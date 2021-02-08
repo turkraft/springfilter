@@ -58,8 +58,7 @@ public class FilterCompiler {
   }
 
   /* Below this comment are defined the methods for Predicate generation, which require Hibernate Core */
-  /* Hibernate is actually needed for the PluralAttributePath method, otherwise JPA would be enough */
-
+  /* Hibernate is actually needed for the PluralAttributePath class, otherwise JPA would be enough */
 
   private static Trio trio; // TODO: find another way to store the trio which would not need 'synchronized'
 
@@ -85,17 +84,17 @@ public class FilterCompiler {
 
     else if (node instanceof Condition) {
       if (node instanceof ConditionWithInput) {
-        return getConditionWithInputSpecification((ConditionWithInput) node, joins);
+        return getConditionWithInputPredicate((ConditionWithInput) node, joins);
       } else {
-        return getConditionSpecification((Condition) node, joins);
+        return getConditionPredicate((Condition) node, joins);
       }
     }
 
     else if (node instanceof Operation) {
       if (node instanceof OperationInfix) {
-        return getOperationInfixSpecification((OperationInfix) node, joins);
+        return getOperationInfixPredicate((OperationInfix) node, joins);
       } else {
-        return getOperationPrefixSpecification((OperationPrefix) node, joins);
+        return getOperationPrefixPredicate((OperationPrefix) node, joins);
       }
     }
 
@@ -103,7 +102,7 @@ public class FilterCompiler {
 
   }
 
-  private static Predicate getConditionWithInputSpecification(ConditionWithInput conditionWithInput,
+  private static Predicate getConditionWithInputPredicate(ConditionWithInput conditionWithInput,
       Map<String, Join<Object, Object>> joins) {
 
     Path<?> path = buildDatabasePath(trio.root, joins, conditionWithInput.getField());
@@ -141,7 +140,7 @@ public class FilterCompiler {
 
   }
 
-  private static Predicate getConditionSpecification(Condition condition, Map<String, Join<Object, Object>> joins) {
+  private static Predicate getConditionPredicate(Condition condition, Map<String, Join<Object, Object>> joins) {
 
     Path<?> path = buildDatabasePath(trio.root, joins, condition.getField());
 
@@ -170,7 +169,7 @@ public class FilterCompiler {
 
   }
 
-  private static Predicate getOperationInfixSpecification(OperationInfix operationInfix,
+  private static Predicate getOperationInfixPredicate(OperationInfix operationInfix,
       Map<String, Join<Object, Object>> joins) {
 
     switch (operationInfix.getType()) {
@@ -190,7 +189,7 @@ public class FilterCompiler {
 
   }
 
-  private static Predicate getOperationPrefixSpecification(OperationPrefix operationPrefix,
+  private static Predicate getOperationPrefixPredicate(OperationPrefix operationPrefix,
       Map<String, Join<Object, Object>> joins) {
 
     switch (operationPrefix.getType()) {
