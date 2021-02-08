@@ -19,8 +19,6 @@ class FilterParserTest {
 
     Filter ast = FilterParser.parse(tokens).transform(null);
 
-    System.out.println(ast.generate());
-
   }
 
 }
