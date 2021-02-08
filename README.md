@@ -43,4 +43,4 @@ Yes we support booleans, dates, enums, **and even searching over relations**! Ne
 Ideas and pull requests are always welcome.
 
 ## License
-Distributed under the [MIT license](LICENSE.txt).
+Distributed under the [MIT license](LICENSE).
