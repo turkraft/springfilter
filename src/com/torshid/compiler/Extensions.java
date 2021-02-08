@@ -36,7 +36,7 @@ public class Extensions {
     java.util.regex.Matcher regexMatcher = pattern.matcher(sb);
 
     if (regexMatcher.find()) {
-      return sb.take(regexMatcher.end());
+      return take(sb, regexMatcher.end());
     }
 
     return null;

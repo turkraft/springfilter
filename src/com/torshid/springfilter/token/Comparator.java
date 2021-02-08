@@ -23,10 +23,10 @@ public class Comparator extends Token {
     GREATER_THAN(">", true),
     LESS_THAN_EQUAL("<=", true),
     LESS_THAN("<", true),
-    NULL(" is null", "^is\s*null", false),
-    NOT_NULL(" is not null", "^is\s*not\s*null", false),
-    EMPTY(" is empty", "^is\s*empty", false),
-    NOT_EMPTY(" is not empty", "^is\s*not\s*empty", false);
+    NULL(" is null", "^is\\s*null", false),
+    NOT_NULL(" is not null", "^is\\s*not\\s*null", false),
+    EMPTY(" is empty", "^is\\s*empty", false),
+    NOT_EMPTY(" is not empty", "^is\\s*not\\s*empty", false);
 
     private final String literal;
     private final String regex;
