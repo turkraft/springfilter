@@ -18,7 +18,7 @@ public class Comparator extends Token {
 
     EQUAL("=", true),
     NOT_EQUAL("!", true),
-    REG_EXP("~", true),
+    LIKE("~", true),
     GREATER_THAN_EQUAL(">=", true),
     GREATER_THAN(">", true),
     LESS_THAN_EQUAL("<=", true),

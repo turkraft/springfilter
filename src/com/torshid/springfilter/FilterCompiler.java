@@ -127,9 +127,9 @@ public class FilterCompiler {
       case LESS_THAN_EQUAL:
         return trio.criteriaBuilder.lessThanOrEqualTo((Expression) path, (Comparable) conditionWithInput.getInput());
 
-      case REG_EXP: {
-        return trio.criteriaBuilder.like(trio.criteriaBuilder.trim(trio.criteriaBuilder.upper((Expression) path)),
-            conditionWithInput.getInput().toString().trim().toUpperCase().replace('*', '%'));
+      case LIKE: {
+        return trio.criteriaBuilder.like(trio.criteriaBuilder.upper((Expression) path),
+            "%" + conditionWithInput.getInput().toString().trim().toUpperCase() + "%");
       }
 
       default:
