@@ -1,4 +1,4 @@
-package com.i2i.compiler.filter.test;
+package com.torshid.springfilter.test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +23,7 @@ import com.torshid.springfilter.token.input.Text;
 import com.torshid.springfilter.token.input.Time;
 
 
-class TokenizerTest {
+class FilterTokenizerTest {
 
   private void validateSingleToken(List<Token> tokens, Class<? extends Token> klass) {
     assertEquals("Only one token should be present", 1, tokens.size());

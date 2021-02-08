@@ -1,4 +1,4 @@
-package com.i2i.compiler.filter.test;
+package com.torshid.springfilter.test;
 
 import java.util.LinkedList;
 
@@ -9,7 +9,7 @@ import com.torshid.springfilter.FilterParser;
 import com.torshid.springfilter.FilterTokenizer;
 import com.torshid.springfilter.node.Filter;
 
-class ParserTest {
+class FilterParserTest {
 
   @Test
   void test() throws Exception {
