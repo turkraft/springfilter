@@ -1,7 +1,7 @@
 package com.torshid.springfilter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -26,9 +26,9 @@ import com.torshid.springfilter.token.input.Time;
 class FilterTokenizerTest {
 
   private void validateSingleToken(List<Token> tokens, Class<? extends Token> klass) {
-    assertEquals("Only one token should be present", 1, tokens.size());
-    assertThat("The token should be a " + klass.getSimpleName() + ", is a " + tokens.get(0).getClass().getSimpleName(),
-        tokens.get(0).getClass().equals(klass));
+    assertEquals(1, tokens.size(), "Only one token should be present");
+    assertEquals(tokens.get(0).getClass(), klass,
+        "The token should be a " + klass.getSimpleName() + ", is a " + tokens.get(0).getClass().getSimpleName());
   }
 
   @ParameterizedTest
@@ -46,21 +46,21 @@ class FilterTokenizerTest {
   @ParameterizedTest
   @ValueSource(strings = {" ", "       "})
   void ignoreSpaces(String input) throws TokenizerException {
-    assertThat("No token should be present", FilterTokenizer.tokenize(input).isEmpty());
+    assertTrue(FilterTokenizer.tokenize(input).isEmpty(), "No token should be present");
   }
 
   @Test
   void validateParenthesisStart() throws TokenizerException {
     List<Token> tokens = FilterTokenizer.tokenize("(");
     validateSingleToken(tokens, Parenthesis.class);
-    assertThat("Parenthesis is of open type", ((Parenthesis) tokens.get(0)).getType() == Type.OPEN);
+    assertTrue(((Parenthesis) tokens.get(0)).getType() == Type.OPEN, "Parenthesis is of open type");
   }
 
   @Test
   void validateParenthesisEnd() throws TokenizerException {
     List<Token> tokens = FilterTokenizer.tokenize(")");
     validateSingleToken(tokens, Parenthesis.class);
-    assertThat("Parenthesis is of close type", ((Parenthesis) tokens.get(0)).getType() == Type.CLOSE);
+    assertTrue(((Parenthesis) tokens.get(0)).getType() == Type.CLOSE, "Parenthesis is of close type");
   }
 
   @ParameterizedTest
@@ -80,7 +80,7 @@ class FilterTokenizerTest {
   void validateBoolTrue(String input) throws TokenizerException {
     List<Token> tokens = FilterTokenizer.tokenize(input);
     validateSingleToken(tokens, Bool.class);
-    assertThat("Bool is true", ((Bool) tokens.get(0)).getValue());
+    assertTrue(((Bool) tokens.get(0)).getValue(), "Bool is true");
   }
 
   @ParameterizedTest
@@ -88,7 +88,7 @@ class FilterTokenizerTest {
   void validateBoolFalse(String input) throws TokenizerException {
     List<Token> tokens = FilterTokenizer.tokenize(input);
     validateSingleToken(tokens, Bool.class);
-    assertThat("Bool is false", !((Bool) tokens.get(0)).getValue());
+    assertTrue(!((Bool) tokens.get(0)).getValue(), "Bool is false");
   }
 
   @ParameterizedTest
@@ -106,7 +106,6 @@ class FilterTokenizerTest {
   @Test
   void test() throws TokenizerException {
     List<Token> tokens = FilterTokenizer.tokenize("entity.id = 55 OR (status ! 'active' And hello.world = nULL) ");
-    System.out.println(tokens);
   }
 
 }
