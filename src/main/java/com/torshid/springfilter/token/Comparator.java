@@ -16,12 +16,12 @@ public class Comparator extends Token {
 
   public enum Type implements ILiteral {
 
-    EQUAL("=", true),
+    EQUAL(":", true),
     NOT_EQUAL("!", true),
     LIKE("~", true),
-    GREATER_THAN_EQUAL(">=", true),
+    GREATER_THAN_EQUAL(">:", true),
     GREATER_THAN(">", true),
-    LESS_THAN_EQUAL("<=", true),
+    LESS_THAN_EQUAL("<:", true),
     LESS_THAN("<", true),
     NULL(" is null", "^is\\s*null", false),
     NOT_NULL(" is not null", "^is\\s*not\\s*null", false),
