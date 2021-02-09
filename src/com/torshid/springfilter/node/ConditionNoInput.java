@@ -47,7 +47,7 @@ public class ConditionNoInput extends Condition {
         }
 
       default:
-        throw new RuntimeException("Unsupported condition comparator " + getComparator().getLiteral());
+        throw new UnsupportedOperationException("Unsupported condition comparator " + getComparator().getLiteral());
 
     }
 
