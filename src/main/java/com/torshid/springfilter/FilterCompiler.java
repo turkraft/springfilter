@@ -1,6 +1,5 @@
 package com.torshid.springfilter;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,7 +25,7 @@ public class FilterCompiler {
   }
 
   public static Predicate generate(Filter ast, Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-    return ast.generate(root, query, criteriaBuilder, new HashMap<>());
+    return ast.generate(root, query, criteriaBuilder);
   }
 
   public static String compile(String input) throws ParserException, TokenizerException {

@@ -23,7 +23,7 @@ public class FilterTokenizer {
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
       new SpaceMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new BoolMatcher(), new ComparatorMatcher(),
-      new TextMatcher(), new FieldMatcher(), new TimeMatcher(), new NumeralMatcher()
+      new FieldMatcher(), new TimeMatcher(), new NumeralMatcher(), new TextMatcher()
 
   };
 

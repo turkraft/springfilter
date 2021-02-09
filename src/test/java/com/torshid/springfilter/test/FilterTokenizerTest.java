@@ -27,8 +27,11 @@ class FilterTokenizerTest {
 
   private void validateSingleToken(List<Token> tokens, Class<? extends Token> klass) {
     assertEquals(1, tokens.size(), "Only one token should be present");
-    assertEquals(tokens.get(0).getClass(), klass,
-        "The token should be a " + klass.getSimpleName() + ", is a " + tokens.get(0).getClass().getSimpleName());
+    assertEquals(tokens.get(0)
+        .getClass(), klass,
+        "The token should be a " + klass.getSimpleName() + ", is a " + tokens.get(0)
+            .getClass()
+            .getSimpleName());
   }
 
   @ParameterizedTest
@@ -46,7 +49,8 @@ class FilterTokenizerTest {
   @ParameterizedTest
   @ValueSource(strings = {" ", "       "})
   void ignoreSpaces(String input) throws TokenizerException {
-    assertTrue(FilterTokenizer.tokenize(input).isEmpty(), "No token should be present");
+    assertTrue(FilterTokenizer.tokenize(input)
+        .isEmpty(), "No token should be present");
   }
 
   @Test
@@ -92,7 +96,7 @@ class FilterTokenizerTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"=", "!", "~", "<", "<=", ">", ">="})
+  @ValueSource(strings = {":", "!", "~", "<", "<:", ">", ">:", "is null", "is not null", "is empty", "is not empty"})
   void validateComparators(String input) throws TokenizerException {
     validateSingleToken(FilterTokenizer.tokenize(input), Comparator.class);
   }
@@ -105,7 +109,7 @@ class FilterTokenizerTest {
 
   @Test
   void test() throws TokenizerException {
-    List<Token> tokens = FilterTokenizer.tokenize("entity.id = 55 OR (status ! 'active' And hello.world = nULL) ");
+    List<Token> tokens = FilterTokenizer.tokenize("entity.id : 55 OR (status ! 'active' And hello.world : nULL) ");
   }
 
 }

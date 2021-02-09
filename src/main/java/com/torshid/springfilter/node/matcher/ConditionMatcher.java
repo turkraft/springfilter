@@ -13,6 +13,7 @@ import com.torshid.springfilter.node.ConditionWithInput;
 import com.torshid.springfilter.token.Comparator;
 import com.torshid.springfilter.token.Field;
 import com.torshid.springfilter.token.input.Input;
+import com.torshid.springfilter.token.input.Text;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -28,22 +29,40 @@ public class ConditionMatcher extends Matcher<Condition> {
 
       // a comparator may need an input, for example ' >= '
 
-      if (((Comparator) tokens.get(1)).getType().needsInput()) {
+      if (((Comparator) tokens.get(1)).getType()
+          .needsInput()) {
 
         if (tokens.indexIs(null, null, Input.class)) {
 
-          return ConditionWithInput.builder().field(((Field) tokens.take()).getName())
-              .comparator(((Comparator) tokens.take()).getType()).input(((Input<?>) tokens.take()).getValue()).build();
+          return ConditionWithInput.builder()
+              .field(((Field) tokens.take()).getName())
+              .comparator(((Comparator) tokens.take()).getType())
+              .input(((Input<?>) tokens.take()).getValue())
+              .build();
+
+        } else if (tokens.indexIs(null, null, Field.class)) {
+
+          // if the input token was interpreted as a field token, we may also use it as a text node
+          // TODO: think of a better way for these collisions
+
+          return ConditionWithInput.builder()
+              .field(((Field) tokens.take()).getName())
+              .comparator(((Comparator) tokens.take()).getType())
+              .input(Text.builder()
+                  .value(((Field) tokens.take()).getName()))
+              .build();
 
         } else {
-          throw new InputExpected(
-              "Comparator " + ((Comparator) tokens.get(1)).getType().getLiteral() + " expects an input");
+          throw new InputExpected("Comparator " + ((Comparator) tokens.get(1)).getType()
+              .getLiteral() + " expects an input");
         }
 
       }
 
-      return ConditionNoInput.builder().field(((Field) tokens.take()).getName())
-          .comparator(((Comparator) tokens.take()).getType()).build();
+      return ConditionNoInput.builder()
+          .field(((Field) tokens.take()).getName())
+          .comparator(((Comparator) tokens.take()).getType())
+          .build();
 
     }
 
