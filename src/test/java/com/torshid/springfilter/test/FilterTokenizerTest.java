@@ -109,7 +109,7 @@ class FilterTokenizerTest {
 
   @Test
   void test() throws TokenizerException {
-    List<Token> tokens = FilterTokenizer.tokenize("entity.id = 55 OR (status ! 'active' And hello.world = nULL) ");
+    List<Token> tokens = FilterTokenizer.tokenize("entity.id : 55 OR (status ! 'active' And hello.world : nULL) ");
   }
 
 }
