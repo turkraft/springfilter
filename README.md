@@ -84,7 +84,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
 </table>
 
-> You may prioritize operators using parentheses, for example: `x or (y and z)`
+> You may prioritize operators using parentheses, for example: `x and (y or z)`
 
 ### Comparators
 <table>
