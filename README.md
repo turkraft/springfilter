@@ -36,28 +36,37 @@ Yes we support booleans, dates, enums, **and even searching over relations**! Ne
 ## Usages
 
 ### a. Controller
+> Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web** and **spring-webmvc**
 ```java
 @GetMapping(value = "/search")
 public List<Entity> search(@EntityFilter Specification<Entity> spec) {
   return repo.findAll(spec);
 }
 ```
-> Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web** and **spring-webmvc**
 
 ### b. Specification
+> Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
 ```java
 Specification<Entity> spec = new FilterSpecification<Entity>(input);
 ```
-> Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
 
 ### c. Predicate
+> Requires **javax.persistence-api**, **spring-data-jpa**
 ```java
 Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
-> Requires **javax.persistence-api**, **spring-data-jpa**
 
----
-:warning: **If you need to search over relations** you also require **hibernate-core** 
+:warning: ** If you need to search over relations** you also require **hibernate-core**
+
+## Syntax
+
+### Operators
+<table>
+  <tr> <th>Literal (case insensitive)</th> <th>Type</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <td>and</th> <td>infix</td> <td>and's two expressions</td> <td>status : active <b>and</b> createdAt > 1-1-2000</td> </tr>
+  <tr> <td>or</th> <td>infix</td> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
+  <tr> <td>not</th> <td>prefix</td> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
+</table>
 
 ## Contributing
 Ideas and pull requests are always welcome.
