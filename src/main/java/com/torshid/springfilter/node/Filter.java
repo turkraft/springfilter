@@ -1,5 +1,6 @@
 package com.torshid.springfilter.node;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -36,6 +37,11 @@ public class Filter extends Root<Filter> implements IPredicate {
   public Predicate generate(javax.persistence.criteria.Root<?> root, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder, Map<String, Join<Object, Object>> joins) {
     return getBody().generate(root, criteriaQuery, criteriaBuilder, joins);
+  }
+
+  public Predicate generate(javax.persistence.criteria.Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>());
   }
 
 }
