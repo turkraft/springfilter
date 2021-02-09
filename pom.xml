@@ -5,47 +5,57 @@
 	<groupId>com.torshid</groupId>
 	<artifactId>spring-filter</artifactId>
 	<version>1.0.0</version>
+	<properties>
+		<java.version>1.8</java.version>
+		<lombok.version>1.18.16</lombok.version>
+		<hibernate.version>5.4.27.Final</hibernate.version>
+		<springframework.version>5.2.12.RELEASE</springframework.version>
+		<springframework-data.version>2.3.6.RELEASE</springframework-data.version>
+		<junit.version>5.7.1</junit.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.16</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.4.23.Final</version>
+			<version>${hibernate.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>2.4.3</version>
+			<version>${springframework-data.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>5.1.1.RELEASE</version>
+			<version>${springframework.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>5.1.1.RELEASE</version>
+			<version>${springframework.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.4.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.4.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -55,16 +65,16 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.0</version>
+				<version>${maven-surefire-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
