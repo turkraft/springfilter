@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class Expression extends Node {
+public abstract class Expression extends Node implements IPredicate {
 
 }

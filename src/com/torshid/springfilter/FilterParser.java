@@ -12,6 +12,10 @@ public class FilterParser {
 
   private FilterParser() {}
 
+  public static Filter parse(String input) {
+    return parse(FilterTokenizer.tokenize(input));
+  }
+
   public static Filter parse(LinkedList<Token> tokens) throws ParserException {
     return Parser.parse(FilterMarcher.INSTANCE, tokens);
   }
