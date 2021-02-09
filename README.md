@@ -29,7 +29,7 @@ Yes we support booleans, dates, enums, **and even searching over relations**! Ne
 <dependency>
     <groupId>com.torshid</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.0.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
