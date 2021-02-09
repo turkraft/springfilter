@@ -8,6 +8,7 @@ import com.torshid.compiler.node.Node;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.Token;
 import com.torshid.springfilter.node.Condition;
+import com.torshid.springfilter.node.ConditionNoInput;
 import com.torshid.springfilter.node.ConditionWithInput;
 import com.torshid.springfilter.token.Comparator;
 import com.torshid.springfilter.token.Field;
@@ -41,7 +42,7 @@ public class ConditionMatcher extends Matcher<Condition> {
 
       }
 
-      return Condition.builder().field(((Field) tokens.take()).getName())
+      return ConditionNoInput.builder().field(((Field) tokens.take()).getName())
           .comparator(((Comparator) tokens.take()).getType()).build();
 
     }

@@ -50,7 +50,7 @@ public class OperationInfix extends Operation {
             getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
 
       default:
-        throw new RuntimeException("Unsupported infix operator " + getType().getLiteral());
+        throw new UnsupportedOperationException("Unsupported infix operator " + getType().getLiteral());
 
     }
 
