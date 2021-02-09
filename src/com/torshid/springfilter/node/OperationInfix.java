@@ -1,5 +1,13 @@
 package com.torshid.springfilter.node;
 
+import java.util.Map;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import com.torshid.compiler.node.Node;
 
 import lombok.Data;
@@ -25,6 +33,27 @@ public class OperationInfix extends Operation {
   @Override
   public String generate() {
     return "(" + left.generate() + " " + getType().getLiteral() + " " + right.generate() + ")";
+  }
+
+  @Override
+  public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+      Map<String, Join<Object, Object>> joins) {
+
+    switch (getType()) {
+
+      case AND:
+        return criteriaBuilder.and(getLeft().generate(root, criteriaQuery, criteriaBuilder, joins),
+            getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
+
+      case OR:
+        return criteriaBuilder.or(getLeft().generate(root, criteriaQuery, criteriaBuilder, joins),
+            getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
+
+      default:
+        throw new RuntimeException("Unsupported infix operator " + getType().getLiteral());
+
+    }
+
   }
 
 }
