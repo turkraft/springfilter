@@ -56,7 +56,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(input);
 Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
 
-:warning: **If you need to search over relations** you also require **hibernate-core**
+:warning: **If you need to search over relations**, you also require **hibernate-core**
 
 ---
 
