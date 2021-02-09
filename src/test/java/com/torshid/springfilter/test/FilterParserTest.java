@@ -15,9 +15,10 @@ class FilterParserTest {
   void test() throws Exception {
 
     LinkedList<Token> tokens = FilterTokenizer.tokenize(
-        "not not (voiture.marque = 'fiat' OR voiture.marque = 'audi') AND voiture.km < 10000 OR x is null and (( not z is empty))");
+        "not not (voiture.marque : 'fiat' OR voiture.marque : 'audi') AND voiture.km < 10000 OR x is null and (( not z is empty))");
 
-    Filter ast = FilterParser.parse(tokens).transform(null);
+    Filter ast = FilterParser.parse(tokens)
+        .transform(null);
 
   }
 
