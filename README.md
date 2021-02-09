@@ -58,6 +58,8 @@ Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuer
 
 :warning: **If you need to search over relations** you also require **hibernate-core**
 
+---
+
 ### d. Builder
 ```java
 Filter filter = Filter.builder()
@@ -67,7 +69,7 @@ Filter filter = Filter.builder()
         .input("jose")
         .build())
     .build();
-String input = filter.generate();
+String input = filter.generate(); // name ~ 'jose'
 Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
 Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
