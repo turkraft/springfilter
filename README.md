@@ -67,7 +67,8 @@ Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuer
   <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
 </table>
-> You may prioritize operators using parentheses, for example: x or (y and z)
+
+> You may prioritize operators using parentheses, for example: `x or (y and z)`
 
 ### Comparators
 <table>
