@@ -28,7 +28,5 @@ jobs:
       with:
         servers: '[{"id": "spring-filter", "username": "torshid", "password": "${{ secrets.BINTRAY_API_TOKEN }}"}]'
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - name: Publish to Bintray
+      run: mvn deploy
