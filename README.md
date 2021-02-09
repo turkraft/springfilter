@@ -33,7 +33,7 @@ Yes we support booleans, dates, enums, **and even searching over relations**! Ne
 </dependency>
 ```
 
-## Usage
+## Usages
 
 ### a. Controller
 ```java
