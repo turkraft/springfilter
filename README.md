@@ -56,16 +56,32 @@ Specification<Entity> spec = new FilterSpecification<Entity>(input);
 Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
 
-:warning: ** If you need to search over relations** you also require **hibernate-core**
+:warning: **If you need to search over relations** you also require **hibernate-core**
 
 ## Syntax
 
 ### Operators
 <table>
-  <tr> <th>Literal (case insensitive)</th> <th>Type</th> <th>Description</th> <th>Example</th> </tr>
-  <tr> <td>and</th> <td>infix</td> <td>and's two expressions</td> <td>status : active <b>and</b> createdAt > 1-1-2000</td> </tr>
-  <tr> <td>or</th> <td>infix</td> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
-  <tr> <td>not</th> <td>prefix</td> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
+  <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <td>and</th> <td>and's two expressions</td> <td>status : active <b>and</b> createdAt > 1-1-2000</td> </tr>
+  <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
+  <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
+</table>
+> You may prioritize operators using parentheses, for example: x or (y and z)
+
+### Comparators
+<table>
+  <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <td>~</th> <td>checks if a (string) field is like a value</td> <td>catalog.name <b>~</b> 'elec'</td> </tr>
+  <tr> <td>:</th> <td>checks if a field is equal to a value</td> <td>id <b>:</b> 5</td> </tr>
+  <tr> <td>></th> <td>checks if a field is greater than a value</td> <td>distance <b>></b> 100</td> </tr>
+  <tr> <td>>:</th> <td>checks if a field is greater than or equal to a value</td> <td>distance <b>>:</b> 100</td> </tr>
+  <tr> <td><</th> <td>checks if a field is smaller than a value</td> <td>distance <b><</b> 100</td> </tr>
+  <tr> <td><:</th> <td>checks if a field is smaller or equal to a value</td> <td>distance <b><:</b> 100</td> </tr>
+  <tr> <td>is null</th> <td>checks if a field is null</td> <td>status <b>is null</b></td> </tr>
+  <tr> <td>is not null</th> <td>checks if a field is not null</td> <td>status <b>is not null</b></td> </tr>
+  <tr> <td>is empty</th> <td>checks if a (collection) field is empty</td> <td>children <b>is empty</b></td> </tr>
+  <tr> <td>is not empty</th> <td>checks if a (collection) field is not empty</td> <td>children <b>is not empty</b></td> </tr>
 </table>
 
 ## Contributing
