@@ -18,15 +18,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
     - uses: s4u/maven-settings-action@v2.3.0
       with:
         servers: '[{"id": "spring-filter", "username": "torshid", "password": "${{ secrets.BINTRAY_API_TOKEN }}"}]'
-
     - name: Publish to Bintray
       run: mvn deploy
