@@ -28,7 +28,7 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
   private <T> Specification<?> getSpecification(Class<?> specificationClass, String input) {
 
-    if (input == null || input.isBlank())
+    if (input == null || input.trim().isEmpty())
       return null;
 
     return new FilterSpecification<T>(input);
