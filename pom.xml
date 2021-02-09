@@ -78,4 +78,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>spring-filter</id>
+			<url>https://api.bintray.com/maven/torshid/spring-filter/spring-filter</url>
+		</repository>
+	</distributionManagement>
 </project>
