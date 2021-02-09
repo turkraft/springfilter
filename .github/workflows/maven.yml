@@ -28,5 +28,4 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Run tests with Maven
-      run: mvn -B test --file pom.xml
+      
