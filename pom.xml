@@ -93,7 +93,7 @@
 	<distributionManagement>
 		<repository>
 			<id>spring-filter</id>
-			<url>https://api.bintray.com/maven/turkraft/spring-filter/spring-filter</url>
+			<url>https://api.bintray.com/maven/turkraft/spring-filter/spring-filter/;publish=1</url>
 		</repository>
 	</distributionManagement>
 </project>
