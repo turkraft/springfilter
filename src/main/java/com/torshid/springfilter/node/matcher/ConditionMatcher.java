@@ -27,42 +27,33 @@ public class ConditionMatcher extends Matcher<Condition> {
 
     if (tokens.indexIs(Field.class, Comparator.class)) {
 
-      // a comparator may need an input, for example ' >= '
+      // a comparator may need an input, for example ' >: '
 
-      if (((Comparator) tokens.get(1)).getType()
-          .needsInput()) {
+      if (((Comparator) tokens.get(1)).getType().needsInput()) {
 
         if (tokens.indexIs(null, null, Input.class)) {
 
-          return ConditionWithInput.builder()
-              .field(((Field) tokens.take()).getName())
-              .comparator(((Comparator) tokens.take()).getType())
-              .input(((Input<?>) tokens.take()).getValue())
-              .build();
+          return ConditionWithInput.builder().field(((Field) tokens.take()).getName())
+              .comparator(((Comparator) tokens.take()).getType()).input((Input<?>) tokens.take()).build();
 
         } else if (tokens.indexIs(null, null, Field.class)) {
 
           // if the input token was interpreted as a field token, we may also use it as a text node
           // TODO: think of a better way for these collisions
 
-          return ConditionWithInput.builder()
-              .field(((Field) tokens.take()).getName())
+          return ConditionWithInput.builder().field(((Field) tokens.take()).getName())
               .comparator(((Comparator) tokens.take()).getType())
-              .input(Text.builder()
-                  .value(((Field) tokens.take()).getName()))
-              .build();
+              .input(Text.builder().value(((Field) tokens.take()).getName()).build()).build();
 
         } else {
-          throw new InputExpected("Comparator " + ((Comparator) tokens.get(1)).getType()
-              .getLiteral() + " expects an input");
+          throw new InputExpected(
+              "Comparator " + ((Comparator) tokens.get(1)).getType().getLiteral() + " expects an input");
         }
 
       }
 
-      return ConditionNoInput.builder()
-          .field(((Field) tokens.take()).getName())
-          .comparator(((Comparator) tokens.take()).getType())
-          .build();
+      return ConditionNoInput.builder().field(((Field) tokens.take()).getName())
+          .comparator(((Comparator) tokens.take()).getType()).build();
 
     }
 

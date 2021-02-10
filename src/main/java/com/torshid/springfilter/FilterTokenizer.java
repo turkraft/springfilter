@@ -14,7 +14,6 @@ import com.torshid.springfilter.token.matcher.SpaceMatcher;
 import com.torshid.springfilter.token.matcher.input.BoolMatcher;
 import com.torshid.springfilter.token.matcher.input.NumeralMatcher;
 import com.torshid.springfilter.token.matcher.input.TextMatcher;
-import com.torshid.springfilter.token.matcher.input.TimeMatcher;
 
 public class FilterTokenizer {
 
@@ -23,7 +22,7 @@ public class FilterTokenizer {
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
       new SpaceMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new BoolMatcher(), new ComparatorMatcher(),
-      new FieldMatcher(), new TimeMatcher(), new NumeralMatcher(), new TextMatcher()
+      new FieldMatcher(), new NumeralMatcher(), new TextMatcher()
 
   };
 

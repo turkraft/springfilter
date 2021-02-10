@@ -13,4 +13,6 @@ public abstract class Input<T> extends Token {
 
   private T value;
 
+  public abstract Object getValueAs(Class<?> klass);
+
 }

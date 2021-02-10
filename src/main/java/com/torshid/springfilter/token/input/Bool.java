@@ -11,4 +11,9 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class Bool extends Input<Boolean> {
 
+  @Override
+  public Boolean getValueAs(Class<?> klass) {
+    return getValue();
+  }
+
 }

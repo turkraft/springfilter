@@ -11,4 +11,9 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class Numeral extends Input<Number> {
 
+  @Override
+  public Number getValueAs(Class<?> klass) {
+    return getValue();
+  }
+
 }

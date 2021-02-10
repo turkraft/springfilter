@@ -20,7 +20,6 @@ import com.torshid.springfilter.token.Parenthesis.Type;
 import com.torshid.springfilter.token.input.Bool;
 import com.torshid.springfilter.token.input.Numeral;
 import com.torshid.springfilter.token.input.Text;
-import com.torshid.springfilter.token.input.Time;
 
 
 class FilterTokenizerTest {
@@ -71,12 +70,6 @@ class FilterTokenizerTest {
   @ValueSource(strings = {"0", "1", "123456", "1.4324", "4.43243", ".6399"})
   void validateNumerals(String input) throws TokenizerException {
     validateSingleToken(FilterTokenizer.tokenize(input), Numeral.class);
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {"07/10/2000"})
-  void validateTimes(String input) throws TokenizerException {
-    validateSingleToken(FilterTokenizer.tokenize(input), Time.class);
   }
 
   @ParameterizedTest
