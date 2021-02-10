@@ -13,7 +13,7 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod(Extensions.class)
 public class TextMatcher extends Matcher<Text> {
 
-  private static Pattern pattern = Pattern.compile("^[\\p{L}0-9]+");
+  private static Pattern pattern = Pattern.compile("^.+?(?=[\\s\\(\\)\\']|$)"); //Pattern.compile("^[\\p{L}0-9]+");
 
   @Override
   public Text match(StringBuilder input) throws OutOfInputException {
@@ -40,7 +40,7 @@ public class TextMatcher extends Matcher<Text> {
 
     }
 
-    // we may also accept characters which are not inside quotes if they consist of only letters and digits
+    // we may also accept characters which are not inside quotes
 
     String matched = input.getMatch(pattern);
 

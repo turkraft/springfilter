@@ -16,32 +16,44 @@ public class Comparator extends Token {
 
   public enum Type implements ILiteral {
 
-    EQUAL(":", true),
-    NOT_EQUAL("!", true),
-    LIKE("~", true),
-    GREATER_THAN_EQUAL(">:", true),
-    GREATER_THAN(">", true),
-    LESS_THAN_EQUAL("<:", true),
-    LESS_THAN("<", true),
-    NULL(" is null", "^is\\s*null", false),
-    NOT_NULL(" is not null", "^is\\s*not\\s*null", false),
-    EMPTY(" is empty", "^is\\s*empty", false),
-    NOT_EMPTY(" is not empty", "^is\\s*not\\s*empty", false);
+    EQUAL(":", Object.class),
+    NOT_EQUAL("!", Object.class),
+    LIKE("~", String.class),
+    GREATER_THAN_EQUAL(">:", Comparable.class),
+    GREATER_THAN(">", Comparable.class),
+    LESS_THAN_EQUAL("<:", Comparable.class),
+    LESS_THAN("<", Comparable.class),
+    NULL(" is null", "^is\\s*null"),
+    NOT_NULL(" is not null", "^is\\s*not\\s*null"),
+    EMPTY(" is empty", "^is\\s*empty"),
+    NOT_EMPTY(" is not empty", "^is\\s*not\\s*empty");
 
     private final String literal;
     private final String regex;
-    private final boolean needsInput;
+    private final Class<?> fieldType;
 
-    Type(String literal, String regex, boolean needsInput) {
+    Type(String literal, String regex, Class<?> fieldType) {
       this.literal = literal;
       this.regex = regex;
-      this.needsInput = needsInput;
+      this.fieldType = fieldType;
     }
 
-    Type(String literal, boolean needsInput) {
+    Type(String literal, Class<?> fieldType) {
       this.literal = literal;
-      this.needsInput = needsInput;
+      this.fieldType = fieldType;
       this.regex = null;
+    }
+
+    Type(String literal, String regex) {
+      this.literal = literal;
+      this.regex = regex;
+      this.fieldType = null;
+    }
+
+    Type(String literal) {
+      this.literal = literal;
+      this.regex = null;
+      this.fieldType = null;
     }
 
     @Override
@@ -50,12 +62,16 @@ public class Comparator extends Token {
     }
 
     public boolean needsInput() {
-      return needsInput;
+      return fieldType != null;
     }
 
     @Override
     public String getRegex() {
       return regex;
+    }
+
+    public Class<?> getFieldType() {
+      return fieldType;
     }
 
   }
