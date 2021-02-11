@@ -11,13 +11,12 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod(Extensions.class)
 public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> extends Matcher<T> {
 
-  @SuppressWarnings("unchecked")
   @Override
   public T match(StringBuilder input) {
 
-    for (Enum<T> type : getEnumClass().getEnumConstants()) {
+    for (T type : getEnumClass().getEnumConstants()) {
 
-      ILiteral literal = (ILiteral) type;
+      ILiteral literal = type;
 
       if (literal.getRegex() == null) {
 
@@ -28,7 +27,7 @@ public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> exte
 
           input.take(literal.getLiteral().length());
 
-          return (T) type;
+          return type;
 
         }
 
@@ -39,7 +38,7 @@ public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> exte
         String match = input.getMatch(Pattern.compile(literal.getRegex()));
 
         if (match != null) {
-          return (T) type;
+          return type;
         }
 
       }
