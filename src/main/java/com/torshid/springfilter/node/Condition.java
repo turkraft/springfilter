@@ -14,7 +14,7 @@ public abstract class Condition extends Expression {
 
   private String field;
 
-  private Comparator.Type comparator;
+  private Comparator comparator;
 
   @Override
   public Node transform(Node parent) {

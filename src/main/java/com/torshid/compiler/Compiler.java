@@ -7,19 +7,19 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.exception.TokenizerException;
 import com.torshid.compiler.node.Node;
 import com.torshid.compiler.node.Root;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 
 public class Compiler {
 
   private Compiler() {}
 
-  public static LinkedList<Token> tokenize(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers, String input)
+  public static LinkedList<IToken> tokenize(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers, String input)
       throws TokenizerException {
     return Tokenizer.tokenize(tokenMatchers, input);
   }
 
   public static <N extends Root<N>> N parse(com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher,
-      LinkedList<Token> tokens) throws ParserException {
+      LinkedList<IToken> tokens) throws ParserException {
     return Parser.parse(rootNodeMatcher, tokens).transform(null);
   }
 

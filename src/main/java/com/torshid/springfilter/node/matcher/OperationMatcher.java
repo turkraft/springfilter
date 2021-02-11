@@ -7,7 +7,7 @@ import com.torshid.compiler.exception.ExpressionExpectedException;
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.Node;
 import com.torshid.compiler.node.matcher.Matcher;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Expression;
 import com.torshid.springfilter.node.Operation;
 import com.torshid.springfilter.node.OperationInfix;
@@ -23,38 +23,38 @@ public class OperationMatcher extends Matcher<Operation> {
   public static final OperationMatcher INSTANCE = new OperationMatcher();
 
   @Override
-  public Operation match(LinkedList<Token> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Operation match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
 
     if (tokens.indexIs(Operator.class)) {
 
       Operator operator = ((Operator) tokens.take());
 
-      if (operator.getType().getPosition() == Position.PREFIX) {
+      if (operator.getPosition() == Position.PREFIX) {
 
         // regular prefix operation, such as 'NOT x'
 
         try {
 
-          return OperationPrefix.builder().type(operator.getType())
-              .right(ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
+          return OperationPrefix.builder().type(operator).right(ExpressionMatcher.INSTANCE.match(tokens, nodes))
+              .build();
 
         } catch (ParserException ex) {
           throw new ExpressionExpectedException(
-              "An expression is expected after the prefix operator " + operator.getType().getLiteral(), ex);
+              "An expression is expected after the prefix operator " + operator.getLiteral(), ex);
         }
 
       }
 
       if (nodes.peekLast() == null) {
         throw new ExpressionExpectedException(
-            "An expression is expected before the infix operator " + operator.getType().getLiteral());
+            "An expression is expected before the infix operator " + operator.getLiteral());
       }
 
       if (nodes.lastIs(OperationInfix.class)) {
 
         OperationInfix previousOperation = ((OperationInfix) nodes.getLast());
 
-        if (operator.getType().getPriority() > previousOperation.getType().getPriority()) {
+        if (operator.getPriority() > previousOperation.getType().getPriority()) {
 
           // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
           // example: 'x OR y AND z' => 'x OR (y AND z)'
@@ -63,7 +63,7 @@ public class OperationMatcher extends Matcher<Operation> {
 
           try {
 
-            OperationInfix and = OperationInfix.builder().type(operator.getType()).left(previousOperation.getRight())
+            OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
                 .right(ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
 
             previousOperation.setRight(and);
@@ -72,7 +72,7 @@ public class OperationMatcher extends Matcher<Operation> {
 
           } catch (ParserException ex) {
             throw new ExpressionExpectedException(
-                "An expression is expected after the infix operator " + operator.getType().getLiteral(), ex);
+                "An expression is expected after the infix operator " + operator.getLiteral(), ex);
           }
 
         }
@@ -83,12 +83,12 @@ public class OperationMatcher extends Matcher<Operation> {
 
         // regular infix operation such as 'x OR y'
 
-        return OperationInfix.builder().left((Expression) nodes.pollLast()).type(operator.getType())
+        return OperationInfix.builder().left((Expression) nodes.pollLast()).type(operator)
             .right(ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
 
       } catch (ParserException ex) {
         throw new ExpressionExpectedException(
-            "An expression is expected after the infix operator " + operator.getType().getLiteral(), ex);
+            "An expression is expected after the infix operator " + operator.getLiteral(), ex);
       }
     }
 

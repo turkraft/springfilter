@@ -1,16 +1,16 @@
 package com.torshid.springfilter.token.matcher;
 
 import com.torshid.compiler.Extensions;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.compiler.token.matcher.Matcher;
 
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public class SpaceMatcher extends Matcher<Token> {
+public class SpaceMatcher extends Matcher<IToken> {
 
   @Override
-  public Token match(StringBuilder input) {
+  public IToken match(StringBuilder input) {
 
     // just skip unnecessary spaces
 

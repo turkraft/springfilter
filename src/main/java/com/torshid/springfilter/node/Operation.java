@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Operation extends Expression {
 
-  private Operator.Type type;
+  private Operator type;
 
 }

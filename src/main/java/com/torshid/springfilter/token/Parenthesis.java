@@ -1,15 +1,13 @@
 package com.torshid.springfilter.token;
 
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Parenthesis extends Token {
+public class Parenthesis implements IToken {
 
   private Type type;
 

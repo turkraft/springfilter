@@ -7,7 +7,7 @@ import com.torshid.compiler.exception.ExpressionExpectedException;
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.Node;
 import com.torshid.compiler.node.matcher.Matcher;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Filter;
 
 import lombok.experimental.ExtensionMethod;
@@ -18,7 +18,7 @@ public class FilterMarcher extends Matcher<Filter> {
   public static final FilterMarcher INSTANCE = new FilterMarcher();
 
   @Override
-  public Filter match(LinkedList<Token> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Filter match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
 
     Filter search = Filter.builder().build();
 

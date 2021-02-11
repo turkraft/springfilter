@@ -8,7 +8,7 @@ import com.torshid.compiler.exception.OutOfTokenException;
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.Node;
 import com.torshid.compiler.node.matcher.Matcher;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Priority;
 import com.torshid.springfilter.token.Parenthesis;
 import com.torshid.springfilter.token.Parenthesis.Type;
@@ -21,7 +21,7 @@ public class PriorityMatcher extends Matcher<Priority> {
   public static final PriorityMatcher INSTANCE = new PriorityMatcher();
 
   @Override
-  public Priority match(LinkedList<Token> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Priority match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
 
     if (tokens.indexIs(Parenthesis.class) && ((Parenthesis) tokens.index()).getType() == Type.OPEN) {
 

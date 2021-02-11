@@ -7,16 +7,11 @@ import com.torshid.springfilter.token.Operator;
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public class OperatorMatcher extends LiteralMatcher<Operator, Operator.Type> {
+public class OperatorMatcher extends LiteralMatcher<Operator> {
 
   @Override
-  public Class<Operator.Type> getEnumClass() {
-    return Operator.Type.class;
-  }
-
-  @Override
-  public Operator enumToToken(Enum<Operator.Type> type) {
-    return Operator.builder().type((Operator.Type) type).build();
+  public Class<Operator> getEnumClass() {
+    return Operator.class;
   }
 
 }

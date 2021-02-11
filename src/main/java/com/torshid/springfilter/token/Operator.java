@@ -1,65 +1,50 @@
 package com.torshid.springfilter.token;
 
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.compiler.token.matcher.LiteralMatcher.ILiteral;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
+public enum Operator implements IToken, ILiteral {
 
-@SuperBuilder
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class Operator extends Token {
+  AND("and", 1), OR("or", 0), NOT("not");
 
-  private Type type;
+  private final String literal;
 
-  public enum Type implements ILiteral {
+  private final Position position;
 
-    AND("and", 1), OR("or", 0), NOT("not");
+  private final int priority;
 
-    private final String literal;
+  Operator(String literal) {
+    this.literal = literal;
+    this.position = Position.PREFIX;
+    this.priority = 0;
+  }
 
-    private final Position position;
+  Operator(String literal, int priority) {
+    this.literal = literal;
+    this.priority = priority;
+    this.position = Position.INFIX;
+  }
 
-    private final int priority;
+  @Override
+  public String getLiteral() {
+    return literal;
+  }
 
-    Type(String literal) {
-      this.literal = literal;
-      this.position = Position.PREFIX;
-      this.priority = 0;
-    }
+  public Position getPosition() {
+    return position;
+  }
 
-    Type(String literal, int priority) {
-      this.literal = literal;
-      this.priority = priority;
-      this.position = Position.INFIX;
-    }
+  public int getPriority() {
+    return priority;
+  }
 
-    @Override
-    public String getLiteral() {
-      return literal;
-    }
-
-    public Position getPosition() {
-      return position;
-    }
-
-    public int getPriority() {
-      return priority;
-    }
-
-    @Override
-    public String getRegex() {
-      return null;
-    }
-
+  @Override
+  public String getRegex() {
+    return null;
   }
 
   public enum Position {
-
     PREFIX, INFIX
-
   }
 
 }

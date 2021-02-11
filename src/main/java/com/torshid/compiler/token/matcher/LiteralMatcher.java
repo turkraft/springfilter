@@ -3,18 +3,19 @@ package com.torshid.compiler.token.matcher;
 import java.util.regex.Pattern;
 
 import com.torshid.compiler.Extensions;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.compiler.token.matcher.LiteralMatcher.ILiteral;
 
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public abstract class LiteralMatcher<T extends Token, E extends Enum<E> & ILiteral> extends Matcher<T> {
+public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> extends Matcher<T> {
 
+  @SuppressWarnings("unchecked")
   @Override
   public T match(StringBuilder input) {
 
-    for (Enum<E> type : getEnumClass().getEnumConstants()) {
+    for (Enum<T> type : getEnumClass().getEnumConstants()) {
 
       ILiteral literal = (ILiteral) type;
 
@@ -27,7 +28,7 @@ public abstract class LiteralMatcher<T extends Token, E extends Enum<E> & ILiter
 
           input.take(literal.getLiteral().length());
 
-          return enumToToken(type);
+          return (T) type;
 
         }
 
@@ -38,7 +39,7 @@ public abstract class LiteralMatcher<T extends Token, E extends Enum<E> & ILiter
         String match = input.getMatch(Pattern.compile(literal.getRegex()));
 
         if (match != null) {
-          return enumToToken(type);
+          return (T) type;
         }
 
       }
@@ -49,9 +50,7 @@ public abstract class LiteralMatcher<T extends Token, E extends Enum<E> & ILiter
 
   }
 
-  public abstract Class<E> getEnumClass();
-
-  public abstract T enumToToken(Enum<E> type);
+  public abstract Class<T> getEnumClass();
 
   public interface ILiteral {
 
