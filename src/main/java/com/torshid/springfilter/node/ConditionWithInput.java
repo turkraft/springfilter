@@ -12,7 +12,6 @@ import javax.persistence.criteria.Root;
 
 import com.torshid.compiler.node.INode;
 import com.torshid.springfilter.Utils;
-import com.torshid.springfilter.token.input.Input;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class ConditionWithInput extends Condition {
 
-  private Input<?> input;
+  private IExpression<?> input;
 
   @Override
   public INode transform(INode parent) {
@@ -32,7 +31,7 @@ public class ConditionWithInput extends Condition {
 
   @Override
   public String generate() {
-    return super.generate() + " '" + getInput().getValue() + "'";
+    return super.generate() + " " + getInput().generate();
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -49,31 +48,34 @@ public class ConditionWithInput extends Condition {
           + " only supports fields of type " + getComparator().getFieldType());
     }
 
-    Object castedInput = getInput().getValueAs(fieldType);
+    Expression<?> input = getInput().generate(root, criteriaQuery, criteriaBuilder, joins);
 
     switch (getComparator()) {
 
       case EQUAL:
-        return criteriaBuilder.equal(path, castedInput);
+        return criteriaBuilder.equal(path, input);
 
       case NOT_EQUAL:
-        return criteriaBuilder.notEqual(path, castedInput);
+        return criteriaBuilder.notEqual(path, input);
 
       case GREATER_THAN:
-        return criteriaBuilder.greaterThan((Expression) path, (Comparable) castedInput);
+        return criteriaBuilder.greaterThan((Expression<? extends Comparable>) path,
+            (Expression<? extends Comparable>) input);
 
       case GREATER_THAN_EQUAL:
-        return criteriaBuilder.greaterThanOrEqualTo((Expression) path, (Comparable) castedInput);
+        return criteriaBuilder.greaterThanOrEqualTo((Expression<? extends Comparable>) path,
+            (Expression<? extends Comparable>) input);
 
       case LESS_THAN:
-        return criteriaBuilder.lessThan((Expression) path, (Comparable) castedInput);
+        return criteriaBuilder.lessThan((Expression<? extends Comparable>) path,
+            (Expression<? extends Comparable>) input);
 
       case LESS_THAN_EQUAL:
-        return criteriaBuilder.lessThanOrEqualTo((Expression) path, (Comparable) castedInput);
+        return criteriaBuilder.lessThanOrEqualTo((Expression) path, (Comparable) input);
 
       case LIKE: {
         return criteriaBuilder.like(criteriaBuilder.upper((Expression) path),
-            "%" + castedInput.toString().trim().toUpperCase() + "%");
+            "%" + input.toString().trim().toUpperCase() + "%");
       }
 
       default:

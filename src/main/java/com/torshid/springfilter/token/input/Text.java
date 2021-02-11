@@ -46,4 +46,9 @@ public class Text extends Input<String> {
 
   }
 
+  @Override
+  public String generate() {
+    return "'" + getValue() + "'";
+  }
+
 }

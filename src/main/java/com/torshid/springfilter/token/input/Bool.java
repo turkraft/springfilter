@@ -16,4 +16,9 @@ public class Bool extends Input<Boolean> {
     return getValue();
   }
 
+  @Override
+  public String generate() {
+    return getValue().toString().toLowerCase();
+  }
+
 }

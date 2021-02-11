@@ -9,6 +9,7 @@ import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Filter;
+import com.torshid.springfilter.node.IPredicate;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -34,7 +35,7 @@ public class FilterMarcher extends Matcher<Filter> {
 
       try {
 
-        search.setBody(ExpressionMatcher.INSTANCE.match(tokens, subNodes));
+        search.setBody((IPredicate) ExpressionMatcher.INSTANCE.match(tokens, subNodes));
 
       } catch (ParserException ex) {
         throw new ExpressionExpectedException("Tokens should form an expression", ex);

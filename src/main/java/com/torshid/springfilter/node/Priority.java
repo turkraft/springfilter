@@ -11,15 +11,13 @@ import javax.persistence.criteria.Root;
 import com.torshid.compiler.node.INode;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Priority extends Expression {
+public class Priority implements IPredicate {
 
-  private Expression body;
+  private IPredicate body;
 
   @Override
   public INode transform(INode parent) {
@@ -28,7 +26,7 @@ public class Priority extends Expression {
       return body.transform(parent); // no need for priority if parent is root or we have nested priorities
     }
 
-    body = (Expression) body.transform(this);
+    body = (IPredicate) body.transform(this);
     return this;
 
   }

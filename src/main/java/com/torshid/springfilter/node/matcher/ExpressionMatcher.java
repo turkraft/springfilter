@@ -8,12 +8,12 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.node.Expression;
+import com.torshid.springfilter.node.IExpression;
 
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public class ExpressionMatcher extends Matcher<Expression> {
+public class ExpressionMatcher extends Matcher<IExpression<?>> {
 
   public static final ExpressionMatcher INSTANCE = new ExpressionMatcher();
 
@@ -24,8 +24,8 @@ public class ExpressionMatcher extends Matcher<Expression> {
   };
 
   @Override
-  public Expression match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
-    return (Expression) Parser.walk(matchers, tokens, nodes);
+  public IExpression<?> match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+    return (IExpression<?>) Parser.walk(matchers, tokens, nodes);
   }
 
 }

@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class OperationPrefix extends Operation {
 
-  private Expression right;
+  private IExpression right;
 
   @Override
   public INode transform(INode parent) {

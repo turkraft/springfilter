@@ -4,13 +4,11 @@ import com.torshid.compiler.node.INode;
 import com.torshid.springfilter.token.Comparator;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public abstract class Condition extends Expression {
+public abstract class Condition implements IPredicate {
 
   private String field;
 
@@ -23,7 +21,7 @@ public abstract class Condition extends Expression {
 
   @Override
   public String generate() {
-    return field + comparator.getLiteral();
+    return field + " " + comparator.getLiteral();
   }
 
 }

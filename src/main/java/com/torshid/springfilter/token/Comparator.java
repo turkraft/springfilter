@@ -12,10 +12,10 @@ public enum Comparator implements IToken, ILiteral {
   GREATER_THAN(">", Comparable.class),
   LESS_THAN_EQUAL("<:", Comparable.class),
   LESS_THAN("<", Comparable.class),
-  NULL(" is null", "^is\\s*null"),
-  NOT_NULL(" is not null", "^is\\s*not\\s*null"),
-  EMPTY(" is empty", "^is\\s*empty"),
-  NOT_EMPTY(" is not empty", "^is\\s*not\\s*empty");
+  NULL("is null", "^is\\s*null"),
+  NOT_NULL("is not null", "^is\\s*not\\s*null"),
+  EMPTY("is empty", "^is\\s*empty"),
+  NOT_EMPTY("is not empty", "^is\\s*not\\s*empty");
 
   private final String literal;
   private final String regex;

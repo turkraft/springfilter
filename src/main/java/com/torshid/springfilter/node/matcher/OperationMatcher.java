@@ -8,7 +8,7 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.node.Expression;
+import com.torshid.springfilter.node.IPredicate;
 import com.torshid.springfilter.node.Operation;
 import com.torshid.springfilter.node.OperationInfix;
 import com.torshid.springfilter.node.OperationPrefix;
@@ -64,7 +64,7 @@ public class OperationMatcher extends Matcher<Operation> {
           try {
 
             OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
-                .right(ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
+                .right((IPredicate) ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
 
             previousOperation.setRight(and);
 
@@ -83,8 +83,8 @@ public class OperationMatcher extends Matcher<Operation> {
 
         // regular infix operation such as 'x OR y'
 
-        return OperationInfix.builder().left((Expression) nodes.pollLast()).type(operator)
-            .right(ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
+        return OperationInfix.builder().left((IPredicate) nodes.pollLast()).type(operator)
+            .right((IPredicate) ExpressionMatcher.INSTANCE.match(tokens, nodes)).build();
 
       } catch (ParserException ex) {
         throw new ExpressionExpectedException(

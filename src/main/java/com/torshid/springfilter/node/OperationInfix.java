@@ -19,14 +19,14 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class OperationInfix extends Operation {
 
-  private Expression left;
+  private IPredicate left;
 
-  private Expression right;
+  private IPredicate right;
 
   @Override
   public INode transform(INode parent) {
-    left = (Expression) left.transform(this);
-    right = (Expression) right.transform(this);
+    left = (IPredicate) left.transform(this);
+    right = (IPredicate) right.transform(this);
     return this;
   }
 

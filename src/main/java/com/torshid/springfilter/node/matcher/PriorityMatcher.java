@@ -9,6 +9,7 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
+import com.torshid.springfilter.node.IPredicate;
 import com.torshid.springfilter.node.Priority;
 import com.torshid.springfilter.token.Parenthesis;
 import com.torshid.springfilter.token.Parenthesis.Type;
@@ -42,7 +43,7 @@ public class PriorityMatcher extends Matcher<Priority> {
 
         try {
 
-          priority.setBody(ExpressionMatcher.INSTANCE.match(tokens, subNodes));
+          priority.setBody((IPredicate) ExpressionMatcher.INSTANCE.match(tokens, subNodes));
 
         } catch (ParserException ex) {
           throw new ExpressionExpectedException("Expression is expected inside parentheses", ex);

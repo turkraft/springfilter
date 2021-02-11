@@ -18,11 +18,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class Filter implements Root<Filter>, IPredicate {
 
-  private Expression body;
+  private IPredicate body;
 
   @Override
   public Filter transform(INode parent) {
-    body = (Expression) body.transform(this);
+    body = (IPredicate) body.transform(this);
     return this;
   }
 

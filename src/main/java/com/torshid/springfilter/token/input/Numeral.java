@@ -16,4 +16,9 @@ public class Numeral extends Input<Number> {
     return getValue();
   }
 
+  @Override
+  public String generate() {
+    return getValue().toString();
+  }
+
 }
