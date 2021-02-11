@@ -6,7 +6,7 @@ import com.torshid.compiler.Extensions;
 import com.torshid.compiler.exception.ExpressionExpectedException;
 import com.torshid.compiler.exception.OutOfTokenException;
 import com.torshid.compiler.exception.ParserException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Priority;
@@ -21,7 +21,7 @@ public class PriorityMatcher extends Matcher<Priority> {
   public static final PriorityMatcher INSTANCE = new PriorityMatcher();
 
   @Override
-  public Priority match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Priority match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
 
     if (tokens.indexIs(Parenthesis.class) && ((Parenthesis) tokens.index()).getType() == Type.OPEN) {
 
@@ -34,7 +34,7 @@ public class PriorityMatcher extends Matcher<Priority> {
 
         // merging walked expressions to the body until we encounter closing parenthesis
 
-        LinkedList<Node> subNodes = new LinkedList<Node>();
+        LinkedList<INode> subNodes = new LinkedList<INode>();
 
         if (priority.getBody() != null) {
           subNodes.add(priority.getBody());

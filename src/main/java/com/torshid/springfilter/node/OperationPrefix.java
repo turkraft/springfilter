@@ -8,7 +8,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +22,7 @@ public class OperationPrefix extends Operation {
   private Expression right;
 
   @Override
-  public Node transform(Node parent) {
+  public INode transform(INode parent) {
     return this;
   }
 

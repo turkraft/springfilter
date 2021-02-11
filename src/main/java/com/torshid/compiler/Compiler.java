@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.exception.TokenizerException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Root;
 import com.torshid.compiler.token.IToken;
 
@@ -27,7 +27,7 @@ public class Compiler {
     return node.generate();
   }
 
-  public static <N extends Root<N>, T> T generate(N node, Function<Node, T> func) {
+  public static <N extends Root<N>, T> T generate(N node, Function<INode, T> func) {
     return node.generate(func);
   }
 
@@ -38,7 +38,7 @@ public class Compiler {
   }
 
   public static <N extends Root<N>, T> T compile(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers,
-      com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher, String input, Function<Node, T> func)
+      com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher, String input, Function<INode, T> func)
       throws ParserException, TokenizerException {
     return generate(parse(rootNodeMatcher, tokenize(tokenMatchers, input)), func);
   }

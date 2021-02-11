@@ -1,6 +1,6 @@
 package com.torshid.springfilter.node;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.springfilter.token.Comparator;
 
 import lombok.Data;
@@ -17,7 +17,7 @@ public abstract class Condition extends Expression {
   private Comparator comparator;
 
   @Override
-  public Node transform(Node parent) {
+  public INode transform(INode parent) {
     return this;
   }
 

@@ -10,7 +10,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.springfilter.Utils;
 import com.torshid.springfilter.token.input.Input;
 
@@ -26,7 +26,7 @@ public class ConditionWithInput extends Condition {
   private Input<?> input;
 
   @Override
-  public Node transform(Node parent) {
+  public INode transform(INode parent) {
     return this;
   }
 

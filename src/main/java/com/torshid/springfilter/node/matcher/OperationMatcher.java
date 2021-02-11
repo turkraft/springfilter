@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.exception.ExpressionExpectedException;
 import com.torshid.compiler.exception.ParserException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Expression;
@@ -23,7 +23,7 @@ public class OperationMatcher extends Matcher<Operation> {
   public static final OperationMatcher INSTANCE = new OperationMatcher();
 
   @Override
-  public Operation match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Operation match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
 
     if (tokens.indexIs(Operator.class)) {
 

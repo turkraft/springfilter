@@ -1,14 +1,12 @@
 package com.torshid.springfilter.node;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public abstract class Expression extends Node implements IPredicate {
+public abstract class Expression implements INode, IPredicate {
 
 }

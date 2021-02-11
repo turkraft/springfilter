@@ -8,22 +8,20 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Root;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Filter extends Root<Filter> implements IPredicate {
+public class Filter implements Root<Filter>, IPredicate {
 
   private Expression body;
 
   @Override
-  public Filter transform(Node parent) {
+  public Filter transform(INode parent) {
     body = (Expression) body.transform(this);
     return this;
   }

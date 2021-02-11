@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.Parser;
 import com.torshid.compiler.exception.ParserException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Expression;
@@ -24,7 +24,7 @@ public class ExpressionMatcher extends Matcher<Expression> {
   };
 
   @Override
-  public Expression match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Expression match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
     return (Expression) Parser.walk(matchers, tokens, nodes);
   }
 

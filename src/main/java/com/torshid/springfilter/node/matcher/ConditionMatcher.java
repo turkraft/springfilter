@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.exception.InputExpected;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Condition;
@@ -23,7 +23,7 @@ public class ConditionMatcher extends Matcher<Condition> {
   public static final ConditionMatcher INSTANCE = new ConditionMatcher();
 
   @Override
-  public Condition match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws InputExpected {
+  public Condition match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws InputExpected {
 
     if (tokens.indexIs(Field.class, Comparator.class)) {
 

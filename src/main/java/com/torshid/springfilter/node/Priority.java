@@ -8,7 +8,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +22,7 @@ public class Priority extends Expression {
   private Expression body;
 
   @Override
-  public Node transform(Node parent) {
+  public INode transform(INode parent) {
 
     if (parent instanceof Filter || parent instanceof Priority) {
       return body.transform(parent); // no need for priority if parent is root or we have nested priorities

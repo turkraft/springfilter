@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.exception.ExpressionExpectedException;
 import com.torshid.compiler.exception.ParserException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Filter;
@@ -18,7 +18,7 @@ public class FilterMarcher extends Matcher<Filter> {
   public static final FilterMarcher INSTANCE = new FilterMarcher();
 
   @Override
-  public Filter match(LinkedList<IToken> tokens, LinkedList<Node> nodes) throws ParserException {
+  public Filter match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
 
     Filter search = Filter.builder().build();
 
@@ -26,7 +26,7 @@ public class FilterMarcher extends Matcher<Filter> {
 
       // merging walked expressions to the ast body
 
-      LinkedList<Node> subNodes = new LinkedList<Node>();
+      LinkedList<INode> subNodes = new LinkedList<INode>();
 
       if (search.getBody() != null) {
         subNodes.add(search.getBody());
