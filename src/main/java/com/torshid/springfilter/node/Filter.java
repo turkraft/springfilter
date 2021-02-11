@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Root;
+import com.torshid.springfilter.token.predicate.IPredicate;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

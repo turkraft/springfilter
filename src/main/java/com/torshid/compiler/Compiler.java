@@ -13,12 +13,12 @@ public class Compiler {
 
   private Compiler() {}
 
-  public static LinkedList<IToken> tokenize(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers, String input)
+  public static LinkedList<IToken> tokenize(com.torshid.compiler.token.Matcher<?>[] tokenMatchers, String input)
       throws TokenizerException {
     return Tokenizer.tokenize(tokenMatchers, input);
   }
 
-  public static <N extends Root<N>> N parse(com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher,
+  public static <N extends Root<N>> N parse(com.torshid.compiler.node.Matcher<N> rootNodeMatcher,
       LinkedList<IToken> tokens) throws ParserException {
     return Parser.parse(rootNodeMatcher, tokens).transform(null);
   }
@@ -31,14 +31,14 @@ public class Compiler {
     return node.generate(func);
   }
 
-  public static <N extends Root<N>> String compile(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers,
-      com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher, String input)
+  public static <N extends Root<N>> String compile(com.torshid.compiler.token.Matcher<?>[] tokenMatchers,
+      com.torshid.compiler.node.Matcher<N> rootNodeMatcher, String input)
       throws ParserException, TokenizerException {
     return generate(parse(rootNodeMatcher, tokenize(tokenMatchers, input)));
   }
 
-  public static <N extends Root<N>, T> T compile(com.torshid.compiler.token.matcher.Matcher<?>[] tokenMatchers,
-      com.torshid.compiler.node.matcher.Matcher<N> rootNodeMatcher, String input, Function<INode, T> func)
+  public static <N extends Root<N>, T> T compile(com.torshid.compiler.token.Matcher<?>[] tokenMatchers,
+      com.torshid.compiler.node.Matcher<N> rootNodeMatcher, String input, Function<INode, T> func)
       throws ParserException, TokenizerException {
     return generate(parse(rootNodeMatcher, tokenize(tokenMatchers, input)), func);
   }

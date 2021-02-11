@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.torshid.compiler.exception.InvalidInputException;
 import com.torshid.compiler.exception.TokenizerException;
 import com.torshid.compiler.token.IToken;
-import com.torshid.compiler.token.matcher.Matcher;
+import com.torshid.compiler.token.Matcher;
 
 public class Tokenizer {
 
@@ -34,7 +34,6 @@ public class Tokenizer {
           }
 
           consumed = true;
-
           break;
 
         }

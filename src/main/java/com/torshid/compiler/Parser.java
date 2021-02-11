@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import com.torshid.compiler.exception.InvalidTokenSequenceException;
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
+import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.node.Root;
-import com.torshid.compiler.node.matcher.Matcher;
 import com.torshid.compiler.token.IToken;
 
 public class Parser {
