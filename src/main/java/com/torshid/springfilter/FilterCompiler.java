@@ -9,7 +9,7 @@ import javax.persistence.criteria.Root;
 
 import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.exception.TokenizerException;
-import com.torshid.compiler.node.Node;
+import com.torshid.compiler.node.INode;
 import com.torshid.springfilter.node.Filter;
 
 public class FilterCompiler {
@@ -20,7 +20,7 @@ public class FilterCompiler {
     return ast.generate();
   }
 
-  public static <T> T generate(Filter ast, Function<Node, T> func) {
+  public static <T> T generate(Filter ast, Function<INode, T> func) {
     return ast.generate(func);
   }
 
@@ -32,7 +32,7 @@ public class FilterCompiler {
     return generate(FilterParser.parse(input));
   }
 
-  public static <T> T compile(String input, Function<Node, T> func) throws ParserException, TokenizerException {
+  public static <T> T compile(String input, Function<INode, T> func) throws ParserException, TokenizerException {
     return generate(FilterParser.parse(input), func);
   }
 

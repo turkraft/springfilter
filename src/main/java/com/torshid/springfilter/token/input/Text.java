@@ -5,17 +5,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Text extends Input<String> {
+public class Text implements IInput {
 
   public static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+
+  private String value;
+
+  @Override
+  public boolean canBe(Class<?> klass) {
+    return String.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass) || klass.isEnum();
+  }
 
   @Override
   public Object getValueAs(Class<?> klass) {
@@ -44,6 +49,11 @@ public class Text extends Input<String> {
 
     throw new ClassCastException("Could not cast input '" + getValue() + "' to class " + klass.getSimpleName());
 
+  }
+
+  @Override
+  public String toStringAs(Class<?> klass) {
+    return "'" + value + "'";
   }
 
 }

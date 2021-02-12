@@ -8,8 +8,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public interface IPredicate {
+public interface IPredicate extends IExpression<Boolean> {
 
+  @Override
   Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins);
 

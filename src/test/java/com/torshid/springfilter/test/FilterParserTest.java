@@ -1,25 +1,34 @@
 package com.torshid.springfilter.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.LinkedList;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.FilterParser;
 import com.torshid.springfilter.FilterTokenizer;
 import com.torshid.springfilter.node.Filter;
 
 class FilterParserTest {
 
-  @Test
-  void test() throws Exception {
+  @ParameterizedTest
+  @ValueSource(strings = {"(a : 1 or not not not(b : 2 or c : 5))"})
+  void test(String input) {
 
-    LinkedList<Token> tokens = FilterTokenizer.tokenize(
-        "not not (voiture.marque : 'fiat' OR voiture.marque : 'audi') AND voiture.km < 10000 OR x is null and (( not z is empty))");
+    LinkedList<IToken> tokens = FilterTokenizer.tokenize(input);
 
-    Filter ast = FilterParser.parse(tokens)
-        .transform(null);
+    Filter ast = FilterParser.parse(tokens).transform(null);
 
+    System.out.println(ast.generate());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"x : 1", "(x : 1 or y : 2)", "not(not(x : 1))", "(x : 1 or (y : 2 and z : 3))"})
+  void generationIsEqualToInput(String input) throws Exception {
+    assertEquals(input, FilterParser.parse(FilterTokenizer.tokenize(input)).transform(null).generate());
   }
 
 }

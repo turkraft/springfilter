@@ -7,12 +7,8 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Parenthesis implements IToken {
+public class Word implements IToken {
 
-  private Type type;
-
-  public enum Type {
-    OPEN, CLOSE
-  }
+  private String value;
 
 }

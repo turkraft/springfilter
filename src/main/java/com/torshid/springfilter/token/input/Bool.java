@@ -1,19 +1,31 @@
 package com.torshid.springfilter.token.input;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Bool extends Input<Boolean> {
+public class Bool implements IInput {
+
+  // bool should maybe implement IPredicate too
+
+  private Boolean value;
 
   @Override
-  public Boolean getValueAs(Class<?> klass) {
-    return getValue();
+  public boolean canBe(Class<?> klass) {
+    return Boolean.class.isAssignableFrom(klass);
+  }
+
+  @Override
+  public Object getValueAs(Class<?> klass) {
+    return value;
+  }
+
+  @Override
+  public String toStringAs(Class<?> targetClass) {
+    return value.toString().toLowerCase();
   }
 
 }

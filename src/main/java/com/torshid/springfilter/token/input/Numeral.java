@@ -1,19 +1,29 @@
 package com.torshid.springfilter.token.input;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Numeral extends Input<Number> {
+public class Numeral implements IInput {
+
+  private Number value;
 
   @Override
-  public Number getValueAs(Class<?> klass) {
-    return getValue();
+  public boolean canBe(Class<?> klass) {
+    return Number.class.isAssignableFrom(klass);
+  }
+
+  @Override
+  public Object getValueAs(Class<?> klass) {
+    return value;
+  }
+
+  @Override
+  public String toStringAs(Class<?> klass) {
+    return value.toString();
   }
 
 }

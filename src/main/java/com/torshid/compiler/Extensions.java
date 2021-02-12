@@ -42,6 +42,15 @@ public class Extensions {
     return null;
   }
 
+  public static <T> LinkedList<T> copy(LinkedList<T> list) {
+    return new LinkedList<T>(list);
+  }
+
+  public static <T> void replaceWith(LinkedList<T> list, LinkedList<T> replacor) {
+    list.clear();
+    list.addAll(replacor);
+  }
+
   public static <T> T take(LinkedList<T> list) {
     return list.pop();
   }

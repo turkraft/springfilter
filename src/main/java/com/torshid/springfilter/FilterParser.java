@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 import com.torshid.compiler.Parser;
 import com.torshid.compiler.exception.ParserException;
-import com.torshid.compiler.token.Token;
+import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.Filter;
-import com.torshid.springfilter.node.matcher.FilterMarcher;
+import com.torshid.springfilter.node.FilterMatcher;
 
 public class FilterParser {
 
@@ -16,8 +16,8 @@ public class FilterParser {
     return parse(FilterTokenizer.tokenize(input));
   }
 
-  public static Filter parse(LinkedList<Token> tokens) throws ParserException {
-    return Parser.parse(FilterMarcher.INSTANCE, tokens);
+  public static Filter parse(LinkedList<IToken> tokens) throws ParserException {
+    return Parser.parse(FilterMatcher.INSTANCE, tokens);
   }
 
 }

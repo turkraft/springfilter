@@ -1,79 +1,66 @@
 package com.torshid.springfilter.token;
 
-import com.torshid.compiler.token.Token;
-import com.torshid.compiler.token.matcher.LiteralMatcher.ILiteral;
+import com.torshid.compiler.token.IToken;
+import com.torshid.compiler.token.LiteralMatcher.ILiteral;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
+public enum Comparator implements IToken, ILiteral {
 
-@SuperBuilder
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class Comparator extends Token {
+  EQUAL(":", Object.class),
+  NOT_EQUAL("!", Object.class),
+  LIKE("~", String.class),
+  GREATER_THAN_EQUAL(">:", Comparable.class),
+  GREATER_THAN(">", Comparable.class),
+  LESS_THAN_EQUAL("<:", Comparable.class),
+  LESS_THAN("<", Comparable.class),
+  NULL("is null", "^is\\s*null(?=\\s|$)"),
+  NOT_NULL("is not null", "^is\\s*not\\s*null(?=\\s|$)"),
+  EMPTY("is empty", "^is\\s*empty(?=\\s|$)"),
+  NOT_EMPTY("is not empty", "^is\\s*not\\s*empty(?=\\s|$)");
 
-  private Type type;
+  private final String literal;
+  private final String regex;
+  private final Class<?> fieldType;
 
-  public enum Type implements ILiteral {
+  Comparator(String literal, String regex, Class<?> fieldType) {
+    this.literal = literal;
+    this.regex = regex;
+    this.fieldType = fieldType;
+  }
 
-    EQUAL(":", Object.class),
-    NOT_EQUAL("!", Object.class),
-    LIKE("~", String.class),
-    GREATER_THAN_EQUAL(">:", Comparable.class),
-    GREATER_THAN(">", Comparable.class),
-    LESS_THAN_EQUAL("<:", Comparable.class),
-    LESS_THAN("<", Comparable.class),
-    NULL(" is null", "^is\\s*null"),
-    NOT_NULL(" is not null", "^is\\s*not\\s*null"),
-    EMPTY(" is empty", "^is\\s*empty"),
-    NOT_EMPTY(" is not empty", "^is\\s*not\\s*empty");
+  Comparator(String literal, Class<?> fieldType) {
+    this.literal = literal;
+    this.fieldType = fieldType;
+    this.regex = null;
+  }
 
-    private final String literal;
-    private final String regex;
-    private final Class<?> fieldType;
+  Comparator(String literal, String regex) {
+    this.literal = literal;
+    this.regex = regex;
+    this.fieldType = null;
+  }
 
-    Type(String literal, String regex, Class<?> fieldType) {
-      this.literal = literal;
-      this.regex = regex;
-      this.fieldType = fieldType;
-    }
+  Comparator(String literal) {
+    this.literal = literal;
+    this.regex = null;
+    this.fieldType = null;
+  }
 
-    Type(String literal, Class<?> fieldType) {
-      this.literal = literal;
-      this.fieldType = fieldType;
-      this.regex = null;
-    }
+  @Override
+  public String getLiteral() {
+    return literal;
+  }
 
-    Type(String literal, String regex) {
-      this.literal = literal;
-      this.regex = regex;
-      this.fieldType = null;
-    }
+  public boolean needsInput() {
+    return fieldType != null;
+  }
 
-    Type(String literal) {
-      this.literal = literal;
-      this.regex = null;
-      this.fieldType = null;
-    }
+  @Override
+  public String getRegex() {
+    return regex;
+  }
 
-    @Override
-    public String getLiteral() {
-      return literal;
-    }
-
-    public boolean needsInput() {
-      return fieldType != null;
-    }
-
-    @Override
-    public String getRegex() {
-      return regex;
-    }
-
-    public Class<?> getFieldType() {
-      return fieldType;
-    }
-
+  public Class<?> getFieldType() {
+    return fieldType;
   }
 
 }
