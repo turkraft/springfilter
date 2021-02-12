@@ -99,7 +99,7 @@ public class ConditionInfix extends Condition {
 
       case LIKE: {
         return criteriaBuilder.like(criteriaBuilder.upper((Expression) left),
-            "%" + right.toString().trim().toUpperCase() + "%");
+            criteriaBuilder.upper((Expression<String>) right));
       }
 
       default:
