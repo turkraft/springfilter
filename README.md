@@ -78,7 +78,7 @@ Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBu
 Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
 
-> :information_source: The builder will change in the future in order to be simpler, it currently uses Lombok
+> :construction: The builder will change in the future in order to be simpler, it currently uses Lombok
 
 ## Syntax
 
