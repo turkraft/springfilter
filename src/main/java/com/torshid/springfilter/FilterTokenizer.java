@@ -7,6 +7,7 @@ import com.torshid.compiler.exception.TokenizerException;
 import com.torshid.compiler.token.IToken;
 import com.torshid.compiler.token.Matcher;
 import com.torshid.springfilter.token.ComparatorMatcher;
+import com.torshid.springfilter.token.DotMatcher;
 import com.torshid.springfilter.token.OperatorMatcher;
 import com.torshid.springfilter.token.ParenthesisMatcher;
 import com.torshid.springfilter.token.SpaceMatcher;
@@ -21,8 +22,8 @@ public class FilterTokenizer {
 
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
-      new SpaceMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new ComparatorMatcher(), new BoolMatcher(),
-      new WordMatcher(), new TextMatcher(), new NumeralMatcher()
+      new SpaceMatcher(), new DotMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new ComparatorMatcher(),
+      new BoolMatcher(), new WordMatcher(), new TextMatcher(), new NumeralMatcher()
 
   };
 

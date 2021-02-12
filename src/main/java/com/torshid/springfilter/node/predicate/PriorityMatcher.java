@@ -29,22 +29,22 @@ public class PriorityMatcher extends Matcher<Priority> {
 
       Priority priority = Priority.builder().build();
 
-      LinkedList<INode> subNodes = new LinkedList<INode>();
+      //      LinkedList<INode> subNodes = new LinkedList<INode>();
 
       while (tokens.size() > 0
           && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE)) {
-        subNodes.add(PredicateMatcher.INSTANCE.match(tokens, subNodes));
+        nodes.add(PredicateMatcher.INSTANCE.match(tokens, nodes));
       }
 
       if (tokens.size() == 0) {
         throw new OutOfTokenException("Closing parenthesis not found");
       }
 
-      if (nodes.size() != 1 || subNodes.index() == null) {
+      if (nodes.size() != 1 || nodes.index() == null) {
         throw new ExpressionExpectedException("Expression expected inside parentheses");
       }
 
-      priority.setBody((IPredicate) subNodes.take());
+      priority.setBody((IPredicate) nodes.take());
 
       tokens.take();
 

@@ -41,6 +41,8 @@ public class ConditionInfix extends Condition {
   public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
+    // crazy stuff going on here
+
     if (left instanceof Input && right instanceof Input) {
       throw new UnsupportedOperationException(
           "Left and right expressions of the comparator " + getComparator().getLiteral() + " can't be both inputs");

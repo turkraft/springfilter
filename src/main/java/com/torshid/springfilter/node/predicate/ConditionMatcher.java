@@ -8,8 +8,8 @@ import com.torshid.compiler.exception.OutOfTokenException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.node.IExpression;
 import com.torshid.springfilter.node.ExpressionMatcher;
+import com.torshid.springfilter.node.IExpression;
 import com.torshid.springfilter.token.Comparator;
 
 import lombok.experimental.ExtensionMethod;
@@ -48,9 +48,9 @@ public class ConditionMatcher extends Matcher<Condition> {
 
       }
 
-      tokens.replaceWith(backup);
-
     }
+
+    tokens.replaceWith(backup);
 
     return null;
 

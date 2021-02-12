@@ -40,7 +40,7 @@ public enum Operator implements IToken, ILiteral {
 
   @Override
   public String getRegex() {
-    return "^" + literal + "\\s";
+    return "^" + literal + "(?=\\s|\\(|$)";
   }
 
   public enum Position {

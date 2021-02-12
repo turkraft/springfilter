@@ -12,6 +12,7 @@ public class DotMatcher extends Matcher<Dot> {
   public Dot match(StringBuilder input) {
 
     if (input.index() == '.') {
+      input.take();
       return Dot.builder().build();
     }
 
