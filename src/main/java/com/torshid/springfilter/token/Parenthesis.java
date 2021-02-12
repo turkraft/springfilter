@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token.predicate;
+package com.torshid.springfilter.token;
 
 import com.torshid.compiler.token.IToken;
 

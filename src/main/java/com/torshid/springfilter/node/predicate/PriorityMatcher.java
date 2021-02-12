@@ -9,8 +9,9 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.token.predicate.Parenthesis;
-import com.torshid.springfilter.token.predicate.Parenthesis.Type;
+import com.torshid.springfilter.node.IPredicate;
+import com.torshid.springfilter.token.Parenthesis;
+import com.torshid.springfilter.token.Parenthesis.Type;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -28,34 +29,22 @@ public class PriorityMatcher extends Matcher<Priority> {
 
       Priority priority = Priority.builder().build();
 
+      LinkedList<INode> subNodes = new LinkedList<INode>();
+
       while (tokens.size() > 0
           && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE)) {
-
-        // merging walked expressions to the body until we encounter closing parenthesis
-
-        LinkedList<INode> subNodes = new LinkedList<INode>();
-
-        if (priority.getBody() != null) {
-          subNodes.add(priority.getBody());
-        }
-
-        try {
-
-          priority.setBody(PredicateMatcher.INSTANCE.match(tokens, subNodes));
-
-        } catch (ParserException ex) {
-          throw new ExpressionExpectedException("Expression is expected inside parentheses", ex);
-        }
-
+        subNodes.add(PredicateMatcher.INSTANCE.match(tokens, subNodes));
       }
 
       if (tokens.size() == 0) {
         throw new OutOfTokenException("Closing parenthesis not found");
       }
 
-      if (priority.getBody() == null) {
+      if (nodes.size() != 1 || subNodes.index() == null) {
         throw new ExpressionExpectedException("Expression expected inside parentheses");
       }
+
+      priority.setBody((IPredicate) subNodes.take());
 
       tokens.take();
 

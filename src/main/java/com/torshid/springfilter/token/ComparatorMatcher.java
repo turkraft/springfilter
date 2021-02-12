@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token.predicate;
+package com.torshid.springfilter.token;
 
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.token.LiteralMatcher;
@@ -6,11 +6,11 @@ import com.torshid.compiler.token.LiteralMatcher;
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public class OperatorMatcher extends LiteralMatcher<Operator> {
+public class ComparatorMatcher extends LiteralMatcher<Comparator> {
 
   @Override
-  public Class<Operator> getEnumClass() {
-    return Operator.class;
+  public Class<Comparator> getEnumClass() {
+    return Comparator.class;
   }
 
 }

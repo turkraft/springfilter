@@ -10,7 +10,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.torshid.compiler.node.INode;
-import com.torshid.springfilter.token.IExpression;
+import com.torshid.springfilter.node.IExpression;
+import com.torshid.springfilter.node.Input;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,9 +41,30 @@ public class ConditionInfix extends Condition {
   public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
-    Expression<?> left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    if (left instanceof Input && right instanceof Input) {
+      throw new UnsupportedOperationException(
+          "Left and right expressions of the comparator " + getComparator().getLiteral() + " can't be both inputs");
+    }
 
-    Expression<?> right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> left = null;
+    Expression<?> right = null;
+
+    if (getRight() instanceof Input) {
+      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      ((Input) getRight()).setTargetClass(left.getJavaType());
+      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+    }
+
+    else if (getLeft() instanceof Input) {
+      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      ((Input) getLeft()).setTargetClass(right.getJavaType());
+      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    }
+
+    else {
+      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+    }
 
     if (!getComparator().getFieldType().isAssignableFrom(left.getJavaType())
         || !getComparator().getFieldType().isAssignableFrom(right.getJavaType())) {

@@ -12,14 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.torshid.compiler.exception.TokenizerException;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.FilterTokenizer;
-import com.torshid.springfilter.token.predicate.Comparator;
-import com.torshid.springfilter.token.predicate.Operator;
-import com.torshid.springfilter.token.predicate.Parenthesis;
-import com.torshid.springfilter.token.predicate.Parenthesis.Type;
-import com.torshid.springfilter.token.statement.Field;
-import com.torshid.springfilter.token.statement.input.Bool;
-import com.torshid.springfilter.token.statement.input.Numeral;
-import com.torshid.springfilter.token.statement.input.Text;
+import com.torshid.springfilter.token.Comparator;
+import com.torshid.springfilter.token.Operator;
+import com.torshid.springfilter.token.Parenthesis;
+import com.torshid.springfilter.token.Parenthesis.Type;
+import com.torshid.springfilter.token.input.Bool;
+import com.torshid.springfilter.token.input.Numeral;
+import com.torshid.springfilter.token.input.Text;
 
 
 class FilterTokenizerTest {
@@ -28,12 +27,6 @@ class FilterTokenizerTest {
     assertEquals(1, tokens.size(), "Only one token should be present");
     assertEquals(tokens.get(0).getClass(), klass,
         "The token should be a " + klass.getSimpleName() + ", is a " + tokens.get(0).getClass().getSimpleName());
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {"A", "a", "abcA123", "a.b.c", "a.b2.cC0943a.l"})
-  void validateFields(String input) throws TokenizerException {
-    validateSingleToken(FilterTokenizer.tokenize(input), Field.class);
   }
 
   @ParameterizedTest

@@ -8,9 +8,9 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.token.predicate.IPredicate;
-import com.torshid.springfilter.token.predicate.Operator;
-import com.torshid.springfilter.token.predicate.Operator.Position;
+import com.torshid.springfilter.node.IPredicate;
+import com.torshid.springfilter.token.Operator;
+import com.torshid.springfilter.token.Operator.Position;
 
 import lombok.experimental.ExtensionMethod;
 

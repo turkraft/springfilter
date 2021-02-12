@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token.predicate;
+package com.torshid.springfilter.node;
 
 import java.util.Map;
 
@@ -7,8 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import com.torshid.springfilter.token.IExpression;
 
 public interface IPredicate extends IExpression<Boolean> {
 

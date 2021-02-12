@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token.statement;
+package com.torshid.springfilter.node;
 
 import java.util.Map;
 
@@ -10,16 +10,18 @@ import javax.persistence.criteria.Root;
 
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.Utils;
+import com.torshid.springfilter.token.input.IInput;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Field implements IToken, IStatement<Object> {
+public class Input implements IToken, IExpression<Object> {
 
-  private String name;
+  private IInput value;
+
+  private Class<?> targetClass;
 
   @Override
   public INode transform(INode parent) {
@@ -28,13 +30,13 @@ public class Field implements IToken, IStatement<Object> {
 
   @Override
   public String generate() {
-    return name;
+    return value.toStringAs(targetClass);
   }
 
   @Override
   public Expression<Object> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
-    return (Expression<Object>) Utils.buildDatabasePath(root, joins, name);
+    return criteriaBuilder.literal(value.getValueAs(targetClass));
   }
 
 }

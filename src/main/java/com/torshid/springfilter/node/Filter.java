@@ -9,15 +9,14 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
 import com.torshid.compiler.node.INode;
-import com.torshid.compiler.node.Root;
-import com.torshid.springfilter.token.predicate.IPredicate;
+import com.torshid.compiler.node.IRoot;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Filter implements Root<Filter>, IPredicate {
+public class Filter implements IRoot<Filter>, IPredicate {
 
   private IPredicate body;
 

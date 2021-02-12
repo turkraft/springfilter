@@ -6,15 +6,14 @@ import com.torshid.compiler.Tokenizer;
 import com.torshid.compiler.exception.TokenizerException;
 import com.torshid.compiler.token.IToken;
 import com.torshid.compiler.token.Matcher;
+import com.torshid.springfilter.token.ComparatorMatcher;
+import com.torshid.springfilter.token.OperatorMatcher;
+import com.torshid.springfilter.token.ParenthesisMatcher;
 import com.torshid.springfilter.token.SpaceMatcher;
 import com.torshid.springfilter.token.WordMatcher;
-import com.torshid.springfilter.token.predicate.ComparatorMatcher;
-import com.torshid.springfilter.token.predicate.OperatorMatcher;
-import com.torshid.springfilter.token.predicate.ParenthesisMatcher;
-import com.torshid.springfilter.token.statement.FieldMatcher;
-import com.torshid.springfilter.token.statement.input.BoolMatcher;
-import com.torshid.springfilter.token.statement.input.NumeralMatcher;
-import com.torshid.springfilter.token.statement.input.TextMatcher;
+import com.torshid.springfilter.token.input.BoolMatcher;
+import com.torshid.springfilter.token.input.NumeralMatcher;
+import com.torshid.springfilter.token.input.TextMatcher;
 
 public class FilterTokenizer {
 
@@ -23,7 +22,7 @@ public class FilterTokenizer {
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
       new SpaceMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new ComparatorMatcher(), new BoolMatcher(),
-      new NumeralMatcher(), new FieldMatcher(), new WordMatcher(), new TextMatcher()
+      new WordMatcher(), new TextMatcher(), new NumeralMatcher()
 
   };
 

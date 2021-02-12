@@ -1,8 +1,8 @@
 package com.torshid.springfilter.node.predicate;
 
 import com.torshid.compiler.node.INode;
-import com.torshid.springfilter.token.predicate.Comparator;
-import com.torshid.springfilter.token.predicate.IPredicate;
+import com.torshid.springfilter.node.IPredicate;
+import com.torshid.springfilter.token.Comparator;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

@@ -8,7 +8,7 @@ import com.torshid.compiler.exception.ParserException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.token.predicate.IPredicate;
+import com.torshid.springfilter.node.IPredicate;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -19,7 +19,7 @@ public class PredicateMatcher extends Matcher<IPredicate> {
 
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
-      ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE, PriorityMatcher.INSTANCE
+      PriorityMatcher.INSTANCE, ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE,
 
   };
 

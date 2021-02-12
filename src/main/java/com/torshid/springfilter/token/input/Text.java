@@ -1,21 +1,26 @@
-package com.torshid.springfilter.token.statement.input;
+package com.torshid.springfilter.token.input;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Text extends Input<String> {
+public class Text implements IInput {
 
   public static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+
+  private String value;
+
+  @Override
+  public boolean canBe(Class<?> klass) {
+    return String.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass) || klass.isEnum();
+  }
 
   @Override
   public Object getValueAs(Class<?> klass) {
@@ -47,8 +52,8 @@ public class Text extends Input<String> {
   }
 
   @Override
-  public String generate() {
-    return "'" + getValue() + "'";
+  public String toStringAs(Class<?> klass) {
+    return "'" + value + "'";
   }
 
 }

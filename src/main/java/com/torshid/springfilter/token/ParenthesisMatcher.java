@@ -1,8 +1,8 @@
-package com.torshid.springfilter.token.predicate;
+package com.torshid.springfilter.token;
 
 import com.torshid.compiler.Extensions;
 import com.torshid.compiler.token.Matcher;
-import com.torshid.springfilter.token.predicate.Parenthesis.Type;
+import com.torshid.springfilter.token.Parenthesis.Type;
 
 import lombok.experimental.ExtensionMethod;
 

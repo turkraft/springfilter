@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token;
+package com.torshid.springfilter.node;
 
 import java.util.Map;
 

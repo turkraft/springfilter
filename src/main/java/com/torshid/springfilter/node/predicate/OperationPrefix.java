@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.torshid.compiler.node.INode;
-import com.torshid.springfilter.token.predicate.IPredicate;
+import com.torshid.springfilter.node.IPredicate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

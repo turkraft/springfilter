@@ -9,7 +9,6 @@ import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
 import com.torshid.springfilter.node.predicate.PredicateMatcher;
-import com.torshid.springfilter.token.predicate.IPredicate;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -24,16 +23,14 @@ public class FilterMatcher extends Matcher<Filter> {
     Filter search = Filter.builder().build();
 
     while (!tokens.isEmpty()) {
-
       nodes.add(PredicateMatcher.INSTANCE.match(tokens, nodes));
-
-      if (nodes.size() != 1) {
-        throw new ExpressionExpectedException("Tokens should form an expression");
-      }
-
     }
 
-    search.setBody((IPredicate) nodes.index());
+    if (nodes.size() != 1 || nodes.index() == null) {
+      throw new ExpressionExpectedException("Tokens should form an expression");
+    }
+
+    search.setBody((IPredicate) nodes.take());
 
     return search;
 

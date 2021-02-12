@@ -8,9 +8,9 @@ import com.torshid.compiler.exception.OutOfTokenException;
 import com.torshid.compiler.node.INode;
 import com.torshid.compiler.node.Matcher;
 import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.node.statement.StatementMatcher;
-import com.torshid.springfilter.token.IExpression;
-import com.torshid.springfilter.token.predicate.Comparator;
+import com.torshid.springfilter.node.IExpression;
+import com.torshid.springfilter.node.ExpressionMatcher;
+import com.torshid.springfilter.token.Comparator;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -24,7 +24,7 @@ public class ConditionMatcher extends Matcher<Condition> {
 
     LinkedList<IToken> backup = tokens.copy();
 
-    IExpression<?> left = StatementMatcher.INSTANCE.match(tokens, nodes);
+    IExpression<?> left = ExpressionMatcher.INSTANCE.match(tokens, nodes);
 
     if (left != null) {
 
@@ -34,7 +34,7 @@ public class ConditionMatcher extends Matcher<Condition> {
 
         if (comparator.needsInput()) {
 
-          IExpression<?> right = StatementMatcher.INSTANCE.match(tokens, nodes);
+          IExpression<?> right = ExpressionMatcher.INSTANCE.match(tokens, nodes);
 
           if (right != null) {
             return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();

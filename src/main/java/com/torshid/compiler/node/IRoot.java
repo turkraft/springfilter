@@ -1,6 +1,6 @@
 package com.torshid.compiler.node;
 
-public interface Root<N extends Root<N>> extends INode {
+public interface IRoot<N extends IRoot<N>> extends INode {
 
   @Override
   N transform(INode parent);

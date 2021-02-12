@@ -12,7 +12,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
-import com.torshid.springfilter.token.IExpression;
+import com.torshid.springfilter.node.IExpression;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

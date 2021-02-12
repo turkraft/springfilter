@@ -1,4 +1,4 @@
-package com.torshid.springfilter.token.statement.input;
+package com.torshid.springfilter.token.input;
 
 import java.text.NumberFormat;
 import java.text.ParsePosition;
