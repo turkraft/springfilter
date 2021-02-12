@@ -1,7 +1,7 @@
 # Spring Filter
 
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
-Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess.
+Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I try to compile a simple syntax to JPA predicates.
 
 ## Example
 */search?filter=* (brand.name **:** 'audi' **or** brand.name : 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
@@ -95,16 +95,16 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ### Comparators
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
-  <tr> <td>~</th> <td>checks if a (string) field is like a value</td> <td>catalog.name <b>~</b> 'electronic'</td> </tr>
-  <tr> <td>:</th> <td>checks if a field is equal to a value</td> <td>id <b>:</b> 5</td> </tr>
-  <tr> <td>></th> <td>checks if a field is greater than a value</td> <td>distance <b>></b> 100</td> </tr>
-  <tr> <td>>:</th> <td>checks if a field is greater than or equal to a value</td> <td>distance <b>>:</b> 100</td> </tr>
-  <tr> <td><</th> <td>checks if a field is smaller than a value</td> <td>distance <b><</b> 100</td> </tr>
-  <tr> <td><:</th> <td>checks if a field is smaller or equal to a value</td> <td>distance <b><:</b> 100</td> </tr>
-  <tr> <td>is null</th> <td>checks if a field is null</td> <td>status <b>is null</b></td> </tr>
-  <tr> <td>is not null</th> <td>checks if a field is not null</td> <td>status <b>is not null</b></td> </tr>
-  <tr> <td>is empty</th> <td>checks if a (collection) field is empty</td> <td>children <b>is empty</b></td> </tr>
-  <tr> <td>is not empty</th> <td>checks if a (collection) field is not empty</td> <td>children <b>is not empty</b></td> </tr>
+  <tr> <td>~</th> <td>checks if the left (string) expression is similar to the right (string) expression</td> <td>catalog.name <b>~</b> 'electronic'</td> </tr>
+  <tr> <td>:</th> <td>checks if the left expression is equal to the right expression</td> <td>id <b>:</b> 5</td> </tr>
+  <tr> <td>></th> <td>checks if the left expression is greater than the right expression</td> <td>distance <b>></b> 100</td> </tr>
+  <tr> <td>>:</th> <td>checks if the left expression is greater or equal to the right expression</td> <td>distance <b>>:</b> 100</td> </tr>
+  <tr> <td><</th> <td>checks if the left expression is smaller than the right expression</td> <td>distance <b><</b> 100</td> </tr>
+  <tr> <td><:</th> <td>checks if the left expression is smaller or equal to the right expression</td> <td>distance <b><:</b> 100</td> </tr>
+  <tr> <td>is null</th> <td>checks if an expression is null</td> <td>status <b>is null</b></td> </tr>
+  <tr> <td>is not null</th> <td>checks if an expression is not null</td> <td>status <b>is not null</b></td> </tr>
+  <tr> <td>is empty</th> <td>checks if the (collection) expression is empty</td> <td>children <b>is empty</b></td> </tr>
+  <tr> <td>is not empty</th> <td>checks if the (collection) expression is not empty</td> <td>children <b>is not empty</b></td> </tr>
 </table>
 
 ## Contributing
