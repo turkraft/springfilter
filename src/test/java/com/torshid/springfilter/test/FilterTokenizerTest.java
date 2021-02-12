@@ -9,17 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.torshid.compiler.token.IToken;
-import com.torshid.springfilter.FilterTokenizer;
-import com.torshid.springfilter.token.Comparator;
-import com.torshid.springfilter.token.Dot;
-import com.torshid.springfilter.token.Operator;
-import com.torshid.springfilter.token.Parenthesis;
-import com.torshid.springfilter.token.Parenthesis.Type;
-import com.torshid.springfilter.token.Word;
-import com.torshid.springfilter.token.input.Bool;
-import com.torshid.springfilter.token.input.Numeral;
-import com.torshid.springfilter.token.input.Text;
+import com.springfilter.compiler.compiler.token.IToken;
+import com.springfilter.compiler.springfilter.FilterTokenizer;
+import com.springfilter.compiler.springfilter.token.Comparator;
+import com.springfilter.compiler.springfilter.token.Dot;
+import com.springfilter.compiler.springfilter.token.Operator;
+import com.springfilter.compiler.springfilter.token.Parenthesis;
+import com.springfilter.compiler.springfilter.token.Word;
+import com.springfilter.compiler.springfilter.token.Parenthesis.Type;
+import com.springfilter.compiler.springfilter.token.input.Bool;
+import com.springfilter.compiler.springfilter.token.input.Numeral;
+import com.springfilter.compiler.springfilter.token.input.Text;
 
 
 class FilterTokenizerTest {
