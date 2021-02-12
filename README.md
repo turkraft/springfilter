@@ -4,7 +4,7 @@ You need a way to dynamically filter entities without any effort? Just add me to
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess.
 
 ## Example
-*/search?filter=* (brand.name **:** audi **or** brand.name : 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** white **and** accidents **is empty**
+*/search?filter=* (brand.name **:** 'audi' **or** brand.name : 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
 
