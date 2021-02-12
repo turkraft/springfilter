@@ -56,17 +56,21 @@ Specification<Entity> spec = new FilterSpecification<Entity>(input);
 Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
 
-:warning: **If you need to search over relations**, you also require **hibernate-core**
-
----
+> :warning: **If you need to search over relations**, you also require **hibernate-core**
 
 ### d. Builder
 ```java
 Filter filter = Filter.builder()
-    .body(ConditionWithInput.builder()
-        .field("name")
-        .comparator(Type.LIKE)
-        .input("jose")
+    .body(ConditionInfix.builder()
+        .left(Field.builder()
+            .name("name")
+            .build())
+        .comparator(Comparator.LIKE)
+        .right(Input.builder()
+            .value(Text.builder()
+                .value("jose")
+                .build())
+            .build())
         .build())
     .build();
 String input = filter.generate(); // name ~ 'jose'
@@ -74,12 +78,14 @@ Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBu
 Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
 
+> The builder will change in the future in order to be simpler, it currently uses Lombok.
+
 ## Syntax
 
 ### Operators
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
-  <tr> <td>and</th> <td>and's two expressions</td> <td>status : active <b>and</b> createdAt > 1-1-2000</td> </tr>
+  <tr> <td>and</th> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > 1-1-2000</td> </tr>
   <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
 </table>
@@ -89,7 +95,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ### Comparators
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
-  <tr> <td>~</th> <td>checks if a (string) field is like a value</td> <td>catalog.name <b>~</b> 'elec'</td> </tr>
+  <tr> <td>~</th> <td>checks if a (string) field is like a value</td> <td>catalog.name <b>~</b> 'electronic'</td> </tr>
   <tr> <td>:</th> <td>checks if a field is equal to a value</td> <td>id <b>:</b> 5</td> </tr>
   <tr> <td>></th> <td>checks if a field is greater than a value</td> <td>distance <b>></b> 100</td> </tr>
   <tr> <td>>:</th> <td>checks if a field is greater than or equal to a value</td> <td>distance <b>>:</b> 100</td> </tr>
