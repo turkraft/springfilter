@@ -16,11 +16,14 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       - id: install-secret-key
-        name: Install gpg secret key
+        name: Install GPG key
         run: |
           export GPG_TTY=$(tty)
           cat <(echo -e "${{ secrets.GPG_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
+      - if: github.event.release
+        name: Update version in pom.xml (Release only)
+        run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
       - name: Publish package
         run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSWORD }} --batch-mode --no-transfer-progress clean deploy
         env:
