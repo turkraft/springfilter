@@ -13,7 +13,7 @@ import com.springfilter.node.Filter;
 class FilterParserTest2 {
 
   @ParameterizedTest
-  @ValueSource(strings = {"hello(x) : 1"})
+  @ValueSource(strings = {"x : 1 and y: 2"})
   void test2(String input) {
 
     LinkedList<IToken> tokens = FilterTokenizer.tokenize(input);

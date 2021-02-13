@@ -2,13 +2,13 @@ package com.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
+import com.springfilter.FilterParser;
 import com.springfilter.compiler.Extensions;
 import com.springfilter.compiler.exception.InputExpected;
 import com.springfilter.compiler.exception.OutOfTokenException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
-import com.springfilter.node.ExpressionMatcher;
 import com.springfilter.node.IExpression;
 import com.springfilter.token.Comparator;
 
@@ -20,9 +20,10 @@ public class ConditionMatcher extends Matcher<Condition> {
   public static final ConditionMatcher INSTANCE = new ConditionMatcher();
 
   @Override
-  public Condition match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws InputExpected {
+  public Condition match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
+      throws InputExpected {
 
-    IExpression left = ExpressionMatcher.INSTANCE.match(tokens, nodes);
+    IExpression left = FilterParser.walk(matchers, tokens, nodes, false);
 
     if (left != null) {
 
@@ -32,7 +33,7 @@ public class ConditionMatcher extends Matcher<Condition> {
 
         if (comparator.needsInput()) {
 
-          IExpression right = ExpressionMatcher.INSTANCE.match(tokens, nodes);
+          IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
 
           if (right != null) {
             return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();

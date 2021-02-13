@@ -2,12 +2,14 @@ package com.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
+import com.springfilter.FilterParser;
 import com.springfilter.compiler.Extensions;
 import com.springfilter.compiler.exception.ExpressionExpectedException;
 import com.springfilter.compiler.exception.ParserException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
+import com.springfilter.node.IExpression;
 import com.springfilter.node.IPredicate;
 import com.springfilter.token.Operator;
 import com.springfilter.token.Operator.Position;
@@ -20,7 +22,8 @@ public class OperationMatcher extends Matcher<Operation> {
   public static final OperationMatcher INSTANCE = new OperationMatcher();
 
   @Override
-  public Operation match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+  public Operation match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
+      throws ParserException {
 
     if (tokens.indexIs(Operator.class)) {
 
@@ -30,18 +33,20 @@ public class OperationMatcher extends Matcher<Operation> {
 
         // regular prefix operation, such as 'NOT x'
 
-        try {
+        IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
 
-          return OperationPrefix.builder().type(operator).right(PredicateMatcher.INSTANCE.match(tokens, nodes)).build();
-
-        } catch (ParserException ex) {
-          throw new ExpressionExpectedException(
-              "An expression is expected after the prefix operator " + operator.getLiteral(), ex);
+        if (right != null && right instanceof IPredicate) {
+          return OperationPrefix.builder().type(operator).right((IPredicate) right).build();
         }
+
+        throw new ExpressionExpectedException(
+            "An expression is expected after the prefix operator " + operator.getLiteral());
 
       }
 
-      if (nodes.peekLast() == null) {
+      // infix operator
+
+      if (!nodes.lastIs(IPredicate.class)) {
         throw new ExpressionExpectedException(
             "An expression is expected before the infix operator " + operator.getLiteral());
       }
@@ -57,35 +62,40 @@ public class OperationMatcher extends Matcher<Operation> {
 
           nodes.pollLast(); // remove previous operation, it will be reinserted later
 
-          try {
+          IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
+
+          if (right != null && right instanceof IPredicate) {
 
             OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
-                .right(PredicateMatcher.INSTANCE.match(tokens, nodes)).build();
+                .right((IPredicate) right).build();
 
             previousOperation.setRight(and);
 
-            return previousOperation; // reinsert previous op, this is done otherwise we would get an exception if we returned null
+            return previousOperation;
 
-          } catch (ParserException ex) {
-            throw new ExpressionExpectedException(
-                "An expression is expected after the infix operator " + operator.getLiteral(), ex);
           }
+
+          throw new ExpressionExpectedException(
+              "An expression is expected after the infix operator " + operator.getLiteral());
 
         }
 
       }
 
-      try {
+      // regular infix operation such as 'x OR y'
 
-        // regular infix operation such as 'x OR y'
 
-        return OperationInfix.builder().left((IPredicate) nodes.pollLast()).type(operator)
-            .right(PredicateMatcher.INSTANCE.match(tokens, nodes)).build();
+      IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
 
-      } catch (ParserException ex) {
-        throw new ExpressionExpectedException(
-            "An expression is expected after the infix operator " + operator.getLiteral(), ex);
+      if (right != null && right instanceof IPredicate) {
+
+        return OperationInfix.builder().left((IPredicate) nodes.pollLast()).type(operator).right((IPredicate) right)
+            .build();
       }
+
+      throw new ExpressionExpectedException(
+          "An expression is expected after the infix operator " + operator.getLiteral());
+
     }
 
     return null;

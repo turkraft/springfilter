@@ -8,7 +8,6 @@ import com.springfilter.compiler.exception.ParserException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
-import com.springfilter.node.predicate.PriorityMatcher;
 import com.springfilter.token.Comma;
 import com.springfilter.token.Parenthesis;
 import com.springfilter.token.Parenthesis.Type;
@@ -22,7 +21,8 @@ public class FunctionMatcher extends Matcher<Function> {
   public static final FunctionMatcher INSTANCE = new FunctionMatcher();
 
   @Override
-  public Function match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+  public Function match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
+      throws ParserException {
 
     if (tokens.indexIs(Word.class, Parenthesis.class)) {
 
@@ -39,11 +39,7 @@ public class FunctionMatcher extends Matcher<Function> {
             n -> tokens.size() > 0
                 && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE)
                 && !tokens.indexIs(Comma.class),
-            new Matcher<?>[] {
-
-                InputMatcher.INSTANCE, FieldMatcher.INSTANCE, FunctionMatcher.INSTANCE, PriorityMatcher.INSTANCE
-
-            }, tokens));
+            matchers, tokens));
 
         if (tokens.indexIs(Comma.class)) {
           tokens.take();

@@ -21,21 +21,16 @@ public class PriorityMatcher extends Matcher<Priority> {
   public static final PriorityMatcher INSTANCE = new PriorityMatcher();
 
   @Override
-  public Priority match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+  public Priority match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
+      throws ParserException {
 
     if (tokens.indexIs(Parenthesis.class) && ((Parenthesis) tokens.index()).getType() == Type.OPEN) {
 
       tokens.take();
 
-      Priority priority = Priority.builder()
-          .body((IPredicate) MatcherUtils.getNextExpression("Expression expected inside parentheses",
-              n -> tokens.size() > 0
-                  && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE),
-              new Matcher<?>[] {
-
-                  PriorityMatcher.INSTANCE, ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE,
-
-              }, tokens)).build();
+      Priority priority =
+          Priority.builder().body((IPredicate) MatcherUtils.getNextExpression("Expression expected inside parentheses",
+              n -> tokens.size() > 0, matchers, tokens)).build();
 
       if (tokens.size() == 0) {
         throw new OutOfTokenException("Closing parenthesis not found");
