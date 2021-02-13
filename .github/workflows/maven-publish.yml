@@ -18,6 +18,7 @@ jobs:
       - id: install-secret-key
         name: Install gpg secret key
         run: |
+          export GPG_TTY=$(tty)
           cat <(echo -e "${{ secrets.GPG_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
       - name: Publish package
