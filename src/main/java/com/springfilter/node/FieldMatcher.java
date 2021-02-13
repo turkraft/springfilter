@@ -25,11 +25,8 @@ public class FieldMatcher extends Matcher<Field> {
       String name = ((Word) tokens.take()).getValue();
 
       while (tokens.indexIs(Dot.class, Word.class)) {
-
         tokens.take();
-
         name += "." + ((Word) tokens.take()).getValue();
-
       }
 
       return Field.builder().name(name).build();

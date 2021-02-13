@@ -24,6 +24,7 @@ public class OperationPrefix extends Operation {
 
   @Override
   public INode transform(INode parent) {
+    right = (IPredicate) right.transform(this);
     return this;
   }
 

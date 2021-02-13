@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
+import com.springfilter.compiler.node.INode;
 import com.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -23,7 +24,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class ConditionPostfix extends Condition {
 
-  private IExpression<?> left;
+  private IExpression left;
+
+  @Override
+  public INode transform(INode parent) {
+    left = (IExpression) left.transform(this);
+    return this;
+  }
 
   @Override
   public String generate() {
@@ -41,7 +48,7 @@ public class ConditionPostfix extends Condition {
 
       case EMPTY:
       case NULL:
-        if (left instanceof PluralAttributePath) {
+        if (Collection.class.isAssignableFrom(left.getJavaType()) && left instanceof PluralAttributePath) {
           return criteriaBuilder.isEmpty((Expression<Collection<?>>) left);
         } else {
           return criteriaBuilder.isNull(left);
@@ -49,7 +56,7 @@ public class ConditionPostfix extends Condition {
 
       case NOT_EMPTY:
       case NOT_NULL:
-        if (left instanceof PluralAttributePath) {
+        if (Collection.class.isAssignableFrom(left.getJavaType()) && left instanceof PluralAttributePath) {
           return criteriaBuilder.isNotEmpty((Expression<Collection<?>>) left);
         } else {
           return criteriaBuilder.isNotNull(left);

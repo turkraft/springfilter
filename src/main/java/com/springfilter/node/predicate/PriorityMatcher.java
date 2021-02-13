@@ -3,13 +3,13 @@ package com.springfilter.node.predicate;
 import java.util.LinkedList;
 
 import com.springfilter.compiler.Extensions;
-import com.springfilter.compiler.exception.ExpressionExpectedException;
 import com.springfilter.compiler.exception.OutOfTokenException;
 import com.springfilter.compiler.exception.ParserException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
 import com.springfilter.node.IPredicate;
+import com.springfilter.node.MatcherUtils;
 import com.springfilter.token.Parenthesis;
 import com.springfilter.token.Parenthesis.Type;
 
@@ -27,24 +27,19 @@ public class PriorityMatcher extends Matcher<Priority> {
 
       tokens.take();
 
-      Priority priority = Priority.builder().build();
+      Priority priority = Priority.builder()
+          .body((IPredicate) MatcherUtils.getNextExpression("Expression expected inside parentheses",
+              n -> tokens.size() > 0
+                  && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE),
+              new Matcher<?>[] {
 
-      //      LinkedList<INode> subNodes = new LinkedList<INode>();
+                  PriorityMatcher.INSTANCE, ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE,
 
-      while (tokens.size() > 0
-          && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE)) {
-        nodes.add(PredicateMatcher.INSTANCE.match(tokens, nodes));
-      }
+              }, tokens)).build();
 
       if (tokens.size() == 0) {
         throw new OutOfTokenException("Closing parenthesis not found");
       }
-
-      if (nodes.size() != 1 || nodes.index() == null) {
-        throw new ExpressionExpectedException("Expression expected inside parentheses");
-      }
-
-      priority.setBody((IPredicate) nodes.take());
 
       tokens.take();
 

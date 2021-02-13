@@ -22,12 +22,14 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class ConditionInfix extends Condition {
 
-  private IExpression<?> left;
+  private IExpression left;
 
-  private IExpression<?> right;
+  private IExpression right;
 
   @Override
   public INode transform(INode parent) {
+    left = (IExpression) left.transform(this);
+    right = (IExpression) right.transform(this);
     return this;
   }
 

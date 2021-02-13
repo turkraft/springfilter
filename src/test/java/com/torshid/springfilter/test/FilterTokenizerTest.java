@@ -11,12 +11,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.springfilter.FilterTokenizer;
 import com.springfilter.compiler.token.IToken;
+import com.springfilter.token.Comma;
 import com.springfilter.token.Comparator;
 import com.springfilter.token.Dot;
 import com.springfilter.token.Operator;
 import com.springfilter.token.Parenthesis;
-import com.springfilter.token.Word;
 import com.springfilter.token.Parenthesis.Type;
+import com.springfilter.token.Word;
 import com.springfilter.token.input.Bool;
 import com.springfilter.token.input.Numeral;
 import com.springfilter.token.input.Text;
@@ -81,6 +82,12 @@ class FilterTokenizerTest {
   @ValueSource(strings = {"."})
   void validateDot(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Dot.class);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {","})
+  void validateComma(String input) {
+    validateSingleToken(FilterTokenizer.tokenize(input), Comma.class);
   }
 
   @ParameterizedTest

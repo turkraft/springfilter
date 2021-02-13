@@ -6,6 +6,7 @@ import com.springfilter.compiler.Tokenizer;
 import com.springfilter.compiler.exception.TokenizerException;
 import com.springfilter.compiler.token.IToken;
 import com.springfilter.compiler.token.Matcher;
+import com.springfilter.token.CommaMatcher;
 import com.springfilter.token.ComparatorMatcher;
 import com.springfilter.token.DotMatcher;
 import com.springfilter.token.OperatorMatcher;
@@ -22,8 +23,8 @@ public class FilterTokenizer {
 
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
-      new SpaceMatcher(), new DotMatcher(), new ParenthesisMatcher(), new OperatorMatcher(), new ComparatorMatcher(),
-      new BoolMatcher(), new WordMatcher(), new TextMatcher(), new NumeralMatcher()
+      new SpaceMatcher(), new DotMatcher(), new CommaMatcher(), new ParenthesisMatcher(), new OperatorMatcher(),
+      new ComparatorMatcher(), new BoolMatcher(), new WordMatcher(), new TextMatcher(), new NumeralMatcher()
 
   };
 

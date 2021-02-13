@@ -22,9 +22,7 @@ public class ConditionMatcher extends Matcher<Condition> {
   @Override
   public Condition match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws InputExpected {
 
-    LinkedList<IToken> backup = tokens.copy();
-
-    IExpression<?> left = ExpressionMatcher.INSTANCE.match(tokens, nodes);
+    IExpression left = ExpressionMatcher.INSTANCE.match(tokens, nodes);
 
     if (left != null) {
 
@@ -34,7 +32,7 @@ public class ConditionMatcher extends Matcher<Condition> {
 
         if (comparator.needsInput()) {
 
-          IExpression<?> right = ExpressionMatcher.INSTANCE.match(tokens, nodes);
+          IExpression right = ExpressionMatcher.INSTANCE.match(tokens, nodes);
 
           if (right != null) {
             return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();
@@ -49,8 +47,6 @@ public class ConditionMatcher extends Matcher<Condition> {
       }
 
     }
-
-    tokens.replaceWith(backup);
 
     return null;
 

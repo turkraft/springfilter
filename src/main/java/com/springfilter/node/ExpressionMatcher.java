@@ -13,19 +13,19 @@ import com.springfilter.node.predicate.PriorityMatcher;
 import lombok.experimental.ExtensionMethod;
 
 @ExtensionMethod(Extensions.class)
-public class ExpressionMatcher extends Matcher<IExpression<?>> {
+public class ExpressionMatcher extends Matcher<IExpression> {
 
   public static final ExpressionMatcher INSTANCE = new ExpressionMatcher();
 
   private static Matcher<?>[] matchers = new Matcher<?>[] {
 
-      PriorityMatcher.INSTANCE, InputMatcher.INSTANCE, FieldMatcher.INSTANCE
+      InputMatcher.INSTANCE, FieldMatcher.INSTANCE, FunctionMatcher.INSTANCE, PriorityMatcher.INSTANCE
 
   };
 
   @Override
-  public IExpression<?> match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
-    return (IExpression<?>) Parser.walk(matchers, tokens, nodes, false);
+  public IExpression match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+    return (IExpression) Parser.walk(matchers, tokens, nodes, true);
   }
 
 }

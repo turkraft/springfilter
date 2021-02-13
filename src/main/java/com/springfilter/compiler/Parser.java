@@ -9,6 +9,9 @@ import com.springfilter.compiler.node.IRoot;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
 
+import lombok.experimental.ExtensionMethod;
+
+@ExtensionMethod(Extensions.class)
 public class Parser {
 
   private Parser() {}
@@ -20,6 +23,9 @@ public class Parser {
   public static INode walk(Matcher<?>[] matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes, boolean exception)
       throws ParserException {
 
+    LinkedList<IToken> tokenBackup = tokens.copy();
+    LinkedList<INode> nodeBackup = nodes.copy();
+
     for (Matcher<?> matcher : matchers) {
 
       INode node = matcher.match(tokens, nodes);
@@ -27,6 +33,9 @@ public class Parser {
       if (node != null) {
         return node;
       }
+
+      tokens.replaceWith(tokenBackup);
+      nodes.replaceWith(nodeBackup);
 
     }
 

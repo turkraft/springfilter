@@ -4,7 +4,29 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.turkraft</groupId>
 	<artifactId>spring-filter</artifactId>
-	<version>0.7.1</version>
+	<version>0.7.2</version>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>Dynamically filters JPA entities with a simple query syntax. Provides JPA/Hibernate predicates and Spring specifications.</description>
+	<url>https://github.com/torshid/spring-filter</url>
+	<scm>
+		<connection>scm:git:git://github.com/turkraft/spring-filter.git</connection>
+		<developerConnection>scm:git:ssh://github.com:turkraft/spring-filter.git</developerConnection>
+		<url>http://github.com/turkraft/spring-filter/tree/main</url>
+	</scm>
+	<developers>
+		<developer>
+			<name>Yusuf Torshid</name>
+			<email>torshid@gmail.com</email>
+			<organization>Turkraft</organization>
+			<organizationUrl>http://turkraft.com</organizationUrl>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
 	<properties>
 		<java.version>1.8</java.version>
 		<lombok.version>1.18.16</lombok.version>
@@ -109,6 +131,12 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>${maven-gpg-plugin.version}</version>
+				<configuration>
+					<gpgArguments>
+						<arg>--pinentry-mode</arg>
+						<arg>loopback</arg>
+					</gpgArguments>
+				</configuration>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -118,6 +146,17 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

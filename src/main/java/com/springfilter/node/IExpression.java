@@ -9,9 +9,9 @@ import javax.persistence.criteria.Root;
 
 import com.springfilter.compiler.node.INode;
 
-public interface IExpression<T> extends INode {
+public interface IExpression extends INode {
 
-  javax.persistence.criteria.Expression<T> generate(Root<?> root, CriteriaQuery<?> criteriaQuery,
+  javax.persistence.criteria.Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder, Map<String, Join<Object, Object>> joins);
 
 }

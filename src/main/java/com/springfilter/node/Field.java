@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Field implements IExpression<Object> {
+public class Field implements IExpression {
 
   private String name;
 
