@@ -15,8 +15,13 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+      - id: install-secret-key
+        name: Install gpg secret key
+        run: |
+          cat <(echo -e "${{ secrets.GPG_KEY }}") | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
       - name: Publish package
-        run: mvn -Dgpg.passphrase=${{ secrets.GPG }} --batch-mode deploy
+        run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSWORD }} --batch-mode --no-transfer-progress clean deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
