@@ -15,6 +15,7 @@ Your API will gain a full featured search functionality. You don't work with API
   @Enumerated Color color;
   @ManyToOne Brand brand;
   @OneToMany List<Accident> accidents;
+  @ElementCollection List<Integer> ratings;
   // ...
 }
 ```
