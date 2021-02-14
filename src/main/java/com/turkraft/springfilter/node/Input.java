@@ -8,7 +8,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.token.IToken;
+import com.turkraft.springfilter.exception.UnsupportedOperationException;
 import com.turkraft.springfilter.token.input.IInput;
 
 import lombok.Data;
@@ -16,11 +16,9 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Input implements IToken, IExpression {
+public class Input implements IExpression {
 
   private IInput value;
-
-  private Class<?> targetClass;
 
   @Override
   public IExpression transform(IExpression parent) {
@@ -29,12 +27,19 @@ public class Input implements IToken, IExpression {
 
   @Override
   public String generate() {
-    return value.toStringAs(targetClass);
+    return value.generate();
   }
+
 
   @Override
   public Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
+    throw new UnsupportedOperationException(
+        "An input can't be directly generated, you need to use the method which specifies the target type");
+  }
+
+  public Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+      Map<String, Join<Object, Object>> joins, Class<?> targetClass) {
     return criteriaBuilder.literal(value.getValueAs(targetClass));
   }
 

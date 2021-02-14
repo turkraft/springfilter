@@ -27,8 +27,8 @@ public class ConditionInfix extends Condition {
 
   @Override
   public IExpression transform(IExpression parent) {
-    left = (IExpression) left.transform(this);
-    right = (IExpression) right.transform(this);
+    left = left.transform(this);
+    right = right.transform(this);
     return this;
   }
 
@@ -54,14 +54,12 @@ public class ConditionInfix extends Condition {
 
     if (getRight() instanceof Input) {
       left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      ((Input) getRight()).setTargetClass(left.getJavaType());
-      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      right = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, left.getJavaType());
     }
 
     else if (getLeft() instanceof Input) {
       right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
-      ((Input) getLeft()).setTargetClass(right.getJavaType());
-      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      left = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, right.getJavaType());
     }
 
     else {
@@ -73,6 +71,12 @@ public class ConditionInfix extends Condition {
         || !getComparator().getFieldType().isAssignableFrom(right.getJavaType())) {
       throw new UnsupportedOperationException(
           "The comparator " + getComparator().getLiteral() + " only supports type " + getComparator().getFieldType());
+    }
+
+    if (!left.getJavaType().equals(right.getJavaType())) {
+      // maybe this exception is not needed, JPA already throws an exception
+      throw new UnsupportedOperationException(
+          "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
     }
 
     // told u

@@ -22,7 +22,7 @@ public class Numeral implements IInput {
   }
 
   @Override
-  public String toStringAs(Class<?> klass) {
+  public String generate() {
     return value.toString();
   }
 

@@ -24,7 +24,7 @@ public class Bool implements IInput {
   }
 
   @Override
-  public String toStringAs(Class<?> targetClass) {
+  public String generate() {
     return value.toString().toLowerCase();
   }
 

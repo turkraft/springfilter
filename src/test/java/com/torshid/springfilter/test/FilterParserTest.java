@@ -15,27 +15,13 @@ import com.turkraft.springfilter.token.IToken;
 class FilterParserTest {
 
   @ParameterizedTest
-  @ValueSource(strings = {"hello(x) : 1"})
-  void test2(String input) {
-
-    LinkedList<IToken> tokens = FilterTokenizer.tokenize(input);
-
-    Filter ast = FilterParser.parse(tokens).transform(null);
-
-    System.out.println(ast.generate());
-
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {"(((a : (((1:2))) or not not not(b : 2 or c : 5))))", "x:1 or y:2 and z:3 or mdr:4 and oo:5",
+  @ValueSource(strings = {"(((a : (((1:2))) or not not not(b : 2 or c : 5))))", "x:1 or y:2 and z:3 or ooo:4 and iii:5",
       "hello(x) : 1"})
   void test(String input) {
 
     LinkedList<IToken> tokens = FilterTokenizer.tokenize(input);
 
     Filter ast = FilterParser.parse(tokens).transform(null);
-
-    System.out.println(ast.generate());
 
   }
 
