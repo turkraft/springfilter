@@ -19,7 +19,7 @@ Your API will gain a full featured search functionality. You don't work with API
 }
 ```
 
-> :rocket: Yes we support booleans, dates, enums, functions, **and even searching over relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
+> :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
 
 ## Installation
 
