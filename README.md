@@ -4,10 +4,10 @@ You need a way to dynamically filter entities without any effort? Just add me to
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I try to compile a simple syntax to JPA predicates.
 
 ## Example
-*/search?filter=* (brand.name **:** 'audi' **or** brand.name : 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
+> */search?filter=* (brand.name **:** 'audi' **or** brand.name : 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
-
+// Entity used in the query above
 @Entity public class Car {
   @Id long id;
       int year;
