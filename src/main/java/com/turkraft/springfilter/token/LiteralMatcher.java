@@ -1,9 +1,9 @@
-package com.turkraft.springfilter.compiler.token;
+package com.turkraft.springfilter.token;
 
 import java.util.regex.Pattern;
 
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.token.LiteralMatcher.ILiteral;
+import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.token.LiteralMatcher.ILiteral;
 
 import lombok.experimental.ExtensionMethod;
 

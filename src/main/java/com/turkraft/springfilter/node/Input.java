@@ -8,8 +8,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.input.IInput;
 
 import lombok.Data;
@@ -24,7 +23,7 @@ public class Input implements IToken, IExpression {
   private Class<?> targetClass;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
     return this;
   }
 

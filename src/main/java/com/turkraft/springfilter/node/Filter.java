@@ -8,21 +8,18 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.IRoot;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Data
-public class Filter implements IRoot<Filter>, IExpression {
+public class Filter implements IExpression {
 
   private IExpression body;
 
   @Override
-  public Filter transform(INode parent) {
-    body = (IExpression) body.transform(this);
+  public Filter transform(IExpression parent) {
+    body = body.transform(this);
     return this;
   }
 

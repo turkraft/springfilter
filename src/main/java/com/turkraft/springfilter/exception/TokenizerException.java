@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.compiler.exception;
+package com.turkraft.springfilter.exception;
 
 public abstract class TokenizerException extends RuntimeException {
 

@@ -2,12 +2,10 @@ package com.turkraft.springfilter.node;
 
 import java.util.LinkedList;
 
+import com.turkraft.springfilter.Extensions;
 import com.turkraft.springfilter.FilterParser;
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.exception.ExpressionExpectedException;
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.Matcher;
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.exception.ExpressionExpectedException;
+import com.turkraft.springfilter.token.IToken;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -17,7 +15,7 @@ public class FilterMatcher extends Matcher<Filter> {
   public static final FilterMatcher INSTANCE = new FilterMatcher();
 
   @Override
-  public Filter match(LinkedList<IToken> tokens, LinkedList<INode> nodes) {
+  public Filter match(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) {
 
     IExpression body = FilterParser.run(tokens, nodes);
 

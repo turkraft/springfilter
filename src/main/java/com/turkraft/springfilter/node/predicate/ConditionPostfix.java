@@ -12,7 +12,6 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
-import com.turkraft.springfilter.compiler.node.INode;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -27,7 +26,7 @@ public class ConditionPostfix extends Condition {
   private IExpression left;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
     left = (IExpression) left.transform(this);
     return this;
   }

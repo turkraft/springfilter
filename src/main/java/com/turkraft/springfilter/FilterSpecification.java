@@ -36,7 +36,7 @@ public class FilterSpecification<T> implements Specification<T> {
     if (input != null) {
       return FilterCompiler.compile(input, root, query, criteriaBuilder);
     }
-    return (Predicate) filter.generate(root, query, criteriaBuilder);
+    return filter.generate(root, query, criteriaBuilder);
   }
 
   public String getInput() {

@@ -2,13 +2,13 @@ package com.turkraft.springfilter;
 
 import java.util.LinkedList;
 
-import com.turkraft.springfilter.compiler.Tokenizer;
-import com.turkraft.springfilter.compiler.exception.TokenizerException;
-import com.turkraft.springfilter.compiler.token.IToken;
-import com.turkraft.springfilter.compiler.token.Matcher;
+import com.turkraft.springfilter.exception.InvalidInputException;
+import com.turkraft.springfilter.exception.TokenizerException;
 import com.turkraft.springfilter.token.CommaMatcher;
 import com.turkraft.springfilter.token.ComparatorMatcher;
 import com.turkraft.springfilter.token.DotMatcher;
+import com.turkraft.springfilter.token.IToken;
+import com.turkraft.springfilter.token.Matcher;
 import com.turkraft.springfilter.token.OperatorMatcher;
 import com.turkraft.springfilter.token.ParenthesisMatcher;
 import com.turkraft.springfilter.token.SpaceMatcher;
@@ -29,7 +29,42 @@ public class FilterTokenizer {
   };
 
   public static LinkedList<IToken> tokenize(String input) throws TokenizerException {
-    return Tokenizer.tokenize(matchers, input);
+
+    LinkedList<IToken> tokens = new LinkedList<>();
+
+    StringBuilder sb = new StringBuilder(input);
+
+    while (sb.length() > 0) {
+
+      boolean consumed = false;
+
+      int currentLength = sb.length();
+
+      for (Matcher<?> matcher : matchers) {
+
+        IToken token = matcher.match(sb);
+
+        if (sb.length() != currentLength) {
+
+          if (token != null) {
+            tokens.add(token);
+          }
+
+          consumed = true;
+          break;
+
+        }
+
+      }
+
+      if (!consumed) {
+        throw new InvalidInputException(sb.toString());
+      }
+
+    }
+
+    return tokens;
+
   }
 
 }

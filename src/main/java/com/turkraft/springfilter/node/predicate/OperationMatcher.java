@@ -2,12 +2,11 @@ package com.turkraft.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
+import com.turkraft.springfilter.Extensions;
 import com.turkraft.springfilter.FilterParser;
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.Matcher;
-import com.turkraft.springfilter.compiler.token.IToken;
 import com.turkraft.springfilter.node.IExpression;
+import com.turkraft.springfilter.node.Matcher;
+import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.Operator;
 import com.turkraft.springfilter.token.Operator.Position;
 
@@ -19,7 +18,7 @@ public class OperationMatcher extends Matcher<Operation> {
   public static final OperationMatcher INSTANCE = new OperationMatcher();
 
   @Override
-  public Operation match(LinkedList<IToken> tokens, LinkedList<INode> nodes) {
+  public Operation match(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) {
 
     if (!tokens.indexIs(Operator.class)) {
       return null;

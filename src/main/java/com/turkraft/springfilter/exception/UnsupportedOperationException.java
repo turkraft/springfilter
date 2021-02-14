@@ -1,7 +1,5 @@
 package com.turkraft.springfilter.exception;
 
-import com.turkraft.springfilter.compiler.exception.ParserException;
-
 public class UnsupportedOperationException extends ParserException {
 
   private static final long serialVersionUID = 1L;

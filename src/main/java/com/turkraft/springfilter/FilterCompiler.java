@@ -7,10 +7,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.compiler.exception.ParserException;
-import com.turkraft.springfilter.compiler.exception.TokenizerException;
-import com.turkraft.springfilter.compiler.node.INode;
+import com.turkraft.springfilter.exception.ParserException;
+import com.turkraft.springfilter.exception.TokenizerException;
 import com.turkraft.springfilter.node.Filter;
+import com.turkraft.springfilter.node.IExpression;
 
 public class FilterCompiler {
 
@@ -20,19 +20,19 @@ public class FilterCompiler {
     return ast.generate();
   }
 
-  public static <T> T generate(Filter ast, Function<INode, T> func) {
+  public static <T> T generate(Filter ast, Function<IExpression, T> func) {
     return ast.generate(func);
   }
 
   public static Predicate generate(Filter ast, Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-    return (Predicate) ast.generate(root, query, criteriaBuilder);
+    return ast.generate(root, query, criteriaBuilder);
   }
 
   public static String compile(String input) throws ParserException, TokenizerException {
     return generate(FilterParser.parse(input));
   }
 
-  public static <T> T compile(String input, Function<INode, T> func) throws ParserException, TokenizerException {
+  public static <T> T compile(String input, Function<IExpression, T> func) throws ParserException, TokenizerException {
     return generate(FilterParser.parse(input), func);
   }
 

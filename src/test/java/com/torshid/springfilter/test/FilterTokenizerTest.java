@@ -10,10 +10,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.turkraft.springfilter.FilterTokenizer;
-import com.turkraft.springfilter.compiler.token.IToken;
 import com.turkraft.springfilter.token.Comma;
 import com.turkraft.springfilter.token.Comparator;
 import com.turkraft.springfilter.token.Dot;
+import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.Operator;
 import com.turkraft.springfilter.token.Parenthesis;
 import com.turkraft.springfilter.token.Word;

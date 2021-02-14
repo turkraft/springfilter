@@ -9,7 +9,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import com.turkraft.springfilter.Utils;
-import com.turkraft.springfilter.compiler.node.INode;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -21,7 +20,7 @@ public class Field implements IExpression {
   private String name;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
     return this;
   }
 

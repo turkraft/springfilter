@@ -1,6 +1,6 @@
 package com.turkraft.springfilter.token.input;
 
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.token.IToken;
 
 public interface IInput extends IToken {
 

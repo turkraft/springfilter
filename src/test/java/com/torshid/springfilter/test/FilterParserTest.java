@@ -9,8 +9,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.turkraft.springfilter.FilterParser;
 import com.turkraft.springfilter.FilterTokenizer;
-import com.turkraft.springfilter.compiler.token.IToken;
 import com.turkraft.springfilter.node.Filter;
+import com.turkraft.springfilter.token.IToken;
 
 class FilterParserTest {
 

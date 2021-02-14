@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 
-import com.turkraft.springfilter.compiler.node.INode;
 import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.IExpression;
 
@@ -21,7 +20,7 @@ public class Priority implements IExpression {
   private IExpression body;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
 
     body = (IExpression) body.transform(this);
 

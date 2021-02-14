@@ -10,8 +10,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.compiler.node.INode;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -24,9 +22,9 @@ public class Function implements IExpression {
   private List<IExpression> arguments;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
     for (int i = 0; i < arguments.size(); i++) {
-      arguments.add((IExpression) arguments.remove(i).transform(this));
+      arguments.add(arguments.remove(i).transform(this));
     }
     return this;
   }

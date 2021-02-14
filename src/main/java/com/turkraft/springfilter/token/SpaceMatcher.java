@@ -1,8 +1,6 @@
 package com.turkraft.springfilter.token;
 
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.token.IToken;
-import com.turkraft.springfilter.compiler.token.Matcher;
+import com.turkraft.springfilter.Extensions;
 
 import lombok.experimental.ExtensionMethod;
 

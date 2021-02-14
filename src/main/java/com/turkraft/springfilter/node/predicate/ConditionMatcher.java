@@ -2,14 +2,13 @@ package com.turkraft.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
+import com.turkraft.springfilter.Extensions;
 import com.turkraft.springfilter.FilterParser;
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.exception.InputExpected;
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.Matcher;
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.exception.InputExpected;
 import com.turkraft.springfilter.node.IExpression;
+import com.turkraft.springfilter.node.Matcher;
 import com.turkraft.springfilter.token.Comparator;
+import com.turkraft.springfilter.token.IToken;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -21,7 +20,7 @@ public class ConditionMatcher extends Matcher<IExpression> {
   public static final ConditionMatcher INSTANCE = new ConditionMatcher();
 
   @Override
-  public IExpression match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws InputExpected {
+  public IExpression match(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) throws InputExpected {
 
     if (!nodes.lastIs(IExpression.class)) {
       return null;

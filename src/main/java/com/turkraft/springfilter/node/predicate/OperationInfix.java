@@ -8,7 +8,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.compiler.node.INode;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -25,7 +24,7 @@ public class OperationInfix extends Operation {
   private IExpression right;
 
   @Override
-  public INode transform(INode parent) {
+  public IExpression transform(IExpression parent) {
     left = (IExpression) left.transform(this);
     right = (IExpression) right.transform(this);
     return this;

@@ -1,7 +1,7 @@
-package com.turkraft.springfilter.compiler.token;
+package com.turkraft.springfilter.token;
 
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.exception.TokenizerException;
+import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.exception.TokenizerException;
 
 import lombok.experimental.ExtensionMethod;
 

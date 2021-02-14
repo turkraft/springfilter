@@ -4,13 +4,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.turkraft.springfilter.Extensions;
 import com.turkraft.springfilter.FilterParser;
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.exception.ParserException;
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.Matcher;
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.exception.ParserException;
 import com.turkraft.springfilter.token.Comma;
+import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.Parenthesis;
 import com.turkraft.springfilter.token.Parenthesis.Type;
 import com.turkraft.springfilter.token.Word;
@@ -23,7 +21,7 @@ public class FunctionMatcher extends Matcher<Function> {
   public static final FunctionMatcher INSTANCE = new FunctionMatcher();
 
   @Override
-  public Function match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+  public Function match(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) throws ParserException {
 
     if (tokens.indexIs(Word.class, Parenthesis.class) && ((Parenthesis) tokens.get(1)).getType() == Type.OPEN) {
 
@@ -36,11 +34,11 @@ public class FunctionMatcher extends Matcher<Function> {
       while (tokens.size() > 0
           && (!tokens.indexIs(Parenthesis.class) || ((Parenthesis) tokens.index()).getType() != Type.CLOSE)) {
 
-        LinkedList<INode> subNodes = new LinkedList<INode>();
+        LinkedList<IExpression> subNodes = new LinkedList<IExpression>();
 
         while (tokens.size() > 0 && !tokens.indexIs(Comma.class)) {
 
-          INode node = FilterParser.walk(tokens, subNodes);
+          IExpression node = FilterParser.walk(tokens, subNodes);
 
           if (node == null) {
             break;
@@ -58,7 +56,7 @@ public class FunctionMatcher extends Matcher<Function> {
           throw new RuntimeException("aaaaa");
         }
 
-        arguments.add((IExpression) subNodes.take());
+        arguments.add(subNodes.take());
 
       }
 

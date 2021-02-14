@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.compiler;
+package com.turkraft.springfilter;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -2,12 +2,10 @@ package com.turkraft.springfilter.node;
 
 import java.util.LinkedList;
 
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.exception.ParserException;
-import com.turkraft.springfilter.compiler.node.INode;
-import com.turkraft.springfilter.compiler.node.Matcher;
-import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.exception.ParserException;
 import com.turkraft.springfilter.token.Dot;
+import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.Word;
 
 import lombok.experimental.ExtensionMethod;
@@ -18,7 +16,7 @@ public class FieldMatcher extends Matcher<Field> {
   public static final FieldMatcher INSTANCE = new FieldMatcher();
 
   @Override
-  public Field match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
+  public Field match(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) throws ParserException {
 
     if (tokens.indexIs(Word.class)) {
 

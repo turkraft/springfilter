@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.token;
 
-import com.turkraft.springfilter.compiler.token.IToken;
-import com.turkraft.springfilter.compiler.token.LiteralMatcher.ILiteral;
+import com.turkraft.springfilter.token.LiteralMatcher.ILiteral;
 
 public enum Operator implements IToken, ILiteral {
 

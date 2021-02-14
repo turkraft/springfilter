@@ -2,8 +2,7 @@ package com.turkraft.springfilter.token;
 
 import java.util.regex.Pattern;
 
-import com.turkraft.springfilter.compiler.Extensions;
-import com.turkraft.springfilter.compiler.token.Matcher;
+import com.turkraft.springfilter.Extensions;
 
 import lombok.experimental.ExtensionMethod;
 
