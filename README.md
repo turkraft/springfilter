@@ -72,7 +72,7 @@ Filter filter = Filter.builder()
             .build())
         .build())
     .build();
-String input = filter.generate(); // name ~ 'jose'
+String input = filter.generate(); // name ~ '%jose%'
 Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
 Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
@@ -80,6 +80,12 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 > :construction: The builder will change in the future in order to be simpler, it currently uses Lombok
 
 ## Syntax
+
+### Fields
+Field names should be directly given without any extra literals. Dots indicate nested fields. For example: `category.updatedAt`
+
+### Inputs
+Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, strings, should be quotes. For example: `status : 'active'`
 
 ### Operators
 <table>
@@ -105,6 +111,9 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
   <tr> <td>is empty</th> <td>checks if the (collection) expression is empty</td> <td>children <b>is empty</b></td> </tr>
   <tr> <td>is not empty</th> <td>checks if the (collection) expression is not empty</td> <td>children <b>is not empty</b></td> </tr>
 </table>
+
+### Functions
+A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
 
 ## Contributing
 Ideas and pull requests are always welcome.
