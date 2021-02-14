@@ -3,7 +3,6 @@ package com.springfilter.node;
 import java.util.LinkedList;
 
 import com.springfilter.compiler.Extensions;
-import com.springfilter.compiler.exception.ParserException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
@@ -17,8 +16,7 @@ public class InputMatcher extends Matcher<IExpression> {
   public static final InputMatcher INSTANCE = new InputMatcher();
 
   @Override
-  public IExpression match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
-      throws ParserException {
+  public IExpression match(LinkedList<IToken> tokens, LinkedList<INode> nodes) {
 
     if (tokens.indexIs(IInput.class)) {
       return Input.builder().value((IInput) tokens.take()).build();

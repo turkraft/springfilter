@@ -18,8 +18,7 @@ public class FieldMatcher extends Matcher<Field> {
   public static final FieldMatcher INSTANCE = new FieldMatcher();
 
   @Override
-  public Field match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
-      throws ParserException {
+  public Field match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws ParserException {
 
     if (tokens.indexIs(Word.class)) {
 

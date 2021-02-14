@@ -20,32 +20,31 @@ public class ConditionMatcher extends Matcher<Condition> {
   public static final ConditionMatcher INSTANCE = new ConditionMatcher();
 
   @Override
-  public Condition match(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
-      throws InputExpected {
+  public Condition match(LinkedList<IToken> tokens, LinkedList<INode> nodes) throws InputExpected {
 
-    IExpression left = FilterParser.walk(matchers, tokens, nodes, false);
+    if (!nodes.lastIs(IExpression.class)) {
+      return null;
+    }
 
-    if (left != null) {
+    IExpression left = (IExpression) nodes.pollLast();
 
-      if (tokens.indexIs(Comparator.class)) {
+    if (tokens.indexIs(Comparator.class)) {
 
-        Comparator comparator = (Comparator) tokens.take();
+      Comparator comparator = (Comparator) tokens.take();
 
-        if (comparator.needsInput()) {
+      if (comparator.needsInput()) {
 
-          IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
+        IExpression right = FilterParser.walk(IExpression.class, tokens, nodes, false);
 
-          if (right != null) {
-            return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();
-          }
-
-          throw new OutOfTokenException("The comparator " + comparator.getLiteral() + " expects an expression");
-
+        if (right != null) {
+          return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();
         }
 
-        return ConditionPostfix.builder().left(left).comparator(comparator).build();
+        throw new OutOfTokenException("The comparator " + comparator.getLiteral() + " expects an expression");
 
       }
+
+      return ConditionPostfix.builder().left(left).comparator(comparator).build();
 
     }
 

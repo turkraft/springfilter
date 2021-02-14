@@ -1,7 +1,5 @@
 package com.springfilter.compiler;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.springfilter.compiler.exception.InvalidTokenSequenceException;
@@ -19,49 +17,66 @@ public class Parser {
   private Parser() {}
 
   public static <N extends IRoot<N>> N parse(Matcher<N> matcher, LinkedList<IToken> tokens) throws ParserException {
-    return matcher.match(new LinkedList<>(Arrays.asList(matcher)), tokens, new LinkedList<>());
+    return matcher.match(tokens, new LinkedList<>());
   }
 
-  public static INode walk(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes,
-      boolean exception) throws ParserException {
+  @SuppressWarnings("unchecked")
+  public static <T extends INode> T walk(Class<?> klass, LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens,
+      LinkedList<INode> nodes, boolean exception) throws ParserException {
 
     LinkedList<IToken> tokenBackup = tokens.copy();
     LinkedList<INode> nodeBackup = nodes.copy();
-    LinkedList<Matcher<?>> matchersCopy = matchers.copy();
 
-    Iterator<Matcher<?>> i = matchers.iterator();
+    while (true) {
 
-    while (i.hasNext()) {
+      int count = tokens.size();
 
-      Matcher<?> matcher = i.next();
+      for (Matcher<?> matcher : matchers) {
 
-      i.remove();
+        LinkedList<IToken> innerTokenBackup = tokens.copy();
+        LinkedList<INode> innerNodeBackup = nodes.copy();
 
-      INode node = matcher.match(matchers, tokens, nodes);
+        INode node = matcher.match(tokens, nodes);
 
-      if (node != null) {
-        matchers.replaceWith(matchersCopy);
-        return node;
+        if (node != null) {
+
+          if (klass.isAssignableFrom(node.getClass())) {
+            return (T) node;
+          }
+
+          else {
+            nodes.add(node);
+          }
+
+        }
+
+        else {
+          tokens.replaceWith(innerTokenBackup);
+          nodes.replaceWith(innerNodeBackup);
+        }
+
       }
 
-      tokens.replaceWith(tokenBackup);
-      nodes.replaceWith(nodeBackup);
+      if (tokens.size() == count) {
+        break;
+      }
 
     }
-
-    matchers.replaceWith(matchersCopy);
 
     if (exception) {
       throw new InvalidTokenSequenceException(tokens);
     }
 
+    tokens.replaceWith(tokenBackup);
+    nodes.replaceWith(nodeBackup);
+
     return null;
 
   }
 
-  public static INode walk(LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens, LinkedList<INode> nodes)
-      throws ParserException {
-    return walk(matchers, tokens, nodes, true);
+  public static <T extends INode> T walk(Class<T> klass, LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens,
+      LinkedList<INode> nodes) throws ParserException {
+    return walk(klass, matchers, tokens, nodes, true);
   }
 
 }
