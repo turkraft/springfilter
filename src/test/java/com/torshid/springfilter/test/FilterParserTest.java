@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.springfilter.FilterParser;
-import com.springfilter.FilterTokenizer;
-import com.springfilter.compiler.token.IToken;
-import com.springfilter.node.Filter;
+import com.turkraft.springfilter.FilterParser;
+import com.turkraft.springfilter.FilterTokenizer;
+import com.turkraft.springfilter.compiler.token.IToken;
+import com.turkraft.springfilter.node.Filter;
 
 class FilterParserTest {
 
