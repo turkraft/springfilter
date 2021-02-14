@@ -7,15 +7,16 @@ import java.util.LinkedList;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.springfilter.FilterParser;
-import com.springfilter.FilterTokenizer;
-import com.springfilter.compiler.token.IToken;
-import com.springfilter.node.Filter;
+import com.turkraft.springfilter.FilterParser;
+import com.turkraft.springfilter.FilterTokenizer;
+import com.turkraft.springfilter.node.Filter;
+import com.turkraft.springfilter.token.IToken;
 
 class FilterParserTest {
 
   @ParameterizedTest
-  @ValueSource(strings = {"(a : 1 or not not not(b : 2 or c : 5))"})
+  @ValueSource(strings = {"(((a : (((1:2))) or not not not(b : 2 or c : 5))))", "x:1 or y:2 and z:3 or ooo:4 and iii:5",
+      "hello(x) : 1"})
   void test(String input) {
 
     LinkedList<IToken> tokens = FilterTokenizer.tokenize(input);

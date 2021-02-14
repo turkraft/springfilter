@@ -9,17 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.springfilter.FilterTokenizer;
-import com.springfilter.compiler.token.IToken;
-import com.springfilter.token.Comparator;
-import com.springfilter.token.Dot;
-import com.springfilter.token.Operator;
-import com.springfilter.token.Parenthesis;
-import com.springfilter.token.Word;
-import com.springfilter.token.Parenthesis.Type;
-import com.springfilter.token.input.Bool;
-import com.springfilter.token.input.Numeral;
-import com.springfilter.token.input.Text;
+import com.turkraft.springfilter.FilterTokenizer;
+import com.turkraft.springfilter.token.Comma;
+import com.turkraft.springfilter.token.Comparator;
+import com.turkraft.springfilter.token.Dot;
+import com.turkraft.springfilter.token.IToken;
+import com.turkraft.springfilter.token.Operator;
+import com.turkraft.springfilter.token.Parenthesis;
+import com.turkraft.springfilter.token.Word;
+import com.turkraft.springfilter.token.Parenthesis.Type;
+import com.turkraft.springfilter.token.input.Bool;
+import com.turkraft.springfilter.token.input.Numeral;
+import com.turkraft.springfilter.token.input.Text;
 
 
 class FilterTokenizerTest {
@@ -81,6 +82,12 @@ class FilterTokenizerTest {
   @ValueSource(strings = {"."})
   void validateDot(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Dot.class);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {","})
+  void validateComma(String input) {
+    validateSingleToken(FilterTokenizer.tokenize(input), Comma.class);
   }
 
   @ParameterizedTest
