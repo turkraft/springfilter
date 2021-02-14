@@ -20,6 +20,11 @@ public class Parser {
     return matcher.match(tokens, new LinkedList<>());
   }
 
+  public static <T extends INode> T walk(Class<T> klass, LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens,
+      LinkedList<INode> nodes) throws ParserException {
+    return walk(klass, matchers, tokens, nodes, true);
+  }
+
   @SuppressWarnings("unchecked")
   public static <T extends INode> T walk(Class<?> klass, LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens,
       LinkedList<INode> nodes, boolean exception) throws ParserException {
@@ -40,13 +45,7 @@ public class Parser {
 
         if (node != null) {
 
-          if (klass.isAssignableFrom(node.getClass())) {
-            return (T) node;
-          }
-
-          else {
-            nodes.add(node);
-          }
+          return (T) node;
 
         }
 
@@ -74,9 +73,24 @@ public class Parser {
 
   }
 
-  public static <T extends INode> T walk(Class<T> klass, LinkedList<Matcher<?>> matchers, LinkedList<IToken> tokens,
-      LinkedList<INode> nodes) throws ParserException {
-    return walk(klass, matchers, tokens, nodes, true);
-  }
+  //  public static INode run(String message, LinkedList<IToken> tokens, LinkedList<INode> nodes) {
+  //
+  //    while (tokens.size() > 0) {
+  //
+  //      INode node = FilterParser.walk(IExpression.class, tokens, nodes, false);
+  //      if (node == null) {
+  //        break;
+  //      }
+  //      nodes.add(node);
+  //
+  //    }
+  //
+  //    if (nodes.size() != 1 || nodes.index() == null) {
+  //      throw new ExpressionExpectedException(message);
+  //    }
+  //
+  //    return nodes.get(0);
+  //
+  //  }
 
 }

@@ -2,14 +2,13 @@ package com.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
-import com.springfilter.FilterParser;
 import com.springfilter.compiler.Extensions;
-import com.springfilter.compiler.exception.ExpressionExpectedException;
 import com.springfilter.compiler.node.INode;
 import com.springfilter.compiler.node.Matcher;
 import com.springfilter.compiler.token.IToken;
 import com.springfilter.node.IExpression;
 import com.springfilter.node.IPredicate;
+import com.springfilter.node.MatcherUtils;
 import com.springfilter.token.Operator;
 import com.springfilter.token.Operator.Position;
 
@@ -23,143 +22,55 @@ public class OperationMatcher extends Matcher<Operation> {
   @Override
   public Operation match(LinkedList<IToken> tokens, LinkedList<INode> nodes) {
 
-    //    if (!nodes.lastIs(IPredicate.class)) {
-    //      return null;
-    //    }
+    if (!tokens.indexIs(Operator.class)) {
+      return null;
+    }
 
+    Operator operator = ((Operator) tokens.take());
 
-    if (tokens.indexIs(Operator.class)) {
+    IExpression right = MatcherUtils.run(tokens, nodes);
 
-      Operator operator = ((Operator) tokens.take());
+    if (right == null || !(right instanceof IPredicate)) {
+      return null;
+    }
 
-      IExpression right = FilterParser.walk(IPredicate.class, tokens, nodes, false);
+    if (operator.getPosition() == Position.PREFIX) {
 
-      if (right == null || !(right instanceof IPredicate)) {
-        throw new ExpressionExpectedException("An expression is expected after the operator " + operator.getLiteral());
+      // regular prefix operation, such as 'NOT x'
+
+      if (right != null && right instanceof IPredicate) {
+        return OperationPrefix.builder().type(operator).right((IPredicate) right).build();
       }
-
-      if (operator.getPosition() == Position.PREFIX) {
-
-        // regular prefix operation, such as 'NOT x'
-
-        if (right != null && right instanceof IPredicate) {
-          return OperationPrefix.builder().type(operator).right((IPredicate) right).build();
-        }
-
-      }
-
-      // infix
-
-      if (!nodes.lastIs(IPredicate.class)) {
-        throw new ExpressionExpectedException("An expression is expected before the operator " + operator.getLiteral());
-      }
-
-      IPredicate left = (IPredicate) nodes.pollLast();
-
-
-      if (left instanceof OperationInfix) {
-
-        OperationInfix previousOperation = ((OperationInfix) left);
-
-        if (operator.getPriority() > previousOperation.getType().getPriority()) {
-
-          // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
-          // example: 'x OR y AND z' => 'x OR (y AND z)'
-
-          OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
-              .right((IPredicate) right).build();
-
-          previousOperation.setRight(and);
-
-          return previousOperation;
-
-        }
-
-      }
-
-      return OperationInfix.builder().left(left).type(operator).right((IPredicate) right).build();
 
     }
 
-    return null;
-    //
+    // infix
 
+    if (!nodes.lastIs(IPredicate.class)) {
+      return null;
+    }
 
-    //    if (tokens.indexIs(Operator.class)) {
-    //
-    //      Operator operator = ((Operator) tokens.take());
-    //
-    //      if (operator.getPosition() == Position.PREFIX) {
-    //
-    //        // regular prefix operation, such as 'NOT x'
-    //
-    //        IExpression right =
-    //            FilterParser.walk(new LinkedList<Matcher<?>>(Arrays.asList(FilterParser.matchers)), tokens, nodes, false);
-    //
-    //        if (right != null && right instanceof IPredicate) {
-    //          return OperationPrefix.builder().type(operator).right((IPredicate) right).build();
-    //        }
-    //
-    //        throw new ExpressionExpectedException(
-    //            "An expression is expected after the prefix operator " + operator.getLiteral());
-    //
-    //      }
-    //
-    //      // infix operator
-    //
-    //      if (!nodes.lastIs(IPredicate.class)) {
-    //        throw new ExpressionExpectedException(
-    //            "An expression is expected before the infix operator " + operator.getLiteral());
-    //      }
-    //
-    //      if (nodes.lastIs(OperationInfix.class)) {
-    //
-    //        OperationInfix previousOperation = ((OperationInfix) nodes.getLast());
-    //
-    //        if (operator.getPriority() > previousOperation.getType().getPriority()) {
-    //
-    //          // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
-    //          // example: 'x OR y AND z' => 'x OR (y AND z)'
-    //
-    //          nodes.pollLast(); // remove previous operation, it will be reinserted later
-    //
-    //          IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
-    //
-    //          if (right != null && right instanceof IPredicate) {
-    //
-    //            OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
-    //                .right((IPredicate) right).build();
-    //
-    //            previousOperation.setRight(and);
-    //
-    //            return previousOperation;
-    //
-    //          }
-    //
-    //          throw new ExpressionExpectedException(
-    //              "An expression is expected after the infix operator " + operator.getLiteral());
-    //
-    //        }
-    //
-    //      }
-    //
-    //      // regular infix operation such as 'x OR y'
-    //
-    //
-    //      IExpression right = FilterParser.walk(matchers, tokens, nodes, false);
-    //
-    //      if (right != null && right instanceof IPredicate) {
-    //
-    //        return OperationInfix.builder().left((IPredicate) nodes.pollLast()).type(operator).right((IPredicate) right)
-    //            .build();
-    //      }
-    //
-    //      throw new ExpressionExpectedException(
-    //          "An expression is expected after the infix operator " + operator.getLiteral());
-    //
-    //    }
-    //
-    //    return null;
+    IPredicate left = (IPredicate) nodes.pollLast();
+
+    // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
+    // example: 'x OR y AND z' => 'x OR (y AND z)'
+
+    if (left instanceof OperationInfix) {
+
+      OperationInfix previousOperation = ((OperationInfix) left);
+
+      if (operator.getPriority() > previousOperation.getType().getPriority()) {
+
+        OperationInfix and = OperationInfix.builder().type(operator).left(previousOperation.getRight())
+            .right((IPredicate) right).build();
+        previousOperation.setRight(and);
+        return previousOperation;
+
+      }
+
+    }
+
+    return OperationInfix.builder().left(left).type(operator).right((IPredicate) right).build();
 
   }
 
