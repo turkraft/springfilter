@@ -22,7 +22,7 @@ public class Priority implements IExpression {
   @Override
   public IExpression transform(IExpression parent) {
 
-    body = (IExpression) body.transform(this);
+    body = body.transform(this);
 
     if (parent instanceof Filter || parent instanceof Priority || parent instanceof Operation) {
       return body; // unnecessary priority
@@ -34,7 +34,10 @@ public class Priority implements IExpression {
 
   @Override
   public String generate() {
-    return "(" + body.generate() + ")";
+    String generatedBody = body.generate();
+    if (generatedBody.isEmpty())
+      return "";
+    return "(" + generatedBody + ")";
   }
 
   @Override

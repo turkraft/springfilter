@@ -27,13 +27,16 @@ public class ConditionPostfix extends Condition {
 
   @Override
   public IExpression transform(IExpression parent) {
-    left = (IExpression) left.transform(this);
+    left = left.transform(this);
     return this;
   }
 
   @Override
   public String generate() {
-    return left.generate() + " " + getComparator().getLiteral();
+    String generatedLeft = left.generate();
+    if (generatedLeft.isEmpty())
+      return "";
+    return generatedLeft + " " + getComparator().getLiteral();
   }
 
   @SuppressWarnings("unchecked")

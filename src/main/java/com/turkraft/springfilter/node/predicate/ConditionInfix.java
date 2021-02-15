@@ -34,7 +34,15 @@ public class ConditionInfix extends Condition {
 
   @Override
   public String generate() {
-    return getLeft().generate() + " " + getComparator().getLiteral() + " " + getRight().generate();
+
+    String generatedLeft = left.generate();
+    String generatedRight = right.generate();
+
+    if (generatedLeft.isEmpty() || generatedRight.isEmpty())
+      return "";
+
+    return generatedLeft + " " + getComparator().getLiteral() + " " + generatedRight;
+
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -93,7 +101,7 @@ public class ConditionInfix extends Condition {
         return criteriaBuilder.greaterThan((Expression<? extends Comparable>) left,
             (Expression<? extends Comparable>) right);
 
-      case GREATER_THAN_EQUAL:
+      case GREATER_THAN_OR_EQUAL:
         return criteriaBuilder.greaterThanOrEqualTo((Expression<? extends Comparable>) left,
             (Expression<? extends Comparable>) right);
 
@@ -101,7 +109,7 @@ public class ConditionInfix extends Condition {
         return criteriaBuilder.lessThan((Expression<? extends Comparable>) left,
             (Expression<? extends Comparable>) right);
 
-      case LESS_THAN_EQUAL:
+      case LESS_THAN_OR_EQUAL:
         return criteriaBuilder.lessThanOrEqualTo((Expression) left, (Comparable) right);
 
       case LIKE: {

@@ -36,6 +36,11 @@ public class Function implements IExpression {
 
   @Override
   public String generate() {
+    if (name.isEmpty())
+      return "";
+    if (arguments == null)
+      return name + "()";
+    // TODO: manage null arguments?
     return name + "(" + String.join(", ", arguments.stream().map(a -> a.generate()).collect(Collectors.toList())) + ")";
   }
 
@@ -99,7 +104,6 @@ public class Function implements IExpression {
         return criteriaBuilder.currentTimestamp();
 
       case SIZE:
-      case COUNT:
         return criteriaBuilder.size((Expression<Collection>) getter.apply(0));
 
       case LENGTH:
@@ -114,7 +118,7 @@ public class Function implements IExpression {
 
   }
 
-  enum Type {
+  public enum Type {
 
     ABSOLUTE(Number.class),
     AVERAGE(Number.class),
@@ -122,7 +126,6 @@ public class Function implements IExpression {
     MAX(Number.class),
     SUM(Number.class),
     SIZE(Collection.class),
-    COUNT(Collection.class),
     LENGTH(String.class),
     TRIM(String.class),
     CURRENTTIME,

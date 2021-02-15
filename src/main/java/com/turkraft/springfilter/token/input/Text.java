@@ -53,6 +53,8 @@ public class Text implements IInput {
 
   @Override
   public String generate() {
+    if (value == null)
+      return null;
     return "'" + value + "'";
   }
 

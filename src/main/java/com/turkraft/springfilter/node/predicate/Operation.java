@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 public abstract class Operation implements IExpression {
 
-  private Operator type;
+  private Operator operator;
 
 }

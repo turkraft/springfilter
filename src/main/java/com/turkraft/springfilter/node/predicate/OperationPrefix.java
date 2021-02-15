@@ -23,13 +23,16 @@ public class OperationPrefix extends Operation {
 
   @Override
   public IExpression transform(IExpression parent) {
-    right = (IExpression) right.transform(this);
+    right = right.transform(this);
     return this;
   }
 
   @Override
   public String generate() {
-    return getType().getLiteral() + "(" + right.generate() + ")";
+    String generatedRight = right.generate();
+    if (generatedRight.isEmpty())
+      return "";
+    return getOperator().getLiteral() + "(" + generatedRight + ")";
   }
 
   @Override
@@ -38,16 +41,16 @@ public class OperationPrefix extends Operation {
 
     if (!(getRight() instanceof Predicate)) {
       throw new RuntimeException(
-          "Right side expression of the prefix operator " + getType().getLiteral() + " should be predicates");
+          "Right side expression of the prefix operator " + getOperator().getLiteral() + " should be predicates");
     }
 
-    switch (getType()) {
+    switch (getOperator()) {
 
       case NOT:
         return criteriaBuilder.not((Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
 
       default:
-        throw new UnsupportedOperationException("Unsupported infix operator " + getType().getLiteral());
+        throw new UnsupportedOperationException("Unsupported infix operator " + getOperator().getLiteral());
 
     }
 

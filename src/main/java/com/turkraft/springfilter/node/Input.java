@@ -27,9 +27,11 @@ public class Input implements IExpression {
 
   @Override
   public String generate() {
-    return value.generate();
+    String generatedValue = value.generate();
+    if (generatedValue == null || generatedValue.isEmpty())
+      return "";
+    return generatedValue;
   }
-
 
   @Override
   public Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
