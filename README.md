@@ -7,7 +7,7 @@ Your API will gain a full featured search functionality. You don't work with API
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
-// Entity used in the query above
+/* Entity used in the query above */
 @Entity public class Car {
   @Id long id;
       int year;
@@ -59,6 +59,12 @@ Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuer
 
 ### d. Builder
 ```java
+/* Using static methods */
+import static com.turkraft.springfilter.FilterQueryBuilder.*;
+Filter filter = filter(like(field("name"), input("%jose%")));
+```
+```java
+/* Using lombok builder */
 Filter filter = Filter.builder()
     .body(ConditionInfix.builder()
         .left(Field.builder()
@@ -72,12 +78,12 @@ Filter filter = Filter.builder()
             .build())
         .build())
     .build();
+```
+```java
 String input = filter.generate(); // name ~ '%jose%'
 Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
 Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
-
-> :construction: The builder will change in the future in order to be simpler, it currently uses Lombok
 
 ## Syntax
 
@@ -110,6 +116,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>is not null</th> <td>checks if an expression is not null</td> <td>status <b>is not null</b></td> </tr>
   <tr> <td>is empty</th> <td>checks if the (collection) expression is empty</td> <td>children <b>is empty</b></td> </tr>
   <tr> <td>is not empty</th> <td>checks if the (collection) expression is not empty</td> <td>children <b>is not empty</b></td> </tr>
+  <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized', 'active'<b>)</b></td> </tr>
 </table>
 
 ### Functions
