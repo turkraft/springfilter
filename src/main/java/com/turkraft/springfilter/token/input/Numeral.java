@@ -23,6 +23,8 @@ public class Numeral implements IInput {
 
   @Override
   public String generate() {
+    if (value == null)
+      return "";
     return value.toString();
   }
 

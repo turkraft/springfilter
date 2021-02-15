@@ -37,7 +37,7 @@ public class OperationMatcher extends Matcher<Operation> {
       // regular prefix operation, such as 'NOT x'
 
       if (right != null && right instanceof IExpression) {
-        return OperationPrefix.builder().type(operator).right(right).build();
+        return OperationPrefix.builder().operator(operator).right(right).build();
       }
 
     }
@@ -48,7 +48,7 @@ public class OperationMatcher extends Matcher<Operation> {
       return null;
     }
 
-    IExpression left = (IExpression) nodes.pollLast();
+    IExpression left = nodes.pollLast();
 
     // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
     // example: 'x OR y AND z' => 'x OR (y AND z)'
@@ -57,10 +57,10 @@ public class OperationMatcher extends Matcher<Operation> {
 
       OperationInfix previousOperation = ((OperationInfix) left);
 
-      if (operator.getPriority() > previousOperation.getType().getPriority()) {
+      if (operator.getPriority() > previousOperation.getOperator().getPriority()) {
 
         OperationInfix and =
-            OperationInfix.builder().type(operator).left(previousOperation.getRight()).right(right).build();
+            OperationInfix.builder().operator(operator).left(previousOperation.getRight()).right(right).build();
         previousOperation.setRight(and);
         return previousOperation;
 
@@ -68,7 +68,7 @@ public class OperationMatcher extends Matcher<Operation> {
 
     }
 
-    return OperationInfix.builder().left(left).type(operator).right(right).build();
+    return OperationInfix.builder().left(left).operator(operator).right(right).build();
 
   }
 

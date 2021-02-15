@@ -8,6 +8,8 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.turkraft.springfilter.exception.ExpressionExpectedException;
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -23,13 +25,16 @@ public class OperationPrefix extends Operation {
 
   @Override
   public IExpression transform(IExpression parent) {
-    right = (IExpression) right.transform(this);
+    right = right.transform(this);
     return this;
   }
 
   @Override
   public String generate() {
-    return getType().getLiteral() + "(" + right.generate() + ")";
+    String generatedRight = right.generate();
+    if (generatedRight.isEmpty())
+      return "";
+    return getOperator().getLiteral() + "(" + generatedRight + ")";
   }
 
   @Override
@@ -37,17 +42,17 @@ public class OperationPrefix extends Operation {
       Map<String, Join<Object, Object>> joins) {
 
     if (!(getRight() instanceof Predicate)) {
-      throw new RuntimeException(
-          "Right side expression of the prefix operator " + getType().getLiteral() + " should be predicates");
+      throw new ExpressionExpectedException(
+          "Right side expression of the prefix operator " + getOperator().getLiteral() + " should be predicates");
     }
 
-    switch (getType()) {
+    switch (getOperator()) {
 
       case NOT:
         return criteriaBuilder.not((Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
 
       default:
-        throw new UnsupportedOperationException("Unsupported infix operator " + getType().getLiteral());
+        throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());
 
     }
 

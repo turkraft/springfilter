@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.turkraft.springfilter.Extensions;
 import com.turkraft.springfilter.FilterParser;
 import com.turkraft.springfilter.exception.InputExpected;
+import com.turkraft.springfilter.node.ArgumentsMatcher;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Matcher;
 import com.turkraft.springfilter.token.Comparator;
@@ -26,7 +27,7 @@ public class ConditionMatcher extends Matcher<IExpression> {
       return null;
     }
 
-    IExpression left = (IExpression) nodes.pollLast();
+    IExpression left = nodes.pollLast();
 
     if (tokens.indexIs(Comparator.class)) {
 
@@ -34,7 +35,8 @@ public class ConditionMatcher extends Matcher<IExpression> {
 
       if (comparator.needsInput()) {
 
-        IExpression right = FilterParser.run(tokens, nodes);
+        IExpression right = comparator == Comparator.IN ? ArgumentsMatcher.INSTANCE.match(tokens, nodes)
+            : FilterParser.run(tokens, nodes);
 
         if (right == null) {
           return null;

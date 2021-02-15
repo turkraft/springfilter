@@ -8,6 +8,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.expression.ExpressionException;
+
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -25,14 +28,29 @@ public class OperationInfix extends Operation {
 
   @Override
   public IExpression transform(IExpression parent) {
-    left = (IExpression) left.transform(this);
-    right = (IExpression) right.transform(this);
+    left = left.transform(this);
+    right = right.transform(this);
     return this;
   }
 
   @Override
   public String generate() {
-    return "(" + left.generate() + " " + getType().getLiteral() + " " + right.generate() + ")";
+
+    String generatedLeft = left.generate();
+    String generatedRight = right.generate();
+
+    if (generatedLeft.isEmpty() || generatedRight.isEmpty()) {
+      // if op = and, return "" maybe?
+      if (generatedLeft.isEmpty())
+        return generatedRight;
+      else if (generatedRight.isEmpty())
+        return generatedLeft;
+      else
+        return "";
+    }
+
+    return "(" + generatedLeft + " " + getOperator().getLiteral() + " " + generatedRight + ")";
+
   }
 
   @Override
@@ -40,11 +58,11 @@ public class OperationInfix extends Operation {
       Map<String, Join<Object, Object>> joins) {
 
     if (!(getLeft() instanceof Predicate && !(getRight() instanceof Predicate))) {
-      throw new RuntimeException(
-          "Left and right side expressions of the infix operator " + getType().getLiteral() + " should be predicates");
+      throw new ExpressionException("Left and right side expressions of the infix operator "
+          + getOperator().getLiteral() + " should be predicates");
     }
 
-    switch (getType()) {
+    switch (getOperator()) {
 
       case AND:
         return criteriaBuilder.and((Predicate) getLeft().generate(root, criteriaQuery, criteriaBuilder, joins),
@@ -55,7 +73,7 @@ public class OperationInfix extends Operation {
             (Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
 
       default:
-        throw new UnsupportedOperationException("Unsupported infix operator " + getType().getLiteral());
+        throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());
 
     }
 
