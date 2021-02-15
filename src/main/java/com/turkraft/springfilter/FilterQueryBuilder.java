@@ -3,6 +3,7 @@ package com.turkraft.springfilter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.Field;
@@ -100,12 +101,38 @@ public class FilterQueryBuilder {
     return condition(left, Comparator.LESS_THAN_OR_EQUAL, right);
   }
 
-  public static ConditionInfix like(Field left, Field right) {
-    return condition(left, Comparator.LIKE, right);
+  public static ConditionInfix like(String field, Field pattern) {
+    return condition(field(field), Comparator.LIKE, pattern);
   }
 
-  public static ConditionInfix like(Field left, String right) {
-    return condition(left, Comparator.LIKE, input(right));
+  public static ConditionInfix like(String field, String pattern) {
+    return condition(field(field), Comparator.LIKE, input(pattern));
+  }
+
+  public static ConditionInfix in(String field, List<IExpression> args) {
+    return condition(field(field), Comparator.IN, Arguments.builder().values(args).build());
+  }
+
+  public static ConditionInfix in(String field, IExpression[] args) {
+    return in(field, Arrays.asList(args));
+  }
+
+  public static ConditionInfix inNumbers(String field, List<Number> args) {
+    return in(field, args.stream().map(a -> Input.builder().value(Numeral.builder().value(a).build()).build())
+        .collect(Collectors.toList()));
+  }
+
+  public static ConditionInfix inNumbers(String field, Number... args) {
+    return inNumbers(field, Arrays.asList(args));
+  }
+
+  public static ConditionInfix inStrings(String field, List<String> args) {
+    return in(field, args.stream().map(a -> Input.builder().value(Text.builder().value(a).build()).build())
+        .collect(Collectors.toList()));
+  }
+
+  public static ConditionInfix inStrings(String field, String... args) {
+    return inStrings(field, Arrays.asList(args));
   }
 
   /* POSTFIX CONDITIONS */

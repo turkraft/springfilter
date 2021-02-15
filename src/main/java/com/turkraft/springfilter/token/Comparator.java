@@ -11,6 +11,7 @@ public enum Comparator implements IToken, ILiteral {
   GREATER_THAN(">", Comparable.class),
   LESS_THAN_OR_EQUAL("<:", Comparable.class),
   LESS_THAN("<", Comparable.class),
+  IN("in", "^in(?=\\s*\\()", Comparable.class),
   NULL("is null", "^is\\s*null(?=\\s|$)"),
   NOT_NULL("is not null", "^is\\s*not\\s*null(?=\\s|$)"),
   EMPTY("is empty", "^is\\s*empty(?=\\s|$)"),
