@@ -28,7 +28,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.7.2</version>
+    <version>0.7.3</version>
 </dependency>
 ```
 
@@ -91,7 +91,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 Field names should be directly given without any extra literals. Dots indicate nested fields. For example: `category.updatedAt`
 
 ### Inputs
-Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, strings, should be quotes. For example: `status : 'active'`
+Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, strings, should be quoted. For example: `status : 'active'`
 
 ### Operators
 <table>
@@ -116,11 +116,25 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>is not null</th> <td>checks if an expression is not null</td> <td>status <b>is not null</b></td> </tr>
   <tr> <td>is empty</th> <td>checks if the (collection) expression is empty</td> <td>children <b>is empty</b></td> </tr>
   <tr> <td>is not empty</th> <td>checks if the (collection) expression is not empty</td> <td>children <b>is not empty</b></td> </tr>
-  <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized', 'active'<b>)</b></td> </tr>
+  <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized'<b>,</b> 'active'<b>)</b></td> </tr>
 </table>
 
 ### Functions
 A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
+<table>
+  <tr> <th>Name</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <td> absolute </th> <td> returns the absolute </td> <td> <b>absolute(</b>x<b>)</b> </td> </tr>
+  <tr> <td> average </th> <td> returns the average </td> <td> <b>average(</b>ratings<b>)</b> </td> </tr>
+  <tr> <td> min </th> <td> returns the minimum </td> <td> <b>min(</b>ratings<b>)</b> </td> </tr>
+  <tr> <td> max </th> <td> returns the maximum </td> <td> <b>max(</b>ratings<b>)</b> </td> </tr>
+  <tr> <td> sum </th> <td> returns the sum </td> <td> <b>max(</b>scores<b>)</b> </td> </tr>
+  <tr> <td> currentDate </th> <td> returns the current date </td> <td> <b>currentDate()</b> </td> </tr>
+  <tr> <td> currentTime </th> <td> returns the current time </td> <td> <b>currentTime()</b> </td> </tr>
+  <tr> <td> currentTimestamp </th> <td> returns the current time stamp </td> <td> <b>currentTimestamp()</b> </td> </tr>
+  <tr> <td> size </th> <td> returns the collection's size </td> <td> <b>size(</b>accidents<b>)</b> </td> </tr>
+  <tr> <td> length </th> <td> returns the string's length </td> <td> <b>length(</b>name<b>)</b> </td> </tr>
+  <tr> <td> trim </th> <td> returns the trimmed string </td> <td> <b>trim(</b>name<b>)</b> </td> </tr>
+</table>
 
 ## Contributing
 Ideas and pull requests are always welcome.
