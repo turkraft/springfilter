@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.Field;
 import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.Function;
@@ -156,7 +157,7 @@ public class FilterQueryBuilder {
   /* FUNCTIONS */
 
   public static Function function(String name, List<IExpression> args) {
-    return Function.builder().name(name).arguments(args).build();
+    return Function.builder().name(name).arguments(Arguments.builder().values(args).build()).build();
   }
 
   public static Function function(Function.Type name, List<IExpression> args) {
@@ -171,36 +172,36 @@ public class FilterQueryBuilder {
     return function(name.name().toLowerCase(), args);
   }
 
-  public static Function absolute(IExpression arg1) {
-    return function(Function.Type.ABSOLUTE, arg1);
+  public static Function absolute(IExpression arg) {
+    return function(Function.Type.ABSOLUTE, arg);
   }
 
-  public static Function min(IExpression arg1) {
-    return function(Function.Type.MIN, arg1);
+  public static Function min(IExpression arg) {
+    return function(Function.Type.MIN, arg);
   }
 
-  public static Function max(IExpression arg1) {
-    return function(Function.Type.MAX, arg1);
+  public static Function max(IExpression arg) {
+    return function(Function.Type.MAX, arg);
   }
 
-  public static Function average(IExpression arg1) {
-    return function(Function.Type.AVERAGE, arg1);
+  public static Function average(IExpression arg) {
+    return function(Function.Type.AVERAGE, arg);
   }
 
-  public static Function sum(IExpression arg1) {
-    return function(Function.Type.SUM, arg1);
+  public static Function sum(IExpression arg) {
+    return function(Function.Type.SUM, arg);
   }
 
-  public static Function size(IExpression arg1) {
-    return function(Function.Type.SIZE, arg1);
+  public static Function size(IExpression arg) {
+    return function(Function.Type.SIZE, arg);
   }
 
-  public static Function length(IExpression arg1) {
-    return function(Function.Type.LENGTH, arg1);
+  public static Function length(IExpression arg) {
+    return function(Function.Type.LENGTH, arg);
   }
 
-  public static Function trim(IExpression arg1) {
-    return function(Function.Type.TRIM, arg1);
+  public static Function trim(IExpression arg) {
+    return function(Function.Type.TRIM, arg);
   }
 
   public static Function currentDate() {

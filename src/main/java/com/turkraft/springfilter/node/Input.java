@@ -8,7 +8,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.exception.UnsupportedOperationException;
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.token.input.IInput;
 
 import lombok.Data;
@@ -36,7 +36,7 @@ public class Input implements IExpression {
   @Override
   public Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
-    throw new UnsupportedOperationException(
+    throw new InvalidQueryException(
         "An input can't be directly generated, you need to use the method which specifies the target type");
   }
 

@@ -9,6 +9,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
 
@@ -53,7 +54,7 @@ public class ConditionInfix extends Condition {
     // crazy stuff going on here
 
     if (left instanceof Input && right instanceof Input) {
-      throw new UnsupportedOperationException(
+      throw new InvalidQueryException(
           "Left and right expressions of the comparator " + getComparator().getLiteral() + " can't be both inputs");
     }
 
@@ -77,13 +78,13 @@ public class ConditionInfix extends Condition {
 
     if (!getComparator().getFieldType().isAssignableFrom(left.getJavaType())
         || !getComparator().getFieldType().isAssignableFrom(right.getJavaType())) {
-      throw new UnsupportedOperationException(
+      throw new InvalidQueryException(
           "The comparator " + getComparator().getLiteral() + " only supports type " + getComparator().getFieldType());
     }
 
     if (!left.getJavaType().equals(right.getJavaType())) {
       // maybe this exception is not needed, JPA already throws an exception
-      throw new UnsupportedOperationException(
+      throw new InvalidQueryException(
           "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
     }
 
@@ -118,7 +119,7 @@ public class ConditionInfix extends Condition {
       }
 
       default:
-        throw new UnsupportedOperationException("Unsupported comparator " + getComparator().getLiteral());
+        throw new InvalidQueryException("Unsupported comparator " + getComparator().getLiteral());
 
     }
 

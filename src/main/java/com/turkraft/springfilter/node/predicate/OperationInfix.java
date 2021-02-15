@@ -8,6 +8,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.expression.ExpressionException;
+
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -55,8 +58,8 @@ public class OperationInfix extends Operation {
       Map<String, Join<Object, Object>> joins) {
 
     if (!(getLeft() instanceof Predicate && !(getRight() instanceof Predicate))) {
-      throw new RuntimeException("Left and right side expressions of the infix operator " + getOperator().getLiteral()
-          + " should be predicates");
+      throw new ExpressionException("Left and right side expressions of the infix operator "
+          + getOperator().getLiteral() + " should be predicates");
     }
 
     switch (getOperator()) {
@@ -70,7 +73,7 @@ public class OperationInfix extends Operation {
             (Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
 
       default:
-        throw new UnsupportedOperationException("Unsupported infix operator " + getOperator().getLiteral());
+        throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());
 
     }
 

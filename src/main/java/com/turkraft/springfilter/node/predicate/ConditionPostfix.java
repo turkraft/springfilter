@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
 
 import lombok.Data;
@@ -65,7 +66,7 @@ public class ConditionPostfix extends Condition {
         }
 
       default:
-        throw new UnsupportedOperationException("The comparator " + getComparator().getLiteral() + " is unsupported");
+        throw new InvalidQueryException("The comparator " + getComparator().getLiteral() + " is unsupported");
 
     }
 

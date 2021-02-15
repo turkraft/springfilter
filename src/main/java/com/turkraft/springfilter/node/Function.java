@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +12,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import com.turkraft.springfilter.Pair;
-import com.turkraft.springfilter.exception.UnsupportedOperationException;
+import com.turkraft.springfilter.exception.InvalidQueryException;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -24,13 +23,11 @@ public class Function implements IExpression {
 
   private String name;
 
-  private List<IExpression> arguments;
+  private Arguments arguments;
 
   @Override
-  public IExpression transform(IExpression parent) {
-    for (int i = 0; i < arguments.size(); i++) {
-      arguments.add(arguments.remove(i).transform(this));
-    }
+  public Function transform(IExpression parent) {
+    arguments = arguments.transform(this);
     return this;
   }
 
@@ -38,10 +35,7 @@ public class Function implements IExpression {
   public String generate() {
     if (name.isEmpty())
       return "";
-    if (arguments == null)
-      return name + "()";
-    // TODO: manage null arguments?
-    return name + "(" + String.join(", ", arguments.stream().map(a -> a.generate()).collect(Collectors.toList())) + ")";
+    return name + arguments.generate();
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
@@ -53,7 +47,7 @@ public class Function implements IExpression {
 
     // the generated expression is directly stored in the list if it's not based on an input, otherwise we will generate it later
 
-    for (IExpression argument : arguments) {
+    for (IExpression argument : arguments.getValues()) {
       if (argument instanceof Input) {
         expressions.add(new Pair(argument, null));
       } else {
@@ -64,7 +58,7 @@ public class Function implements IExpression {
     Type type = Type.getMatch(name, expressions);
 
     if (type == null) {
-      throw new UnsupportedOperationException("The function " + name + " didn't have any match");
+      throw new InvalidQueryException("The function " + name + " didn't have any match");
     }
 
     // the following method is used to get the expression of the argument at the given index
@@ -114,7 +108,7 @@ public class Function implements IExpression {
 
     }
 
-    throw new UnsupportedOperationException("Unsupported function " + type.name().toLowerCase());
+    throw new InvalidQueryException("Unsupported function " + type.name().toLowerCase());
 
   }
 
@@ -149,8 +143,7 @@ public class Function implements IExpression {
       }
 
       if (argumentTypes.length > expressions.size()) {
-        throw new UnsupportedOperationException(
-            "The function " + name + " should have " + argumentTypes.length + " arguments");
+        throw new InvalidQueryException("The function " + name + " should have " + argumentTypes.length + " arguments");
       }
 
       for (int i = 0; i < argumentTypes.length; i++) {
