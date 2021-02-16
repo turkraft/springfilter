@@ -358,8 +358,10 @@ public class FilterQueryBuilder {
 
   /* HELPERS */
 
-  public static IExpression object(Object object) {
-    return Input.builder().value(Text.builder().value(object.toString()).build()).build();
+  public static IExpression object(Object arg) {
+    if (arg == null)
+      return nothing();
+    return Input.builder().value(Text.builder().value(arg.toString()).build()).build();
   }
 
   public static <T extends Number> IExpression number(T arg) {
@@ -379,18 +381,15 @@ public class FilterQueryBuilder {
   }
 
   public static <T> List<IExpression> objects(List<T> args) {
-    return args.stream().map(a -> Input.builder().value(Text.builder().value(a.toString()).build()).build())
-        .collect(Collectors.toList());
+    return args.stream().map(a -> object(a)).collect(Collectors.toList());
   }
 
   public static <T extends Number> List<IExpression> numbers(List<T> args) {
-    return args.stream().map(a -> Input.builder().value(Numeral.builder().value(a).build()).build())
-        .collect(Collectors.toList());
+    return args.stream().map(a -> number(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> bools(List<Boolean> args) {
-    return args.stream().map(a -> Input.builder().value(Bool.builder().value(a).build()).build())
-        .collect(Collectors.toList());
+    return args.stream().map(a -> bool(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> strings(List<String> args) {
