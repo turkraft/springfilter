@@ -69,31 +69,31 @@ public class ConditionInfix extends Condition {
           "Left and right expressions of the comparator " + getComparator().getLiteral() + " can't be both inputs");
     }
 
-    Expression<?> left = null;
-    Expression<?> right = null;
+    Expression<?> leftExpression = null;
+    Expression<?> rightExpression = null;
 
     if (getRight() instanceof Input) {
-      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      right = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, left.getJavaType());
+      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      rightExpression = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, leftExpression.getJavaType());
     }
 
     else if (getLeft() instanceof Input) {
-      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
-      left = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, right.getJavaType());
+      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      leftExpression = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, rightExpression.getJavaType());
     }
 
     else {
-      left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      right = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
     }
 
-    if (!getComparator().getFieldType().isAssignableFrom(left.getJavaType())
-        || !getComparator().getFieldType().isAssignableFrom(right.getJavaType())) {
+    if (!getComparator().getFieldType().isAssignableFrom(leftExpression.getJavaType())
+        || !getComparator().getFieldType().isAssignableFrom(rightExpression.getJavaType())) {
       throw new InvalidQueryException(
           "The comparator " + getComparator().getLiteral() + " only supports type " + getComparator().getFieldType());
     }
 
-    if (!left.getJavaType().equals(right.getJavaType())) {
+    if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
       // maybe this exception is not needed, JPA already throws an exception
       throw new InvalidQueryException(
           "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
@@ -104,29 +104,29 @@ public class ConditionInfix extends Condition {
     switch (getComparator()) {
 
       case EQUAL:
-        return criteriaBuilder.equal(left, right);
+        return criteriaBuilder.equal(leftExpression, rightExpression);
 
       case NOT_EQUAL:
-        return criteriaBuilder.notEqual(left, right);
+        return criteriaBuilder.notEqual(leftExpression, rightExpression);
 
       case GREATER_THAN:
-        return criteriaBuilder.greaterThan((Expression<? extends Comparable>) left,
-            (Expression<? extends Comparable>) right);
+        return criteriaBuilder.greaterThan((Expression<? extends Comparable>) leftExpression,
+            (Expression<? extends Comparable>) rightExpression);
 
       case GREATER_THAN_OR_EQUAL:
-        return criteriaBuilder.greaterThanOrEqualTo((Expression<? extends Comparable>) left,
-            (Expression<? extends Comparable>) right);
+        return criteriaBuilder.greaterThanOrEqualTo((Expression<? extends Comparable>) leftExpression,
+            (Expression<? extends Comparable>) rightExpression);
 
       case LESS_THAN:
-        return criteriaBuilder.lessThan((Expression<? extends Comparable>) left,
-            (Expression<? extends Comparable>) right);
+        return criteriaBuilder.lessThan((Expression<? extends Comparable>) leftExpression,
+            (Expression<? extends Comparable>) rightExpression);
 
       case LESS_THAN_OR_EQUAL:
-        return criteriaBuilder.lessThanOrEqualTo((Expression) left, (Comparable) right);
+        return criteriaBuilder.lessThanOrEqualTo((Expression) leftExpression, (Comparable) rightExpression);
 
       case LIKE: {
-        return criteriaBuilder.like(criteriaBuilder.upper((Expression) left),
-            criteriaBuilder.upper((Expression<String>) right));
+        return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
+            criteriaBuilder.upper((Expression<String>) rightExpression));
       }
 
       default:

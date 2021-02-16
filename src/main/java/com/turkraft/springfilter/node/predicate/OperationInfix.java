@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -57,7 +58,10 @@ public class OperationInfix extends Operation {
   public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
-    if (!(getLeft() instanceof Predicate && !(getRight() instanceof Predicate))) {
+    Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+
+    if (!leftExpression.getJavaType().equals(Boolean.class) || !rightExpression.getJavaType().equals(Boolean.class)) {
       throw new ExpressionException("Left and right side expressions of the infix operator "
           + getOperator().getLiteral() + " should be predicates");
     }
@@ -65,12 +69,10 @@ public class OperationInfix extends Operation {
     switch (getOperator()) {
 
       case AND:
-        return criteriaBuilder.and((Predicate) getLeft().generate(root, criteriaQuery, criteriaBuilder, joins),
-            (Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
+        return criteriaBuilder.and((Predicate) leftExpression, (Predicate) rightExpression);
 
       case OR:
-        return criteriaBuilder.or((Predicate) getLeft().generate(root, criteriaQuery, criteriaBuilder, joins),
-            (Predicate) getRight().generate(root, criteriaQuery, criteriaBuilder, joins));
+        return criteriaBuilder.or((Predicate) leftExpression, (Predicate) rightExpression);
 
       default:
         throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());

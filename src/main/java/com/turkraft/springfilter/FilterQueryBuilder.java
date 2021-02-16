@@ -1,6 +1,7 @@
 package com.turkraft.springfilter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -381,14 +382,20 @@ public class FilterQueryBuilder {
   }
 
   public static <T> List<IExpression> objects(List<T> args) {
+    if (args == null)
+      return Collections.emptyList();
     return args.stream().map(a -> object(a)).collect(Collectors.toList());
   }
 
   public static <T extends Number> List<IExpression> numbers(List<T> args) {
+    if (args == null)
+      return Collections.emptyList();
     return args.stream().map(a -> number(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> bools(List<Boolean> args) {
+    if (args == null)
+      return Collections.emptyList();
     return args.stream().map(a -> bool(a)).collect(Collectors.toList());
   }
 

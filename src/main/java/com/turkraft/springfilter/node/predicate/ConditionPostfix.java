@@ -45,24 +45,24 @@ public class ConditionPostfix extends Condition {
   public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
-    Expression<?> left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
 
     switch (getComparator()) {
 
       case EMPTY:
       case NULL:
-        if (Collection.class.isAssignableFrom(left.getJavaType()) && left instanceof PluralAttributePath) {
-          return criteriaBuilder.isEmpty((Expression<Collection<?>>) left);
+        if (Collection.class.isAssignableFrom(leftExpression.getJavaType()) && leftExpression instanceof PluralAttributePath) {
+          return criteriaBuilder.isEmpty((Expression<Collection<?>>) leftExpression);
         } else {
-          return criteriaBuilder.isNull(left);
+          return criteriaBuilder.isNull(leftExpression);
         }
 
       case NOT_EMPTY:
       case NOT_NULL:
-        if (Collection.class.isAssignableFrom(left.getJavaType()) && left instanceof PluralAttributePath) {
-          return criteriaBuilder.isNotEmpty((Expression<Collection<?>>) left);
+        if (Collection.class.isAssignableFrom(leftExpression.getJavaType()) && leftExpression instanceof PluralAttributePath) {
+          return criteriaBuilder.isNotEmpty((Expression<Collection<?>>) leftExpression);
         } else {
-          return criteriaBuilder.isNotNull(left);
+          return criteriaBuilder.isNotNull(leftExpression);
         }
 
       default:
