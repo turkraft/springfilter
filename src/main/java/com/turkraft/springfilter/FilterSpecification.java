@@ -1,5 +1,6 @@
 package com.turkraft.springfilter;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,7 +10,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.turkraft.springfilter.node.Filter;
+import com.turkraft.springfilter.node.IExpression;
 
 public class FilterSpecification<T> implements Specification<T> {
 
@@ -17,7 +18,7 @@ public class FilterSpecification<T> implements Specification<T> {
 
   private final String input;
 
-  private final Filter filter;
+  private final IExpression filter;
 
   public FilterSpecification(String input) {
     Objects.requireNonNull(input);
@@ -25,7 +26,7 @@ public class FilterSpecification<T> implements Specification<T> {
     this.filter = null;
   }
 
-  public FilterSpecification(Filter filter) {
+  public FilterSpecification(IExpression filter) {
     Objects.requireNonNull(filter);
     this.filter = filter;
     this.input = null;
@@ -36,7 +37,7 @@ public class FilterSpecification<T> implements Specification<T> {
     if (input != null) {
       return FilterCompiler.compile(input, root, query, criteriaBuilder);
     }
-    return filter.generate(root, query, criteriaBuilder);
+    return (Predicate) filter.generate(root, query, criteriaBuilder, new HashMap<>());
   }
 
   public String getInput() {

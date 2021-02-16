@@ -26,7 +26,8 @@ class FilterParserTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"x : 1", "(x : 1 or y : 2)", "not(not(x : 1))", "(x : 1 or (y : 2 and z : 3))"})
+  @ValueSource(strings = {"x : 1", "(x : 1 or y : 2)", "not(not(x : 1))", "(x : 1 or (y : 2 and z : 3))",
+      "(productSpecification in (261, 262, 263, 264, 265) or category is empty)"})
   void generationIsEqualToInput(String input) throws Exception {
     assertEquals(input, FilterParser.parse(FilterTokenizer.tokenize(input)).transform(null).generate());
   }
