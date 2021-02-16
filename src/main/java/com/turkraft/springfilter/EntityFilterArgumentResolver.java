@@ -21,17 +21,25 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
   public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
       NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
 
-    return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        nativeWebRequest.getParameter(methodParameter.getParameterAnnotation(EntityFilter.class).parameterName()));
+    return getSpecification(methodParameter.getGenericParameterType().getClass(), nativeWebRequest
+        .getParameterValues(methodParameter.getParameterAnnotation(EntityFilter.class).parameterName()));
 
   }
 
-  private <T> Specification<?> getSpecification(Class<?> specificationClass, String input) {
+  private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
-    if (input == null || input.trim().isEmpty())
+    if (inputs == null || inputs.length == 0)
       return null;
 
-    return new FilterSpecification<T>(input);
+    Specification<T> result = null;
+
+    for (String input : inputs) {
+      if (input.trim().length() > 0) {
+        result = new FilterSpecification<T>(input).and(result);
+      }
+    }
+
+    return result;
 
   }
 
