@@ -77,29 +77,115 @@ public class FilterQueryBuilder {
     return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();
   }
 
+  /* EQUAL */
+
   public static ConditionInfix equal(IExpression left, IExpression right) {
     return condition(left, Comparator.EQUAL, right);
   }
+
+  public static ConditionInfix equal(String field, IExpression value) {
+    return equal(field(field), value);
+  }
+
+  public static IExpression equal(String field, String value) {
+    return equal(field, string(value));
+  }
+
+  public static <T extends Number> IExpression equal(String field, T value) {
+    return equal(field, number(value));
+  }
+
+  public static IExpression equal(String field, Boolean value) {
+    return equal(field, bool(value));
+  }
+
+  public static <T extends Enum<T>> IExpression equal(String field, T value) {
+    return equal(field, enum_(value));
+  }
+
+  /* NOT EQUAL */
 
   public static ConditionInfix notEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.NOT_EQUAL, right);
   }
 
+  public static ConditionInfix notEqual(String field, IExpression value) {
+    return notEqual(field(field), value);
+  }
+
+  public static IExpression notEqual(String field, String value) {
+    return notEqual(field, string(value));
+  }
+
+  public static <T extends Number> IExpression notEqual(String field, T value) {
+    return notEqual(field, number(value));
+  }
+
+  public static IExpression notEqual(String field, Boolean value) {
+    return notEqual(field, bool(value));
+  }
+
+  public static <T extends Enum<T>> IExpression notEqual(String field, T value) {
+    return notEqual(field, enum_(value));
+  }
+
+  /* GREATER THAN */
+
   public static ConditionInfix greaterThan(IExpression left, IExpression right) {
     return condition(left, Comparator.GREATER_THAN, right);
   }
+
+  public static ConditionInfix greaterThan(String field, IExpression value) {
+    return greaterThan(field(field), value);
+  }
+
+  public static <T extends Number> IExpression greaterThan(String field, T value) {
+    return greaterThan(field, number(value));
+  }
+
+  /* GREATER THAN OR EQUAL */
 
   public static ConditionInfix greaterThanOrEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.GREATER_THAN_OR_EQUAL, right);
   }
 
+  public static ConditionInfix greaterThanOrEqual(String field, IExpression value) {
+    return greaterThanOrEqual(field(field), value);
+  }
+
+  public static <T extends Number> IExpression greaterThanOrEqual(String field, T value) {
+    return greaterThanOrEqual(field, number(value));
+  }
+
+  /* LESS THAN */
+
   public static ConditionInfix lessThan(IExpression left, IExpression right) {
     return condition(left, Comparator.LESS_THAN, right);
   }
 
+  public static ConditionInfix lessThan(String field, IExpression value) {
+    return lessThan(field(field), value);
+  }
+
+  public static <T extends Number> IExpression lessThan(String field, T value) {
+    return lessThan(field, number(value));
+  }
+
+  /* LESS THAN OR EQUAL */
+
   public static ConditionInfix lessThanOrEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.LESS_THAN_OR_EQUAL, right);
   }
+
+  public static ConditionInfix lessThanOrEqual(String field, IExpression value) {
+    return lessThanOrEqual(field(field), value);
+  }
+
+  public static <T extends Number> IExpression lessThanOrEqual(String field, T value) {
+    return lessThanOrEqual(field, number(value));
+  }
+
+  /* LIKE */
 
   public static ConditionInfix like(String field, Field pattern) {
     return condition(field(field), Comparator.LIKE, pattern);
@@ -109,30 +195,10 @@ public class FilterQueryBuilder {
     return condition(field(field), Comparator.LIKE, input(pattern));
   }
 
+  /* IN */
+
   public static ConditionInfix in(String field, List<IExpression> args) {
     return condition(field(field), Comparator.IN, Arguments.builder().values(args).build());
-  }
-
-  public static ConditionInfix in(String field, IExpression[] args) {
-    return in(field, Arrays.asList(args));
-  }
-
-  public static ConditionInfix inNumbers(String field, List<Number> args) {
-    return in(field, args.stream().map(a -> Input.builder().value(Numeral.builder().value(a).build()).build())
-        .collect(Collectors.toList()));
-  }
-
-  public static ConditionInfix inNumbers(String field, Number... args) {
-    return inNumbers(field, Arrays.asList(args));
-  }
-
-  public static ConditionInfix inStrings(String field, List<String> args) {
-    return in(field, args.stream().map(a -> Input.builder().value(Text.builder().value(a).build()).build())
-        .collect(Collectors.toList()));
-  }
-
-  public static ConditionInfix inStrings(String field, String... args) {
-    return inStrings(field, Arrays.asList(args));
   }
 
   /* POSTFIX CONDITIONS */
@@ -145,16 +211,32 @@ public class FilterQueryBuilder {
     return condition(left, Comparator.NULL);
   }
 
+  public static ConditionPostfix isNull(String field) {
+    return isNull(field(field));
+  }
+
   public static ConditionPostfix isNotNull(Field left) {
     return condition(left, Comparator.NOT_NULL);
+  }
+
+  public static ConditionPostfix isNotNull(String field) {
+    return isNotNull(field(field));
   }
 
   public static ConditionPostfix isEmpty(Field left) {
     return condition(left, Comparator.EMPTY);
   }
 
+  public static ConditionPostfix isEmpty(String field) {
+    return isEmpty(field(field));
+  }
+
   public static ConditionPostfix isNotEmpty(Field left) {
     return condition(left, Comparator.NOT_EMPTY);
+  }
+
+  public static ConditionPostfix isNotEmpty(String field) {
+    return isNotEmpty(field(field));
   }
 
   /* INFIX OPERATIONS */
@@ -167,8 +249,32 @@ public class FilterQueryBuilder {
     return operation(left, Operator.AND, right);
   }
 
+  public static IExpression and(IExpression... expressions) {
+    if (expressions.length == 0)
+      return null;
+    if (expressions.length == 1)
+      return expressions[1];
+    IExpression ands = expressions[0];
+    for (int i = 1; i < expressions.length; i++) {
+      ands = and(ands, expressions[i]);
+    }
+    return ands;
+  }
+
   public static OperationInfix or(IExpression left, IExpression right) {
     return operation(left, Operator.OR, right);
+  }
+
+  public static IExpression or(IExpression... expressions) {
+    if (expressions.length == 0)
+      return null;
+    if (expressions.length == 1)
+      return expressions[1];
+    IExpression ors = expressions[0];
+    for (int i = 1; i < expressions.length; i++) {
+      ors = or(ors, expressions[i]);
+    }
+    return ors;
   }
 
   /* PREFIX OPERATIONS */
@@ -241,6 +347,51 @@ public class FilterQueryBuilder {
 
   public static Function currentTimestamp() {
     return function(Function.Type.CURRENTTIMESTAMP);
+  }
+
+  /* HELPERS */
+
+  public static IExpression object(Object object) {
+    return Input.builder().value(Text.builder().value(object.toString()).build()).build();
+  }
+
+  public static <T extends Number> IExpression number(T arg) {
+    return Input.builder().value(Numeral.builder().value(arg).build()).build();
+  }
+
+  public static IExpression bool(Boolean arg) {
+    return Input.builder().value(Bool.builder().value(arg).build()).build();
+  }
+
+  public static IExpression string(String arg) {
+    return object(arg);
+  }
+
+  public static <T extends Enum<T>> IExpression enum_(T arg) {
+    return object(arg);
+  }
+
+  public static <T> List<IExpression> objects(List<T> args) {
+    return args.stream().map(a -> Input.builder().value(Text.builder().value(a.toString()).build()).build())
+        .collect(Collectors.toList());
+  }
+
+  public static <T extends Number> List<IExpression> numbers(List<T> args) {
+    return args.stream().map(a -> Input.builder().value(Numeral.builder().value(a).build()).build())
+        .collect(Collectors.toList());
+  }
+
+  public static List<IExpression> bools(List<Boolean> args) {
+    return args.stream().map(a -> Input.builder().value(Bool.builder().value(a).build()).build())
+        .collect(Collectors.toList());
+  }
+
+  public static List<IExpression> strings(List<String> args) {
+    return objects(args);
+  }
+
+  public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
+    return objects(args);
   }
 
 }
