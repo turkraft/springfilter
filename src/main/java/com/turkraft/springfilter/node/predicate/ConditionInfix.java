@@ -167,10 +167,10 @@ public class ConditionInfix extends Condition {
         expression = in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins));
       }
 
-      if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
-        throw new InvalidQueryException(
-            "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
-      }
+      //      if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
+      //        throw new InvalidQueryException(
+      //            "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
+      //      }
 
       in.value(expression);
 
