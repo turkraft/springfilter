@@ -74,12 +74,14 @@ public class ConditionInfix extends Condition {
 
     if (getRight() instanceof Input) {
       leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      rightExpression = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, leftExpression.getJavaType());
+      rightExpression =
+          ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, leftExpression.getJavaType());
     }
 
     else if (getLeft() instanceof Input) {
       rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
-      leftExpression = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, rightExpression.getJavaType());
+      leftExpression =
+          ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, rightExpression.getJavaType());
     }
 
     else {
@@ -93,11 +95,11 @@ public class ConditionInfix extends Condition {
           "The comparator " + getComparator().getLiteral() + " only supports type " + getComparator().getFieldType());
     }
 
-    if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
-      // maybe this exception is not needed, JPA already throws an exception
-      throw new InvalidQueryException(
-          "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
-    }
+    //    if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
+    //      // maybe this exception is not needed, JPA already throws an exception
+    //      throw new InvalidQueryException(
+    //          "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
+    //    }
 
     // told u
 
