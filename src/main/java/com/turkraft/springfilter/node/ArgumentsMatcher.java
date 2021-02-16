@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.node;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class ArgumentsMatcher extends Matcher<Arguments> {
 
       tokens.take();
 
-      Collections.reverse(arguments);
+      //      Collections.reverse(arguments);
 
       return Arguments.builder().values(arguments).build();
 

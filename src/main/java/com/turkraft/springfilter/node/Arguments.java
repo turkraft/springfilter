@@ -24,7 +24,7 @@ public class Arguments implements IExpression {
   @Override
   public Arguments transform(IExpression parent) {
     for (int i = 0; i < values.size(); i++) {
-      values.add(values.remove(i).transform(this));
+      values.set(i, values.get(i).transform(this));
     }
     return this;
   }
