@@ -11,6 +11,7 @@ import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.Function;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
+import com.turkraft.springfilter.node.Nothing;
 import com.turkraft.springfilter.node.predicate.ConditionInfix;
 import com.turkraft.springfilter.node.predicate.ConditionPostfix;
 import com.turkraft.springfilter.node.predicate.OperationInfix;
@@ -30,6 +31,12 @@ public class FilterQueryBuilder {
 
   public static Filter filter(IExpression body) {
     return Filter.builder().body(body).build();
+  }
+
+  /* NOTHING */
+
+  public static Nothing nothing() {
+    return Nothing.builder().build();
   }
 
   /* PRIORITY */
