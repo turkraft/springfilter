@@ -45,6 +45,10 @@ public class ConditionInfix extends Condition {
     if (generatedLeft.isEmpty() || generatedRight.isEmpty())
       return "";
 
+    if (getComparator() == Comparator.IN && generatedRight.equals("()")) { // if right expression represent arguments with no argument
+      return "";
+    }
+
     return generatedLeft + " " + getComparator().getLiteral() + " " + generatedRight;
 
   }

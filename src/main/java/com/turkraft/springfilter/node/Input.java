@@ -27,6 +27,8 @@ public class Input implements IExpression {
 
   @Override
   public String generate() {
+    if (value == null)
+      return "";
     String generatedValue = value.generate();
     if (generatedValue == null || generatedValue.isEmpty())
       return "";
