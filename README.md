@@ -61,7 +61,7 @@ Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuer
 ```java
 /* Using static methods */
 import static com.turkraft.springfilter.FilterQueryBuilder.*;
-Filter filter = filter(like(field("name"), input("%jose%")));
+Filter filter = filter(like("name", "%jose%"));
 ```
 ```java
 /* Using lombok builder */
