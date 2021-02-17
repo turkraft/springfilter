@@ -36,224 +36,249 @@ public class FilterQueryBuilder {
 
   /* NOTHING */
 
-  public static Nothing nothing() {
+  public static IExpression nothing() {
     return Nothing.builder().build();
   }
 
   /* PRIORITY */
 
-  public static Priority priority(IExpression body) {
+  public static IExpression priority(IExpression body) {
     return Priority.builder().body(body).build();
   }
 
   /* FIELD */
 
-  public static Field field(String name) {
+  public static IExpression field(String name) {
     return Field.builder().name(name).build();
   }
 
   /* INPUTS */
 
-  public static Input input(Number value) {
+  public static IExpression input(Number value) {
     return Input.builder().value(Numeral.builder().value(value).build()).build();
   }
 
-  public static Input input(Boolean value) {
+  public static IExpression input(Boolean value) {
     return Input.builder().value(Bool.builder().value(value).build()).build();
   }
 
-  public static Input input(Enum<?> value) {
-    return Input.builder().value(Text.builder().value(value.toString()).build()).build();
-  }
-
-  public static Input input(String value) {
+  public static IExpression input(String value) {
     return Input.builder().value(Text.builder().value(value).build()).build();
   }
 
-  public static Input input(Date value) {
-    // need to format
-    return input((Object) value);
+  public static <T extends Enum<T>> IExpression input(Enum<T> value) {
+    return input(value.toString());
   }
 
-  public static Input input(Object value) {
-    return Input.builder().value(Text.builder().value(value != null ? value.toString() : null).build()).build();
+  public static IExpression input(Date value) {
+    return input(FilterConfig.DATE_FORMATTER.format(value));
   }
+
+  //  public static Input input(Object value) {
+  //    return Input.builder().value(Text.builder().value(value != null ? value.toString() : null).build()).build();
+  //  }
 
   /* INFIX CONDITIONS */
 
-  public static ConditionInfix condition(IExpression left, Comparator comparator, IExpression right) {
+  private static IExpression condition(IExpression left, Comparator comparator, IExpression right) {
     return ConditionInfix.builder().left(left).comparator(comparator).right(right).build();
   }
 
   /* EQUAL */
 
-  public static ConditionInfix equal(IExpression left, IExpression right) {
+  public static IExpression equal(IExpression left, IExpression right) {
     return condition(left, Comparator.EQUAL, right);
   }
 
-  public static ConditionInfix equal(String field, IExpression value) {
+  public static IExpression equal(String field, IExpression value) {
     return equal(field(field), value);
   }
 
-  public static IExpression equal(String field, String value) {
-    return equal(field, string(value));
+  public static IExpression equal(String field, Boolean value) {
+    return equal(field, input(value));
   }
 
   public static <T extends Number> IExpression equal(String field, T value) {
-    return equal(field, number(value));
+    return equal(field, input(value));
   }
 
-  public static IExpression equal(String field, Boolean value) {
-    return equal(field, bool(value));
+  public static IExpression equal(String field, String value) {
+    return equal(field, input(value));
   }
 
   public static <T extends Enum<T>> IExpression equal(String field, T value) {
-    return equal(field, enum_(value));
+    return equal(field, input(value));
+  }
+
+  public static IExpression equal(String field, Date value) {
+    return equal(field, input(value));
   }
 
   /* NOT EQUAL */
 
-  public static ConditionInfix notEqual(IExpression left, IExpression right) {
+  public static IExpression notEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.NOT_EQUAL, right);
   }
 
-  public static ConditionInfix notEqual(String field, IExpression value) {
+  public static IExpression notEqual(String field, IExpression value) {
     return notEqual(field(field), value);
   }
 
-  public static IExpression notEqual(String field, String value) {
-    return notEqual(field, string(value));
+  public static IExpression notEqual(String field, Boolean value) {
+    return notEqual(field, input(value));
   }
 
   public static <T extends Number> IExpression notEqual(String field, T value) {
-    return notEqual(field, number(value));
+    return notEqual(field, input(value));
   }
 
-  public static IExpression notEqual(String field, Boolean value) {
-    return notEqual(field, bool(value));
+  public static IExpression notEqual(String field, String value) {
+    return notEqual(field, input(value));
   }
 
   public static <T extends Enum<T>> IExpression notEqual(String field, T value) {
-    return notEqual(field, enum_(value));
+    return notEqual(field, input(value));
+  }
+
+  public static IExpression notEqual(String field, Date value) {
+    return notEqual(field, input(value));
   }
 
   /* GREATER THAN */
 
-  public static ConditionInfix greaterThan(IExpression left, IExpression right) {
+  public static IExpression greaterThan(IExpression left, IExpression right) {
     return condition(left, Comparator.GREATER_THAN, right);
   }
 
-  public static ConditionInfix greaterThan(String field, IExpression value) {
+  public static IExpression greaterThan(String field, IExpression value) {
     return greaterThan(field(field), value);
   }
 
   public static <T extends Number> IExpression greaterThan(String field, T value) {
-    return greaterThan(field, number(value));
+    return greaterThan(field, input(value));
+  }
+
+  public static <T extends Number> IExpression greaterThan(String field, Date value) {
+    return greaterThan(field, input(value));
   }
 
   /* GREATER THAN OR EQUAL */
 
-  public static ConditionInfix greaterThanOrEqual(IExpression left, IExpression right) {
+  public static IExpression greaterThanOrEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.GREATER_THAN_OR_EQUAL, right);
   }
 
-  public static ConditionInfix greaterThanOrEqual(String field, IExpression value) {
+  public static IExpression greaterThanOrEqual(String field, IExpression value) {
     return greaterThanOrEqual(field(field), value);
   }
 
   public static <T extends Number> IExpression greaterThanOrEqual(String field, T value) {
-    return greaterThanOrEqual(field, number(value));
+    return greaterThanOrEqual(field, input(value));
+  }
+
+  public static <T extends Number> IExpression greaterThanOrEqual(String field, Date value) {
+    return greaterThanOrEqual(field, input(value));
   }
 
   /* LESS THAN */
 
-  public static ConditionInfix lessThan(IExpression left, IExpression right) {
+  public static IExpression lessThan(IExpression left, IExpression right) {
     return condition(left, Comparator.LESS_THAN, right);
   }
 
-  public static ConditionInfix lessThan(String field, IExpression value) {
+  public static IExpression lessThan(String field, IExpression value) {
     return lessThan(field(field), value);
   }
 
   public static <T extends Number> IExpression lessThan(String field, T value) {
-    return lessThan(field, number(value));
+    return lessThan(field, input(value));
+  }
+
+  public static <T extends Number> IExpression lessThan(String field, Date value) {
+    return lessThan(field, input(value));
   }
 
   /* LESS THAN OR EQUAL */
 
-  public static ConditionInfix lessThanOrEqual(IExpression left, IExpression right) {
+  public static IExpression lessThanOrEqual(IExpression left, IExpression right) {
     return condition(left, Comparator.LESS_THAN_OR_EQUAL, right);
   }
 
-  public static ConditionInfix lessThanOrEqual(String field, IExpression value) {
+  public static IExpression lessThanOrEqual(String field, IExpression value) {
     return lessThanOrEqual(field(field), value);
   }
 
   public static <T extends Number> IExpression lessThanOrEqual(String field, T value) {
-    return lessThanOrEqual(field, number(value));
+    return lessThanOrEqual(field, input(value));
+  }
+
+  public static <T extends Number> IExpression lessThanOrEqual(String field, Date value) {
+    return lessThanOrEqual(field, input(value));
   }
 
   /* LIKE */
 
-  public static ConditionInfix like(String field, Field pattern) {
+  public static IExpression like(String field, Field pattern) {
     return condition(field(field), Comparator.LIKE, pattern);
   }
 
-  public static ConditionInfix like(String field, String pattern) {
+  public static IExpression like(String field, String pattern) {
     return condition(field(field), Comparator.LIKE, input(pattern));
   }
 
   /* IN */
 
-  public static ConditionInfix in(String field, List<IExpression> args) {
+  public static IExpression in(String field, List<IExpression> args) {
     return condition(field(field), Comparator.IN, Arguments.builder().values(args).build());
   }
 
   /* POSTFIX CONDITIONS */
 
-  public static ConditionPostfix condition(IExpression left, Comparator comparator) {
+  private static IExpression condition(IExpression left, Comparator comparator) {
     return ConditionPostfix.builder().left(left).comparator(comparator).build();
   }
 
-  public static ConditionPostfix isNull(Field left) {
+  public static IExpression isNull(IExpression left) {
     return condition(left, Comparator.NULL);
   }
 
-  public static ConditionPostfix isNull(String field) {
+  public static IExpression isNull(String field) {
     return isNull(field(field));
   }
 
-  public static ConditionPostfix isNotNull(Field left) {
+  public static IExpression isNotNull(IExpression left) {
     return condition(left, Comparator.NOT_NULL);
   }
 
-  public static ConditionPostfix isNotNull(String field) {
+  public static IExpression isNotNull(String field) {
     return isNotNull(field(field));
   }
 
-  public static ConditionPostfix isEmpty(Field left) {
+  public static IExpression isEmpty(IExpression left) {
     return condition(left, Comparator.EMPTY);
   }
 
-  public static ConditionPostfix isEmpty(String field) {
+  public static IExpression isEmpty(String field) {
     return isEmpty(field(field));
   }
 
-  public static ConditionPostfix isNotEmpty(Field left) {
+  public static IExpression isNotEmpty(IExpression left) {
     return condition(left, Comparator.NOT_EMPTY);
   }
 
-  public static ConditionPostfix isNotEmpty(String field) {
+  public static IExpression isNotEmpty(String field) {
     return isNotEmpty(field(field));
   }
 
   /* INFIX OPERATIONS */
 
-  public static OperationInfix operation(IExpression left, Operator operator, IExpression right) {
+  private static IExpression operation(IExpression left, Operator operator, IExpression right) {
     return OperationInfix.builder().left(left).operator(operator).right(right).build();
   }
 
-  public static OperationInfix and(IExpression left, IExpression right) {
+  /* AND */
+
+  public static IExpression and(IExpression left, IExpression right) {
     return operation(left, Operator.AND, right);
   }
 
@@ -269,7 +294,9 @@ public class FilterQueryBuilder {
     return ands;
   }
 
-  public static OperationInfix or(IExpression left, IExpression right) {
+  /* OR */
+
+  public static IExpression or(IExpression left, IExpression right) {
     return operation(left, Operator.OR, right);
   }
 
@@ -287,124 +314,102 @@ public class FilterQueryBuilder {
 
   /* PREFIX OPERATIONS */
 
-  public static OperationPrefix operation(Operator operator, IExpression right) {
+  public static IExpression operation(Operator operator, IExpression right) {
     return OperationPrefix.builder().operator(operator).right(right).build();
   }
 
-  public static OperationPrefix not(IExpression right) {
+  /* NOT */
+
+  public static IExpression not(IExpression right) {
     return operation(Operator.NOT, right);
   }
 
   /* FUNCTIONS */
 
-  public static Function function(String name, List<IExpression> args) {
+  public static IExpression function(String name, List<IExpression> args) {
     return Function.builder().name(name).arguments(Arguments.builder().values(args).build()).build();
   }
 
-  public static Function function(Function.Type name, List<IExpression> args) {
+  public static IExpression function(Function.Type name, List<IExpression> args) {
     return function(name.name().toLowerCase(), args);
   }
 
-  public static Function function(String name, IExpression... args) {
+  public static IExpression function(String name, IExpression... args) {
     return function(name, Arrays.asList(args));
   }
 
-  public static Function function(Function.Type name, IExpression... args) {
+  public static IExpression function(Function.Type name, IExpression... args) {
     return function(name.name().toLowerCase(), args);
   }
 
-  public static Function absolute(IExpression arg) {
+  public static IExpression absolute(IExpression arg) {
     return function(Function.Type.ABSOLUTE, arg);
   }
 
-  public static Function min(IExpression arg) {
+  public static IExpression min(IExpression arg) {
     return function(Function.Type.MIN, arg);
   }
 
-  public static Function max(IExpression arg) {
+  public static IExpression max(IExpression arg) {
     return function(Function.Type.MAX, arg);
   }
 
-  public static Function average(IExpression arg) {
+  public static IExpression average(IExpression arg) {
     return function(Function.Type.AVERAGE, arg);
   }
 
-  public static Function sum(IExpression arg) {
+  public static IExpression sum(IExpression arg) {
     return function(Function.Type.SUM, arg);
   }
 
-  public static Function size(IExpression arg) {
+  public static IExpression size(IExpression arg) {
     return function(Function.Type.SIZE, arg);
   }
 
-  public static Function length(IExpression arg) {
+  public static IExpression length(IExpression arg) {
     return function(Function.Type.LENGTH, arg);
   }
 
-  public static Function trim(IExpression arg) {
+  public static IExpression trim(IExpression arg) {
     return function(Function.Type.TRIM, arg);
   }
 
-  public static Function currentDate() {
+  public static IExpression currentDate() {
     return function(Function.Type.CURRENTDATE);
   }
 
-  public static Function currentTime() {
+  public static IExpression currentTime() {
     return function(Function.Type.CURRENTTIME);
   }
 
-  public static Function currentTimestamp() {
+  public static IExpression currentTimestamp() {
     return function(Function.Type.CURRENTTIMESTAMP);
   }
 
   /* HELPERS */
 
-  public static IExpression object(Object arg) {
-    if (arg == null)
-      return nothing();
-    return Input.builder().value(Text.builder().value(arg.toString()).build()).build();
-  }
-
-  public static <T extends Number> IExpression number(T arg) {
-    return Input.builder().value(Numeral.builder().value(arg).build()).build();
-  }
-
-  public static IExpression bool(Boolean arg) {
-    return Input.builder().value(Bool.builder().value(arg).build()).build();
-  }
-
-  public static IExpression string(String arg) {
-    return object(arg);
-  }
-
-  public static <T extends Enum<T>> IExpression enum_(T arg) {
-    return object(arg);
-  }
-
-  public static <T> List<IExpression> objects(List<T> args) {
-    if (args == null)
-      return Collections.emptyList();
-    return args.stream().map(a -> object(a)).collect(Collectors.toList());
-  }
-
   public static <T extends Number> List<IExpression> numbers(List<T> args) {
     if (args == null)
       return Collections.emptyList();
-    return args.stream().map(a -> number(a)).collect(Collectors.toList());
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> bools(List<Boolean> args) {
     if (args == null)
       return Collections.emptyList();
-    return args.stream().map(a -> bool(a)).collect(Collectors.toList());
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> strings(List<String> args) {
-    return objects(args);
+    if (args == null)
+      return Collections.emptyList();
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
-    return objects(args);
+    if (args == null)
+      return Collections.emptyList();
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
 }
