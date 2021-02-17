@@ -294,9 +294,9 @@ public class FilterQueryBuilder {
 
   public static IExpression and(IExpression... expressions) {
     if (expressions.length == 0)
-      return null;
+      return nothing();
     if (expressions.length == 1)
-      return expressions[1];
+      return expressions[0];
     IExpression ands = expressions[0];
     for (int i = 1; i < expressions.length; i++) {
       ands = and(ands, expressions[i]);
@@ -312,9 +312,9 @@ public class FilterQueryBuilder {
 
   public static IExpression or(IExpression... expressions) {
     if (expressions.length == 0)
-      return null;
+      return nothing();
     if (expressions.length == 1)
-      return expressions[1];
+      return expressions[0];
     IExpression ors = expressions[0];
     for (int i = 1; i < expressions.length; i++) {
       ors = or(ors, expressions[i]);
