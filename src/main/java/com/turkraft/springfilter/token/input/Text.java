@@ -1,8 +1,9 @@
 package com.turkraft.springfilter.token.input;
 
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.turkraft.springfilter.FilterConfig;
 
 import lombok.Data;
 import lombok.ToString;
@@ -12,8 +13,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @ToString(callSuper = true)
 public class Text implements IInput {
-
-  public static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
   private String value;
 
@@ -40,7 +39,7 @@ public class Text implements IInput {
     }
 
     if (klass.equals(Date.class)) {
-      Date date = DATE_FORMATTER.parse(getValue(), new ParsePosition(0));
+      Date date = FilterConfig.DATE_FORMATTER.parse(getValue(), new ParsePosition(0));
       if (date != null) {
         return date;
       }

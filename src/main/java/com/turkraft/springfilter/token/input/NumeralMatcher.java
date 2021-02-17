@@ -1,9 +1,9 @@
 package com.turkraft.springfilter.token.input;
 
-import java.text.NumberFormat;
 import java.text.ParsePosition;
 
 import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.token.Matcher;
 
 import lombok.experimental.ExtensionMethod;
@@ -16,7 +16,7 @@ public class NumeralMatcher extends Matcher<Numeral> {
 
     ParsePosition position = new ParsePosition(0);
 
-    Number number = NumberFormat.getInstance().parse(input.toString(), position);
+    Number number = FilterConfig.NUMBER_FORMAT.parse(input.toString(), position);
 
     if (number != null) {
       input.take(position.getIndex());

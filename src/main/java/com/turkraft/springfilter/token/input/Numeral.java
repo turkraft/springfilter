@@ -1,5 +1,7 @@
 package com.turkraft.springfilter.token.input;
 
+import com.turkraft.springfilter.FilterConfig;
+
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -25,7 +27,7 @@ public class Numeral implements IInput {
   public String generate() {
     if (value == null)
       return "";
-    return value.toString();
+    return FilterConfig.NUMBER_FORMAT.format(value);
   }
 
 }
