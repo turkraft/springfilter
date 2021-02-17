@@ -55,22 +55,32 @@ public class FilterQueryBuilder {
   /* INPUTS */
 
   public static IExpression input(Number value) {
+    if (value == null)
+      return nothing();
     return Input.builder().value(Numeral.builder().value(value).build()).build();
   }
 
   public static IExpression input(Boolean value) {
+    if (value == null)
+      return nothing();
     return Input.builder().value(Bool.builder().value(value).build()).build();
   }
 
   public static IExpression input(String value) {
+    if (value == null)
+      return nothing();
     return Input.builder().value(Text.builder().value(value).build()).build();
   }
 
   public static <T extends Enum<T>> IExpression input(Enum<T> value) {
+    if (value == null)
+      return nothing();
     return input(value.toString());
   }
 
   public static IExpression input(Date value) {
+    if (value == null)
+      return nothing();
     return input(FilterConfig.DATE_FORMATTER.format(value));
   }
 
