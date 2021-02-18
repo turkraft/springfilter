@@ -15,11 +15,14 @@ public class Numeral implements IInput {
 
   @Override
   public boolean canBe(Class<?> klass) {
-    return Number.class.isAssignableFrom(klass);
+    return String.class.isAssignableFrom(klass) || Number.class.isAssignableFrom(klass);
   }
 
   @Override
   public Object getValueAs(Class<?> klass) {
+    if (String.class.isAssignableFrom(klass)) {
+      return value.toString().toLowerCase();
+    }
     return value;
   }
 

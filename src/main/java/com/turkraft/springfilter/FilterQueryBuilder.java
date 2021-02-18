@@ -292,16 +292,20 @@ public class FilterQueryBuilder {
     return operation(left, Operator.AND, right);
   }
 
-  public static IExpression and(IExpression... expressions) {
-    if (expressions.length == 0)
-      return null;
-    if (expressions.length == 1)
-      return expressions[1];
-    IExpression ands = expressions[0];
-    for (int i = 1; i < expressions.length; i++) {
-      ands = and(ands, expressions[i]);
+  public static IExpression and(List<IExpression> expressions) {
+    if (expressions == null || expressions.size() == 0)
+      return nothing();
+    if (expressions.size() == 1)
+      return expressions.get(0);
+    IExpression ands = expressions.get(0);
+    for (int i = 1; i < expressions.size(); i++) {
+      ands = and(ands, expressions.get(i));
     }
     return ands;
+  }
+
+  public static IExpression and(IExpression... expressions) {
+    return and(Arrays.asList(expressions));
   }
 
   /* OR */
@@ -310,16 +314,20 @@ public class FilterQueryBuilder {
     return operation(left, Operator.OR, right);
   }
 
-  public static IExpression or(IExpression... expressions) {
-    if (expressions.length == 0)
-      return null;
-    if (expressions.length == 1)
-      return expressions[1];
-    IExpression ors = expressions[0];
-    for (int i = 1; i < expressions.length; i++) {
-      ors = or(ors, expressions[i]);
+  public static IExpression or(List<IExpression> expressions) {
+    if (expressions == null || expressions.size() == 0)
+      return nothing();
+    if (expressions.size() == 1)
+      return expressions.get(0);
+    IExpression ors = expressions.get(0);
+    for (int i = 1; i < expressions.size(); i++) {
+      ors = or(ors, expressions.get(i));
     }
     return ors;
+  }
+
+  public static IExpression or(IExpression... expressions) {
+    return or(Arrays.asList(expressions));
   }
 
   /* PREFIX OPERATIONS */
@@ -345,7 +353,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression function(String name, IExpression... args) {
-    return function(name, Arrays.asList(args));
+    return function(name, args == null ? Collections.emptyList() : Arrays.asList(args));
   }
 
   public static IExpression function(Function.Type name, IExpression... args) {
@@ -404,10 +412,23 @@ public class FilterQueryBuilder {
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
+  @SafeVarargs
+  public static <T extends Number> List<IExpression> numbers(T... args) {
+    if (args == null)
+      return Collections.emptyList();
+    return numbers(Arrays.asList(args));
+  }
+
   public static List<IExpression> bools(List<Boolean> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
+  }
+
+  public static List<IExpression> bools(Boolean... args) {
+    if (args == null)
+      return Collections.emptyList();
+    return bools(Arrays.asList(args));
   }
 
   public static List<IExpression> strings(List<String> args) {
@@ -416,10 +437,35 @@ public class FilterQueryBuilder {
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
+  public static List<IExpression> strings(String... args) {
+    if (args == null)
+      return Collections.emptyList();
+    return strings(Arrays.asList(args));
+  }
+
   public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
+  }
+
+  @SafeVarargs
+  public static <T extends Enum<T>> List<IExpression> enums(T... args) {
+    if (args == null)
+      return Collections.emptyList();
+    return enums(Arrays.asList(args));
+  }
+
+  public static List<IExpression> dates(List<Date> args) {
+    if (args == null)
+      return Collections.emptyList();
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
+  }
+
+  public static List<IExpression> dates(Date... args) {
+    if (args == null)
+      return Collections.emptyList();
+    return dates(Arrays.asList(args));
   }
 
 }

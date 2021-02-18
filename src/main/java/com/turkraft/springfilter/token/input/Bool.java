@@ -9,17 +9,18 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class Bool implements IInput {
 
-  // bool should maybe implement IPredicate too
-
   private Boolean value;
 
   @Override
   public boolean canBe(Class<?> klass) {
-    return Boolean.class.isAssignableFrom(klass);
+    return String.class.isAssignableFrom(klass) || Boolean.class.isAssignableFrom(klass);
   }
 
   @Override
   public Object getValueAs(Class<?> klass) {
+    if (String.class.isAssignableFrom(klass)) {
+      return value.toString().toLowerCase();
+    }
     return value;
   }
 
