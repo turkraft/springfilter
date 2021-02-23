@@ -412,63 +412,63 @@ public class FilterQueryBuilder {
 
   /* HELPERS */
 
-  public static <T extends Number> Collection<IExpression> numbers(Collection<T> args) {
+  public static <T extends Number> List<IExpression> numbers(List<T> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
-  public static <T extends Number> Collection<IExpression> numbers(T... args) {
+  public static <T extends Number> List<IExpression> numbers(T... args) {
     if (args == null)
       return Collections.emptyList();
     return numbers(Arrays.asList(args));
   }
 
-  public static Collection<IExpression> bools(Collection<Boolean> args) {
+  public static List<IExpression> bools(List<Boolean> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static Collection<IExpression> bools(Boolean... args) {
+  public static List<IExpression> bools(Boolean... args) {
     if (args == null)
       return Collections.emptyList();
     return bools(Arrays.asList(args));
   }
 
-  public static Collection<IExpression> strings(Collection<String> args) {
+  public static List<IExpression> strings(List<String> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static Collection<IExpression> strings(String... args) {
+  public static List<IExpression> strings(String... args) {
     if (args == null)
       return Collections.emptyList();
     return strings(Arrays.asList(args));
   }
 
-  public static <T extends Enum<T>> Collection<IExpression> enums(Collection<T> args) {
+  public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
-  public static <T extends Enum<T>> Collection<IExpression> enums(T... args) {
+  public static <T extends Enum<T>> List<IExpression> enums(T... args) {
     if (args == null)
       return Collections.emptyList();
     return enums(Arrays.asList(args));
   }
 
-  public static Collection<IExpression> dates(Collection<Date> args) {
+  public static List<IExpression> dates(List<Date> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static Collection<IExpression> dates(Date... args) {
+  public static List<IExpression> dates(Date... args) {
     if (args == null)
       return Collections.emptyList();
     return dates(Arrays.asList(args));
