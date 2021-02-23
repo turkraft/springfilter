@@ -1,8 +1,10 @@
 package com.turkraft.springfilter;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -292,14 +294,16 @@ public class FilterQueryBuilder {
     return operation(left, Operator.AND, right);
   }
 
-  public static IExpression and(List<IExpression> expressions) {
+  public static IExpression and(Collection<IExpression> expressions) {
     if (expressions == null || expressions.size() == 0)
       return nothing();
-    if (expressions.size() == 1)
-      return expressions.get(0);
-    IExpression ands = expressions.get(0);
-    for (int i = 1; i < expressions.size(); i++) {
-      ands = and(ands, expressions.get(i));
+    Iterator<IExpression> i = expressions.iterator();
+    if (expressions.size() == 1) {
+      return i.next();
+    }
+    IExpression ands = i.next();
+    while (i.hasNext()) {
+      ands = and(ands, i.next());
     }
     return ands;
   }
@@ -314,14 +318,16 @@ public class FilterQueryBuilder {
     return operation(left, Operator.OR, right);
   }
 
-  public static IExpression or(List<IExpression> expressions) {
+  public static IExpression or(Collection<IExpression> expressions) {
     if (expressions == null || expressions.size() == 0)
       return nothing();
-    if (expressions.size() == 1)
-      return expressions.get(0);
-    IExpression ors = expressions.get(0);
-    for (int i = 1; i < expressions.size(); i++) {
-      ors = or(ors, expressions.get(i));
+    Iterator<IExpression> i = expressions.iterator();
+    if (expressions.size() == 1) {
+      return i.next();
+    }
+    IExpression ors = i.next();
+    while (i.hasNext()) {
+      ors = or(ors, i.next());
     }
     return ors;
   }
@@ -332,7 +338,7 @@ public class FilterQueryBuilder {
 
   /* PREFIX OPERATIONS */
 
-  public static IExpression operation(Operator operator, IExpression right) {
+  private static IExpression operation(Operator operator, IExpression right) {
     return OperationPrefix.builder().operator(operator).right(right).build();
   }
 
@@ -364,32 +370,64 @@ public class FilterQueryBuilder {
     return function(Function.Type.ABSOLUTE, arg);
   }
 
+  public static IExpression absolute(String field) {
+    return absolute(field(field));
+  }
+
   public static IExpression min(IExpression arg) {
     return function(Function.Type.MIN, arg);
+  }
+
+  public static IExpression min(String field) {
+    return min(field(field));
   }
 
   public static IExpression max(IExpression arg) {
     return function(Function.Type.MAX, arg);
   }
 
+  public static IExpression max(String field) {
+    return max(field(field));
+  }
+
   public static IExpression average(IExpression arg) {
     return function(Function.Type.AVERAGE, arg);
+  }
+
+  public static IExpression average(String field) {
+    return average(field(field));
   }
 
   public static IExpression sum(IExpression arg) {
     return function(Function.Type.SUM, arg);
   }
 
+  public static IExpression sum(String field) {
+    return sum(field(field));
+  }
+
   public static IExpression size(IExpression arg) {
     return function(Function.Type.SIZE, arg);
+  }
+
+  public static IExpression size(String field) {
+    return size(field(field));
   }
 
   public static IExpression length(IExpression arg) {
     return function(Function.Type.LENGTH, arg);
   }
 
+  public static IExpression length(String field) {
+    return length(field(field));
+  }
+
   public static IExpression trim(IExpression arg) {
     return function(Function.Type.TRIM, arg);
+  }
+
+  public static IExpression trim(String field) {
+    return trim(field(field));
   }
 
   public static IExpression currentDate() {

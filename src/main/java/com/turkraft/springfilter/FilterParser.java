@@ -34,7 +34,7 @@ public class FilterParser {
   }
 
   public static Filter parse(LinkedList<IToken> tokens) throws ParserException {
-    return FilterMatcher.INSTANCE.match(tokens, new LinkedList<>());
+    return FilterMatcher.INSTANCE.match(tokens, new LinkedList<>()).transform(null);
   }
 
   public static IExpression walk(LinkedList<IToken> tokens, LinkedList<IExpression> nodes) {

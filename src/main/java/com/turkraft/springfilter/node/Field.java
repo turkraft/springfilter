@@ -8,7 +8,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
-import com.turkraft.springfilter.Utils;
+import com.turkraft.springfilter.FilterUtils;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -33,7 +33,7 @@ public class Field implements IExpression {
   @Override
   public Path<Object> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
-    return (Path<Object>) Utils.buildDatabasePath(root, joins, name);
+    return (Path<Object>) FilterUtils.getDatabasePath(root, joins, name);
   }
 
 }
