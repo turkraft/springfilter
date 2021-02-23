@@ -1,8 +1,10 @@
 package com.turkraft.springfilter;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -292,14 +294,16 @@ public class FilterQueryBuilder {
     return operation(left, Operator.AND, right);
   }
 
-  public static IExpression and(List<IExpression> expressions) {
+  public static IExpression and(Collection<IExpression> expressions) {
     if (expressions == null || expressions.size() == 0)
       return nothing();
-    if (expressions.size() == 1)
-      return expressions.get(0);
-    IExpression ands = expressions.get(0);
-    for (int i = 1; i < expressions.size(); i++) {
-      ands = and(ands, expressions.get(i));
+    Iterator<IExpression> i = expressions.iterator();
+    if (expressions.size() == 1) {
+      return i.next();
+    }
+    IExpression ands = i.next();
+    while (i.hasNext()) {
+      ands = and(ands, i.next());
     }
     return ands;
   }
@@ -314,14 +318,16 @@ public class FilterQueryBuilder {
     return operation(left, Operator.OR, right);
   }
 
-  public static IExpression or(List<IExpression> expressions) {
+  public static IExpression or(Collection<IExpression> expressions) {
     if (expressions == null || expressions.size() == 0)
       return nothing();
-    if (expressions.size() == 1)
-      return expressions.get(0);
-    IExpression ors = expressions.get(0);
-    for (int i = 1; i < expressions.size(); i++) {
-      ors = or(ors, expressions.get(i));
+    Iterator<IExpression> i = expressions.iterator();
+    if (expressions.size() == 1) {
+      return i.next();
+    }
+    IExpression ors = i.next();
+    while (i.hasNext()) {
+      ors = or(ors, i.next());
     }
     return ors;
   }
@@ -406,63 +412,63 @@ public class FilterQueryBuilder {
 
   /* HELPERS */
 
-  public static <T extends Number> List<IExpression> numbers(List<T> args) {
+  public static <T extends Number> Collection<IExpression> numbers(Collection<T> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
-  public static <T extends Number> List<IExpression> numbers(T... args) {
+  public static <T extends Number> Collection<IExpression> numbers(T... args) {
     if (args == null)
       return Collections.emptyList();
     return numbers(Arrays.asList(args));
   }
 
-  public static List<IExpression> bools(List<Boolean> args) {
+  public static Collection<IExpression> bools(Collection<Boolean> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static List<IExpression> bools(Boolean... args) {
+  public static Collection<IExpression> bools(Boolean... args) {
     if (args == null)
       return Collections.emptyList();
     return bools(Arrays.asList(args));
   }
 
-  public static List<IExpression> strings(List<String> args) {
+  public static Collection<IExpression> strings(Collection<String> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static List<IExpression> strings(String... args) {
+  public static Collection<IExpression> strings(String... args) {
     if (args == null)
       return Collections.emptyList();
     return strings(Arrays.asList(args));
   }
 
-  public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
+  public static <T extends Enum<T>> Collection<IExpression> enums(Collection<T> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
-  public static <T extends Enum<T>> List<IExpression> enums(T... args) {
+  public static <T extends Enum<T>> Collection<IExpression> enums(T... args) {
     if (args == null)
       return Collections.emptyList();
     return enums(Arrays.asList(args));
   }
 
-  public static List<IExpression> dates(List<Date> args) {
+  public static Collection<IExpression> dates(Collection<Date> args) {
     if (args == null)
       return Collections.emptyList();
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
-  public static List<IExpression> dates(Date... args) {
+  public static Collection<IExpression> dates(Date... args) {
     if (args == null)
       return Collections.emptyList();
     return dates(Arrays.asList(args));
