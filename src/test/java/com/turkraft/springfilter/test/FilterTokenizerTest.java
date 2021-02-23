@@ -1,4 +1,4 @@
-package com.torshid.springfilter.test;
+package com.turkraft.springfilter.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,8 +16,8 @@ import com.turkraft.springfilter.token.Dot;
 import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.Operator;
 import com.turkraft.springfilter.token.Parenthesis;
-import com.turkraft.springfilter.token.Word;
 import com.turkraft.springfilter.token.Parenthesis.Type;
+import com.turkraft.springfilter.token.Word;
 import com.turkraft.springfilter.token.input.Bool;
 import com.turkraft.springfilter.token.input.Numeral;
 import com.turkraft.springfilter.token.input.Text;
@@ -25,7 +25,7 @@ import com.turkraft.springfilter.token.input.Text;
 
 class FilterTokenizerTest {
 
-  private void validateSingleToken(List<IToken> tokens, Class<? extends IToken> klass) {
+  void validateSingleToken(List<IToken> tokens, Class<? extends IToken> klass) {
     assertEquals(1, tokens.size());
     assertEquals(klass, tokens.get(0).getClass());
   }
@@ -91,19 +91,19 @@ class FilterTokenizerTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"hello", "world", "doing", "some", "tests"})
+  @ValueSource(strings = {"Hello", "world", "doing", "some", "tests", "a_b_1"})
   void validateWords(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Word.class);
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {":", "!", "~", "<", "<:", ">", ">:", "is null", "is not null", "is empty", "is not empty"})
+  @ValueSource(strings = {":", "!", "~", "<", "<:", ">", ">:", "is null", "is not null", "is empty", "is not empty"}) // TODO: add 'in'
   void validateComparators(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Comparator.class);
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"and ", "AND ", "or ", "OR "})
+  @ValueSource(strings = {"and ", "or ", "not "})
   void validateLogics(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Operator.class);
   }

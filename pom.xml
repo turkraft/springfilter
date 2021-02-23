@@ -33,6 +33,8 @@
 		<hibernate.version>5.4.27.Final</hibernate.version>
 		<springframework.version>5.2.12.RELEASE</springframework.version>
 		<springframework-data.version>2.3.6.RELEASE</springframework-data.version>
+		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
+		<h2database-h2.version>1.4.200</h2database-h2.version>
 		<junit.version>5.7.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
@@ -81,6 +83,24 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${springframework-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>${springframework-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2database-h2.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
