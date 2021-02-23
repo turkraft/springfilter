@@ -28,7 +28,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.8.3</version>
+    <version>0.8.4</version>
 </dependency>
 ```
 
