@@ -8,11 +8,11 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
-public class Utils {
+public class FilterUtils {
 
-  private Utils() {}
+  private FilterUtils() {}
 
-  public static Path<?> buildDatabasePath(Root<?> table, Map<String, Join<Object, Object>> joins, String fieldPath) {
+  public static Path<?> getDatabasePath(Root<?> table, Map<String, Join<Object, Object>> joins, String fieldPath) {
 
     Path<?> path = table;
 
