@@ -96,7 +96,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
 ### Operators
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
-  <tr> <td>and</th> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > 1-1-2000</td> </tr>
+  <tr> <td>and</th> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > '1-1-2000'</td> </tr>
   <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
 </table>
