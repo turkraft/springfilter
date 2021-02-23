@@ -91,7 +91,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 Field names should be directly given without any extra literals. Dots indicate nested fields. For example: `category.updatedAt`
 
 ### Inputs
-Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, strings, should be quoted. For example: `status : 'active'`
+Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, should be quoted. For example: `status : 'active'`
 
 ### Operators
 <table>
