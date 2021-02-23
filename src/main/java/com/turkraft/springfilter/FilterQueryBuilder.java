@@ -338,7 +338,7 @@ public class FilterQueryBuilder {
 
   /* PREFIX OPERATIONS */
 
-  public static IExpression operation(Operator operator, IExpression right) {
+  private static IExpression operation(Operator operator, IExpression right) {
     return OperationPrefix.builder().operator(operator).right(right).build();
   }
 
@@ -370,32 +370,64 @@ public class FilterQueryBuilder {
     return function(Function.Type.ABSOLUTE, arg);
   }
 
+  public static IExpression absolute(String field) {
+    return absolute(field(field));
+  }
+
   public static IExpression min(IExpression arg) {
     return function(Function.Type.MIN, arg);
+  }
+
+  public static IExpression min(String field) {
+    return min(field(field));
   }
 
   public static IExpression max(IExpression arg) {
     return function(Function.Type.MAX, arg);
   }
 
+  public static IExpression max(String field) {
+    return max(field(field));
+  }
+
   public static IExpression average(IExpression arg) {
     return function(Function.Type.AVERAGE, arg);
+  }
+
+  public static IExpression average(String field) {
+    return average(field(field));
   }
 
   public static IExpression sum(IExpression arg) {
     return function(Function.Type.SUM, arg);
   }
 
+  public static IExpression sum(String field) {
+    return sum(field(field));
+  }
+
   public static IExpression size(IExpression arg) {
     return function(Function.Type.SIZE, arg);
+  }
+
+  public static IExpression size(String field) {
+    return size(field(field));
   }
 
   public static IExpression length(IExpression arg) {
     return function(Function.Type.LENGTH, arg);
   }
 
+  public static IExpression length(String field) {
+    return length(field(field));
+  }
+
   public static IExpression trim(IExpression arg) {
     return function(Function.Type.TRIM, arg);
+  }
+
+  public static IExpression trim(String field) {
+    return trim(field(field));
   }
 
   public static IExpression currentDate() {

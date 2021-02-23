@@ -124,7 +124,8 @@ public class ConditionInfix extends Condition {
             (Expression<? extends Comparable>) rightExpression);
 
       case LESS_THAN_OR_EQUAL:
-        return criteriaBuilder.lessThanOrEqualTo((Expression) leftExpression, (Comparable) rightExpression);
+        return criteriaBuilder.lessThanOrEqualTo((Expression<? extends Comparable>) leftExpression,
+            (Expression<? extends Comparable>) rightExpression);
 
       case LIKE: {
         return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
