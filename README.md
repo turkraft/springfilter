@@ -137,8 +137,8 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> trim </th> <td> returns the trimmed string </td> <td> <b>trim(</b>name<b>)</b> </td> </tr>
 </table>
 
-### Contributing
+## Contributing
 Ideas and pull requests are always welcome.
 
-### License
+## License
 Distributed under the [MIT license](LICENSE).
