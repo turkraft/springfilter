@@ -1,6 +1,8 @@
 package com.turkraft.springfilter.test.app;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -31,9 +33,15 @@ public class Application implements ApplicationRunner {
     Car car1 = Car.builder().km(250000).brand(landRover).build();
     Car car2 = Car.builder().color(Color.BLACK).year(2011).km(7000).brand(landRover).build();
     Car car3 = Car.builder().color(Color.BLACK).brand(audi).build();
-    Car car4 = Car.builder().accidents(Arrays.asList(Accident.builder().build())).build();
+    Car car4 = Car.builder().accidents(Arrays.asList(Accident.builder().date(getDate(5, 7, 2000)).build())).build();
     carRepository.saveAll(Arrays.asList(car1, car2, car3, car4));
 
+  }
+
+  public static Date getDate(int day, int month, int year) {
+    Calendar cal = Calendar.getInstance();
+    cal.set(year, month - 1, day);
+    return cal.getTime();
   }
 
 }

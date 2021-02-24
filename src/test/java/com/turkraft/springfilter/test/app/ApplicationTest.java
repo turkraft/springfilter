@@ -56,6 +56,14 @@ public class ApplicationTest {
   }
 
   @Test
+  public void equalDateTest() {
+    assertThat(carRepository.findAll(new FilterSpecification<>("accidents.date : '5/07/2000'"))).hasSize(1);
+    assertThat(
+        carRepository.findAll(new FilterSpecification<>(equal("accidents.date", Application.getDate(5, 7, 2000)))))
+            .hasSize(1);
+  }
+
+  @Test
   public void notEqualTest() {
     assertThat(carRepository.findAll(new FilterSpecification<>("brand.name ! 'audi'"))).hasSize(2);
     assertThat(carRepository.findAll(new FilterSpecification<>(notEqual("brand.name", "audi")))).hasSize(2);
