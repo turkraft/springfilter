@@ -194,14 +194,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>com.turkraft.springfilter.test.app.Application</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
