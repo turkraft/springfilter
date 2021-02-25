@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,15 +41,19 @@ public class Employee {
 
   public Integer salary;
 
+  @JsonIgnoreProperties("employees")
   @ManyToOne
   private Company company;
 
+  @JsonIgnoreProperties({"company", "manager", "staff", "payslips"})
   @ManyToOne
   private Employee manager;
 
+  @JsonIgnoreProperties({"company", "manager", "staff", "payslips"})
   @OneToMany(mappedBy = "manager")
   private List<Employee> staff;
 
+  @JsonIgnoreProperties({"employee"})
   // TODO: eager fetching is currently used to prevent lazy initialization exception,
   // @Transactional seems to not work in tests...
   @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)

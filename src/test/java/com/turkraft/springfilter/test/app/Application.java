@@ -8,10 +8,15 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
+import com.turkraft.springfilter.EntityFilter;
 import com.turkraft.springfilter.test.app.Employee.MaritalStatus;
 
 @SpringBootApplication
+@RestController
 public class Application implements ApplicationRunner {
 
   public static void main(String[] args) {
@@ -65,6 +70,26 @@ public class Application implements ApplicationRunner {
     }
     payslipRepository.saveAll(payslips);
 
+  }
+
+  @GetMapping(value = "industry")
+  public List<Industry> getIndustries(@EntityFilter Specification<Industry> spec) {
+    return industryRepository.findAll(spec);
+  }
+
+  @GetMapping(value = "company")
+  public List<Company> getCompanies(@EntityFilter Specification<Company> spec) {
+    return companyRepository.findAll(spec);
+  }
+
+  @GetMapping(value = "employee")
+  public List<Employee> getEmployees(@EntityFilter Specification<Employee> spec) {
+    return employeeRepository.findAll(spec);
+  }
+
+  @GetMapping(value = "payslip")
+  public List<Payslip> getPayslips(@EntityFilter Specification<Payslip> spec) {
+    return payslipRepository.findAll(spec);
   }
 
 }
