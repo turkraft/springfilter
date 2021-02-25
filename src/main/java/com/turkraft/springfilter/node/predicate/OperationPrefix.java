@@ -40,14 +40,18 @@ public class OperationPrefix extends Operation {
   }
 
   @Override
-  public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Predicate generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
-    Expression<?> rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> rightExpression =
+        getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
 
     if (!rightExpression.getJavaType().equals(Boolean.class)) {
-      throw new ExpressionException(
-          "Right side expression of the prefix operator " + getOperator().getLiteral() + " should be a predicate");
+      throw new ExpressionException("Right side expression of the prefix operator "
+          + getOperator().getLiteral() + " should be a predicate");
     }
 
     switch (getOperator()) {
@@ -56,7 +60,8 @@ public class OperationPrefix extends Operation {
         return criteriaBuilder.not((Predicate) rightExpression);
 
       default:
-        throw new InvalidQueryException("Unsupported prefix operator " + getOperator().getLiteral());
+        throw new InvalidQueryException(
+            "Unsupported prefix operator " + getOperator().getLiteral());
 
     }
 

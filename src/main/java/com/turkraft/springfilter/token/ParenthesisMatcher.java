@@ -1,11 +1,10 @@
 package com.turkraft.springfilter.token;
 
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.token.Parenthesis.Type;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class ParenthesisMatcher extends Matcher<Parenthesis> {
 
   @Override

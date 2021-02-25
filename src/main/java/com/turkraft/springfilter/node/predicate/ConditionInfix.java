@@ -45,7 +45,9 @@ public class ConditionInfix extends Condition {
     if (generatedLeft.isEmpty() || generatedRight.isEmpty())
       return "";
 
-    if (getComparator() == Comparator.IN && generatedRight.equals("()")) { // if right expression represent arguments with no argument
+    if (getComparator() == Comparator.IN && generatedRight.equals("()")) { // if right expression
+                                                                           // represent arguments
+                                                                           // with no argument
       return "";
     }
 
@@ -55,7 +57,10 @@ public class ConditionInfix extends Condition {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
-  public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Predicate generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
     if (getComparator() == Comparator.IN) { // TODO: 'in' should be a different node
@@ -65,8 +70,8 @@ public class ConditionInfix extends Condition {
     // crazy stuff going on here
 
     if (left instanceof Input && right instanceof Input) {
-      throw new InvalidQueryException(
-          "Left and right expressions of the comparator " + getComparator().getLiteral() + " can't be both inputs");
+      throw new InvalidQueryException("Left and right expressions of the comparator "
+          + getComparator().getLiteral() + " can't be both inputs");
     }
 
     Expression<?> leftExpression = null;
@@ -74,14 +79,14 @@ public class ConditionInfix extends Condition {
 
     if (getRight() instanceof Input) {
       leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      rightExpression =
-          ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins, leftExpression.getJavaType());
+      rightExpression = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins,
+          leftExpression.getJavaType());
     }
 
     else if (getLeft() instanceof Input) {
       rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
-      leftExpression =
-          ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins, rightExpression.getJavaType());
+      leftExpression = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins,
+          rightExpression.getJavaType());
     }
 
     else {
@@ -91,15 +96,16 @@ public class ConditionInfix extends Condition {
 
     if (!getComparator().getFieldType().isAssignableFrom(leftExpression.getJavaType())
         || !getComparator().getFieldType().isAssignableFrom(rightExpression.getJavaType())) {
-      throw new InvalidQueryException(
-          "The comparator " + getComparator().getLiteral() + " only supports type " + getComparator().getFieldType());
+      throw new InvalidQueryException("The comparator " + getComparator().getLiteral()
+          + " only supports type " + getComparator().getFieldType());
     }
 
-    //    if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
-    //      // maybe this exception is not needed, JPA already throws an exception
-    //      throw new InvalidQueryException(
-    //          "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
-    //    }
+    // if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
+    // // maybe this exception is not needed, JPA already throws an exception
+    // throw new InvalidQueryException(
+    // "Expressions of different types are not supported in comparator " +
+    // getComparator().getLiteral());
+    // }
 
     // told u
 
@@ -116,7 +122,8 @@ public class ConditionInfix extends Condition {
             (Expression<? extends Comparable>) rightExpression);
 
       case GREATER_THAN_OR_EQUAL:
-        return criteriaBuilder.greaterThanOrEqualTo((Expression<? extends Comparable>) leftExpression,
+        return criteriaBuilder.greaterThanOrEqualTo(
+            (Expression<? extends Comparable>) leftExpression,
             (Expression<? extends Comparable>) rightExpression);
 
       case LESS_THAN:
@@ -139,7 +146,10 @@ public class ConditionInfix extends Condition {
 
   }
 
-  private Predicate inCondition(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  private Predicate inCondition(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
     if ((getLeft() instanceof Input)) {
@@ -161,17 +171,19 @@ public class ConditionInfix extends Condition {
       Expression<?> expression = null;
 
       if (argument instanceof Input) {
-        expression = ((Input) argument).generate(root, criteriaQuery, criteriaBuilder, joins, left.getJavaType());
+        expression = ((Input) argument).generate(root, criteriaQuery, criteriaBuilder, joins,
+            left.getJavaType());
       }
 
       else {
         expression = in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins));
       }
 
-      //      if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
-      //        throw new InvalidQueryException(
-      //            "Expressions of different types are not supported in comparator " + getComparator().getLiteral());
-      //      }
+      // if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
+      // throw new InvalidQueryException(
+      // "Expressions of different types are not supported in comparator " +
+      // getComparator().getLiteral());
+      // }
 
       in.value(expression);
 

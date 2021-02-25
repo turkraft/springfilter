@@ -1,14 +1,12 @@
 package com.turkraft.springfilter.node;
 
 import java.util.LinkedList;
-
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.token.IToken;
 import com.turkraft.springfilter.token.input.IInput;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class InputMatcher extends Matcher<IExpression> {
 
   public static final InputMatcher INSTANCE = new InputMatcher();

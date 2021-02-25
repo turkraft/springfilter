@@ -2,13 +2,13 @@ package com.turkraft.springfilter.token.input;
 
 import java.text.ParsePosition;
 
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.token.Matcher;
 
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class NumeralMatcher extends Matcher<Numeral> {
 
   @Override

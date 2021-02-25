@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.Field;
 import com.turkraft.springfilter.node.Filter;
@@ -57,38 +56,39 @@ public class FilterQueryBuilder {
   /* INPUTS */
 
   public static IExpression input(Number value) {
-    if (value == null)
+    if (value == null) {
       return nothing();
+    }
     return Input.builder().value(Numeral.builder().value(value).build()).build();
   }
 
   public static IExpression input(Boolean value) {
-    if (value == null)
+    if (value == null) {
       return nothing();
+    }
     return Input.builder().value(Bool.builder().value(value).build()).build();
   }
 
   public static IExpression input(String value) {
-    if (value == null)
+    if (value == null) {
       return nothing();
-    return Input.builder().value(Text.builder().value(value).build()).build();
+    }
+    return Input.builder().value(Text.builder().value(value.replace("'", "\\'")).build()).build();
   }
 
   public static <T extends Enum<T>> IExpression input(Enum<T> value) {
-    if (value == null)
+    if (value == null) {
       return nothing();
+    }
     return input(value.toString());
   }
 
   public static IExpression input(Date value) {
-    if (value == null)
+    if (value == null) {
       return nothing();
+    }
     return input(FilterConfig.DATE_FORMATTER.format(value));
   }
-
-  //  public static Input input(Object value) {
-  //    return Input.builder().value(Text.builder().value(value != null ? value.toString() : null).build()).build();
-  //  }
 
   /* INFIX CONDITIONS */
 
@@ -295,8 +295,9 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression and(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0)
+    if (expressions == null || expressions.size() == 0) {
       return nothing();
+    }
     Iterator<IExpression> i = expressions.iterator();
     if (expressions.size() == 1) {
       return i.next();
@@ -319,8 +320,9 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression or(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0)
+    if (expressions == null || expressions.size() == 0) {
       return nothing();
+    }
     Iterator<IExpression> i = expressions.iterator();
     if (expressions.size() == 1) {
       return i.next();
@@ -351,7 +353,8 @@ public class FilterQueryBuilder {
   /* FUNCTIONS */
 
   public static IExpression function(String name, List<IExpression> args) {
-    return Function.builder().name(name).arguments(Arguments.builder().values(args).build()).build();
+    return Function.builder().name(name).arguments(Arguments.builder().values(args).build())
+        .build();
   }
 
   public static IExpression function(Function.Type name, List<IExpression> args) {
@@ -445,64 +448,74 @@ public class FilterQueryBuilder {
   /* HELPERS */
 
   public static <T extends Number> List<IExpression> numbers(List<T> args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
   public static <T extends Number> List<IExpression> numbers(T... args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return numbers(Arrays.asList(args));
   }
 
   public static List<IExpression> bools(List<Boolean> args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> bools(Boolean... args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return bools(Arrays.asList(args));
   }
 
   public static List<IExpression> strings(List<String> args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> strings(String... args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return strings(Arrays.asList(args));
   }
 
   public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   @SafeVarargs
   public static <T extends Enum<T>> List<IExpression> enums(T... args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return enums(Arrays.asList(args));
   }
 
   public static List<IExpression> dates(List<Date> args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return args.stream().map(a -> input(a)).collect(Collectors.toList());
   }
 
   public static List<IExpression> dates(Date... args) {
-    if (args == null)
+    if (args == null) {
       return Collections.emptyList();
+    }
     return dates(Arrays.asList(args));
   }
 

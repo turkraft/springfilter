@@ -2,9 +2,7 @@ package com.turkraft.springfilter.token.input;
 
 import java.text.ParsePosition;
 import java.util.Date;
-
 import com.turkraft.springfilter.FilterConfig;
-
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -18,7 +16,8 @@ public class Text implements IInput {
 
   @Override
   public boolean canBe(Class<?> klass) {
-    return String.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass) || klass.isEnum();
+    return String.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass)
+        || klass.isEnum();
   }
 
   @Override
@@ -46,7 +45,8 @@ public class Text implements IInput {
       // throw specific exception otherwise, the input was not in the correct format
     }
 
-    throw new ClassCastException("Could not cast input '" + getValue() + "' to class " + klass.getSimpleName());
+    throw new ClassCastException(
+        "Could not cast input '" + getValue() + "' to class " + klass.getSimpleName());
 
   }
 
@@ -54,7 +54,7 @@ public class Text implements IInput {
   public String generate() {
     if (value == null)
       return null;
-    return "'" + value + "'";
+    return "'" + value.replace("'", "\\'") + "'";
   }
 
 }

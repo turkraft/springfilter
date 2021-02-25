@@ -1,10 +1,8 @@
 package com.turkraft.springfilter.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import com.turkraft.springfilter.FilterCompiler;
 
 class FilterCompilerTest {
@@ -14,7 +12,7 @@ class FilterCompilerTest {
 
       "(((a : (((1:2))) or not not not(b : 2 or c : 5))))",
 
-      "x:1 or y:2 and z:3 or ooo:4 and iii:5", "hello(x) : 1",
+      "x:1 or y:2 and z:3 or ooo:4 and iii:5", "hello(x) : 1", "bibi(  )", "func('hey\\'s')",
 
       "x : 1", "(x : 1 or y : 2)",
 
@@ -29,7 +27,8 @@ class FilterCompilerTest {
 
     // this is a generic test method
     // we're just checking that the compiled input is equal to the compilation output of itself
-    // this will let us catch tokenizer/parser errors and will make sure that the compiler is deterministic
+    // this will let us catch tokenizer/parser errors and will make sure that the compiler is
+    // deterministic
 
     String output = FilterCompiler.compile(input);
 

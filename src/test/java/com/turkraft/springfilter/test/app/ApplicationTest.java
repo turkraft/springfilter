@@ -1,154 +1,189 @@
 package com.turkraft.springfilter.test.app;
 
-import static com.turkraft.springfilter.FilterQueryBuilder.and;
-import static com.turkraft.springfilter.FilterQueryBuilder.equal;
-import static com.turkraft.springfilter.FilterQueryBuilder.greaterThan;
-import static com.turkraft.springfilter.FilterQueryBuilder.greaterThanOrEqual;
-import static com.turkraft.springfilter.FilterQueryBuilder.in;
-import static com.turkraft.springfilter.FilterQueryBuilder.input;
-import static com.turkraft.springfilter.FilterQueryBuilder.isEmpty;
-import static com.turkraft.springfilter.FilterQueryBuilder.isNotEmpty;
-import static com.turkraft.springfilter.FilterQueryBuilder.isNotNull;
-import static com.turkraft.springfilter.FilterQueryBuilder.isNull;
-import static com.turkraft.springfilter.FilterQueryBuilder.lessThan;
-import static com.turkraft.springfilter.FilterQueryBuilder.lessThanOrEqual;
-import static com.turkraft.springfilter.FilterQueryBuilder.not;
-import static com.turkraft.springfilter.FilterQueryBuilder.notEqual;
-import static com.turkraft.springfilter.FilterQueryBuilder.or;
-import static com.turkraft.springfilter.FilterQueryBuilder.size;
-import static com.turkraft.springfilter.FilterQueryBuilder.strings;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.transaction.Transactional;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+import org.hibernate.Hibernate;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.FilterSpecification;
+import com.turkraft.springfilter.test.app.Employee.MaritalStatus;
 
-@RunWith(SpringRunner.class)
+@TestInstance(Lifecycle.PER_CLASS)
 @DataJpaTest
-@Transactional
 public class ApplicationTest {
 
   @Autowired
-  private CarRepository carRepository;
+  private EmployeeRepository employeeRepository;
 
-  @Test
-  public void equalStringTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("brand.name : 'audi'"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(equal("brand.name", "audi")))).hasSize(1);
+  private Stream<Employee> randomEmployees() {
+    return StreamSupport.stream(employeeRepository.findAll().spliterator(), false);
+    // return Stream.of(employeeRepository.random(), employeeRepository.random(),
+    // employeeRepository.random());
+  }
+
+  private void validate(String input, Predicate<Employee> predicate, boolean expectsResults) {
+
+    // TODO
+    // Entities which should theoretically match the input query but didn't
+    // are currently out of the scope of this validation method
+    // if some entities are missed, that should be considered as a failure
+    // ideally we should compare the input matches with real query matches
+
+    List<Employee> inputResults =
+        employeeRepository.findAll(new FilterSpecification<Employee>(input));
+
+    if (expectsResults) {
+      assertFalse(inputResults.isEmpty());
+    }
+
+    for (int i = 0; i < inputResults.size(); i++) {
+      Hibernate.initialize(inputResults.get(i).getPayslips());
+      assertTrue(predicate.test(inputResults.get(i)));
+    }
+
+  }
+
+  private void validate(String input, Predicate<Employee> predicate) {
+    validate(input, predicate, true);
   }
 
   @Test
-  public void equalEnumTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("color : 'black'"))).hasSize(2);
-    assertThat(carRepository.findAll(new FilterSpecification<>(equal("color", Color.BLACK)))).hasSize(2);
+  public void databaseTest() {
+    assertTrue(employeeRepository.count() > 0);
   }
 
-  @Test
-  public void equalNumberTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("km : 250000"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(equal("km", 250000)))).hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void equalStringTest(Employee employee) {
+    validate(String.format("firstName : '%s'", employee.getFirstName().replace("'", "\\'")),
+        e -> e.getFirstName().equals(employee.getFirstName()));
   }
 
-  @Test
-  public void equalDateTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("accidents.date : '5/07/2000'"))).hasSize(1);
-    assertThat(
-        carRepository.findAll(new FilterSpecification<>(equal("accidents.date", Application.getDate(5, 7, 2000)))))
-            .hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void equalEnumTest(Employee employee) {
+    validate(String.format("maritalStatus : '%s'", employee.getMaritalStatus()),
+        e -> e.getMaritalStatus().equals(employee.getMaritalStatus()));
   }
 
-  @Test
-  public void notEqualTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("brand.name ! 'audi'"))).hasSize(2);
-    assertThat(carRepository.findAll(new FilterSpecification<>(notEqual("brand.name", "audi")))).hasSize(2);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void equalNumberTest(Employee employee) {
+    validate(String.format("salary : %d", employee.getSalary()),
+        e -> e.getSalary().equals(employee.getSalary()));
   }
 
-  @Test
-  public void greaterThanTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("km > 7000"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(greaterThan("km", 7000)))).hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void equalDateTest(Employee employee) {
+    validate(
+        String.format("birthDate : '%s'",
+            FilterConfig.DATE_FORMATTER.format(employee.getBirthDate())),
+        e -> e.getBirthDate().equals(employee.getBirthDate()));
   }
 
-  @Test
-  public void greaterThanOrEqualTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("km >: 7000"))).hasSize(2);
-    assertThat(carRepository.findAll(new FilterSpecification<>(greaterThanOrEqual("km", 7000)))).hasSize(2);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void notEqualTest(Employee employee) {
+    validate(String.format("lastName ! '%s'", employee.getLastName().replace("'", "\\'")),
+        e -> !e.getLastName().equals(employee.getLastName()));
   }
 
-  @Test
-  public void lessThanTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("km < 7000"))).hasSize(0);
-    assertThat(carRepository.findAll(new FilterSpecification<>(lessThan("km", 7000)))).hasSize(0);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void greaterThanTest(Employee employee) {
+    validate(String.format("salary > %d", employee.getSalary()),
+        e -> e.getSalary() > employee.getSalary(), false);
   }
 
-  @Test
-  public void lessThanOrEqualTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("km <: 7000"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(lessThanOrEqual("km", 7000)))).hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void greaterThanOrEqualTest(Employee employee) {
+    validate(String.format("salary >: %d", employee.getSalary()),
+        e -> e.getSalary() >= employee.getSalary());
+  }
+
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void lessThanTest(Employee employee) {
+    validate(String.format("salary < %d", employee.getSalary()),
+        e -> e.getSalary() < employee.getSalary(), false);
+  }
+
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void lessThanOrEqualTest(Employee employee) {
+    validate(String.format("salary <: %d", employee.getSalary()),
+        e -> e.getSalary() <= employee.getSalary());
   }
 
   @Test
   public void isNullTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("year is null"))).hasSize(3);
-    assertThat(carRepository.findAll(new FilterSpecification<>(isNull("year")))).hasSize(3);
+    validate(String.format("manager is null"), e -> e.getManager() == null);
   }
 
   @Test
   public void isNotNullTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("year is not null"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(isNotNull("year")))).hasSize(1);
+    validate(String.format("manager is not null"), e -> e.getManager() != null);
   }
 
   @Test
   public void isEmptyTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("accidents is empty"))).hasSize(3);
-    assertThat(carRepository.findAll(new FilterSpecification<>(isEmpty("accidents")))).hasSize(3);
+    validate(String.format("payslips is empty"), e -> e.getPayslips().isEmpty());
   }
 
   @Test
   public void isNotEmptyTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("accidents is not empty"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(isNotEmpty("accidents")))).hasSize(1);
+    validate(String.format("payslips is not empty"), e -> !e.getPayslips().isEmpty());
   }
 
   @Test
   public void inTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("brand.name in ('audi', 'land rover')"))).hasSize(3);
-    assertThat(carRepository.findAll(new FilterSpecification<>(in("brand.name", strings("audi", "land rover")))))
-        .hasSize(3);
+    validate(
+        String.format("maritalStatus in ('%s', '%s')", MaritalStatus.DIVORCED,
+            MaritalStatus.SEPARATED),
+        e -> e.getMaritalStatus() == MaritalStatus.DIVORCED
+            || e.getMaritalStatus() == MaritalStatus.SEPARATED);
   }
 
-  @Test
-  public void andTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("year : 2011 and color : 'black'"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>(and(equal("year", 2011), equal("color", Color.BLACK)))))
-        .hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void andTest(Employee employee) {
+    validate(
+        String.format("company.id : %d and manager is not null", employee.getCompany().getId()),
+        e -> e.getCompany().getId().equals(employee.getCompany().getId())
+            && e.getManager() != null);
   }
 
-  @Test
-  public void orTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("year : 2011 or color : 'black'"))).hasSize(2);
-    assertThat(carRepository.findAll(new FilterSpecification<>(or(equal("year", 2011), equal("color", Color.BLACK)))))
-        .hasSize(2);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void orTest(Employee employee) {
+    validate(
+        String.format("maritalStatus : '%s' or payslips is empty", employee.getMaritalStatus()),
+        e -> e.getMaritalStatus() == employee.getMaritalStatus() || e.getPayslips().isEmpty());
   }
 
-  @Test
-  public void notTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("not color : 'white'"))).hasSize(2);
-    assertThat(carRepository.findAll(new FilterSpecification<>(not(equal("color", Color.WHITE))))).hasSize(2);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void notTest(Employee employee) {
+    validate(String.format("id ! %d", employee.getId()), e -> !e.getId().equals(employee.getId()));
   }
 
-  @Test
-  public void sizeTest() {
-    assertThat(carRepository.findAll(new FilterSpecification<>("size(accidents) >: 1"))).hasSize(1);
-    assertThat(carRepository.findAll(new FilterSpecification<>((greaterThanOrEqual(size("accidents"), input(1))))))
-        .hasSize(1);
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void sizeTest(Employee employee) {
+    validate(String.format("size(payslips) : %d", employee.getPayslips().size()),
+        e -> e.getPayslips().size() == employee.getPayslips().size());
   }
 
 }

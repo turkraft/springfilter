@@ -42,7 +42,10 @@ public class ConditionPostfix extends Condition {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Predicate generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
     Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
@@ -51,7 +54,8 @@ public class ConditionPostfix extends Condition {
 
       case EMPTY:
       case NULL:
-        if (Collection.class.isAssignableFrom(leftExpression.getJavaType()) && leftExpression instanceof PluralAttributePath) {
+        if (Collection.class.isAssignableFrom(leftExpression.getJavaType())
+            && leftExpression instanceof PluralAttributePath) {
           return criteriaBuilder.isEmpty((Expression<Collection<?>>) leftExpression);
         } else {
           return criteriaBuilder.isNull(leftExpression);
@@ -59,14 +63,16 @@ public class ConditionPostfix extends Condition {
 
       case NOT_EMPTY:
       case NOT_NULL:
-        if (Collection.class.isAssignableFrom(leftExpression.getJavaType()) && leftExpression instanceof PluralAttributePath) {
+        if (Collection.class.isAssignableFrom(leftExpression.getJavaType())
+            && leftExpression instanceof PluralAttributePath) {
           return criteriaBuilder.isNotEmpty((Expression<Collection<?>>) leftExpression);
         } else {
           return criteriaBuilder.isNotNull(leftExpression);
         }
 
       default:
-        throw new InvalidQueryException("The comparator " + getComparator().getLiteral() + " is unsupported");
+        throw new InvalidQueryException(
+            "The comparator " + getComparator().getLiteral() + " is unsupported");
 
     }
 

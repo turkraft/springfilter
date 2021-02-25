@@ -3,11 +3,10 @@ package com.turkraft.springfilter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
-public class Extensions {
+@ExtensionMethod(FilterExtensions.class)
+public class FilterExtensions {
 
   public static char take(StringBuilder sb) {
     return take(sb, 1).charAt(0);
@@ -23,8 +22,16 @@ public class Extensions {
     return sb.charAt(0);
   }
 
-  public static boolean indexIs(StringBuilder sb, char c) {
-    return sb.length() > 0 && sb.charAt(0) == c;
+  public static boolean indexIs(StringBuilder sb, char... c) {
+    if (sb.length() < c.length) {
+      return false;
+    }
+    for (int i = 0; i < c.length; i++) {
+      if (sb.charAt(i) != c[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public static boolean isEmpty(StringBuilder sb) {
@@ -32,18 +39,15 @@ public class Extensions {
   }
 
   public static String getMatch(StringBuilder sb, Pattern pattern) {
-
     java.util.regex.Matcher regexMatcher = pattern.matcher(sb);
-
     if (regexMatcher.find()) {
       return take(sb, regexMatcher.end());
     }
-
     return null;
   }
 
   public static <T> LinkedList<T> copy(LinkedList<T> list) {
-    return new LinkedList<T>(list);
+    return new LinkedList<>(list);
   }
 
   public static <T> void replaceWith(LinkedList<T> list, LinkedList<T> replacor) {
@@ -56,13 +60,10 @@ public class Extensions {
   }
 
   public static <T> LinkedList<T> take(LinkedList<T> list, int count) {
-
-    LinkedList<T> result = new LinkedList<T>();
-
+    LinkedList<T> result = new LinkedList<>();
     for (int i = 0; i < count; i++) {
       result.add(list.pop());
     }
-
     return result;
   }
 

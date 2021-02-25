@@ -1,7 +1,6 @@
 package com.turkraft.springfilter;
 
 import java.util.LinkedList;
-
 import com.turkraft.springfilter.exception.ParserException;
 import com.turkraft.springfilter.node.FieldMatcher;
 import com.turkraft.springfilter.node.Filter;
@@ -14,16 +13,15 @@ import com.turkraft.springfilter.node.predicate.ConditionMatcher;
 import com.turkraft.springfilter.node.predicate.OperationMatcher;
 import com.turkraft.springfilter.node.predicate.PriorityMatcher;
 import com.turkraft.springfilter.token.IToken;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class FilterParser {
 
   public static Matcher<?>[] matchers = new Matcher<?>[] {
 
-      PriorityMatcher.INSTANCE, ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE, FunctionMatcher.INSTANCE,
-      FieldMatcher.INSTANCE, InputMatcher.INSTANCE,
+      PriorityMatcher.INSTANCE, ConditionMatcher.INSTANCE, OperationMatcher.INSTANCE,
+      FunctionMatcher.INSTANCE, FieldMatcher.INSTANCE, InputMatcher.INSTANCE,
 
   };
 

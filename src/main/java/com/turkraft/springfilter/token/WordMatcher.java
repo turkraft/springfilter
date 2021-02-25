@@ -1,12 +1,10 @@
 package com.turkraft.springfilter.token;
 
 import java.util.regex.Pattern;
-
-import com.turkraft.springfilter.Extensions;
-
+import com.turkraft.springfilter.FilterExtensions;
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class WordMatcher extends Matcher<Word> {
 
   public static Pattern PATTERN = Pattern.compile("^[\\p{L}_][\\p{L}0-9_]*");
