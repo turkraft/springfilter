@@ -1,13 +1,11 @@
 package com.turkraft.springfilter.token;
 
 import java.util.regex.Pattern;
-
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.token.LiteralMatcher.ILiteral;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> extends Matcher<T> {
 
   @Override
@@ -22,7 +20,8 @@ public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> exte
         // match using literal
 
         if (input.length() >= literal.getLiteral().length()
-            && input.substring(0, literal.getLiteral().length()).toLowerCase().equalsIgnoreCase(literal.getLiteral())) {
+            && input.substring(0, literal.getLiteral().length()).toLowerCase()
+                .equalsIgnoreCase(literal.getLiteral())) {
 
           input.take(literal.getLiteral().length());
 
@@ -34,7 +33,8 @@ public abstract class LiteralMatcher<T extends Enum<T> & IToken & ILiteral> exte
 
         // match using regex
 
-        String match = input.getMatch(Pattern.compile(literal.getRegex(), Pattern.CASE_INSENSITIVE));
+        String match =
+            input.getMatch(Pattern.compile(literal.getRegex(), Pattern.CASE_INSENSITIVE));
 
         if (match != null) {
           return type;

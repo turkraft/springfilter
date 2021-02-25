@@ -1,18 +1,19 @@
 package com.turkraft.springfilter;
 
 import java.util.Map;
-
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 
 public class FilterUtils {
 
   private FilterUtils() {}
 
-  public static Path<?> getDatabasePath(Root<?> table, Map<String, Join<Object, Object>> joins, String fieldPath) {
+  public static Path<?> getDatabasePath(
+      Root<?> table,
+      Map<String, Join<Object, Object>> joins,
+      String fieldPath) {
 
     Path<?> path = table;
 

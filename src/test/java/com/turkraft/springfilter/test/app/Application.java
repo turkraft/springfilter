@@ -1,14 +1,15 @@
 package com.turkraft.springfilter.test.app;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.github.javafaker.Faker;
+import com.turkraft.springfilter.test.app.Employee.MaritalStatus;
 
 @SpringBootApplication
 public class Application implements ApplicationRunner {
@@ -18,30 +19,52 @@ public class Application implements ApplicationRunner {
   }
 
   @Autowired
-  private BrandRepository brandRepository;
+  private IndustryRepository industryRepository;
 
   @Autowired
-  private CarRepository carRepository;
+  private CompanyRepository companyRepository;
+
+  @Autowired
+  private EmployeeRepository employeeRepository;
+
+  @Autowired
+  private PayslipRepository payslipRepository;
 
   @Override
   public void run(ApplicationArguments args) {
 
-    Brand audi = Brand.builder().name("audi").build();
-    Brand landRover = Brand.builder().name("land rover").build();
-    brandRepository.saveAll(Arrays.asList(audi, landRover));
+    Faker faker = new Faker(new Random(1));
 
-    Car car1 = Car.builder().km(250000).brand(landRover).build();
-    Car car2 = Car.builder().color(Color.BLACK).year(2011).km(7000).brand(landRover).build();
-    Car car3 = Car.builder().color(Color.BLACK).brand(audi).build();
-    Car car4 = Car.builder().accidents(Arrays.asList(Accident.builder().date(getDate(5, 7, 2000)).build())).build();
-    carRepository.saveAll(Arrays.asList(car1, car2, car3, car4));
+    List<Industry> industries = new ArrayList<>();
+    for (int i = 0; i < 3; i++) {
+      industries.add(Industry.builder().name(faker.company().industry()).build());
+    }
+    industryRepository.saveAll(industries);
 
-  }
+    List<Company> companies = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      companies.add(Company.builder().name(faker.company().name())
+          .industry(faker.options().nextElement(industries)).build());
+    }
+    companyRepository.saveAll(companies);
 
-  public static Date getDate(int day, int month, int year) {
-    Calendar cal = Calendar.getInstance();
-    cal.set(year, month - 1, day);
-    return cal.getTime();
+    List<Employee> employees = new ArrayList<>();
+    for (int i = 0; i < 30; i++) {
+      employees.add(Employee.builder().firstName(faker.name().firstName())
+          .lastName(faker.name().lastName()).birthDate(faker.date().birthday())
+          .maritalStatus(faker.options().option(MaritalStatus.class))
+          .salary(faker.random().nextInt(1000, 10000))
+          .company(faker.options().nextElement(companies))
+          .manager(employees.isEmpty() ? null : faker.options().nextElement(employees)).build());
+    }
+    employeeRepository.saveAll(employees);
+
+    List<Payslip> payslips = new ArrayList<>();
+    for (int i = 0; i < 50; i++) {
+      payslips.add(Payslip.builder().employee(faker.options().nextElement(employees)).build());
+    }
+    payslipRepository.saveAll(payslips);
+
   }
 
 }

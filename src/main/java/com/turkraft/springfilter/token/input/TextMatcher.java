@@ -1,13 +1,12 @@
 package com.turkraft.springfilter.token.input;
 
 
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.exception.OutOfInputException;
 import com.turkraft.springfilter.token.Matcher;
-
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class TextMatcher extends Matcher<Text> {
 
   @Override
@@ -19,8 +18,15 @@ public class TextMatcher extends Matcher<Text> {
 
       input.take();
 
-      while (!input.indexIs('\'')) {
+      while (!input.isEmpty() && !input.indexIs('\'')) {
+
         chars += input.take();
+
+        if (input.indexIs('\\', '\'')) {
+          chars += input.take();
+          chars += input.take();
+        }
+
       }
 
       if (input.isEmpty()) {
@@ -29,7 +35,7 @@ public class TextMatcher extends Matcher<Text> {
 
       input.take();
 
-      return Text.builder().value(chars).build();
+      return Text.builder().value(chars.replace("\\'", "'")).build();
 
     }
 

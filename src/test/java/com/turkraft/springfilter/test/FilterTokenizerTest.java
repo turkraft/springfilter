@@ -2,13 +2,10 @@ package com.turkraft.springfilter.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import com.turkraft.springfilter.FilterTokenizer;
 import com.turkraft.springfilter.token.Comma;
 import com.turkraft.springfilter.token.Comparator;
@@ -97,7 +94,8 @@ class FilterTokenizerTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {":", "!", "~", "<", "<:", ">", ">:", "is null", "is not null", "is empty", "is not empty"}) // TODO: add 'in'
+  @ValueSource(strings = {":", "!", "~", "<", "<:", ">", ">:", "is null", "is not null", "is empty",
+      "is not empty"}) // TODO: add 'in'
   void validateComparators(String input) {
     validateSingleToken(FilterTokenizer.tokenize(input), Comparator.class);
   }

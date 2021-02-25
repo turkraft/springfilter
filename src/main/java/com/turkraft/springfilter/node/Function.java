@@ -4,16 +4,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
-
 import com.turkraft.springfilter.Pair;
 import com.turkraft.springfilter.exception.InvalidQueryException;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -33,25 +30,31 @@ public class Function implements IExpression {
 
   @Override
   public String generate() {
-    if (name.isEmpty())
+    if (name.isEmpty()) {
       return "";
+    }
     return name + arguments.generate();
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
-  public Expression<?> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Expression<?> generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
     List<Pair<IExpression, Expression<?>>> expressions = new LinkedList<>();
 
-    // the generated expression is directly stored in the list if it's not based on an input, otherwise we will generate it later
+    // the generated expression is directly stored in the list if it's not based on an input,
+    // otherwise we will generate it later
 
     for (IExpression argument : arguments.getValues()) {
       if (argument instanceof Input) {
         expressions.add(new Pair(argument, null));
       } else {
-        expressions.add(new Pair(argument, argument.generate(root, criteriaQuery, criteriaBuilder, joins)));
+        expressions.add(
+            new Pair(argument, argument.generate(root, criteriaQuery, criteriaBuilder, joins)));
       }
     }
 
@@ -65,8 +68,8 @@ public class Function implements IExpression {
 
     java.util.function.Function<Integer, Expression<?>> getter = (index) -> {
       if (expressions.get(index).getKey() instanceof Input) {
-        return ((Input) expressions.get(index).getKey()).generate(root, criteriaQuery, criteriaBuilder, joins,
-            type.argumentTypes[index]);
+        return ((Input) expressions.get(index).getKey()).generate(root, criteriaQuery,
+            criteriaBuilder, joins, type.argumentTypes[index]);
       }
       return expressions.get(index).getValue();
     };
@@ -114,17 +117,9 @@ public class Function implements IExpression {
 
   public enum Type {
 
-    ABSOLUTE(Number.class),
-    AVERAGE(Number.class),
-    MIN(Number.class),
-    MAX(Number.class),
-    SUM(Number.class),
-    SIZE(Collection.class),
-    LENGTH(String.class),
-    TRIM(String.class),
-    CURRENTTIME,
-    CURRENTDATE,
-    CURRENTTIMESTAMP;
+    ABSOLUTE(Number.class), AVERAGE(Number.class), MIN(Number.class), MAX(Number.class), SUM(
+        Number.class), SIZE(Collection.class), LENGTH(
+            String.class), TRIM(String.class), CURRENTTIME, CURRENTDATE, CURRENTTIMESTAMP;
 
     private final Class<?>[] argumentTypes;
 
@@ -143,7 +138,8 @@ public class Function implements IExpression {
       }
 
       if (argumentTypes.length > expressions.size()) {
-        throw new InvalidQueryException("The function " + name + " should have " + argumentTypes.length + " arguments");
+        throw new InvalidQueryException(
+            "The function " + name + " should have " + argumentTypes.length + " arguments");
       }
 
       for (int i = 0; i < argumentTypes.length; i++) {
@@ -152,12 +148,9 @@ public class Function implements IExpression {
           if (!(((Input) expressions.get(i).getKey()).getValue().canBe(argumentTypes[i]))) {
             return false;
           }
-        }
-
-        else {
-          if (!argumentTypes[i].isAssignableFrom(expressions.get(i).getValue().getJavaType())) {
-            return false;
-          }
+        } else if (!argumentTypes[i]
+            .isAssignableFrom(expressions.get(i).getValue().getJavaType())) {
+          return false;
         }
 
       }

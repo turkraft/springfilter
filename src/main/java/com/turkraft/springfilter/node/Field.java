@@ -1,15 +1,12 @@
 package com.turkraft.springfilter.node;
 
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-
 import com.turkraft.springfilter.FilterUtils;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -31,7 +28,10 @@ public class Field implements IExpression {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Path<Object> generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Path<Object> generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
     return (Path<Object>) FilterUtils.getDatabasePath(root, joins, name);
   }

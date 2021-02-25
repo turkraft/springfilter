@@ -1,11 +1,11 @@
 package com.turkraft.springfilter.token.input;
 
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.token.Matcher;
 
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class BoolMatcher extends Matcher<Bool> {
 
   @Override

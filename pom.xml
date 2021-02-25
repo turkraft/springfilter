@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.turkraft</groupId>
 	<artifactId>spring-filter</artifactId>
-	<version>0.8.4</version>
+	<version>0.8.5</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Dynamically filters JPA entities with a simple query syntax. Provides JPA/Hibernate predicates and Spring specifications.</description>
 	<url>https://github.com/torshid/spring-filter</url>
@@ -35,6 +35,7 @@
 		<springframework-data.version>2.3.6.RELEASE</springframework-data.version>
 		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
+		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.7.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
@@ -101,6 +102,12 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2database-h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>${javafaker.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

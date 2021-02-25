@@ -55,13 +55,18 @@ public class OperationInfix extends Operation {
   }
 
   @Override
-  public Predicate generate(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  public Predicate generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
       Map<String, Join<Object, Object>> joins) {
 
     Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-    Expression<?> rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> rightExpression =
+        getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
 
-    if (!leftExpression.getJavaType().equals(Boolean.class) || !rightExpression.getJavaType().equals(Boolean.class)) {
+    if (!leftExpression.getJavaType().equals(Boolean.class)
+        || !rightExpression.getJavaType().equals(Boolean.class)) {
       throw new ExpressionException("Left and right side expressions of the infix operator "
           + getOperator().getLiteral() + " should be predicates");
     }

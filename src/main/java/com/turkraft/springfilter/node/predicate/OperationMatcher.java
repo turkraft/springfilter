@@ -2,7 +2,7 @@ package com.turkraft.springfilter.node.predicate;
 
 import java.util.LinkedList;
 
-import com.turkraft.springfilter.Extensions;
+import com.turkraft.springfilter.FilterExtensions;
 import com.turkraft.springfilter.FilterParser;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Matcher;
@@ -12,7 +12,7 @@ import com.turkraft.springfilter.token.Operator.Position;
 
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod(Extensions.class)
+@ExtensionMethod(FilterExtensions.class)
 public class OperationMatcher extends Matcher<Operation> {
 
   public static final OperationMatcher INSTANCE = new OperationMatcher();
@@ -50,7 +50,8 @@ public class OperationMatcher extends Matcher<Operation> {
 
     IExpression left = nodes.pollLast();
 
-    // if the previous node is an infix operation which has lower priority than the current one, then a swap should be done
+    // if the previous node is an infix operation which has lower priority than the current one,
+    // then a swap should be done
     // example: 'x OR y AND z' => 'x OR (y AND z)'
 
     if (left instanceof OperationInfix) {
@@ -59,8 +60,8 @@ public class OperationMatcher extends Matcher<Operation> {
 
       if (operator.getPriority() > previousOperation.getOperator().getPriority()) {
 
-        OperationInfix and =
-            OperationInfix.builder().operator(operator).left(previousOperation.getRight()).right(right).build();
+        OperationInfix and = OperationInfix.builder().operator(operator)
+            .left(previousOperation.getRight()).right(right).build();
         previousOperation.setRight(and);
         return previousOperation;
 
