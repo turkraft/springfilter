@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.test.app;
+package com.turkraft.springfilter.app;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.EntityFilter;
-import com.turkraft.springfilter.test.app.Employee.MaritalStatus;
+import com.turkraft.springfilter.app.Employee.MaritalStatus;
 
 @SpringBootApplication
 @RestController
