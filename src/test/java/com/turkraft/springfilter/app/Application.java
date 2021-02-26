@@ -1,9 +1,11 @@
 package com.turkraft.springfilter.app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletResponse;
 import org.springdoc.core.SwaggerUiConfigParameters;
 import org.springdoc.core.SwaggerUiOAuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.EntityFilter;
 import com.turkraft.springfilter.app.Employee.MaritalStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -85,6 +88,12 @@ public class Application implements ApplicationRunner {
     }
     payslipRepository.saveAll(payslips);
 
+  }
+
+  @Operation(hidden = true)
+  @GetMapping
+  public void index(HttpServletResponse response) throws IOException {
+    response.sendRedirect("swagger-ui.html");
   }
 
   @GetMapping(value = "industry")
