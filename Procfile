@@ -1,1 +1,1 @@
-web: java -jar target/spring-filter-*-fat-tests.jar
+web: java -jar target/spring-filter-*-fat-tests.jar --server.port=$PORT
