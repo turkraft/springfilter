@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.test.app;
+package com.turkraft.springfilter.app;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,7 +61,15 @@ public class Employee {
   private List<Payslip> payslips;
 
   public enum MaritalStatus {
-    UNKNOWN, MARRIED, WIDOWED, DIVORCED, SINGLE, SEPARATED
+
+    UNKNOWN, MARRIED, WIDOWED, DIVORCED, SINGLE, SEPARATED;
+
+    @JsonValue
+    @Override
+    public String toString() {
+      return name().toLowerCase();
+    }
+
   }
 
 }

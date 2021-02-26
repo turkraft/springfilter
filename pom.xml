@@ -34,6 +34,7 @@
 		<springframework.version>5.2.12.RELEASE</springframework.version>
 		<springframework-data.version>2.3.6.RELEASE</springframework-data.version>
 		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
+		<springdoc-openapi-ui.version>1.5.4</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.7.1</junit.version>
@@ -116,6 +117,12 @@
 			<version>${springframework-boot.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi-ui.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -133,6 +140,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.turkraft.springfilter.test.app.Application</mainClass>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -192,24 +206,24 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
+				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<archive>
-						<index>true</index>
-						<manifest>
-							<addClasspath>true</addClasspath>
-						</manifest>
-						<manifestEntries>
-							<Main-Class>com.turkraft.springfilter.test.app.Application</Main-Class>
-						</manifestEntries>
-					</archive>
+					<descriptor>src/test/assembly/assembly.xml</descriptor>
 				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>test-jar</goal>
+							<goal>assembly</goal>
 						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>com.turkraft.springfilter.app.Application</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

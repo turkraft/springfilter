@@ -12,7 +12,7 @@ public class FilterConfig {
 
   static {
 
-    DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+    DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
 
     NUMBER_FORMAT = NumberFormat.getInstance(Locale.US);
     NUMBER_FORMAT.setGroupingUsed(false); // in order to not count commas as part of number

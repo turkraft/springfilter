@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.test;
+package com.turkraft.springfilter;
 
 import static com.turkraft.springfilter.FilterQueryBuilder.equal;
 import static com.turkraft.springfilter.FilterQueryBuilder.field;
