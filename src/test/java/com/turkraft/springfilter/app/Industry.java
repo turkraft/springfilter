@@ -1,31 +1,34 @@
-package com.turkraft.springfilter.test.app;
+package com.turkraft.springfilter.app;
 
-import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table
 @Entity
+@Table
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Accident {
+public class Industry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @Temporal(TemporalType.DATE)
-  private Date date;
+  private String name;
+
+  @JsonIgnoreProperties({"employees", "industry"})
+  @OneToMany(mappedBy = "industry")
+  private List<Company> companies;
 
 }

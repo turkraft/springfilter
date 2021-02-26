@@ -1,22 +1,36 @@
-package com.turkraft.springfilter.test.app;
+package com.turkraft.springfilter.app;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import org.springdoc.core.SwaggerUiConfigParameters;
+import org.springdoc.core.SwaggerUiOAuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.EntityFilter;
-import com.turkraft.springfilter.test.app.Employee.MaritalStatus;
+import com.turkraft.springfilter.app.Employee.MaritalStatus;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @SpringBootApplication
 @RestController
+@Import({org.springdoc.core.SpringDocConfigProperties.class,
+    org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration.class,
+    org.springdoc.core.SpringDocConfiguration.class,
+    org.springdoc.webmvc.core.SpringDocWebMvcConfiguration.class, SwaggerUiConfigParameters.class,
+    SwaggerUiOAuthProperties.class, org.springdoc.core.SwaggerUiConfigProperties.class,
+    org.springdoc.core.SwaggerUiOAuthProperties.class, org.springdoc.webmvc.ui.SwaggerConfig.class,
+    org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration.class})
 public class Application implements ApplicationRunner {
 
   public static void main(String[] args) {
@@ -66,30 +80,39 @@ public class Application implements ApplicationRunner {
 
     List<Payslip> payslips = new ArrayList<>();
     for (int i = 0; i < 50; i++) {
-      payslips.add(Payslip.builder().employee(faker.options().nextElement(employees)).build());
+      payslips.add(Payslip.builder().employee(faker.options().nextElement(employees))
+          .date(faker.date().past(360, TimeUnit.DAYS)).build());
     }
     payslipRepository.saveAll(payslips);
 
   }
 
   @GetMapping(value = "industry")
-  public List<Industry> getIndustries(@EntityFilter Specification<Industry> spec) {
-    return industryRepository.findAll(spec);
+  public List<Industry> getIndustries(
+      @RequestParam(required = false) @Parameter(
+          schema = @Schema(type = "string")) @EntityFilter Specification<Industry> filter) {
+    return industryRepository.findAll(filter);
   }
 
   @GetMapping(value = "company")
-  public List<Company> getCompanies(@EntityFilter Specification<Company> spec) {
-    return companyRepository.findAll(spec);
+  public List<Company> getCompanies(
+      @RequestParam(required = false) @Parameter(
+          schema = @Schema(type = "string")) @EntityFilter Specification<Company> filter) {
+    return companyRepository.findAll(filter);
   }
 
   @GetMapping(value = "employee")
-  public List<Employee> getEmployees(@EntityFilter Specification<Employee> spec) {
-    return employeeRepository.findAll(spec);
+  public List<Employee> getEmployees(
+      @RequestParam(required = false) @Parameter(
+          schema = @Schema(type = "string")) @EntityFilter Specification<Employee> filter) {
+    return employeeRepository.findAll(filter);
   }
 
   @GetMapping(value = "payslip")
-  public List<Payslip> getPayslips(@EntityFilter Specification<Payslip> spec) {
-    return payslipRepository.findAll(spec);
+  public List<Payslip> getPayslips(
+      @RequestParam(required = false) @Parameter(
+          schema = @Schema(type = "string")) @EntityFilter Specification<Payslip> filter) {
+    return payslipRepository.findAll(filter);
   }
 
 }

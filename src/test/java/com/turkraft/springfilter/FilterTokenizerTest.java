@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.test;
+package com.turkraft.springfilter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
