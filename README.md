@@ -1,4 +1,4 @@
-# Spring Filter
+# [Spring Filter](https://spring-filter.herokuapp.com/)
 
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I try to compile a simple syntax to JPA predicates.
