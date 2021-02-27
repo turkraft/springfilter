@@ -16,13 +16,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.EntityFilter;
 import com.turkraft.springfilter.app.Employee.MaritalStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @SpringBootApplication
@@ -98,29 +98,29 @@ public class Application implements ApplicationRunner {
 
   @GetMapping(value = "industry")
   public List<Industry> getIndustries(
-      @RequestParam(required = false) @Parameter(
-          schema = @Schema(type = "string")) @EntityFilter Specification<Industry> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
+          allowEmptyValue = true) @EntityFilter Specification<Industry> filter) {
     return industryRepository.findAll(filter);
   }
 
   @GetMapping(value = "company")
   public List<Company> getCompanies(
-      @RequestParam(required = false) @Parameter(
-          schema = @Schema(type = "string")) @EntityFilter Specification<Company> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
+          allowEmptyValue = true) @EntityFilter Specification<Company> filter) {
     return companyRepository.findAll(filter);
   }
 
   @GetMapping(value = "employee")
   public List<Employee> getEmployees(
-      @RequestParam(required = false) @Parameter(
-          schema = @Schema(type = "string")) @EntityFilter Specification<Employee> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
+          allowEmptyValue = true) @EntityFilter Specification<Employee> filter) {
     return employeeRepository.findAll(filter);
   }
 
   @GetMapping(value = "payslip")
   public List<Payslip> getPayslips(
-      @RequestParam(required = false) @Parameter(
-          schema = @Schema(type = "string")) @EntityFilter Specification<Payslip> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
+          allowEmptyValue = true) @EntityFilter Specification<Payslip> filter) {
     return payslipRepository.findAll(filter);
   }
 
