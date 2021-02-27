@@ -98,29 +98,29 @@ public class Application implements ApplicationRunner {
 
   @GetMapping(value = "industry")
   public List<Industry> getIndustries(
-      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-          allowEmptyValue = true) @EntityFilter Specification<Industry> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
+          example = "size(companies.employees) > 5") @EntityFilter Specification<Industry> filter) {
     return industryRepository.findAll(filter);
   }
 
   @GetMapping(value = "company")
   public List<Company> getCompanies(
-      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-          allowEmptyValue = true) @EntityFilter Specification<Company> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
+          example = "id < 10 and employees is not empty") @EntityFilter Specification<Company> filter) {
     return companyRepository.findAll(filter);
   }
 
   @GetMapping(value = "employee")
   public List<Employee> getEmployees(
-      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-          allowEmptyValue = true) @EntityFilter Specification<Employee> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
+          example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)") @EntityFilter Specification<Employee> filter) {
     return employeeRepository.findAll(filter);
   }
 
   @GetMapping(value = "payslip")
   public List<Payslip> getPayslips(
-      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-          allowEmptyValue = true) @EntityFilter Specification<Payslip> filter) {
+      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
+          example = "employee.salary > 3000") @EntityFilter Specification<Payslip> filter) {
     return payslipRepository.findAll(filter);
   }
 
