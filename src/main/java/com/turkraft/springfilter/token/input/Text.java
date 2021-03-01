@@ -16,15 +16,31 @@ public class Text implements IInput {
 
   @Override
   public boolean canBe(Class<?> klass) {
-    return String.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass)
-        || klass.isEnum();
+    return String.class.isAssignableFrom(klass) || Character.class.isAssignableFrom(klass)
+        || Date.class.isAssignableFrom(klass) || klass.isEnum();
   }
 
   @Override
   public Object getValueAs(Class<?> klass) {
 
-    if (klass.equals(String.class)) {
+    if (String.class.isAssignableFrom(klass)) {
       return getValue();
+    }
+
+    if (Character.class.isAssignableFrom(klass)) {
+      if (getValue() == null || getValue().length() != 1) {
+        throw new ClassCastException("The value '" + getValue() + "' could not be cast to a char");
+      }
+      return getValue().charAt(0);
+    }
+
+    if (Date.class.isAssignableFrom(klass)) {
+      Date date = FilterConfig.DATE_FORMATTER.parse(getValue(), new ParsePosition(0));
+      if (date != null) {
+        return date;
+      }
+      throw new ClassCastException("The value '" + getValue() + "' didn't match the date format "
+          + FilterConfig.DATE_FORMATTER.toPattern());
     }
 
     if (klass.isEnum()) {
@@ -35,14 +51,6 @@ public class Text implements IInput {
       }
       throw new ClassCastException(
           "The value '" + getValue() + "' didn't match any value of enum " + klass.getSimpleName());
-    }
-
-    if (klass.equals(Date.class)) {
-      Date date = FilterConfig.DATE_FORMATTER.parse(getValue(), new ParsePosition(0));
-      if (date != null) {
-        return date;
-      }
-      // throw specific exception otherwise, the input was not in the correct format
     }
 
     throw new ClassCastException(

@@ -76,6 +76,13 @@ public class FilterQueryBuilder {
     return Input.builder().value(Text.builder().value(value.replace("'", "\\'")).build()).build();
   }
 
+  public static IExpression input(Character value) {
+    if (value == null) {
+      return nothing();
+    }
+    return input(value.toString());
+  }
+
   public static <T extends Enum<T>> IExpression input(Enum<T> value) {
     if (value == null) {
       return nothing();
@@ -118,6 +125,10 @@ public class FilterQueryBuilder {
     return equal(field, input(value));
   }
 
+  public static IExpression equal(String field, Character value) {
+    return equal(field, input(value));
+  }
+
   public static <T extends Enum<T>> IExpression equal(String field, T value) {
     return equal(field, input(value));
   }
@@ -145,6 +156,10 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression notEqual(String field, String value) {
+    return notEqual(field, input(value));
+  }
+
+  public static IExpression notEqual(String field, Character value) {
     return notEqual(field, input(value));
   }
 
@@ -488,6 +503,20 @@ public class FilterQueryBuilder {
       return Collections.emptyList();
     }
     return strings(Arrays.asList(args));
+  }
+
+  public static List<IExpression> chars(List<Character> args) {
+    if (args == null) {
+      return Collections.emptyList();
+    }
+    return args.stream().map(a -> input(a)).collect(Collectors.toList());
+  }
+
+  public static List<IExpression> chars(Character... args) {
+    if (args == null) {
+      return Collections.emptyList();
+    }
+    return chars(Arrays.asList(args));
   }
 
   public static <T extends Enum<T>> List<IExpression> enums(List<T> args) {
