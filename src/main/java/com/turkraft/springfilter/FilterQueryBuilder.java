@@ -97,6 +97,46 @@ public class FilterQueryBuilder {
     return input(FilterConfig.DATE_FORMATTER.format(value));
   }
 
+  public static IExpression input(Object value) {
+
+    if (value == null) {
+      return nothing();
+    }
+
+    if (!isSupportedAsInput(value.getClass())) {
+      throw new UnsupportedOperationException(
+          "The value type " + value.getClass().getSimpleName() + " is not supported as an input");
+    }
+
+    if (value instanceof String) {
+      return input((String) value);
+    }
+
+    if (value instanceof Character) {
+      return input((Character) value);
+    }
+
+    if (value instanceof Number) {
+      return input((Number) value);
+    }
+
+    if (value instanceof Boolean) {
+      return input((Boolean) value);
+    }
+
+    if (value instanceof Date) {
+      return input((Date) value);
+    }
+    
+    if (value instanceof Enum) {
+      return input((Enum<?>)value);
+    }
+
+    throw new UnsupportedOperationException("The value type " + value.getClass().getSimpleName()
+        + " could not be used converted to an input");
+
+  }
+
   /* INFIX CONDITIONS */
 
   private static IExpression condition(IExpression left, Comparator comparator, IExpression right) {
@@ -546,6 +586,74 @@ public class FilterQueryBuilder {
       return Collections.emptyList();
     }
     return dates(Arrays.asList(args));
+  }
+
+  public static boolean isSupportedAsInput(Class<?> klass) {
+    return klass.isEnum() || String.class.isAssignableFrom(klass)
+        || Character.class.isAssignableFrom(klass) || Boolean.class.isAssignableFrom(klass)
+        || Number.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass);
+  }
+
+  public static boolean isSupportedAsInputWith(Class<?> klass, Comparator operator) {
+
+    if (!isSupportedAsInput(klass) || operator == null) {
+      return false;
+    }
+
+    switch (operator) {
+
+      case EQUAL:
+      case NOT_EQUAL:
+      case NULL:
+      case NOT_NULL:
+      case IN:
+        return true;
+
+      case GREATER_THAN:
+      case GREATER_THAN_OR_EQUAL:
+      case LESS_THAN:
+      case LESS_THAN_OR_EQUAL:
+        return Comparable.class.isAssignableFrom(klass);
+
+      case LIKE:
+        return String.class.isAssignableFrom(klass);
+
+      default:
+        return false;
+
+    }
+
+  }
+
+  public static IExpression compare(String field, Comparator comparator, Object value) {
+
+    if (!isSupportedAsInputWith(value.getClass(), comparator)) {
+      throw new UnsupportedOperationException("The comparator " + comparator.getLiteral()
+          + " is not compatible with the value type " + value.getClass().getSimpleName());
+    }
+
+    switch (comparator) {
+
+      case EQUAL:
+      case NOT_EQUAL:
+      case LIKE:
+      case IN:
+      case GREATER_THAN:
+      case GREATER_THAN_OR_EQUAL:
+      case LESS_THAN:
+      case LESS_THAN_OR_EQUAL:
+        return condition(field(field), comparator, input(value));
+
+      case NULL:
+      case NOT_NULL:
+        return condition(field(field), comparator);
+
+      default:
+        throw new UnsupportedOperationException("The value type " + value.getClass().getSimpleName()
+            + " could not be used with the comparator " + comparator.getLiteral());
+
+    }
+
   }
 
 }
