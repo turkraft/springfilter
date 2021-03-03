@@ -137,6 +137,9 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> trim </th> <td> returns the trimmed string </td> <td> <b>trim(</b>name<b>)</b> </td> </tr>
 </table>
 
+## Configuration
+You may want to customize the behavior of the different processes taking place. For now, you are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. Advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the abilty to add custom functions and much more.
+
 ## Contributing
 Ideas and pull requests are always welcome.
 
