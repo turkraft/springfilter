@@ -4,8 +4,8 @@ import com.turkraft.springfilter.token.LiteralMatcher.ILiteral;
 
 public enum Comparator implements IToken, ILiteral {
 
-  EQUAL(":", Object.class), NOT_EQUAL("!", Object.class), LIKE("~",
-      String.class), GREATER_THAN_OR_EQUAL(">:", Comparable.class), GREATER_THAN(">",
+  LIKE("~", String.class), EQUAL(":", Object.class), NOT_EQUAL("!",
+      Object.class), GREATER_THAN_OR_EQUAL(">:", Comparable.class), GREATER_THAN(">",
           Comparable.class), LESS_THAN_OR_EQUAL("<:", Comparable.class), LESS_THAN("<",
               Comparable.class), IN("in", "^in(?=\\s*\\()", Comparable.class), NULL("is null",
                   "^is\\s*null(?=\\s|\\)|$)"), NOT_NULL("is not null",
