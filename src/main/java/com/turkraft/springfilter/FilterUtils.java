@@ -2,9 +2,11 @@ package com.turkraft.springfilter;
 
 import java.util.Map;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
+import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 
 public class FilterUtils {
 
@@ -23,12 +25,18 @@ public class FilterUtils {
 
     for (String field : fields) {
 
-      if (path instanceof PluralAttributePath) { // = relation
+      if (path instanceof PluralAttributePath || path instanceof SingularAttributePath) {
         if (!joins.containsKey(previous)) {
-          joins.put(previous, table.join(previous));
+          if (path instanceof PluralAttributePath) {
+            joins.put(previous, table.join(previous));
+          } else {
+            joins.put(previous, table.join(previous, JoinType.LEFT));
+          }
         }
         path = joins.get(previous).get(field);
-      } else {
+      }
+
+      else {
         path = path.get(field);
       }
 
