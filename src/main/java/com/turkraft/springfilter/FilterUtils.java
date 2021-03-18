@@ -1,10 +1,12 @@
 package com.turkraft.springfilter;
 
 import java.util.Map;
+import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Attribute.PersistentAttributeType;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 
@@ -17,33 +19,38 @@ public class FilterUtils {
       Map<String, Join<Object, Object>> joins,
       String fieldPath) {
 
+    if (!fieldPath.contains(".")) {
+      return table.get(fieldPath);
+    }
+
     Path<?> path = table;
+    From<?, ?> from = table;
 
-    String[] fields = fieldPath.contains(".") ? fieldPath.split("\\.") : new String[] {fieldPath};
+    String[] fields = fieldPath.split("\\.");
 
-    String previous = null;
+    String chain = null;
 
     for (String field : fields) {
 
-      if (path instanceof PluralAttributePath || path instanceof SingularAttributePath) {
-        if (!joins.containsKey(previous)) {
-          if (path instanceof PluralAttributePath) {
-            joins.put(previous, table.join(previous));
-          } else {
-            joins.put(previous, table.join(previous, JoinType.LEFT));
-          }
-        }
-        path = joins.get(previous).get(field);
-      }
+      path = from.get(field);
 
-      else {
-        path = path.get(field);
-      }
-
-      if (previous == null) {
-        previous = field;
+      if (chain == null) {
+        chain = field;
       } else {
-        previous += "." + field;
+        chain += "." + field;
+      }
+
+      JoinType join = path instanceof PluralAttributePath ? JoinType.INNER
+          : (path instanceof SingularAttributePath && ((SingularAttributePath<?>) path)
+              .getAttribute().getPersistentAttributeType() != PersistentAttributeType.BASIC
+                  ? JoinType.LEFT
+                  : null);
+
+      if (join != null) {
+        if (!joins.containsKey(chain)) {
+          joins.put(chain, from.join(field, join));
+        }
+        from = joins.get(chain);
       }
 
     }
