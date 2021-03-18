@@ -186,4 +186,10 @@ public class ApplicationTest {
         e -> e.getPayslips().size() == employee.getPayslips().size());
   }
 
+  @Test
+  public void nestedFieldsTest() {
+    validate(String.format("manager.company.id : company.id"),
+        e -> e.getManager().getCompany().getId().equals(e.getCompany().getId()));
+  }
+
 }
