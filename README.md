@@ -22,6 +22,8 @@ Your API will gain a full featured search functionality. You don't work with API
 
 > :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
 
+> ℹ️ You may also apply multiple sortings using the query parameter `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
+
 ## Installation
 
 ```xml
@@ -138,7 +140,10 @@ A function is characterized by its name (case insensitive) followed by parenthes
 </table>
 
 ## Configuration
-You may want to customize the behavior of the different processes taking place. For now, you are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. Advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
+You may want to customize the behavior of the different processes taking place. For now, you can only change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
+
+### Date format
+You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`
 
 ## Contributing
 Ideas and pull requests are always welcome.
