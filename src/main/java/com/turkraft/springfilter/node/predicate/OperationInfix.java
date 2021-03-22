@@ -59,7 +59,7 @@ public class OperationInfix extends Operation {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
 
     Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
     Expression<?> rightExpression =

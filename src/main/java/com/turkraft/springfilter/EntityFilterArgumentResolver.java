@@ -24,24 +24,37 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
       NativeWebRequest nativeWebRequest,
       WebDataBinderFactory webDataBinderFactory) throws Exception {
 
+    EntityFilter entityFilter = methodParameter.getParameterAnnotation(EntityFilter.class);
+
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        nativeWebRequest.getParameterValues(
-            methodParameter.getParameterAnnotation(EntityFilter.class).parameterName()));
+        entityFilter.filterParameterName() != null
+            ? nativeWebRequest.getParameterValues(entityFilter.filterParameterName())
+            : null,
+        entityFilter.sortParameterName() != null
+            ? nativeWebRequest.getParameterValues(entityFilter.sortParameterName())
+            : null);
 
   }
 
-  private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
-
-    if (inputs == null || inputs.length == 0) {
-      return null;
-    }
+  private <T> Specification<?> getSpecification(
+      Class<?> specificationClass,
+      String[] filterInputs,
+      String[] orderInputs) {
 
     Specification<T> result = null;
 
-    for (String input : inputs) {
-      if (input.trim().length() > 0) {
-        result = new FilterSpecification<T>(input).and(result);
+    if (filterInputs != null && filterInputs.length > 0) {
+
+      for (String input : filterInputs) {
+        if (input.trim().length() > 0) {
+          result = new FilterSpecification<T>(input).and(result);
+        }
       }
+
+    }
+
+    if (orderInputs != null && orderInputs.length > 0) {
+      result = new FilterSpecification<T>("", String.join(",", orderInputs)).and(result);
     }
 
     return result;

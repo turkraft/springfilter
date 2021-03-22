@@ -31,7 +31,7 @@ public class Filter implements IExpression {
       javax.persistence.criteria.Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
     return (Predicate) getBody().generate(root, criteriaQuery, criteriaBuilder, joins);
   }
 

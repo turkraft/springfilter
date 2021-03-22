@@ -32,7 +32,7 @@ public class Field implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
     return (Path<Object>) FilterUtils.getDatabasePath(root, joins, name);
   }
 
