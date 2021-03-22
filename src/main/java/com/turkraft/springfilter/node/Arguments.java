@@ -41,7 +41,7 @@ public class Arguments implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
     throw new InvalidQueryException("Arguments can't be directly generated");
   }
 

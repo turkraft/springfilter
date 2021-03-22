@@ -26,22 +26,31 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
         nativeWebRequest.getParameterValues(
-            methodParameter.getParameterAnnotation(EntityFilter.class).parameterName()));
+            methodParameter.getParameterAnnotation(EntityFilter.class).filterParameterName()),
+        nativeWebRequest.getParameterValues(
+            methodParameter.getParameterAnnotation(EntityFilter.class).sortParameterName()));
 
   }
 
-  private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
-
-    if (inputs == null || inputs.length == 0) {
-      return null;
-    }
+  private <T> Specification<?> getSpecification(
+      Class<?> specificationClass,
+      String[] filterInputs,
+      String[] orderInputs) {
 
     Specification<T> result = null;
 
-    for (String input : inputs) {
-      if (input.trim().length() > 0) {
-        result = new FilterSpecification<T>(input).and(result);
+    if (filterInputs != null && filterInputs.length > 0) {
+
+      for (String input : filterInputs) {
+        if (input.trim().length() > 0) {
+          result = new FilterSpecification<T>(input).and(result);
+        }
       }
+
+    }
+
+    if (orderInputs != null && orderInputs.length > 0) {
+      result = new FilterSpecification<T>("", String.join(",", orderInputs)).and(result);
     }
 
     return result;

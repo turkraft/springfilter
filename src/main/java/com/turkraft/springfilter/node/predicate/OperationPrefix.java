@@ -44,7 +44,7 @@ public class OperationPrefix extends Operation {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
 
     Expression<?> rightExpression =
         getRight().generate(root, criteriaQuery, criteriaBuilder, joins);

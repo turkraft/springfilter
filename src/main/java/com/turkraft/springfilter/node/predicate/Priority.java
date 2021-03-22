@@ -45,7 +45,7 @@ public class Priority implements IExpression {
       javax.persistence.criteria.Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
     return getBody().generate(root, criteriaQuery, criteriaBuilder, joins);
   }
 

@@ -61,7 +61,7 @@ public class ConditionInfix extends Condition {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
 
     if (getComparator() == Comparator.IN) { // TODO: 'in' should be a different node
       return inCondition(root, criteriaQuery, criteriaBuilder, joins);
@@ -150,7 +150,7 @@ public class ConditionInfix extends Condition {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<Object, Object>> joins) {
+      Map<String, Join<?, ?>> joins) {
 
     if ((getLeft() instanceof Input)) {
       throw new InvalidQueryException(
