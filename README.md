@@ -6,6 +6,8 @@ Your API will gain a full featured search functionality. You don't work with API
 ## Example
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
+> You may also apply sortings using `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
+
 ```java
 /* Entity used in the query above */
 @Entity public class Car {
@@ -21,8 +23,6 @@ Your API will gain a full featured search functionality. You don't work with API
 ```
 
 > :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
-
-> ℹ️ You may also apply multiple sortings using the query parameter `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
 
 ## Installation
 
