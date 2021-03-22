@@ -24,11 +24,15 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
       NativeWebRequest nativeWebRequest,
       WebDataBinderFactory webDataBinderFactory) throws Exception {
 
+    EntityFilter entityFilter = methodParameter.getParameterAnnotation(EntityFilter.class);
+
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        nativeWebRequest.getParameterValues(
-            methodParameter.getParameterAnnotation(EntityFilter.class).filterParameterName()),
-        nativeWebRequest.getParameterValues(
-            methodParameter.getParameterAnnotation(EntityFilter.class).sortParameterName()));
+        entityFilter.filterParameterName() != null
+            ? nativeWebRequest.getParameterValues(entityFilter.filterParameterName())
+            : null,
+        entityFilter.sortParameterName() != null
+            ? nativeWebRequest.getParameterValues(entityFilter.sortParameterName())
+            : null);
 
   }
 
