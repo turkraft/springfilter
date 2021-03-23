@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.node.predicate;
 
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
@@ -9,13 +8,11 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
 import com.turkraft.springfilter.token.Comparator;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -67,8 +64,6 @@ public class ConditionInfix extends Condition {
       return inCondition(root, criteriaQuery, criteriaBuilder, joins);
     }
 
-    // crazy stuff going on here
-
     if (left instanceof Input && right instanceof Input) {
       throw new InvalidQueryException("Left and right expressions of the comparator "
           + getComparator().getLiteral() + " can't be both inputs");
@@ -93,21 +88,6 @@ public class ConditionInfix extends Condition {
       leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
       rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
     }
-
-    if (!getComparator().getFieldType().isAssignableFrom(leftExpression.getJavaType())
-        || !getComparator().getFieldType().isAssignableFrom(rightExpression.getJavaType())) {
-      throw new InvalidQueryException("The comparator " + getComparator().getLiteral()
-          + " only supports type " + getComparator().getFieldType());
-    }
-
-    // if (!leftExpression.getJavaType().equals(rightExpression.getJavaType())) {
-    // // maybe this exception is not needed, JPA already throws an exception
-    // throw new InvalidQueryException(
-    // "Expressions of different types are not supported in comparator " +
-    // getComparator().getLiteral());
-    // }
-
-    // told u
 
     switch (getComparator()) {
 

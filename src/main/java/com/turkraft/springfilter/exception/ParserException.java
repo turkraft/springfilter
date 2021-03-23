@@ -1,6 +1,6 @@
 package com.turkraft.springfilter.exception;
 
-public abstract class ParserException extends RuntimeException {
+public abstract class ParserException extends SpringFilterException {
 
   private static final long serialVersionUID = 1L;
 

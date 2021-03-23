@@ -4,41 +4,44 @@ import com.turkraft.springfilter.token.LiteralMatcher.ILiteral;
 
 public enum Comparator implements IToken, ILiteral {
 
-  LIKE("~", String.class), EQUAL(":", Object.class), NOT_EQUAL("!",
-      Object.class), GREATER_THAN_OR_EQUAL(">:", Comparable.class), GREATER_THAN(">",
-          Comparable.class), LESS_THAN_OR_EQUAL("<:", Comparable.class), LESS_THAN("<",
-              Comparable.class), IN("in", "^in(?=\\s*\\()", Comparable.class), NULL("is null",
-                  "^is\\s*null(?=\\s|\\)|$)"), NOT_NULL("is not null",
-                      "^is\\s*not\\s*null(?=\\s|\\)|$)"), EMPTY("is empty",
-                          "^is\\s*empty(?=\\s|\\)|$)"), NOT_EMPTY("is not empty",
-                              "^is\\s*not\\s*empty(?=\\s|\\)|$)");
+  LIKE("~", true),
+
+  EQUAL(":", true),
+
+  NOT_EQUAL("!", true),
+
+  GREATER_THAN_OR_EQUAL(">:", true),
+
+  GREATER_THAN(">", true),
+
+  LESS_THAN_OR_EQUAL("<:", true),
+
+  LESS_THAN("<", true),
+
+  IN("in", "^in(?=\\s*\\()", true),
+
+  NULL("is null", "^is\\s*null(?=\\s|\\)|$)", false),
+
+  NOT_NULL("is not null", "^is\\s*not\\s*null(?=\\s|\\)|$)", false),
+
+  EMPTY("is empty", "^is\\s*empty(?=\\s|\\)|$)", false),
+
+  NOT_EMPTY("is not empty", "^is\\s*not\\s*empty(?=\\s|\\)|$)", false);
 
   private final String literal;
   private final String regex;
-  private final Class<?> fieldType;
+  private final boolean needsInput;
 
-  Comparator(String literal, String regex, Class<?> fieldType) {
+  Comparator(String literal, String regex, boolean needsInput) {
     this.literal = literal;
     this.regex = regex;
-    this.fieldType = fieldType;
+    this.needsInput = needsInput;
   }
 
-  Comparator(String literal, Class<?> fieldType) {
-    this.literal = literal;
-    this.fieldType = fieldType;
-    this.regex = null;
-  }
-
-  Comparator(String literal, String regex) {
-    this.literal = literal;
-    this.regex = regex;
-    this.fieldType = null;
-  }
-
-  Comparator(String literal) {
+  Comparator(String literal, boolean needsInput) {
     this.literal = literal;
     this.regex = null;
-    this.fieldType = null;
+    this.needsInput = needsInput;
   }
 
   @Override
@@ -47,16 +50,12 @@ public enum Comparator implements IToken, ILiteral {
   }
 
   public boolean needsInput() {
-    return fieldType != null;
+    return needsInput;
   }
 
   @Override
   public String getRegex() {
     return regex;
-  }
-
-  public Class<?> getFieldType() {
-    return fieldType;
   }
 
 }
