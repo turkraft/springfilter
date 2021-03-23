@@ -1,6 +1,6 @@
 package com.turkraft.springfilter.exception;
 
-public abstract class TokenizerException extends RuntimeException {
+public abstract class TokenizerException extends SpringFilterException {
 
   private static final long serialVersionUID = 1L;
 
