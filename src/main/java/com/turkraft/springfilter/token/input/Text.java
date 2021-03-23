@@ -27,7 +27,7 @@ public class Text implements IInput {
       return getValue();
     }
 
-    if (Character.class.isAssignableFrom(klass)) {
+    if (char.class.isAssignableFrom(klass) || Character.class.isAssignableFrom(klass)) {
       if (getValue() == null || getValue().length() != 1) {
         throw new ClassCastException("The value '" + getValue() + "' could not be cast to a char");
       }
