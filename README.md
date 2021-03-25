@@ -146,6 +146,9 @@ You may want to customize the behavior of the different processes taking place. 
 ### Date format
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`
 
+## Notes
+When using `@EntityFilter`, sorting is automatically done. The logic behind that is to support sorting nested fields, and to avoid duplicated joins if sorting was to be done externally. If you still want to manually sort or disable sorting completely, you may do it with `@EntityFilter(sortParameterName = "")`
+
 ## Contributing
 Ideas and pull requests are always welcome.
 
