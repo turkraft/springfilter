@@ -6,7 +6,7 @@ Your API will gain a full featured search functionality. You don't work with API
 ## Example
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
-> You may also apply sortings using `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
+> You may also apply sorting using `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
 
 ```java
 /* Entity used in the query above */
