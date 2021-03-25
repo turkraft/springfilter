@@ -27,10 +27,10 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
     EntityFilter entityFilter = methodParameter.getParameterAnnotation(EntityFilter.class);
 
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        entityFilter.filterParameterName() != null
+        !entityFilter.filterParameterName().isEmpty()
             ? nativeWebRequest.getParameterValues(entityFilter.filterParameterName())
             : null,
-        entityFilter.sortParameterName() != null
+        !entityFilter.sortParameterName().isEmpty()
             ? nativeWebRequest.getParameterValues(entityFilter.sortParameterName())
             : null);
 
