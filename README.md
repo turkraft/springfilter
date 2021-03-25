@@ -40,11 +40,12 @@ Your API will gain a full featured search functionality. You don't work with API
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web** and **spring-webmvc**
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@EntityFilter Specification<Entity> spec) {
-  return repo.findAll(spec);
+public List<Entity> search(@EntityFilter Specification<Entity> spec, Pageable page) {
+  return repo.findAll(spec, page);
 }
 ```
-
+> The repository should implement `JpaSpecificationExecutor` in order to execute Spring's Specification, `SimpleJpaRepository` is a well known implementation. You can remove the `Pageable` argument if pagination is not needed.
+> 
 ### b. Specification
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
 ```java
