@@ -28,7 +28,7 @@ public class Nothing implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins, Object payload) {
     return null;
   }
 

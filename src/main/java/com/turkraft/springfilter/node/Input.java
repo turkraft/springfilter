@@ -39,7 +39,8 @@ public class Input implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
     throw new InvalidQueryException(
         "An input can't be directly generated, you need to use the method which specifies the target type");
   }
@@ -49,6 +50,7 @@ public class Input implements IExpression {
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins,
+      Object payload,
       Class<?> targetClass) {
     return criteriaBuilder.literal(value.getValueAs(targetClass));
   }

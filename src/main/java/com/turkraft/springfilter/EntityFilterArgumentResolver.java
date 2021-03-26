@@ -1,11 +1,14 @@
 package com.turkraft.springfilter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import com.turkraft.springfilter.node.IExpression;
 
 public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -45,16 +48,17 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
     if (filterInputs != null && filterInputs.length > 0) {
 
+      Collection<IExpression> filters = new ArrayList<IExpression>();
+
       for (String input : filterInputs) {
         if (input.trim().length() > 0) {
-          result = new FilterSpecification<T>(input).and(result);
+          filters.add(FilterParser.parse(input.trim()));
         }
       }
 
-    }
+      return new FilterSpecification<T>(FilterQueryBuilder.and(filters),
+          orderInputs != null && orderInputs.length > 0 ? String.join(",", orderInputs) : null);
 
-    if (orderInputs != null && orderInputs.length > 0) {
-      result = new FilterSpecification<T>("", String.join(",", orderInputs)).and(result);
     }
 
     return result;

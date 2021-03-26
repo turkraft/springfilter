@@ -31,10 +31,30 @@ public class Filter implements IExpression {
       javax.persistence.criteria.Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
-    return (Predicate) getBody().generate(root, criteriaQuery, criteriaBuilder, joins);
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    return (Predicate) getBody().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
   }
 
+  @Override
+  public Predicate generate(
+      javax.persistence.criteria.Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins) {
+    return generate(root, criteriaQuery, criteriaBuilder, joins, null);
+  }
+
+  @Override
+  public Predicate generate(
+      javax.persistence.criteria.Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Object payload) {
+    return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>(), payload);
+  }
+
+  @Override
   public Predicate generate(
       javax.persistence.criteria.Root<?> root,
       CriteriaQuery<?> criteriaQuery,

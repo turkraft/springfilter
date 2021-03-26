@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.node;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,6 +22,30 @@ public interface IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins);
+      Map<String, Join<?, ?>> joins,
+      Object payload);
+
+  default javax.persistence.criteria.Expression<?> generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins) {
+    return generate(root, criteriaQuery, criteriaBuilder, joins, null);
+  }
+
+  default javax.persistence.criteria.Expression<?> generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Object payload) {
+    return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>(), payload);
+  }
+
+  default javax.persistence.criteria.Expression<?> generate(
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>());
+  }
 
 }

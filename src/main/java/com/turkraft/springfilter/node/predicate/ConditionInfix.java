@@ -58,10 +58,11 @@ public class ConditionInfix extends Condition {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
 
     if (getComparator() == Comparator.IN) { // TODO: 'in' should be a different node
-      return inCondition(root, criteriaQuery, criteriaBuilder, joins);
+      return inCondition(root, criteriaQuery, criteriaBuilder, joins, payload);
     }
 
     if (left instanceof Input && right instanceof Input) {
@@ -73,20 +74,20 @@ public class ConditionInfix extends Condition {
     Expression<?> rightExpression = null;
 
     if (getRight() instanceof Input) {
-      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
       rightExpression = ((Input) getRight()).generate(root, criteriaQuery, criteriaBuilder, joins,
-          leftExpression.getJavaType());
+          payload, leftExpression.getJavaType());
     }
 
     else if (getLeft() instanceof Input) {
-      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
       leftExpression = ((Input) getLeft()).generate(root, criteriaQuery, criteriaBuilder, joins,
-          rightExpression.getJavaType());
+          payload, rightExpression.getJavaType());
     }
 
     else {
-      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
-      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+      leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
+      rightExpression = getRight().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
     }
 
     switch (getComparator()) {
@@ -130,7 +131,8 @@ public class ConditionInfix extends Condition {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
 
     if ((getLeft() instanceof Input)) {
       throw new InvalidQueryException(
@@ -142,7 +144,7 @@ public class ConditionInfix extends Condition {
           "Right expression of the " + getComparator().getLiteral() + " should be arguments");
     }
 
-    Expression<?> left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
 
     In<Object> in = criteriaBuilder.in(left);
 
@@ -152,11 +154,12 @@ public class ConditionInfix extends Condition {
 
       if (argument instanceof Input) {
         expression = ((Input) argument).generate(root, criteriaQuery, criteriaBuilder, joins,
-            left.getJavaType());
+            payload, left.getJavaType());
       }
 
       else {
-        expression = in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins));
+        expression =
+            in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins, payload));
       }
 
       // if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {

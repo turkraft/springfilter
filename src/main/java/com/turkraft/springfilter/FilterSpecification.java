@@ -20,6 +20,8 @@ public class FilterSpecification<T> implements Specification<T> {
 
   private final IExpression filter;
 
+  private Object payload;
+
   public FilterSpecification(String filterInput, String orderInput) {
     Objects.requireNonNull(filterInput);
     this.filterInput = filterInput;
@@ -28,17 +30,18 @@ public class FilterSpecification<T> implements Specification<T> {
   }
 
   public FilterSpecification(String filterInput) {
-    Objects.requireNonNull(filterInput);
-    this.filterInput = filterInput;
-    this.orderInput = null;
-    this.filter = null;
+    this(filterInput, null);
   }
 
-  public FilterSpecification(IExpression filter) {
+  public FilterSpecification(IExpression filter, String orderInput) {
     Objects.requireNonNull(filter);
     this.filter = filter;
     this.filterInput = null;
-    this.orderInput = null;
+    this.orderInput = orderInput;
+  }
+
+  public FilterSpecification(IExpression filter) {
+    this(filter, null);
   }
 
   @Override
@@ -47,27 +50,37 @@ public class FilterSpecification<T> implements Specification<T> {
       CriteriaQuery<?> query,
       CriteriaBuilder criteriaBuilder) {
 
+    Predicate predicate = null;
+
+    Map<String, Join<?, ?>> joins = new HashMap<String, Join<?, ?>>();
+
     if (filterInput != null) {
-
-      Map<String, Join<?, ?>> joins = new HashMap<String, Join<?, ?>>();
-
-      Predicate predicate = !filterInput.trim().isEmpty()
-          ? FilterParser.parse(filterInput).generate(root, query, criteriaBuilder, joins)
+      predicate = !filterInput.trim().isEmpty()
+          ? FilterParser.parse(filterInput).generate(root, query, criteriaBuilder, joins, payload)
           : null;
-
-      if (orderInput != null) {
-        query.orderBy(FilterUtils.generateOrderBys(root, criteriaBuilder, joins, orderInput));
-      }
-
-      return predicate;
-
+    } else {
+      predicate = (Predicate) filter.generate(root, query, criteriaBuilder, payload);
     }
 
-    return (Predicate) filter.generate(root, query, criteriaBuilder, new HashMap<>());
+    if (orderInput != null) {
+      query
+          .orderBy(FilterUtils.generateOrderBys(root, criteriaBuilder, joins, payload, orderInput));
+    }
+
+    return predicate;
+
   }
 
   public String getFilterInput() {
     return filterInput;
+  }
+
+  public Object getPayload() {
+    return payload;
+  }
+
+  public void setPayload(Object payload) {
+    this.payload = payload;
   }
 
 }

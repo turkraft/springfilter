@@ -1,15 +1,12 @@
 package com.turkraft.springfilter.node.predicate;
 
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-
 import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.IExpression;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -45,8 +42,9 @@ public class Priority implements IExpression {
       javax.persistence.criteria.Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
-    return getBody().generate(root, criteriaQuery, criteriaBuilder, joins);
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    return getBody().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
   }
 
 }
