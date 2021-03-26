@@ -48,10 +48,6 @@ public class FilterUtils {
       String fieldPath,
       BiFunction<Path<?>, Object, Boolean> authorizer) {
 
-    if (payload == null) {
-      System.out.println("null");
-    }
-
     if (!fieldPath.contains(".")) {
       return authorize(authorizer, table.get(fieldPath), payload, fieldPath);
     }
