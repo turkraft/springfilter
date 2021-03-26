@@ -1,19 +1,15 @@
 package com.turkraft.springfilter.node.predicate;
 
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.springframework.expression.ExpressionException;
-
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -44,10 +40,11 @@ public class OperationPrefix extends Operation {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
 
     Expression<?> rightExpression =
-        getRight().generate(root, criteriaQuery, criteriaBuilder, joins);
+        getRight().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
 
     if (!rightExpression.getJavaType().equals(Boolean.class)) {
       throw new ExpressionException("Right side expression of the prefix operator "

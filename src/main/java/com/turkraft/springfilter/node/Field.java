@@ -6,6 +6,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.FilterUtils;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -32,8 +33,10 @@ public class Field implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
-    return (Path<Object>) FilterUtils.getDatabasePath(root, joins, name);
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    return (Path<Object>) FilterUtils.getDatabasePath(root, joins, payload, name,
+        FilterConfig.FILTERING_AUTHORIZATION);
   }
 
 }

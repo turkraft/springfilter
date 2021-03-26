@@ -2,19 +2,15 @@ package com.turkraft.springfilter.node.predicate;
 
 import java.util.Collection;
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
-
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -46,9 +42,11 @@ public class ConditionPostfix extends Condition {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
 
-    Expression<?> leftExpression = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> leftExpression =
+        getLeft().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
 
     switch (getComparator()) {
 

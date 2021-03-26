@@ -26,8 +26,17 @@ public class FilterCompiler {
       Filter ast,
       Root<?> root,
       CriteriaQuery<?> query,
+      CriteriaBuilder criteriaBuilder,
+      Object payload) {
+    return ast.generate(root, query, criteriaBuilder, payload);
+  }
+
+  public static Predicate generate(
+      Filter ast,
+      Root<?> root,
+      CriteriaQuery<?> query,
       CriteriaBuilder criteriaBuilder) {
-    return ast.generate(root, query, criteriaBuilder);
+    return generate(ast, root, query, criteriaBuilder, null);
   }
 
   public static String compile(String input) throws ParserException, TokenizerException {
@@ -43,8 +52,17 @@ public class FilterCompiler {
       String input,
       Root<?> root,
       CriteriaQuery<?> query,
+      CriteriaBuilder criteriaBuilder,
+      Object payload) throws ParserException, TokenizerException {
+    return generate(FilterParser.parse(input), root, query, criteriaBuilder, payload);
+  }
+
+  public static Predicate compile(
+      String input,
+      Root<?> root,
+      CriteriaQuery<?> query,
       CriteriaBuilder criteriaBuilder) throws ParserException, TokenizerException {
-    return generate(FilterParser.parse(input), root, query, criteriaBuilder);
+    return compile(input, root, query, criteriaBuilder, null);
   }
 
 }

@@ -42,7 +42,8 @@ public class Function implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
 
     List<Pair<IExpression, Expression<?>>> expressions = new LinkedList<>();
 
@@ -53,8 +54,8 @@ public class Function implements IExpression {
       if (argument instanceof Input) {
         expressions.add(new Pair(argument, null));
       } else {
-        expressions.add(
-            new Pair(argument, argument.generate(root, criteriaQuery, criteriaBuilder, joins)));
+        expressions.add(new Pair(argument,
+            argument.generate(root, criteriaQuery, criteriaBuilder, joins, payload)));
       }
     }
 
