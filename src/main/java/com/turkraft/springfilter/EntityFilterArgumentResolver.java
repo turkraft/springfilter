@@ -30,34 +30,27 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
     EntityFilter entityFilter = methodParameter.getParameterAnnotation(EntityFilter.class);
 
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        !entityFilter.filterParameterName().isEmpty()
-            ? nativeWebRequest.getParameterValues(entityFilter.filterParameterName())
-            : null,
-        !entityFilter.sortParameterName().isEmpty()
-            ? nativeWebRequest.getParameterValues(entityFilter.sortParameterName())
+        !entityFilter.parameterName().isEmpty()
+            ? nativeWebRequest.getParameterValues(entityFilter.parameterName())
             : null);
 
   }
 
-  private <T> Specification<?> getSpecification(
-      Class<?> specificationClass,
-      String[] filterInputs,
-      String[] orderInputs) {
+  private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
     Specification<T> result = null;
 
-    if (filterInputs != null && filterInputs.length > 0) {
+    if (inputs != null && inputs.length > 0) {
 
       Collection<IExpression> filters = new ArrayList<IExpression>();
 
-      for (String input : filterInputs) {
+      for (String input : inputs) {
         if (input.trim().length() > 0) {
           filters.add(FilterParser.parse(input.trim()));
         }
       }
 
-      return new FilterSpecification<T>(FilterQueryBuilder.and(filters),
-          orderInputs != null && orderInputs.length > 0 ? String.join(",", orderInputs) : null);
+      return new FilterSpecification<T>(FilterQueryBuilder.and(filters));
 
     }
 
