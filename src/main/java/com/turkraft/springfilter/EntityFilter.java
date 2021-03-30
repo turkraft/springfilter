@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 public @interface EntityFilter {
 
-  String filterParameterName() default "filter";
-
-  String sortParameterName() default "sort";
+  String parameterName() default "filter";
 
 }

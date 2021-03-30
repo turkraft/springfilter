@@ -1,16 +1,11 @@
 package com.turkraft.springfilter;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Attribute.PersistentAttributeType;
@@ -87,58 +82,6 @@ public class FilterUtils {
     }
 
     return path;
-
-  }
-
-  public static List<Order> generateOrderBys(
-      Root<?> table,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins,
-      Object payload,
-      String orderInput) {
-
-    if (orderInput == null || orderInput.trim().isEmpty()) {
-      return Collections.emptyList();
-    }
-
-    List<Order> orders = new ArrayList<Order>();
-
-    String[] fields = orderInput.split(",");
-
-    for (String field : fields) {
-      Order order = generateOrderBy(table, criteriaBuilder, joins, payload, field);
-      if (order != null) {
-        orders.add(order);
-      }
-    }
-
-    return orders;
-
-  }
-
-  private static Order generateOrderBy(
-      Root<?> table,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins,
-      Object payload,
-      String orderInput) {
-
-    orderInput = orderInput.trim();
-
-    boolean asc = true;
-
-    if (orderInput.startsWith("-")) {
-      asc = false;
-      orderInput = orderInput.substring(1).trim();
-    }
-
-    if (asc) {
-      return criteriaBuilder.asc(
-          getDatabasePath(table, joins, payload, orderInput, FilterConfig.SORTING_AUTHORIZATION));
-    }
-
-    return criteriaBuilder.desc(
-        getDatabasePath(table, joins, payload, orderInput, FilterConfig.SORTING_AUTHORIZATION));
 
   }
 
