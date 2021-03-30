@@ -6,8 +6,6 @@ Your API will gain a full featured search functionality. You don't work with API
 ## Example
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
-> You may also apply sorting using `sort`, for example: `&sort=name,-brand.id` (where `-` means descending)
-
 ```java
 /* Entity used in the query above */
 @Entity public class Car {
@@ -30,7 +28,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.9.3</version>
+    <version>0.9.4</version>
 </dependency>
 ```
 
@@ -144,10 +142,7 @@ A function is characterized by its name (case insensitive) followed by parenthes
 You may want to customize the behavior of the different processes taking place. For now, you can only change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
 
 ### Date format
-You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`
-
-## Notes
-When using `@EntityFilter`, sorting is automatically done. The logic behind that is to support sorting nested fields, and to avoid duplicated joins if sorting was to be done externally. If you still want to manually sort or disable sorting completely, you may do it with `@EntityFilter(sortParameterName = "")`
+You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
 ## Contributing
 Ideas and pull requests are always welcome.
