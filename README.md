@@ -121,6 +121,8 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized'<b>,</b> 'active'<b>)</b></td> </tr>
 </table>
 
+> Note that the `*` character can also be used instead of `%` when using the `~` comparator
+
 ### Functions
 A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
 <table>
@@ -144,8 +146,11 @@ You may want to customize the behavior of the different processes taking place. 
 ### Date format
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
+## Articles
+* [Easily filter entities in your Spring AP](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+
 ## Contributing
-Ideas and pull requests are always welcome.
+Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
 
 ## License
 Distributed under the [MIT license](LICENSE).
