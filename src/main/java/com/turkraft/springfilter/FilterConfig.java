@@ -17,6 +17,8 @@ public class FilterConfig {
 
   public static BiFunction<Path<?>, Object, Boolean> FILTERING_AUTHORIZATION;
 
+  public static boolean ENABLE_ASTERISK_WITH_LIKE_OPERATOR;
+
   static {
 
     DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
@@ -25,6 +27,8 @@ public class FilterConfig {
     NUMBER_FORMAT.setGroupingUsed(false); // in order to not count commas as part of number
 
     FILTERING_AUTHORIZATION = null;
+
+    ENABLE_ASTERISK_WITH_LIKE_OPERATOR = true;
 
   }
 

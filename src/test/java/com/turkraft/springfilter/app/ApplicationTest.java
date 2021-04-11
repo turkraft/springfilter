@@ -47,6 +47,7 @@ public class ApplicationTest {
     }
 
     for (int i = 0; i < inputResults.size(); i++) {
+      System.out.println(inputResults.get(i).getFirstName());
       Hibernate.initialize(inputResults.get(i).getPayslips());
       assertTrue(predicate.test(inputResults.get(i)));
     }
@@ -125,6 +126,23 @@ public class ApplicationTest {
   public void lessThanOrEqualTest(Employee employee) {
     validate(String.format("salary <: %d", employee.getSalary()),
         e -> e.getSalary() <= employee.getSalary());
+  }
+
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void likeTest(Employee employee) {
+    validate(String.format("firstName ~ '%s'", employee.getFirstName()),
+        e -> e.getFirstName().equals(employee.getFirstName()));
+  }
+
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void likeTest2(Employee employee) {
+    validate(
+        String.format("firstName ~ '*%s*'",
+            employee.getFirstName().substring(1, employee.getFirstName().length() - 1)),
+        e -> e.getFirstName().toUpperCase().contains(employee.getFirstName()
+            .substring(1, employee.getFirstName().length() - 1).toUpperCase()));
   }
 
   @Test

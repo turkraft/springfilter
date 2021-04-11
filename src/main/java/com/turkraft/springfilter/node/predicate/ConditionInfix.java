@@ -8,6 +8,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.IExpression;
@@ -116,6 +117,11 @@ public class ConditionInfix extends Condition {
             (Expression<? extends Comparable>) rightExpression);
 
       case LIKE: {
+        if (FilterConfig.ENABLE_ASTERISK_WITH_LIKE_OPERATOR && getRight() instanceof Input) {
+          return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
+              ((Input) getRight()).getValue().getValueAs(String.class).toString().toUpperCase()
+                  .replace('*', '%'));
+        }
         return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
             criteriaBuilder.upper((Expression<String>) rightExpression));
       }
