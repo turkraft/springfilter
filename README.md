@@ -147,7 +147,7 @@ You may want to customize the behavior of the different processes taking place. 
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
 ## Articles
-* [Easily filter entities in your Spring AP](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+* [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
 
 ## Contributing
 Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
