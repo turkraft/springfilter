@@ -1,4 +1,8 @@
-# [Spring Filter](https://spring-filter.herokuapp.com/)
+<p align="center">
+  <a href="https://github.com/turkraft/spring-filter">
+    <img src="https://i.imgur.com/0otEurv.png" alt="Spring Filter Logo" width="180">
+  </a>
+</p>
 
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I compile a simple syntax to JPA predicates.
