@@ -7,7 +7,7 @@
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I compile a simple syntax to JPA predicates.
 
-## Example
+## Example ([try it live](https://spring-filter.herokuapp.com))
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
