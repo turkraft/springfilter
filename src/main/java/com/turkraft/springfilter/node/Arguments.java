@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -41,7 +42,13 @@ public class Arguments implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins, Object payload) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    throw new InvalidQueryException("Arguments can't be directly generated");
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
     throw new InvalidQueryException("Arguments can't be directly generated");
   }
 

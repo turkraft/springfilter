@@ -8,9 +8,11 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.Arguments;
+import com.turkraft.springfilter.node.Field;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
 import com.turkraft.springfilter.token.Comparator;
@@ -168,17 +170,56 @@ public class ConditionInfix extends Condition {
             in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins, payload));
       }
 
-      // if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
-      // throw new InvalidQueryException(
-      // "Expressions of different types are not supported in comparator " +
-      // getComparator().getLiteral());
-      // }
-
       in.value(expression);
 
     }
 
     return in;
+
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+
+    if (!(getLeft() instanceof Field)) {
+      throw new InvalidQueryException("Left side of infix conditions should be a field");
+    }
+
+    if (!(getRight() instanceof Input)) {
+      throw new InvalidQueryException("Right side of infix conditions should be an input");
+    }
+
+    String key = ((Field) getLeft()).getName();
+    Object input = ((Input) getRight()).getValue().getValue();
+
+    switch (getComparator()) {
+
+      case EQUAL:
+        return com.mongodb.client.model.Filters.eq(key, input);
+
+      case NOT_EQUAL:
+        return com.mongodb.client.model.Filters.ne(key, input);
+
+      case GREATER_THAN:
+        return com.mongodb.client.model.Filters.gt(key, input);
+
+      case GREATER_THAN_OR_EQUAL:
+        return com.mongodb.client.model.Filters.gte(key, input);
+
+      case LESS_THAN:
+        return com.mongodb.client.model.Filters.lt(key, input);
+
+      case LESS_THAN_OR_EQUAL:
+        return com.mongodb.client.model.Filters.lte(key, input);
+
+      case LIKE: {
+        // return Criteria.where(key).m(input);
+      }
+
+      default:
+        throw new InvalidQueryException("Unsupported comparator " + getComparator().getLiteral());
+
+    }
 
   }
 

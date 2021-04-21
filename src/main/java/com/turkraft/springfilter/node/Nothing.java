@@ -6,6 +6,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -28,7 +29,13 @@ public class Nothing implements IExpression {
       Root<?> root,
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins, Object payload) {
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    return null;
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
     return null;
   }
 

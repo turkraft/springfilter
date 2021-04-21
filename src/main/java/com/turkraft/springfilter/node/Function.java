@@ -119,7 +119,7 @@ public class Function implements IExpression {
   }
 
   @Override
-  public Bson generate(Object payload) {
+  public Bson generateBson(Object payload) {
     throw new InvalidQueryException("Unsupported functions");
   }
 

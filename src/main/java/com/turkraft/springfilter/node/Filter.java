@@ -6,6 +6,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
+import org.bson.conversions.Bson;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -60,6 +61,11 @@ public class Filter implements IExpression {
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder) {
     return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>());
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+    return getBody().generateBson(payload);
   }
 
 }
