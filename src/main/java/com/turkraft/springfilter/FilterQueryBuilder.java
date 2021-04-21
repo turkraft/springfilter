@@ -11,6 +11,7 @@ import com.turkraft.springfilter.node.Arguments;
 import com.turkraft.springfilter.node.Field;
 import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.Function;
+import com.turkraft.springfilter.node.FunctionType;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
 import com.turkraft.springfilter.node.Nothing;
@@ -127,9 +128,9 @@ public class FilterQueryBuilder {
     if (value instanceof Date) {
       return input((Date) value);
     }
-    
+
     if (value instanceof Enum) {
-      return input((Enum<?>)value);
+      return input((Enum<?>) value);
     }
 
     throw new UnsupportedOperationException("The value type " + value.getClass().getSimpleName()
@@ -412,7 +413,7 @@ public class FilterQueryBuilder {
         .build();
   }
 
-  public static IExpression function(Function.Type name, List<IExpression> args) {
+  public static IExpression function(FunctionType name, List<IExpression> args) {
     return function(name.name().toLowerCase(), args);
   }
 
@@ -420,12 +421,12 @@ public class FilterQueryBuilder {
     return function(name, args == null ? Collections.emptyList() : Arrays.asList(args));
   }
 
-  public static IExpression function(Function.Type name, IExpression... args) {
+  public static IExpression function(FunctionType name, IExpression... args) {
     return function(name.name().toLowerCase(), args);
   }
 
   public static IExpression absolute(IExpression arg) {
-    return function(Function.Type.ABSOLUTE, arg);
+    return function(FunctionType.ABSOLUTE, arg);
   }
 
   public static IExpression absolute(String field) {
@@ -433,7 +434,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression min(IExpression arg) {
-    return function(Function.Type.MIN, arg);
+    return function(FunctionType.MIN, arg);
   }
 
   public static IExpression min(String field) {
@@ -441,7 +442,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression max(IExpression arg) {
-    return function(Function.Type.MAX, arg);
+    return function(FunctionType.MAX, arg);
   }
 
   public static IExpression max(String field) {
@@ -449,7 +450,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression average(IExpression arg) {
-    return function(Function.Type.AVERAGE, arg);
+    return function(FunctionType.AVERAGE, arg);
   }
 
   public static IExpression average(String field) {
@@ -457,7 +458,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression sum(IExpression arg) {
-    return function(Function.Type.SUM, arg);
+    return function(FunctionType.SUM, arg);
   }
 
   public static IExpression sum(String field) {
@@ -465,7 +466,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression size(IExpression arg) {
-    return function(Function.Type.SIZE, arg);
+    return function(FunctionType.SIZE, arg);
   }
 
   public static IExpression size(String field) {
@@ -473,7 +474,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression length(IExpression arg) {
-    return function(Function.Type.LENGTH, arg);
+    return function(FunctionType.LENGTH, arg);
   }
 
   public static IExpression length(String field) {
@@ -481,7 +482,7 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression trim(IExpression arg) {
-    return function(Function.Type.TRIM, arg);
+    return function(FunctionType.TRIM, arg);
   }
 
   public static IExpression trim(String field) {
@@ -489,15 +490,15 @@ public class FilterQueryBuilder {
   }
 
   public static IExpression currentDate() {
-    return function(Function.Type.CURRENTDATE);
+    return function(FunctionType.CURRENTDATE);
   }
 
   public static IExpression currentTime() {
-    return function(Function.Type.CURRENTTIME);
+    return function(FunctionType.CURRENTTIME);
   }
 
   public static IExpression currentTimestamp() {
-    return function(Function.Type.CURRENTTIMESTAMP);
+    return function(FunctionType.CURRENTTIMESTAMP);
   }
 
   /* HELPERS */

@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.Pair;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import lombok.Data;
@@ -59,10 +60,11 @@ public class Function implements IExpression {
       }
     }
 
-    Type type = Type.getMatch(name, expressions);
+    FunctionType type = FunctionType.getMatch(name, expressions);
 
     if (type == null) {
-      throw new InvalidQueryException("The function " + name + " didn't have any match");
+      throw new InvalidQueryException(
+          "The function " + name + " didn't have any match, input types may be wrong");
     }
 
     // the following method is used to get the expression of the argument at the given index
@@ -70,7 +72,7 @@ public class Function implements IExpression {
     java.util.function.Function<Integer, Expression<?>> getter = (index) -> {
       if (expressions.get(index).getKey() instanceof Input) {
         return ((Input) expressions.get(index).getKey()).generate(root, criteriaQuery,
-            criteriaBuilder, joins, type.argumentTypes[index]);
+            criteriaBuilder, joins, type.getArgumentTypes()[index]);
       }
       return expressions.get(index).getValue();
     };
@@ -116,62 +118,9 @@ public class Function implements IExpression {
 
   }
 
-  public enum Type {
-
-    ABSOLUTE(Number.class), AVERAGE(Number.class), MIN(Number.class), MAX(Number.class), SUM(
-        Number.class), SIZE(Collection.class), LENGTH(
-            String.class), TRIM(String.class), CURRENTTIME, CURRENTDATE, CURRENTTIMESTAMP;
-
-    private final Class<?>[] argumentTypes;
-
-    Type(Class<?>... argumentTypes) {
-      this.argumentTypes = argumentTypes;
-    }
-
-    public Class<?>[] getArgumentTypes() {
-      return argumentTypes;
-    }
-
-    public boolean matches(String name, List<Pair<IExpression, Expression<?>>> expressions) {
-
-      if (!name().equalsIgnoreCase(name)) {
-        return false;
-      }
-
-      if (argumentTypes.length > expressions.size()) {
-        throw new InvalidQueryException(
-            "The function " + name + " should have " + argumentTypes.length + " arguments");
-      }
-
-      for (int i = 0; i < argumentTypes.length; i++) {
-
-        if (expressions.get(i).getKey() instanceof Input) {
-          if (!(((Input) expressions.get(i).getKey()).getValue().canBe(argumentTypes[i]))) {
-            return false;
-          }
-        } else if (!argumentTypes[i]
-            .isAssignableFrom(expressions.get(i).getValue().getJavaType())) {
-          return false;
-        }
-
-      }
-
-      return true;
-
-    }
-
-    public static Type getMatch(String name, List<Pair<IExpression, Expression<?>>> expressions) {
-
-      for (Type type : values()) {
-        if (type.matches(name, expressions)) {
-          return type;
-        }
-      }
-
-      return null;
-
-    }
-
+  @Override
+  public Bson generate(Object payload) {
+    throw new InvalidQueryException("Unsupported functions");
   }
 
 }
