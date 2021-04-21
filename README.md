@@ -1,9 +1,15 @@
-# [Spring Filter](https://spring-filter.herokuapp.com/)
+# Spring Filter
+
+<p align="center">
+  <a href="https://github.com/turkraft/spring-filter">
+    <img src="https://i.imgur.com/0otEurv.png" alt="Spring Filter Logo" width="180">
+  </a>
+</p>
 
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I compile a simple syntax to JPA predicates.
 
-## Example
+## Example ([try it live](https://spring-filter.herokuapp.com))
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
@@ -28,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.9.4</version>
+    <version>0.9.5</version>
 </dependency>
 ```
 
@@ -98,7 +104,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td>and</th> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > '1-1-2000'</td> </tr>
-  <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ 'hello' <b>or</b> name ~ 'world'</td> </tr>
+  <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ '%hello%' <b>or</b> name ~ '%world%'</td> </tr>
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
 </table>
 
@@ -120,6 +126,8 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>is not empty</th> <td>checks if the (collection) expression is not empty</td> <td>children <b>is not empty</b></td> </tr>
   <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized'<b>,</b> 'active'<b>)</b></td> </tr>
 </table>
+
+> Note that the `*` character can also be used instead of `%` when using the `~` comparator
 
 ### Functions
 A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
@@ -144,8 +152,11 @@ You may want to customize the behavior of the different processes taking place. 
 ### Date format
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
+## Articles
+* [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+
 ## Contributing
-Ideas and pull requests are always welcome.
+Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
 
 ## License
 Distributed under the [MIT license](LICENSE).
