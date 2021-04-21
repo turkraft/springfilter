@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import com.turkraft.springfilter.FilterTokenizer;
 import com.turkraft.springfilter.token.Comma;
 import com.turkraft.springfilter.token.Comparator;
 import com.turkraft.springfilter.token.Dot;
@@ -64,7 +63,7 @@ class FilterTokenizerTest {
   void validateBoolTrue(String input) {
     List<IToken> tokens = FilterTokenizer.tokenize(input);
     validateSingleToken(tokens, Bool.class);
-    assertTrue(((Bool) tokens.get(0)).getValue());
+    assertTrue((Boolean) ((Bool) tokens.get(0)).getValue());
   }
 
   @ParameterizedTest
@@ -72,7 +71,7 @@ class FilterTokenizerTest {
   void validateBoolFalse(String input) {
     List<IToken> tokens = FilterTokenizer.tokenize(input);
     validateSingleToken(tokens, Bool.class);
-    assertTrue(!((Bool) tokens.get(0)).getValue());
+    assertTrue(!(Boolean) ((Bool) tokens.get(0)).getValue());
   }
 
   @ParameterizedTest

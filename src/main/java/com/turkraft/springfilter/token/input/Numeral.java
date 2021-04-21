@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.token.input;
 
 import com.turkraft.springfilter.FilterConfig;
-
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;

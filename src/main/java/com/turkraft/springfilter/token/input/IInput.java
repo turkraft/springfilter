@@ -8,6 +8,8 @@ public interface IInput extends IToken {
 
   Object getValueAs(Class<?> klass);
 
+  Object getValue();
+
   String generate();
 
 }
