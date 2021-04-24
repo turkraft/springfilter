@@ -10,7 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import com.turkraft.springfilter.node.IExpression;
 
-public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolver {
+public class SpecificationFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
@@ -38,8 +38,6 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
   private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
-    Specification<T> result = null;
-
     if (inputs != null && inputs.length > 0) {
 
       Collection<IExpression> filters = new ArrayList<IExpression>();
@@ -54,7 +52,7 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
     }
 
-    return result;
+    return null;
 
   }
 
