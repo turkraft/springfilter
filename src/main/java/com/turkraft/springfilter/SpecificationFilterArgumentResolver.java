@@ -1,7 +1,5 @@
 package com.turkraft.springfilter;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -38,21 +36,9 @@ public class SpecificationFilterArgumentResolver implements HandlerMethodArgumen
 
   private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
-    if (inputs != null && inputs.length > 0) {
+    IExpression filter = FilterUtils.getFilterFromInputs(inputs);
 
-      Collection<IExpression> filters = new ArrayList<IExpression>();
-
-      for (String input : inputs) {
-        if (input.trim().length() > 0) {
-          filters.add(FilterParser.parse(input.trim()));
-        }
-      }
-
-      return new FilterSpecification<T>(FilterQueryBuilder.and(filters));
-
-    }
-
-    return null;
+    return filter == null ? null : new FilterSpecification<T>(filter);
 
   }
 

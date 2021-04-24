@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import javax.persistence.criteria.Path;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import com.mongodb.MongoClientSettings;
 
 @Configuration
 public class FilterConfig {
@@ -19,6 +21,8 @@ public class FilterConfig {
 
   public static boolean ENABLE_ASTERISK_WITH_LIKE_OPERATOR;
 
+  public static CodecRegistry CODEC_REGISTRY;
+
   static {
 
     DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
@@ -29,6 +33,8 @@ public class FilterConfig {
     FILTERING_AUTHORIZATION = null;
 
     ENABLE_ASTERISK_WITH_LIKE_OPERATOR = true;
+
+    CODEC_REGISTRY = MongoClientSettings.getDefaultCodecRegistry();
 
   }
 
