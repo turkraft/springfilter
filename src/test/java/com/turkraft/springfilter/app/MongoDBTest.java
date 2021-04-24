@@ -20,7 +20,7 @@ import com.turkraft.springfilter.node.IExpression;
 class MongoDBTest {
 
   void queryTest(IExpression expression, Bson query) {
-    assertEquals(query, expression.generateBson((Object) null));
+    assertEquals(query, expression.generateBson());
   }
 
   @Test
