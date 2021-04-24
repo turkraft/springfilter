@@ -10,7 +10,7 @@ public class FilterWebConfig implements WebMvcConfigurer {
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    argumentResolvers.add(new EntityFilterArgumentResolver());
+    argumentResolvers.add(new SpecificationFilterArgumentResolver());
   }
 
 }
