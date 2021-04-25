@@ -4,10 +4,12 @@ import static com.turkraft.springfilter.FilterQueryBuilder.and;
 import static com.turkraft.springfilter.FilterQueryBuilder.equal;
 import static com.turkraft.springfilter.FilterQueryBuilder.greaterThan;
 import static com.turkraft.springfilter.FilterQueryBuilder.greaterThanOrEqual;
+import static com.turkraft.springfilter.FilterQueryBuilder.in;
 import static com.turkraft.springfilter.FilterQueryBuilder.lessThan;
 import static com.turkraft.springfilter.FilterQueryBuilder.lessThanOrEqual;
 import static com.turkraft.springfilter.FilterQueryBuilder.not;
 import static com.turkraft.springfilter.FilterQueryBuilder.or;
+import static com.turkraft.springfilter.FilterQueryBuilder.strings;
 import static org.junit.Assert.assertEquals;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
@@ -68,6 +70,11 @@ class MongoDBTest {
   @Test
   void notTest() throws Exception {
     queryTest(not(equal("key", "value")), Filters.not(Filters.eq("key", "value")));
+  }
+
+  @Test
+  void inTest() throws Exception {
+    queryTest(in("a", strings("a", "b", "c")), Filters.in("a", "a", "b", "c"));
   }
 
 }
