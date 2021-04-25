@@ -181,7 +181,7 @@ Query query = FilterUtils.getQueryFromDocument(doc);
 Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
 
 ## Contributors
-* @marcopag90 and @glodepa for supporting MongoDB. 
+Thanks to [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) for adding support to MongoDB.
 
 ## License
 Distributed under the [MIT license](LICENSE).
