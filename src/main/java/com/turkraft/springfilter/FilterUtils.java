@@ -1,5 +1,7 @@
 package com.turkraft.springfilter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -9,9 +11,18 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Attribute.PersistentAttributeType;
+import org.bson.BsonDocument;
+import org.bson.BsonDocumentReader;
+import org.bson.Document;
+import org.bson.codecs.DecoderContext;
+import org.bson.codecs.DocumentCodec;
+import org.bson.conversions.Bson;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import com.turkraft.springfilter.exception.UnauthorizedPathException;
+import com.turkraft.springfilter.node.IExpression;
 
 public class FilterUtils {
 
@@ -99,6 +110,44 @@ public class FilterUtils {
 
     return path;
 
+  }
+
+  public static Document getDocumentFromBson(Bson bson) {
+
+    if (bson == null) {
+      return null;
+    }
+
+    BsonDocument bsonDocument =
+        bson.toBsonDocument(BsonDocument.class, FilterConfig.CODEC_REGISTRY);
+    DocumentCodec codec = new DocumentCodec();
+    DecoderContext decoderContext = DecoderContext.builder().build();
+    return codec.decode(new BsonDocumentReader(bsonDocument), decoderContext);
+
+  }
+
+  public static IExpression getFilterFromInputs(String[] inputs) {
+
+    if (inputs != null && inputs.length > 0) {
+
+      Collection<IExpression> filters = new ArrayList<IExpression>();
+
+      for (String input : inputs) {
+        if (input.trim().length() > 0) {
+          filters.add(FilterParser.parse(input.trim()));
+        }
+      }
+
+      return FilterQueryBuilder.and(filters);
+
+    }
+
+    return null;
+
+  }
+
+  public static Query getQueryFromDocument(Document doc) {
+    return doc == null ? new Query() : new BasicQuery(doc);
   }
 
 }

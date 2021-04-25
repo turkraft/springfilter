@@ -5,6 +5,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.node.Filter;
 import com.turkraft.springfilter.node.IExpression;
 import lombok.Data;
@@ -45,6 +46,11 @@ public class Priority implements IExpression {
       Map<String, Join<?, ?>> joins,
       Object payload) {
     return getBody().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+    return getBody().generateBson(payload);
   }
 
 }

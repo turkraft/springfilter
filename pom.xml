@@ -32,10 +32,13 @@
 		<lombok.version>1.18.16</lombok.version>
 		<hibernate.version>5.4.27.Final</hibernate.version>
 		<springframework.version>5.2.12.RELEASE</springframework.version>
-		<springframework-data.version>2.3.6.RELEASE</springframework-data.version>
+		<spring-data-jpa.version>2.3.6.RELEASE</spring-data-jpa.version>
+		<spring-data-mongodb.version>3.0.9.RELEASE</spring-data-mongodb.version>
 		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
 		<springdoc-openapi-ui.version>1.5.4</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
+		<spring-boot-starter-data-mongodb.version>2.3.10.RELEASE</spring-boot-starter-data-mongodb.version>
+		<de.flapdoodle.embed.mongo.version>3.0.0</de.flapdoodle.embed.mongo.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.7.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -60,8 +63,13 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>${springframework-data.version}</version>
+			<version>${spring-data-jpa.version}</version>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring-data-mongodb.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -109,6 +117,18 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2database-h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+			<version>${spring-boot-starter-data-mongodb.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>${de.flapdoodle.embed.mongo.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

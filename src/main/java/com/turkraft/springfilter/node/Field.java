@@ -6,8 +6,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.FilterUtils;
+import com.turkraft.springfilter.exception.InvalidQueryException;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -37,6 +39,11 @@ public class Field implements IExpression {
       Object payload) {
     return (Path<Object>) FilterUtils.getDatabasePath(root, joins, payload, name,
         FilterConfig.FILTERING_AUTHORIZATION);
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+    throw new InvalidQueryException("A field can't be directly generated");
   }
 
 }

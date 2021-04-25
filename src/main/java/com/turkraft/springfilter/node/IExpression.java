@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 
 public interface IExpression {
 
@@ -46,6 +47,12 @@ public interface IExpression {
       CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder) {
     return generate(root, criteriaQuery, criteriaBuilder, new HashMap<>());
+  }
+
+  Bson generateBson(Object payload);
+
+  default Bson generateBson() {
+    return generateBson(null);
   }
 
 }

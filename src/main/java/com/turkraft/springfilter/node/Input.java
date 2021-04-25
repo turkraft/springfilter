@@ -6,6 +6,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.token.input.IInput;
 import lombok.Data;
@@ -53,6 +54,11 @@ public class Input implements IExpression {
       Object payload,
       Class<?> targetClass) {
     return criteriaBuilder.literal(value.getValueAs(targetClass));
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+    throw new InvalidQueryException("An input can't be directly generated");
   }
 
 }
