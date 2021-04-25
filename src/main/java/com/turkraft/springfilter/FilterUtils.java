@@ -126,6 +126,10 @@ public class FilterUtils {
 
   }
 
+  public static Query getQueryFromDocument(Document doc) {
+    return doc == null ? new Query() : new BasicQuery(doc);
+  }
+
   public static IExpression getFilterFromInputs(String[] inputs) {
 
     if (inputs != null && inputs.length > 0) {
@@ -144,10 +148,6 @@ public class FilterUtils {
 
     return null;
 
-  }
-
-  public static Query getQueryFromDocument(Document doc) {
-    return doc == null ? new Query() : new BasicQuery(doc);
   }
 
 }
