@@ -153,7 +153,7 @@ You may want to customize the behavior of the different processes taking place. 
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
 ## MongoDB
-MongoDB is also partially supported as an alternative to JPA. The query input is compiled to a `Bson`/`Document` filter. You can then use it as you whish with `MongoTemplate` or `MongoOperations` for example. 
+MongoDB is also partially supported as an alternative to JPA. The query input is compiled to a `Bson`/`Document` filter. You can then use it as you wish with `MongoTemplate` or `MongoOperations` for example. 
 
 > Requires **spring-data-mongodb** 
 
@@ -172,7 +172,7 @@ Query query = FilterUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Note that functions are not supported, and field types are limited to strings/enums, numbers, and booleans
+> :warning: Functions are currently not supported, and field types are limited to strings/enums, numbers, and booleans
 
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
