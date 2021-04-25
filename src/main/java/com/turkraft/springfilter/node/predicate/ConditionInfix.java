@@ -221,7 +221,7 @@ public class ConditionInfix extends Condition {
         return com.mongodb.client.model.Filters.lte(key, input);
 
       case LIKE: {
-        // TODO
+        return com.mongodb.client.model.Filters.regex(key, input.toString());
       }
 
       default:
