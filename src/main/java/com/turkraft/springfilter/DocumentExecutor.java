@@ -14,27 +14,27 @@ import org.springframework.lang.Nullable;
 public interface DocumentExecutor<T, I> {
 
   default Optional<T> findOne(@Nullable Document doc) {
-    return Optional.ofNullable(getMongoOperations().findOne(FilterUtils.getQueryFromDocument(doc),
+    return Optional.ofNullable(getMongoOperations().findOne(DocumentUtils.getQueryFromDocument(doc),
         getMetadata().getJavaType()));
   }
 
   default List<T> findAll(@Nullable Document doc) {
-    return getMongoOperations().find(FilterUtils.getQueryFromDocument(doc),
+    return getMongoOperations().find(DocumentUtils.getQueryFromDocument(doc),
         getMetadata().getJavaType());
   }
 
   default Page<T> findAll(@Nullable Document doc, Pageable pageable) {
     return new PageImpl<>(getMongoOperations()
-        .find(FilterUtils.getQueryFromDocument(doc).with(pageable), getMetadata().getJavaType()));
+        .find(DocumentUtils.getQueryFromDocument(doc).with(pageable), getMetadata().getJavaType()));
   }
 
   default List<T> findAll(@Nullable Document doc, Sort sort) {
-    return getMongoOperations().find(FilterUtils.getQueryFromDocument(doc).with(sort),
+    return getMongoOperations().find(DocumentUtils.getQueryFromDocument(doc).with(sort),
         getMetadata().getJavaType());
   }
 
   default long count(@Nullable Document doc) {
-    return getMongoOperations().count(FilterUtils.getQueryFromDocument(doc),
+    return getMongoOperations().count(DocumentUtils.getQueryFromDocument(doc),
         getMetadata().getJavaType());
   }
 
