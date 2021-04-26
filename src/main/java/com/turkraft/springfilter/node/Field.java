@@ -8,7 +8,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import org.bson.conversions.Bson;
 import com.turkraft.springfilter.FilterConfig;
-import com.turkraft.springfilter.FilterUtils;
+import com.turkraft.springfilter.PathUtils;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -37,7 +37,7 @@ public class Field implements IExpression {
       CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins,
       Object payload) {
-    return (Path<Object>) FilterUtils.getDatabasePath(root, joins, payload, name,
+    return (Path<Object>) PathUtils.getDatabasePath(root, joins, payload, name,
         FilterConfig.FILTERING_AUTHORIZATION);
   }
 

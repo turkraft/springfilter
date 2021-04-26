@@ -31,7 +31,7 @@ public class DocumentFilterArgumentResolver implements HandlerMethodArgumentReso
     Bson bson = getBson(!entityFilter.parameterName().isEmpty()
         ? webRequest.getParameterValues(entityFilter.parameterName())
         : null);
-    return FilterUtils.getDocumentFromBson(bson);
+    return DocumentUtils.getDocumentFromBson(bson);
 
   }
 
