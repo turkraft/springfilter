@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.turkraft</groupId>
 	<artifactId>spring-filter</artifactId>
-	<version>0.9.8</version>
+	<version>1.0.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Dynamically filters JPA entities and MongoDB collections with a simple query syntax. Provides JPA/Hibernate predicates, Spring Data specifications, and MongoDB queries. Easily integrated with Spring APIs.</description>
 	<url>https://github.com/torshid/spring-filter</url>
@@ -37,6 +37,7 @@
 		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
 		<springdoc-openapi-ui.version>1.5.4</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
+		<de.flapdoodle.embed.mongo.version>3.0.0</de.flapdoodle.embed.mongo.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.7.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -102,12 +103,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>${springframework-boot.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<version>${springframework-boot.version}</version>
 			<scope>test</scope>
@@ -116,6 +111,18 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2database-h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+			<version>${springframework-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>${de.flapdoodle.embed.mongo.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -152,7 +159,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.turkraft.springfilter.test.app.Application</mainClass>
+					<mainClass>com.turkraft.springfilter.jpa.Application</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -227,7 +234,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>com.turkraft.springfilter.app.Application</mainClass>
+									<mainClass>com.turkraft.springfilter.jpa.Application</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

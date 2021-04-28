@@ -3,7 +3,7 @@ package com.turkraft.springfilter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import com.turkraft.springfilter.FilterCompiler;
+import com.turkraft.springfilter.compiler.Parser;
 
 class FilterCompilerTest {
 
@@ -30,9 +30,9 @@ class FilterCompilerTest {
     // this will let us catch tokenizer/parser errors and will make sure that the compiler is
     // deterministic
 
-    String output = FilterCompiler.compile(input);
+    String output = Parser.parse(input).generate();
 
-    assertEquals(output, FilterCompiler.compile(output));
+    assertEquals(output, Parser.parse(output).generate());
 
   }
 
