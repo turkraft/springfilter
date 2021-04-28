@@ -2,6 +2,7 @@ package com.turkraft.springfilter.generator;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.BsonNull;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.turkraft.springfilter.compiler.node.Arguments;
@@ -57,25 +58,25 @@ public class BsonGenerator implements Generator<Bson> {
     switch (expression.getComparator()) {
 
       case EQUAL:
-        return com.mongodb.client.model.Filters.eq(key, input);
+        return Filters.eq(key, input);
 
       case NOT_EQUAL:
-        return com.mongodb.client.model.Filters.ne(key, input);
+        return Filters.ne(key, input);
 
       case GREATER_THAN:
-        return com.mongodb.client.model.Filters.gt(key, input);
+        return Filters.gt(key, input);
 
       case GREATER_THAN_OR_EQUAL:
-        return com.mongodb.client.model.Filters.gte(key, input);
+        return Filters.gte(key, input);
 
       case LESS_THAN:
-        return com.mongodb.client.model.Filters.lt(key, input);
+        return Filters.lt(key, input);
 
       case LESS_THAN_OR_EQUAL:
-        return com.mongodb.client.model.Filters.lte(key, input);
+        return Filters.lte(key, input);
 
       case LIKE: {
-        return com.mongodb.client.model.Filters.regex(key, input.toString());
+        return Filters.regex(key, input.toString());
       }
 
       default:
@@ -111,16 +112,36 @@ public class BsonGenerator implements Generator<Bson> {
 
     }
 
-    return com.mongodb.client.model.Filters.in(((Field) expression.getLeft()).getName(), arguments);
+    return Filters.in(((Field) expression.getLeft()).getName(), arguments);
 
   }
 
   @Override
   public Bson generate(ConditionPostfix expression) {
 
-    // TODO: implement
+    if (!(expression.getLeft() instanceof Field)) {
+      throw new InvalidQueryException("Left side of the comparator "
+          + expression.getComparator().getLiteral() + " should be a field");
+    }
+
+    String key = ((Field) expression.getLeft()).getName();
 
     switch (expression.getComparator()) {
+
+      case NULL:
+        return Filters.eq(key, BsonNull.VALUE);
+
+      case NOT_NULL:
+        return Filters.ne(key, BsonNull.VALUE);
+
+      // TODO: check with empty array instead of size
+      // https://stackoverflow.com/questions/14789684/find-mongodb-records-where-array-field-is-not-empty
+
+      case EMPTY:
+        return Filters.size(key, 0);
+
+      case NOT_EMPTY:
+        return Filters.not(Filters.size(key, 0));
 
       default:
         throw new InvalidQueryException(
