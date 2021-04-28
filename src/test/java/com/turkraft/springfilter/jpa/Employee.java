@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.app;
+package com.turkraft.springfilter.jpa;
 
 import java.util.Date;
 import java.util.List;

@@ -27,23 +27,33 @@ public class FilterConfig {
     NUMBER_FORMAT = NumberFormat.getInstance(Locale.US);
     NUMBER_FORMAT.setGroupingUsed(false); // in order to not count commas as part of number
 
-    FILTERING_AUTHORIZATION = null;
-
     ENABLE_ASTERISK_WITH_LIKE_OPERATOR = true;
 
-    if (isMongoDBDepdendencyPresent()) {
+    if (isSpringDataMongoDbDependencyPresent()) {
       CODEC_REGISTRY = MongoClientSettings.getDefaultCodecRegistry();
     }
 
   }
 
-  public static boolean isMongoDBDepdendencyPresent() {
+  private static boolean isClassPresent(String className) {
     try {
-      Class.forName("com.mongodb.MongoClientSettings");
+      Class.forName(className);
       return true;
     } catch (ClassNotFoundException e) {
       return false;
     }
+  }
+
+  public static boolean isSpringDataMongoDbDependencyPresent() {
+    return isClassPresent("com.mongodb.MongoClientSettings");
+  }
+
+  public static boolean isSpecificationDependencyPresent() {
+    return isClassPresent("org.springframework.data.jpa.domain.Specification");
+  }
+
+  public static boolean isHibernateCoreDependencyPresent() {
+    return isClassPresent("org.hibernate.query.criteria.internal.path.PluralAttributePath");
   }
 
 }

@@ -1,11 +1,10 @@
-package com.turkraft.springfilter.app;
+package com.turkraft.springfilter.jpa;
 
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Company {
+public class Industry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,12 +27,8 @@ public class Company {
 
   private String name;
 
-  @JsonIgnoreProperties("companies")
-  @ManyToOne
-  private Industry industry;
-
-  @JsonIgnoreProperties({"company", "manager", "staff", "payslips"})
-  @OneToMany(mappedBy = "company")
-  private List<Employee> employees;
+  @JsonIgnoreProperties({"employees", "industry"})
+  @OneToMany(mappedBy = "industry")
+  private List<Company> companies;
 
 }

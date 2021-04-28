@@ -9,8 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.Nullable;
 
+@NoRepositoryBean
 public interface DocumentExecutor<T, I> {
 
   default Optional<T> findOne(@Nullable Document doc) {
