@@ -1,7 +1,7 @@
 package com.turkraft.springfilter.exception;
 
 import java.util.LinkedList;
-import com.turkraft.springfilter.token.IToken;
+import com.turkraft.springfilter.compiler.token.IToken;
 
 public class InvalidTokenSequenceException extends ParserException {
 

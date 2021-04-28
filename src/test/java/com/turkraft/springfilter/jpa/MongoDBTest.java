@@ -1,28 +1,29 @@
 package com.turkraft.springfilter.jpa;
 
-import static com.turkraft.springfilter.FilterQueryBuilder.and;
-import static com.turkraft.springfilter.FilterQueryBuilder.equal;
-import static com.turkraft.springfilter.FilterQueryBuilder.greaterThan;
-import static com.turkraft.springfilter.FilterQueryBuilder.greaterThanOrEqual;
-import static com.turkraft.springfilter.FilterQueryBuilder.in;
-import static com.turkraft.springfilter.FilterQueryBuilder.lessThan;
-import static com.turkraft.springfilter.FilterQueryBuilder.lessThanOrEqual;
-import static com.turkraft.springfilter.FilterQueryBuilder.not;
-import static com.turkraft.springfilter.FilterQueryBuilder.or;
-import static com.turkraft.springfilter.FilterQueryBuilder.strings;
+import static com.turkraft.springfilter.FilterBuilder.and;
+import static com.turkraft.springfilter.FilterBuilder.equal;
+import static com.turkraft.springfilter.FilterBuilder.greaterThan;
+import static com.turkraft.springfilter.FilterBuilder.greaterThanOrEqual;
+import static com.turkraft.springfilter.FilterBuilder.in;
+import static com.turkraft.springfilter.FilterBuilder.lessThan;
+import static com.turkraft.springfilter.FilterBuilder.lessThanOrEqual;
+import static com.turkraft.springfilter.FilterBuilder.not;
+import static com.turkraft.springfilter.FilterBuilder.or;
+import static com.turkraft.springfilter.FilterBuilder.strings;
 import static org.junit.Assert.assertEquals;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import com.mongodb.client.model.Filters;
-import com.turkraft.springfilter.node.IExpression;
+import com.turkraft.springfilter.compiler.node.IExpression;
+import com.turkraft.springfilter.generator.BsonGenerator;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MongoDBTest {
 
   void queryTest(IExpression expression, Bson query) {
-    assertEquals(query, expression.generateBson());
+    assertEquals(query, BsonGenerator.run(expression));
   }
 
   @Test

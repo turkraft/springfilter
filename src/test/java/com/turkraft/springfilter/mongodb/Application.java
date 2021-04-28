@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoCo
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.turkraft.springfilter.EntityFilter;
+import com.turkraft.springfilter.boot.Filter;
 
 @SpringBootApplication(exclude = EmbeddedMongoAutoConfiguration.class)
 @RestController
@@ -35,7 +35,7 @@ public class Application implements ApplicationRunner {
   private CarRepository carRepository;
 
   @GetMapping(value = "car")
-  public List<Car> getCars(@EntityFilter Document filter) {
+  public List<Car> getCars(@Filter Document filter) {
     return carRepository.findAll(filter);
   }
 

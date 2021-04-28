@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.javafaker.Faker;
-import com.turkraft.springfilter.EntityFilter;
+import com.turkraft.springfilter.boot.Filter;
 import com.turkraft.springfilter.jpa.Employee.MaritalStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,28 +100,28 @@ public class Application implements ApplicationRunner {
   @GetMapping(value = "industry")
   public List<Industry> getIndustries(
       @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
-          example = "size(companies.employees) > 5") @EntityFilter Specification<Industry> filter) {
+          example = "size(companies.employees) > 5") @Filter Specification<Industry> filter) {
     return industryRepository.findAll(filter);
   }
 
   @GetMapping(value = "company")
   public List<Company> getCompanies(
       @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
-          example = "id < 10 and employees is not empty") @EntityFilter Specification<Company> filter) {
+          example = "id < 10 and employees is not empty") @Filter Specification<Company> filter) {
     return companyRepository.findAll(filter);
   }
 
   @GetMapping(value = "employee")
   public List<Employee> getEmployees(
       @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
-          example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)") @EntityFilter Specification<Employee> filter) {
+          example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)") @Filter Specification<Employee> filter) {
     return employeeRepository.findAll(filter);
   }
 
   @GetMapping(value = "payslip")
   public List<Payslip> getPayslips(
       @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
-          example = "employee.salary > 3000") @EntityFilter Specification<Payslip> filter) {
+          example = "employee.salary > 3000") @Filter Specification<Payslip> filter) {
     return payslipRepository.findAll(filter);
   }
 

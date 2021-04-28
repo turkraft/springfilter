@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.stereotype.Repository;
-import com.turkraft.springfilter.DocumentExecutor;
+import com.turkraft.springfilter.repository.DocumentExecutor;
 
 @Repository
 public class CarRepository implements DocumentExecutor<Car, Long> {

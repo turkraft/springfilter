@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.turkraft</groupId>
 	<artifactId>spring-filter</artifactId>
-	<version>0.9.8</version>
+	<version>1.0.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Dynamically filters JPA entities and MongoDB collections with a simple query syntax. Provides JPA/Hibernate predicates, Spring Data specifications, and MongoDB queries. Easily integrated with Spring APIs.</description>
 	<url>https://github.com/torshid/spring-filter</url>

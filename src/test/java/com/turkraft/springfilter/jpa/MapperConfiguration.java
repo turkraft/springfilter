@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.turkraft.springfilter.FilterConfig;
+import com.turkraft.springfilter.SpringFilterParameters;
 
 @Configuration
 public class MapperConfiguration {
@@ -30,7 +30,7 @@ public class MapperConfiguration {
           Date date,
           JsonGenerator jsonGenerator,
           SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        jsonGenerator.writeString(FilterConfig.DATE_FORMATTER.format(date));
+        jsonGenerator.writeString(SpringFilterParameters.DATE_FORMATTER.format(date));
       }
     });
     mapper.registerModule(simpleModule);

@@ -14,8 +14,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import com.turkraft.springfilter.FilterConfig;
-import com.turkraft.springfilter.FilterSpecification;
+import com.turkraft.springfilter.SpringFilterParameters;
+import com.turkraft.springfilter.boot.FilterSpecification;
 import com.turkraft.springfilter.jpa.Employee.MaritalStatus;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -89,7 +89,7 @@ public class ApplicationTest {
   public void equalDateTest(Employee employee) {
     validate(
         String.format("birthDate : '%s'",
-            FilterConfig.DATE_FORMATTER.format(employee.getBirthDate())),
+            SpringFilterParameters.DATE_FORMATTER.format(employee.getBirthDate())),
         e -> e.getBirthDate().equals(employee.getBirthDate()));
   }
 
