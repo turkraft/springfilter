@@ -1,5 +1,7 @@
 package com.turkraft.springfilter.node.predicate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
@@ -8,9 +10,11 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.Arguments;
+import com.turkraft.springfilter.node.Field;
 import com.turkraft.springfilter.node.IExpression;
 import com.turkraft.springfilter.node.Input;
 import com.turkraft.springfilter.token.Comparator;
@@ -141,13 +145,13 @@ public class ConditionInfix extends Condition {
       Object payload) {
 
     if ((getLeft() instanceof Input)) {
-      throw new InvalidQueryException(
-          "Left expression of the " + getComparator().getLiteral() + " can't be in an input");
+      throw new InvalidQueryException("Left expression of the comparator "
+          + getComparator().getLiteral() + " can't be an input");
     }
 
     if (!(getRight() instanceof Arguments)) {
-      throw new InvalidQueryException(
-          "Right expression of the " + getComparator().getLiteral() + " should be arguments");
+      throw new InvalidQueryException("Right expression of the comparator "
+          + getComparator().getLiteral() + " should be arguments");
     }
 
     Expression<?> left = getLeft().generate(root, criteriaQuery, criteriaBuilder, joins, payload);
@@ -168,17 +172,91 @@ public class ConditionInfix extends Condition {
             in.value(argument.generate(root, criteriaQuery, criteriaBuilder, joins, payload));
       }
 
-      // if (!left.getJavaType().isAssignableFrom(expression.getJavaType())) {
-      // throw new InvalidQueryException(
-      // "Expressions of different types are not supported in comparator " +
-      // getComparator().getLiteral());
-      // }
-
       in.value(expression);
 
     }
 
     return in;
+
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+
+    if (getComparator() == Comparator.IN) { // TODO: 'in' should be a different node
+      return inCondition(payload);
+    }
+
+    if (!(getLeft() instanceof Field)) {
+      throw new InvalidQueryException(
+          "Left side of the comparator " + getComparator().getLiteral() + " should be a field");
+    }
+
+    if (!(getRight() instanceof Input)) {
+      throw new InvalidQueryException(
+          "Right side of the comparator " + getComparator().getLiteral() + " should be an input");
+    }
+
+    String key = ((Field) getLeft()).getName();
+    Object input = ((Input) getRight()).getValue().getValue();
+
+    switch (getComparator()) {
+
+      case EQUAL:
+        return com.mongodb.client.model.Filters.eq(key, input);
+
+      case NOT_EQUAL:
+        return com.mongodb.client.model.Filters.ne(key, input);
+
+      case GREATER_THAN:
+        return com.mongodb.client.model.Filters.gt(key, input);
+
+      case GREATER_THAN_OR_EQUAL:
+        return com.mongodb.client.model.Filters.gte(key, input);
+
+      case LESS_THAN:
+        return com.mongodb.client.model.Filters.lt(key, input);
+
+      case LESS_THAN_OR_EQUAL:
+        return com.mongodb.client.model.Filters.lte(key, input);
+
+      case LIKE: {
+        return com.mongodb.client.model.Filters.regex(key, input.toString());
+      }
+
+      default:
+        throw new InvalidQueryException("Unsupported comparator " + getComparator().getLiteral());
+
+    }
+
+  }
+
+  private Bson inCondition(Object payload) {
+
+    if (!(getLeft() instanceof Field)) {
+      throw new InvalidQueryException("Left expression of the comparator "
+          + getComparator().getLiteral() + " should be a field");
+    }
+
+    if (!(getRight() instanceof Arguments)) {
+      throw new InvalidQueryException("Right expression of the comparator "
+          + getComparator().getLiteral() + " should be arguments");
+    }
+
+    List<Object> arguments = new ArrayList<Object>();
+
+    for (IExpression argument : ((Arguments) right).getValues()) {
+
+      if (!(argument instanceof Input)) {
+        throw new InvalidQueryException("Right expression of the comparator "
+            + getComparator().getLiteral() + " should be made of only input arguments");
+      }
+
+      arguments.add(((Input) argument).getValue().getValue());
+
+    }
+
+    return com.mongodb.client.model.Filters.in(((Field) getLeft()).getName(), arguments);
 
   }
 

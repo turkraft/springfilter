@@ -8,6 +8,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
@@ -67,6 +68,19 @@ public class ConditionPostfix extends Condition {
         } else {
           return criteriaBuilder.isNotNull(leftExpression);
         }
+
+      default:
+        throw new InvalidQueryException(
+            "The comparator " + getComparator().getLiteral() + " is unsupported");
+
+    }
+
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+
+    switch (getComparator()) {
 
       default:
         throw new InvalidQueryException(

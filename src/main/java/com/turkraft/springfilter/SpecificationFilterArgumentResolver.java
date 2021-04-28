@@ -1,7 +1,5 @@
 package com.turkraft.springfilter;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,7 +8,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import com.turkraft.springfilter.node.IExpression;
 
-public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolver {
+public class SpecificationFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
@@ -38,23 +36,9 @@ public class EntityFilterArgumentResolver implements HandlerMethodArgumentResolv
 
   private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
-    Specification<T> result = null;
+    IExpression filter = FilterUtils.getFilterFromInputs(inputs);
 
-    if (inputs != null && inputs.length > 0) {
-
-      Collection<IExpression> filters = new ArrayList<IExpression>();
-
-      for (String input : inputs) {
-        if (input.trim().length() > 0) {
-          filters.add(FilterParser.parse(input.trim()));
-        }
-      }
-
-      return new FilterSpecification<T>(FilterQueryBuilder.and(filters));
-
-    }
-
-    return result;
+    return filter == null ? null : new FilterSpecification<T>(filter);
 
   }
 

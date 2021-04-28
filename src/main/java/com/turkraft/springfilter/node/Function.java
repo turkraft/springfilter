@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import com.turkraft.springfilter.Pair;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import lombok.Data;
@@ -115,6 +116,11 @@ public class Function implements IExpression {
 
     throw new InvalidQueryException("Unsupported function " + type.name().toLowerCase());
 
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+    throw new InvalidQueryException("Unsupported functions");
   }
 
 }

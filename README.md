@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.9.5</version>
+    <version>0.9.8</version>
 </dependency>
 ```
 
@@ -152,11 +152,36 @@ You may want to customize the behavior of the different processes taking place. 
 ### Date format
 You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
+## MongoDB
+MongoDB is also partially supported as an alternative to JPA. The query input is compiled to a `Bson`/`Document` filter. You can then use it as you wish with `MongoTemplate` or `MongoOperations` for example. 
+
+> Requires **spring-data-mongodb** 
+
+### Usage
+```java
+@GetMapping(value = "/search")
+public List<Entity> search(@EntityFilter Document doc, Pageable page) {
+  // your repo may implement DocumentExecutor for easy usage
+  return repo.findAll(doc, page); 
+}
+```
+```java
+Bson bson = filter.generateBson();
+Document doc = FilterUtils.getDocumentFromBson(bson);
+Query query = FilterUtils.getQueryFromDocument(doc);
+// ...
+```
+
+> :warning: Functions are currently not supported, and field types are limited to strings/enums, numbers, and booleans
+
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
 
 ## Contributing
 Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
+
+## Contributors
+Thanks to [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) for adding support to MongoDB.
 
 ## License
 Distributed under the [MIT license](LICENSE).

@@ -43,6 +43,15 @@ public class Text implements IInput {
           + FilterConfig.DATE_FORMATTER.toPattern());
     }
 
+    if (Number.class.isAssignableFrom(klass)) {
+      Number number = FilterConfig.NUMBER_FORMAT.parse(getValue(), new ParsePosition(0));
+      if (number != null) {
+        return number;
+      }
+      throw new ClassCastException(
+          "The value '" + getValue() + "' could not be parsed to a number");
+    }
+
     if (klass.isEnum()) {
       for (Object e : klass.getEnumConstants()) {
         if (getValue().equalsIgnoreCase(e.toString())) {

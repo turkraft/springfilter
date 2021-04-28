@@ -5,10 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import javax.persistence.criteria.Path;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.bson.codecs.configuration.CodecRegistry;
+import com.mongodb.MongoClientSettings;
 
-@Configuration
 public class FilterConfig {
 
   public static SimpleDateFormat DATE_FORMATTER;
@@ -18,6 +17,8 @@ public class FilterConfig {
   public static BiFunction<Path<?>, Object, Boolean> FILTERING_AUTHORIZATION;
 
   public static boolean ENABLE_ASTERISK_WITH_LIKE_OPERATOR;
+
+  public static CodecRegistry CODEC_REGISTRY;
 
   static {
 
@@ -30,15 +31,19 @@ public class FilterConfig {
 
     ENABLE_ASTERISK_WITH_LIKE_OPERATOR = true;
 
-  }
-
-  public FilterConfig(
-      @Value("${turkraft.springfilter.dateformatter.pattern:#{null}}") String pattern) {
-
-    if (pattern != null) {
-      DATE_FORMATTER.applyPattern(pattern);
+    if (isMongoDBDepdendencyPresent()) {
+      CODEC_REGISTRY = MongoClientSettings.getDefaultCodecRegistry();
     }
 
+  }
+
+  public static boolean isMongoDBDepdendencyPresent() {
+    try {
+      Class.forName("com.mongodb.MongoClientSettings");
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
   }
 
 }

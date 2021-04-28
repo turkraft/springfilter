@@ -7,6 +7,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import org.springframework.expression.ExpressionException;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
@@ -76,6 +77,26 @@ public class OperationInfix extends Operation {
 
       case OR:
         return criteriaBuilder.or((Predicate) leftExpression, (Predicate) rightExpression);
+
+      default:
+        throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());
+
+    }
+
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+
+    switch (getOperator()) {
+
+      case AND:
+        return com.mongodb.client.model.Filters.and(getLeft().generateBson(payload),
+            getRight().generateBson(payload));
+
+      case OR:
+        return com.mongodb.client.model.Filters.or(getLeft().generateBson(payload),
+            getRight().generateBson(payload));
 
       default:
         throw new InvalidQueryException("Unsupported infix operator " + getOperator().getLiteral());

@@ -7,6 +7,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.bson.conversions.Bson;
 import org.springframework.expression.ExpressionException;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 import com.turkraft.springfilter.node.IExpression;
@@ -55,6 +56,22 @@ public class OperationPrefix extends Operation {
 
       case NOT:
         return criteriaBuilder.not((Predicate) rightExpression);
+
+      default:
+        throw new InvalidQueryException(
+            "Unsupported prefix operator " + getOperator().getLiteral());
+
+    }
+
+  }
+
+  @Override
+  public Bson generateBson(Object payload) {
+
+    switch (getOperator()) {
+
+      case NOT:
+        return com.mongodb.client.model.Filters.not(getRight().generateBson(payload));
 
       default:
         throw new InvalidQueryException(
