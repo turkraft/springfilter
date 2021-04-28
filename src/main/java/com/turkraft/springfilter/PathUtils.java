@@ -47,6 +47,12 @@ public class PathUtils {
       return authorize(authorizer, table.get(fieldPath), payload, fieldPath);
     }
 
+    if (!FilterConfig.isHibernateCoreDependencyPresent()) {
+      throw new UnsupportedOperationException(
+          "The Hibernate Core dependency should be added in order to filter nested fields");
+      // TODO: instead of throwing an exception, try to join with JPA only
+    }
+
     Path<?> path = table;
     From<?, ?> from = table;
 

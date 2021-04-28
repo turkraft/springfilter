@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.app;
+package com.turkraft.springfilter.jpa;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import com.turkraft.springfilter.FilterConfig;
 import com.turkraft.springfilter.FilterSpecification;
-import com.turkraft.springfilter.app.Employee.MaritalStatus;
+import com.turkraft.springfilter.jpa.Employee.MaritalStatus;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @DataJpaTest

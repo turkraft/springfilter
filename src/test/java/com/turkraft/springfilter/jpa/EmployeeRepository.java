@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.app;
+package com.turkraft.springfilter.jpa;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

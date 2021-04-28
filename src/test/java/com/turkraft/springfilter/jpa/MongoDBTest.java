@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.app;
+package com.turkraft.springfilter.jpa;
 
 import static com.turkraft.springfilter.FilterQueryBuilder.and;
 import static com.turkraft.springfilter.FilterQueryBuilder.equal;

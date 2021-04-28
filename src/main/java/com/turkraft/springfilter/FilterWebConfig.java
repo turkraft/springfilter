@@ -10,8 +10,15 @@ public class FilterWebConfig implements WebMvcConfigurer {
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    argumentResolvers.add(new SpecificationFilterArgumentResolver());
-    argumentResolvers.add(new DocumentFilterArgumentResolver());
+
+    if (FilterConfig.isSpecificationDependencyPresent()) {
+      argumentResolvers.add(new SpecificationFilterArgumentResolver());
+    }
+
+    if (FilterConfig.isSpringDataMongoDbDependencyPresent()) {
+      argumentResolvers.add(new DocumentFilterArgumentResolver());
+    }
+
   }
 
 }
