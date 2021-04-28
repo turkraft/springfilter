@@ -15,8 +15,10 @@ import javax.persistence.criteria.Root;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.springframework.expression.ExpressionException;
 import com.turkraft.springfilter.Pair;
+import com.turkraft.springfilter.compiler.Parser;
 import com.turkraft.springfilter.compiler.node.Arguments;
 import com.turkraft.springfilter.compiler.node.Field;
+import com.turkraft.springfilter.compiler.node.Filter;
 import com.turkraft.springfilter.compiler.node.Function;
 import com.turkraft.springfilter.compiler.node.FunctionType;
 import com.turkraft.springfilter.compiler.node.IExpression;
@@ -29,6 +31,22 @@ import com.turkraft.springfilter.compiler.token.Comparator;
 import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public class ExpressionGenerator implements Generator<Expression<?>> {
+
+  public static Predicate run(
+      String query,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return run(Parser.parse(query), root, criteriaQuery, criteriaBuilder);
+  }
+
+  public static Predicate run(
+      Filter expression,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return (Predicate) run((IExpression) expression, root, criteriaQuery, criteriaBuilder);
+  }
 
   public static Expression<?> run(
       IExpression expression,
