@@ -148,7 +148,7 @@ public List<Entity> search(@Filter Document doc, Pageable page) {
 }
 ```
 ```java
-Bson bson = filter.generateBson();
+Bson bson = BsonGenerator.run(filter);
 Document doc = BsonUtils.getDocumentFromBson(bson);
 Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
