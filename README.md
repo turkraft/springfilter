@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>0.9.8</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ Your API will gain a full featured search functionality. You don't work with API
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web** and **spring-webmvc**
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@EntityFilter Specification<Entity> spec, Pageable page) {
+public List<Entity> search(@Filter Specification<Entity> spec, Pageable page) {
   return repo.findAll(spec, page);
 }
 ```
@@ -53,13 +53,13 @@ public List<Entity> search(@EntityFilter Specification<Entity> spec, Pageable pa
 ### b. Specification
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
 ```java
-Specification<Entity> spec = new FilterSpecification<Entity>(input);
+Specification<Entity> spec = new FilterSpecification<Entity>(query);
 ```
 
 ### c. Predicate
 > Requires **javax.persistence-api**, **spring-data-jpa**
 ```java
-Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
+Predicate predicate = ExpressionGenerator.run(String query, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
 
 > :warning: **If you need to search over relations**, you also require **hibernate-core**
@@ -67,29 +67,11 @@ Predicate predicate = FilterCompiler.parse(String input, Root<?> r, CriteriaQuer
 ### d. Builder
 ```java
 /* Using static methods */
-import static com.turkraft.springfilter.FilterQueryBuilder.*;
+import static com.turkraft.springfilter.FilterBuilder.*;
 Filter filter = filter(like("name", "%jose%"));
-```
-```java
-/* Using lombok builder */
-Filter filter = Filter.builder()
-    .body(ConditionInfix.builder()
-        .left(Field.builder()
-            .name("name")
-            .build())
-        .comparator(Comparator.LIKE)
-        .right(Input.builder()
-            .value(Text.builder()
-                .value("%jose%")
-                .build())
-            .build())
-        .build())
-    .build();
-```
-```java
-String input = filter.generate(); // name ~ '%jose%'
-Predicate predicate = filter.generate(Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
-Specification<Entity> spec = new FilterSpecification<Entity>(filter);
+String query = filter.generate(); // name ~ '%jose%'
+// Predicate predicate = ExpressionGenerator.run(filter, Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
+// Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
 
 ## Syntax
@@ -150,7 +132,7 @@ A function is characterized by its name (case insensitive) followed by parenthes
 You may want to customize the behavior of the different processes taking place. For now, you can only change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
 
 ### Date format
-You are able to change the date format by setting the static `DATE_FORMATTER` field of the `FilterConfig` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
+You are able to change the date format by setting the static `DATE_FORMATTER` field of the `SpringFilterParameters` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
 
 ## MongoDB
 MongoDB is also partially supported as an alternative to JPA. The query input is compiled to a `Bson`/`Document` filter. You can then use it as you wish with `MongoTemplate` or `MongoOperations` for example. 
@@ -160,19 +142,19 @@ MongoDB is also partially supported as an alternative to JPA. The query input is
 ### Usage
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@EntityFilter Document doc, Pageable page) {
+public List<Entity> search(@Filter Document doc, Pageable page) {
   // your repo may implement DocumentExecutor for easy usage
   return repo.findAll(doc, page); 
 }
 ```
 ```java
-Bson bson = filter.generateBson();
-Document doc = FilterUtils.getDocumentFromBson(bson);
-Query query = FilterUtils.getQueryFromDocument(doc);
+Bson bson = BsonGenerator.run(filter);
+Document doc = BsonUtils.getDocumentFromBson(bson);
+Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Functions are currently not supported, and field types are limited to strings/enums, numbers, and booleans
+> :warning: Functions are currently not supported, and field types are limited to strings/enums, numbers, booleans, and collections
 
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
