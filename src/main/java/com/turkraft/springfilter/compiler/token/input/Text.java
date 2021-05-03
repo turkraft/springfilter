@@ -2,6 +2,7 @@ package com.turkraft.springfilter.compiler.token.input;
 
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.UUID;
 import com.turkraft.springfilter.SpringFilterParameters;
 import lombok.Data;
 import lombok.ToString;
@@ -50,6 +51,15 @@ public class Text implements IInput {
       }
       throw new ClassCastException(
           "The value '" + getValue() + "' could not be parsed to a number");
+    }
+
+    if (UUID.class.isAssignableFrom(klass)) {
+      try {
+        return UUID.fromString(getValue());
+      } catch (IllegalArgumentException e) {
+        throw new ClassCastException(
+            "The value '" + getValue() + "' could not be parsed to a uuid");
+      }
     }
 
     if (klass.isEnum()) {
