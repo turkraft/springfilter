@@ -1,7 +1,13 @@
 package com.turkraft.springfilter.compiler.token.input;
 
 import java.text.ParsePosition;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.UUID;
 import com.turkraft.springfilter.SpringFilterParameters;
 import lombok.Data;
 import lombok.ToString;
@@ -29,7 +35,7 @@ public class Text implements IInput {
 
     if (char.class.isAssignableFrom(klass) || Character.class.isAssignableFrom(klass)) {
       if (getValue() == null || getValue().length() != 1) {
-        throw new ClassCastException("The value '" + getValue() + "' could not be cast to a char");
+        throw new ClassCastException("The value '" + getValue() + "' could not be cast to Char");
       }
       return getValue().charAt(0);
     }
@@ -39,8 +45,44 @@ public class Text implements IInput {
       if (date != null) {
         return date;
       }
-      throw new ClassCastException("The value '" + getValue() + "' didn't match the date format "
-          + SpringFilterParameters.DATE_FORMATTER.toPattern());
+      throw new ClassCastException("The value '" + getValue() + "' could not be parsed to Date ("
+          + SpringFilterParameters.DATE_FORMATTER.toPattern() + ")");
+    }
+
+    if (LocalDate.class.isAssignableFrom(klass)) {
+      try {
+        return LocalDate.parse(getValue(), SpringFilterParameters.LOCALDATE_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException(
+            "The value '" + getValue() + "' could not be parsed to LocalDate");
+      }
+    }
+
+    if (LocalDateTime.class.isAssignableFrom(klass)) {
+      try {
+        return LocalDateTime.parse(getValue(), SpringFilterParameters.LOCALDATETIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException(
+            "The value '" + getValue() + "' could not be parsed to LocalDateTime");
+      }
+    }
+
+    if (OffsetDateTime.class.isAssignableFrom(klass)) {
+      try {
+        return OffsetDateTime.parse(getValue(), SpringFilterParameters.OFFSETDATETIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException(
+            "The value '" + getValue() + "' could not be parsed to OffsetDateTime");
+      }
+    }
+
+    if (Instant.class.isAssignableFrom(klass)) {
+      try {
+        return Instant.parse(getValue());
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException(
+            "The value '" + getValue() + "' could not be parsed to Instant");
+      }
     }
 
     if (Number.class.isAssignableFrom(klass)) {
@@ -48,8 +90,15 @@ public class Text implements IInput {
       if (number != null) {
         return number;
       }
-      throw new ClassCastException(
-          "The value '" + getValue() + "' could not be parsed to a number");
+      throw new ClassCastException("The value '" + getValue() + "' could not be parsed to Number");
+    }
+
+    if (UUID.class.isAssignableFrom(klass)) {
+      try {
+        return UUID.fromString(getValue());
+      } catch (IllegalArgumentException e) {
+        throw new ClassCastException("The value '" + getValue() + "' could not be parsed to UUID");
+      }
     }
 
     if (klass.isEnum()) {
@@ -59,7 +108,7 @@ public class Text implements IInput {
         }
       }
       throw new ClassCastException(
-          "The value '" + getValue() + "' didn't match any value of enum " + klass.getSimpleName());
+          "The value '" + getValue() + "' didn't match any value of " + klass.getSimpleName());
     }
 
     throw new ClassCastException(
