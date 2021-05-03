@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -132,7 +132,16 @@ A function is characterized by its name (case insensitive) followed by parenthes
 You may want to customize the behavior of the different processes taking place. For now, you can only change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
 
 ### Date format
-You are able to change the date format by setting the static `DATE_FORMATTER` field of the `SpringFilterParameters` class. You can also set it with the property `turkraft.springfilter.dateformatter.pattern`.
+You are able to change the date format by setting the static formatters inside the `SpringFilterParameters` class. You may see below the default patterns and how you can set them with properties:
+
+<table>
+  <tr> <th>Type</th> <th>Default Pattern</th> <th>Property Name</th> </tr>
+  <tr> <td> java.util.Date </th> <td> dd-MM-yyyy </td> <td> turkraft.springfilter.dateformatter.pattern </td> </tr>
+  <tr> <td> java.time.LocalDate </th> <td> dd-MM-yyyy </td> <td> turkraft.springfilter.localdateformatter.pattern </td> </tr>
+  <tr> <td> java.time.LocalDateTime </th> <td> dd-MM-yyyy'T'HH:mm:ss </td> <td> turkraft.springfilter.localdatetimeformatter.pattern </td> </tr>
+  <tr> <td> java.time.OffsetDateTime </th> <td> dd-MM-yyyy'T'HH:mm:ss.SSSXXX </td> <td> turkraft.springfilter.offsetdatetimeformatter.pattern </td> </tr>
+  <tr> <td> java.time.Instant </th> <td> dd-MM-yyyy'T'HH:mm:ss.SSSXXX </td> <td> <i>Parses using DateTimeFormatter.ISO_INSTANT</i> </td> </tr>
+</table>
 
 ## MongoDB
 MongoDB is also partially supported as an alternative to JPA. The query input is compiled to a `Bson`/`Document` filter. You can then use it as you wish with `MongoTemplate` or `MongoOperations` for example. 
