@@ -248,14 +248,25 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
             (Expression<? extends Comparable>) rightExpression);
 
       case LIKE: {
-        if (ExpressionGeneratorParameters.ENABLE_ASTERISK_WITH_LIKE_OPERATOR
-            && expression.getRight() instanceof Input) {
+        // TODO: factorize
+        if (ExpressionGeneratorParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
+          if (ExpressionGeneratorParameters.ENABLE_ASTERISK_WITH_LIKE_OPERATOR
+              && expression.getRight() instanceof Input) {
+            return criteriaBuilder.like((Expression) leftExpression, ((Input) expression.getRight())
+                .getValue().getValueAs(String.class).toString().replace('*', '%'));
+          }
+          return criteriaBuilder.like((Expression) leftExpression,
+              (Expression<String>) rightExpression);
+        } else {
+          if (ExpressionGeneratorParameters.ENABLE_ASTERISK_WITH_LIKE_OPERATOR
+              && expression.getRight() instanceof Input) {
+            return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
+                ((Input) expression.getRight()).getValue().getValueAs(String.class).toString()
+                    .toUpperCase().replace('*', '%'));
+          }
           return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
-              ((Input) expression.getRight()).getValue().getValueAs(String.class).toString()
-                  .toUpperCase().replace('*', '%'));
+              criteriaBuilder.upper((Expression<String>) rightExpression));
         }
-        return criteriaBuilder.like(criteriaBuilder.upper((Expression) leftExpression),
-            criteriaBuilder.upper((Expression<String>) rightExpression));
       }
 
       default:
