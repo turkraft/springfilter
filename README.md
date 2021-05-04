@@ -126,6 +126,9 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> size </th> <td> returns the collection's size </td> <td> <b>size(</b>accidents<b>)</b> </td> </tr>
   <tr> <td> length </th> <td> returns the string's length </td> <td> <b>length(</b>name<b>)</b> </td> </tr>
   <tr> <td> trim </th> <td> returns the trimmed string </td> <td> <b>trim(</b>name<b>)</b> </td> </tr>
+  <tr> <td> upper </th> <td> returns the uppercased string </td> <td> <b>upper(</b>name<b>)</b> </td> </tr>
+  <tr> <td> lower </th> <td> returns the lowercased string </td> <td> <b>lower(</b>name<b>)</b> </td> </tr>
+  <tr> <td> concat </th> <td> returns the concatenation of two given strings </td> <td> <b>concat(</b>firstName<b>, concat(</b>' '<b>,</b> lastName<b>))</b> </td> </tr>
 </table>
 
 ## Configuration
