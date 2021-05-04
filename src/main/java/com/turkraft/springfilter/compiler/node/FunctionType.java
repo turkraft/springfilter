@@ -8,9 +8,33 @@ import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public enum FunctionType {
 
-  ABSOLUTE(Number.class), AVERAGE(Number.class), MIN(Number.class), MAX(Number.class), SUM(
-      Number.class), SIZE(Collection.class), LENGTH(
-          String.class), TRIM(String.class), CURRENTTIME, CURRENTDATE, CURRENTTIMESTAMP;
+  ABSOLUTE(Number.class),
+
+  AVERAGE(Number.class),
+
+  MIN(Number.class),
+
+  MAX(Number.class),
+
+  SUM(Number.class),
+
+  SIZE(Collection.class),
+
+  LENGTH(String.class),
+
+  TRIM(String.class),
+
+  UPPER(String.class),
+
+  LOWER(String.class),
+
+  CONCAT(String.class, String.class),
+
+  CURRENTTIME,
+
+  CURRENTDATE,
+
+  CURRENTTIMESTAMP;
 
   private final Class<?>[] argumentTypes;
 
