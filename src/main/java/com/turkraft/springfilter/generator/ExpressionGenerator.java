@@ -175,6 +175,16 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
       case TRIM:
         return criteriaBuilder.trim((Expression<String>) getter.apply(0));
 
+      case UPPER:
+        return criteriaBuilder.upper((Expression<String>) getter.apply(0));
+
+      case LOWER:
+        return criteriaBuilder.lower((Expression<String>) getter.apply(0));
+
+      case CONCAT:
+        return criteriaBuilder.concat((Expression<String>) getter.apply(0),
+            (Expression<String>) getter.apply(1));
+
     }
 
     throw new InvalidQueryException("Unsupported function " + type.name().toLowerCase());
