@@ -109,7 +109,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized'<b>,</b> 'active'<b>)</b></td> </tr>
 </table>
 
-> Note that the `*` character can also be used instead of `%` when using the `~` comparator
+> Note that the `*` character can also be used instead of `%` when using the `~` comparator. By default, this comparator is case insensitive, the behavior can be changed with `ExpressionGeneratorParameters.CASE_SENSITIVE_LIKE_OPERATOR`.
 
 ### Functions
 A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
