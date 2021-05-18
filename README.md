@@ -57,7 +57,7 @@ Specification<Entity> spec = new FilterSpecification<Entity>(query);
 ```
 
 ### c. Predicate
-> Requires **javax.persistence-api**, **spring-data-jpa**
+> Requires **javax.persistence-api**
 ```java
 Predicate predicate = ExpressionGenerator.run(String query, Root<?> r, CriteriaQuery<?> q, CriteriaBuilder cb);
 ```
