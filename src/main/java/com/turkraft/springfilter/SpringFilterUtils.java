@@ -52,6 +52,7 @@ public class SpringFilterUtils {
 
   }
 
+  // not sure if something like that already exists
   public static <T> T merge(BiFunction<T, T, T> func, Collection<T> inputs) {
     if (inputs == null || inputs.size() == 0) {
       return null;
