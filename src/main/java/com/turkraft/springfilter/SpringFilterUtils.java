@@ -68,4 +68,9 @@ public class SpringFilterUtils {
     return result;
   }
 
+  // requireNonNullElse comes with Java 9
+  public static <T> T requireNonNullElse(T obj, T defaultObj) {
+    return obj != null ? obj : defaultObj;
+  }
+
 }

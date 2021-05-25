@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import com.turkraft.springfilter.compiler.node.Arguments;
 import com.turkraft.springfilter.compiler.node.Field;
@@ -351,8 +350,8 @@ public class FilterBuilder {
   }
 
   public static IExpression and(Collection<IExpression> expressions) {
-    return Objects.requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::and, expressions),
-        nothing());
+    return SpringFilterUtils
+        .requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::and, expressions), nothing());
   }
 
   public static IExpression and(IExpression... expressions) {
@@ -366,8 +365,8 @@ public class FilterBuilder {
   }
 
   public static IExpression or(Collection<IExpression> expressions) {
-    return Objects.requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::or, expressions),
-        nothing());
+    return SpringFilterUtils
+        .requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::or, expressions), nothing());
   }
 
   public static IExpression or(IExpression... expressions) {
