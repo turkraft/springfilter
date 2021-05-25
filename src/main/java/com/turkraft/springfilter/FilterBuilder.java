@@ -489,6 +489,30 @@ public class FilterBuilder {
     return trim(field(field));
   }
 
+  public static IExpression lower(IExpression arg) {
+    return function(FunctionType.LOWER, arg);
+  }
+
+  public static IExpression lower(String field) {
+    return lower(field(field));
+  }
+
+  public static IExpression upper(IExpression arg) {
+    return function(FunctionType.UPPER, arg);
+  }
+
+  public static IExpression upper(String field) {
+    return upper(field(field));
+  }
+
+  public static IExpression concat(List<IExpression> args) {
+    return function(FunctionType.CONCAT, args);
+  }
+
+  public static IExpression concat(IExpression arg1, IExpression arg2) {
+    return concat(Arrays.asList(arg1, arg2));
+  }
+
   public static IExpression currentDate() {
     return function(FunctionType.CURRENTDATE);
   }
