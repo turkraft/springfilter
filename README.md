@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -128,7 +128,7 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> trim </th> <td> returns the trimmed string </td> <td> <b>trim(</b>name<b>)</b> </td> </tr>
   <tr> <td> upper </th> <td> returns the uppercased string </td> <td> <b>upper(</b>name<b>)</b> </td> </tr>
   <tr> <td> lower </th> <td> returns the lowercased string </td> <td> <b>lower(</b>name<b>)</b> </td> </tr>
-  <tr> <td> concat </th> <td> returns the concatenation of two given strings </td> <td> <b>concat(</b>firstName<b>, concat(</b>' '<b>,</b> lastName<b>))</b> </td> </tr>
+  <tr> <td> concat </th> <td> returns the concatenation of given strings </td> <td> <b>concat(</b>firstName<b>,</b> ' '<b>,</b> lastName<b>)</b> </td> </tr>
 </table>
 
 ## Configuration
