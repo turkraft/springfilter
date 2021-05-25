@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.generator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.springframework.expression.ExpressionException;
 import com.turkraft.springfilter.Pair;
+import com.turkraft.springfilter.SpringFilterUtils;
 import com.turkraft.springfilter.compiler.Parser;
 import com.turkraft.springfilter.compiler.node.Arguments;
 import com.turkraft.springfilter.compiler.node.Field;
@@ -135,7 +137,9 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
     java.util.function.Function<Integer, Expression<?>> getter = (index) -> {
       if (expressions.get(index).getKey() instanceof Input) {
-        return generate(((Input) expressions.get(index).getKey()), type.getArgumentTypes()[index]);
+        return generate(((Input) expressions.get(index).getKey()),
+            type.isVariadic() ? type.getArgumentTypes()[0].getComponentType()
+                : type.getArgumentTypes()[index]);
       }
       return expressions.get(index).getValue();
     };
@@ -182,8 +186,11 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
         return criteriaBuilder.lower((Expression<String>) getter.apply(0));
 
       case CONCAT:
-        return criteriaBuilder.concat((Expression<String>) getter.apply(0),
-            (Expression<String>) getter.apply(1));
+        List<Expression<String>> strings = new ArrayList<Expression<String>>(expressions.size());
+        for (Pair<IExpression, Expression<?>> pair : expressions) {
+          strings.add((Expression<String>) getter.apply(expressions.indexOf(pair)));
+        }
+        return SpringFilterUtils.merge(criteriaBuilder::concat, strings);
 
     }
 

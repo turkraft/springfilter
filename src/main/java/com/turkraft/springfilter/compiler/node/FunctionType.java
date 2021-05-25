@@ -28,7 +28,7 @@ public enum FunctionType {
 
   LOWER(String.class),
 
-  CONCAT(String.class, String.class),
+  CONCAT(String[].class),
 
   CURRENTTIME,
 
@@ -39,7 +39,13 @@ public enum FunctionType {
   private final Class<?>[] argumentTypes;
 
   FunctionType(Class<?>... argumentTypes) {
+
     this.argumentTypes = argumentTypes;
+
+    if (argumentTypes.length > 1 && isVariadic()) {
+      throw new RuntimeException("Variadic functions can only have one argument type");
+    }
+
   }
 
   public Class<?>[] getArgumentTypes() {
@@ -57,6 +63,27 @@ public enum FunctionType {
           "The function " + name + " should have " + argumentTypes.length + " arguments");
     }
 
+    if (isVariadic()) {
+
+      for (int i = 0; i < expressions.size(); i++) {
+
+        if (expressions.get(i).getKey() instanceof Input) {
+          if (!(((Input) expressions.get(i).getKey()).getValue()
+              .canBe(argumentTypes[0].getComponentType()))) {
+            return false;
+          }
+        } else if (!argumentTypes[0].getComponentType()
+            .isAssignableFrom(expressions.get(i).getValue().getJavaType())) {
+          return false;
+        }
+
+      }
+
+      return true;
+
+    }
+
+
     for (int i = 0; i < argumentTypes.length; i++) {
 
       if (expressions.get(i).getKey() instanceof Input) {
@@ -71,6 +98,10 @@ public enum FunctionType {
 
     return true;
 
+  }
+
+  public boolean isVariadic() {
+    return argumentTypes[0].isArray();
   }
 
   public static FunctionType getMatch(

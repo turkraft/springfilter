@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.turkraft.springfilter.compiler.node.Arguments;
@@ -351,18 +350,8 @@ public class FilterBuilder {
   }
 
   public static IExpression and(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0) {
-      return nothing();
-    }
-    Iterator<IExpression> i = expressions.iterator();
-    if (expressions.size() == 1) {
-      return i.next();
-    }
-    IExpression ands = i.next();
-    while (i.hasNext()) {
-      ands = and(ands, i.next());
-    }
-    return ands;
+    return SpringFilterUtils
+        .requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::and, expressions), nothing());
   }
 
   public static IExpression and(IExpression... expressions) {
@@ -376,18 +365,8 @@ public class FilterBuilder {
   }
 
   public static IExpression or(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0) {
-      return nothing();
-    }
-    Iterator<IExpression> i = expressions.iterator();
-    if (expressions.size() == 1) {
-      return i.next();
-    }
-    IExpression ors = i.next();
-    while (i.hasNext()) {
-      ors = or(ors, i.next());
-    }
-    return ors;
+    return SpringFilterUtils
+        .requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::or, expressions), nothing());
   }
 
   public static IExpression or(IExpression... expressions) {
@@ -487,6 +466,30 @@ public class FilterBuilder {
 
   public static IExpression trim(String field) {
     return trim(field(field));
+  }
+
+  public static IExpression lower(IExpression arg) {
+    return function(FunctionType.LOWER, arg);
+  }
+
+  public static IExpression lower(String field) {
+    return lower(field(field));
+  }
+
+  public static IExpression upper(IExpression arg) {
+    return function(FunctionType.UPPER, arg);
+  }
+
+  public static IExpression upper(String field) {
+    return upper(field(field));
+  }
+
+  public static IExpression concat(List<IExpression> args) {
+    return function(FunctionType.CONCAT, args);
+  }
+
+  public static IExpression concat(IExpression arg1, IExpression arg2) {
+    return concat(Arrays.asList(arg1, arg2));
   }
 
   public static IExpression currentDate() {

@@ -204,6 +204,16 @@ public class ApplicationTest {
         e -> e.getPayslips().size() == employee.getPayslips().size());
   }
 
+  @ParameterizedTest
+  @MethodSource("randomEmployees")
+  public void concatTest(Employee employee) {
+    validate(
+        String.format("concat(firstName, ' ', lastName) : '%s'",
+            (employee.getFirstName() + " " + employee.getLastName()).replace("'", "\\'")),
+        e -> (e.getFirstName() + " " + e.getLastName())
+            .equals(employee.getFirstName() + " " + employee.getLastName()));
+  }
+
   @Test
   public void nestedFieldsTest() {
     validate(String.format("manager.company.id : company.id"),

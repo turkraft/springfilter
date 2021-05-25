@@ -2,6 +2,8 @@ package com.turkraft.springfilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.BiFunction;
 import com.turkraft.springfilter.compiler.Parser;
 import com.turkraft.springfilter.compiler.node.IExpression;
 
@@ -48,6 +50,27 @@ public class SpringFilterUtils {
 
     return null;
 
+  }
+
+  // not sure if something like that already exists
+  public static <T> T merge(BiFunction<T, T, T> func, Collection<T> inputs) {
+    if (inputs == null || inputs.size() == 0) {
+      return null;
+    }
+    Iterator<T> i = inputs.iterator();
+    if (inputs.size() == 1) {
+      return i.next();
+    }
+    T result = i.next();
+    while (i.hasNext()) {
+      result = func.apply(result, i.next());
+    }
+    return result;
+  }
+
+  // requireNonNullElse comes with Java 9
+  public static <T> T requireNonNullElse(T obj, T defaultObj) {
+    return obj != null ? obj : defaultObj;
   }
 
 }
