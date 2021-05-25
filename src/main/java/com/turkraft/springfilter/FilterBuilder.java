@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import com.turkraft.springfilter.compiler.node.Arguments;
 import com.turkraft.springfilter.compiler.node.Field;
@@ -351,18 +351,8 @@ public class FilterBuilder {
   }
 
   public static IExpression and(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0) {
-      return nothing();
-    }
-    Iterator<IExpression> i = expressions.iterator();
-    if (expressions.size() == 1) {
-      return i.next();
-    }
-    IExpression ands = i.next();
-    while (i.hasNext()) {
-      ands = and(ands, i.next());
-    }
-    return ands;
+    return Objects.requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::and, expressions),
+        nothing());
   }
 
   public static IExpression and(IExpression... expressions) {
@@ -376,18 +366,8 @@ public class FilterBuilder {
   }
 
   public static IExpression or(Collection<IExpression> expressions) {
-    if (expressions == null || expressions.size() == 0) {
-      return nothing();
-    }
-    Iterator<IExpression> i = expressions.iterator();
-    if (expressions.size() == 1) {
-      return i.next();
-    }
-    IExpression ors = i.next();
-    while (i.hasNext()) {
-      ors = or(ors, i.next());
-    }
-    return ors;
+    return Objects.requireNonNullElse(SpringFilterUtils.merge(FilterBuilder::or, expressions),
+        nothing());
   }
 
   public static IExpression or(IExpression... expressions) {
