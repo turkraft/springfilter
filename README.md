@@ -154,13 +154,13 @@ MongoDB is also partially supported as an alternative to JPA. The query input is
 ### Usage
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@Filter Document doc, Pageable page) {
+public List<Entity> search(@Filter(entityClass = Car.class) Document doc, Pageable page) {
   // your repo may implement DocumentExecutor for easy usage
   return repo.findAll(doc, page); 
 }
 ```
 ```java
-Bson bson = BsonGenerator.run(filter);
+Bson bson = BsonGenerator.run(Car.class, filter);
 Document doc = BsonUtils.getDocumentFromBson(bson);
 Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
