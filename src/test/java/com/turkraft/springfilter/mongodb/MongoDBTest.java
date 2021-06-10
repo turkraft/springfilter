@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.jpa;
+package com.turkraft.springfilter.mongodb;
 
 import static com.turkraft.springfilter.FilterBuilder.and;
 import static com.turkraft.springfilter.FilterBuilder.equal;
@@ -8,6 +8,7 @@ import static com.turkraft.springfilter.FilterBuilder.in;
 import static com.turkraft.springfilter.FilterBuilder.lessThan;
 import static com.turkraft.springfilter.FilterBuilder.lessThanOrEqual;
 import static com.turkraft.springfilter.FilterBuilder.not;
+import static com.turkraft.springfilter.FilterBuilder.numbers;
 import static com.turkraft.springfilter.FilterBuilder.or;
 import static com.turkraft.springfilter.FilterBuilder.strings;
 import static org.junit.Assert.assertEquals;
@@ -23,59 +24,60 @@ import com.turkraft.springfilter.generator.BsonGenerator;
 class MongoDBTest {
 
   void queryTest(IExpression expression, Bson query) {
-    assertEquals(query, BsonGenerator.run(expression));
+    assertEquals(query, BsonGenerator.run(Car.class, expression));
   }
 
   @Test
   void equalStringTest() throws Exception {
-    queryTest(equal("key", "value"), Filters.eq("key", "value"));
+    queryTest(equal("name", "value"), Filters.eq("name", "value"));
   }
 
   @Test
   void equalNumberTest() throws Exception {
-    queryTest(equal("key", 0), Filters.eq("key", 0));
+    queryTest(equal("someNumber", 0), Filters.eq("someNumber", 0));
   }
 
   @Test
   void greaterThanTest() throws Exception {
-    queryTest(greaterThan("key", 0), Filters.gt("key", 0));
+    queryTest(greaterThan("someNumber", 0), Filters.gt("someNumber", 0));
   }
 
   @Test
   void greaterThanOrEqualTest() throws Exception {
-    queryTest(greaterThanOrEqual("key", 0), Filters.gte("key", 0));
+    queryTest(greaterThanOrEqual("someNumber", 0), Filters.gte("someNumber", 0));
   }
 
   @Test
   void lessThanTest() throws Exception {
-    queryTest(lessThan("key", 0), Filters.lt("key", 0));
+    queryTest(lessThan("someNumber", 0), Filters.lt("someNumber", 0));
   }
 
   @Test
   void lessThanOrEqualTest() throws Exception {
-    queryTest(lessThanOrEqual("key", 0), Filters.lte("key", 0));
+    queryTest(lessThanOrEqual("someNumber", 0), Filters.lte("someNumber", 0));
   }
 
   @Test
   void andTest() throws Exception {
-    queryTest(and(equal("a", "b"), equal("c", "d")),
-        Filters.and(Filters.eq("a", "b"), Filters.eq("c", "d")));
+    queryTest(and(equal("name", "x"), equal("id", "y")),
+        Filters.and(Filters.eq("name", "x"), Filters.eq("id", "y")));
   }
 
   @Test
   void orTest() throws Exception {
-    queryTest(or(equal("a", "b"), equal("c", "d")),
-        Filters.or(Filters.eq("a", "b"), Filters.eq("c", "d")));
+    queryTest(or(equal("name", "x"), equal("id", "y")),
+        Filters.or(Filters.eq("name", "x"), Filters.eq("id", "y")));
   }
 
   @Test
   void notTest() throws Exception {
-    queryTest(not(equal("key", "value")), Filters.not(Filters.eq("key", "value")));
+    queryTest(not(equal("name", "value")), Filters.not(Filters.eq("name", "value")));
   }
 
   @Test
   void inTest() throws Exception {
-    queryTest(in("a", strings("a", "b", "c")), Filters.in("a", "a", "b", "c"));
+    queryTest(in("id", strings("x", "y", "z")), Filters.in("id", "x", "y", "z"));
+    queryTest(in("someNumber", numbers(1, 2, 3)), Filters.in("someNumber", 1, 2, 3));
   }
 
 }

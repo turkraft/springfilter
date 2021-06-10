@@ -11,4 +11,6 @@ public @interface Filter {
 
   String parameterName() default "filter";
 
+  Class<?> entityClass() default Void.class;
+
 }

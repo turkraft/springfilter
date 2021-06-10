@@ -29,15 +29,13 @@ public class SpecificationFilterArgumentResolver implements HandlerMethodArgumen
 
     Filter filter = methodParameter.getParameterAnnotation(Filter.class);
 
-    if (filter == null) {
-      return getSpecification(methodParameter.getGenericParameterType().getClass(),
-          nativeWebRequest.getParameterValues("filter"));
+    if (!filter.entityClass().equals(Void.class)) {
+      throw new IllegalArgumentException(
+          "The entity class should not be provided, " + filter.entityClass() + " was given");
     }
 
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        !filter.parameterName().isEmpty()
-            ? nativeWebRequest.getParameterValues(filter.parameterName())
-            : null);
+        nativeWebRequest.getParameterValues(filter.parameterName()));
 
   }
 

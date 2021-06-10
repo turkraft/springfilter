@@ -1,6 +1,8 @@
 package com.turkraft.springfilter.mongodb;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,16 @@ public class Application implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws IOException {
-    mongoTemplate.save(Car.builder().name("Audi").build());
-    mongoTemplate.save(Car.builder().name("Merco").build());
+    mongoTemplate.save(Car.builder().name("Audi").someDate(Date.from(Instant.now())).build());
+    mongoTemplate.save(Car.builder().name("Merco")
+        .someDate(Date.from(Instant.now().minusSeconds(60 * 60 * 24))).build());
   }
 
   @Autowired
   private CarRepository carRepository;
 
   @GetMapping(value = "car")
-  public List<Car> getCars(@Filter Document filter) {
+  public List<Car> getCars(@Filter(entityClass = Car.class) Document filter) {
     return carRepository.findAll(filter);
   }
 
