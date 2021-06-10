@@ -1,4 +1,4 @@
-package com.turkraft.springfilter.jpa;
+package com.turkraft.springfilter.mongodb;
 
 import static com.turkraft.springfilter.FilterBuilder.and;
 import static com.turkraft.springfilter.FilterBuilder.equal;
