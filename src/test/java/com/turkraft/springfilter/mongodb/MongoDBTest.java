@@ -11,6 +11,8 @@ import static com.turkraft.springfilter.FilterBuilder.not;
 import static com.turkraft.springfilter.FilterBuilder.or;
 import static com.turkraft.springfilter.FilterBuilder.strings;
 import static org.junit.Assert.assertEquals;
+import java.time.Instant;
+import java.util.Date;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -76,6 +78,12 @@ class MongoDBTest {
   @Test
   void inTest() throws Exception {
     queryTest(in("a", strings("a", "b", "c")), Filters.in("a", "a", "b", "c"));
+  }
+
+  @Test
+  void inputConversionTest() throws Exception {
+    Date date = Date.from(Instant.now());
+    queryTest(equal("key", date), Filters.eq("key", date));
   }
 
 }
