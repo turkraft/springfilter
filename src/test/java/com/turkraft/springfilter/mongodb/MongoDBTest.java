@@ -23,7 +23,7 @@ import com.turkraft.springfilter.generator.BsonGenerator;
 class MongoDBTest {
 
   void queryTest(IExpression expression, Bson query) {
-    assertEquals(query, BsonGenerator.run(expression));
+    assertEquals(query, BsonGenerator.run(Car.class, expression));
   }
 
   @Test

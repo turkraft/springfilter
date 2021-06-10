@@ -19,10 +19,14 @@ import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public class BsonGenerator implements Generator<Bson> {
 
-  private static final BsonGenerator INSTANCE = new BsonGenerator();
+  private Class<?> entityClass;
 
-  public static Bson run(IExpression expression) {
-    return INSTANCE.generate(expression);
+  public static Bson run(Class<?> entityClass, IExpression expression) {
+    return new BsonGenerator(entityClass).generate(expression);
+  }
+
+  public BsonGenerator(Class<?> entityClass) {
+    this.entityClass = entityClass;
   }
 
   @Override
@@ -53,7 +57,8 @@ public class BsonGenerator implements Generator<Bson> {
     }
 
     String key = ((Field) expression.getLeft()).getName();
-    Object input = ((Input) expression.getRight()).getValue().getValue();
+    Object input = ((Input) expression.getRight()).getValue()
+        .getValueAs(EntityFieldTypeResolver.resolve(key, entityClass));
 
     switch (expression.getComparator()) {
 

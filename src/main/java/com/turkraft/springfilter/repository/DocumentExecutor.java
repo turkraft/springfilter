@@ -17,8 +17,8 @@ import com.turkraft.springfilter.generator.BsonGeneratorUtils;
 public interface DocumentExecutor<T, I> {
 
   default Optional<T> findOne(@Nullable Document doc) {
-    return Optional.ofNullable(getMongoOperations().findOne(BsonGeneratorUtils.getQueryFromDocument(doc),
-        getMetadata().getJavaType()));
+    return Optional.ofNullable(getMongoOperations()
+        .findOne(BsonGeneratorUtils.getQueryFromDocument(doc), getMetadata().getJavaType()));
   }
 
   default List<T> findAll(@Nullable Document doc) {
@@ -27,8 +27,8 @@ public interface DocumentExecutor<T, I> {
   }
 
   default Page<T> findAll(@Nullable Document doc, Pageable pageable) {
-    return new PageImpl<>(getMongoOperations()
-        .find(BsonGeneratorUtils.getQueryFromDocument(doc).with(pageable), getMetadata().getJavaType()));
+    return new PageImpl<>(getMongoOperations().find(
+        BsonGeneratorUtils.getQueryFromDocument(doc).with(pageable), getMetadata().getJavaType()));
   }
 
   default List<T> findAll(@Nullable Document doc, Sort sort) {
