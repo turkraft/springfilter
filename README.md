@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -166,7 +166,7 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Functions are currently not supported, and field types are limited to strings/enums, numbers, booleans, and collections
+> :warning: Functions are currently not supported
 
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
