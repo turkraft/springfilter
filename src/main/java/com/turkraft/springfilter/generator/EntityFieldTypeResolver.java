@@ -7,6 +7,9 @@ import java.util.Collection;
 
 // source: https://github.com/RutledgePaulV/rest-query-engine
 
+// this class is only used by the BsonGenerator, and adds the lang3 dependency unfortunately
+// it should be possible to get rid of it and use reflection/LambdaMetafactory
+
 public class EntityFieldTypeResolver {
 
   public static Class<?> resolve(String path, Class<?> root) {
