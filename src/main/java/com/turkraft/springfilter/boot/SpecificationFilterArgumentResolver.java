@@ -30,9 +30,7 @@ public class SpecificationFilterArgumentResolver implements HandlerMethodArgumen
     Filter filter = methodParameter.getParameterAnnotation(Filter.class);
 
     return getSpecification(methodParameter.getGenericParameterType().getClass(),
-        !filter.parameterName().isEmpty()
-            ? nativeWebRequest.getParameterValues(filter.parameterName())
-            : null);
+        nativeWebRequest.getParameterValues(filter.parameterName()));
 
   }
 
