@@ -30,25 +30,29 @@ public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory) {
 
-    Filter entityFilter = parameter.getParameterAnnotation(Filter.class);
+    Filter filter = parameter.getParameterAnnotation(Filter.class);
 
-    Bson bson = getBson(!entityFilter.parameterName().isEmpty()
-        ? webRequest.getParameterValues(entityFilter.parameterName())
-        : null);
+    if (filter.entityClass().equals(Void.class)) {
+      throw new IllegalArgumentException(
+          "The entity class should be provided when using @Filter with MongoDB, for example: @Filter(entityClass = Car.class)");
+    }
+
+    Bson bson = getBson(filter.entityClass(),
+        !filter.parameterName().isEmpty() ? webRequest.getParameterValues(filter.parameterName())
+            : null);
 
     if (parameter.getParameterType().equals(Bson.class)) {
       return bson;
     }
 
     return BsonGeneratorUtils.getDocumentFromBson(bson);
-
   }
 
-  private Bson getBson(String[] inputs) {
+  private Bson getBson(Class<?> entityClass, String[] inputs) {
 
     IExpression filter = SpringFilterUtils.getFilterFromInputs(inputs);
 
-    return filter == null ? null : (new BsonGenerator()).generate(filter);
+    return filter == null ? null : BsonGenerator.run(entityClass, filter);
 
   }
 
