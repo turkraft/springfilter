@@ -61,7 +61,9 @@ public class ExpressionGeneratorUtils {
 
     String chain = null;
 
-    for (String field : fields) {
+    for (int i = 0; i < fields.length; i++) {
+
+      String field = fields[i];
 
       path = from.get(field);
 
@@ -79,7 +81,7 @@ public class ExpressionGeneratorUtils {
                   ? JoinType.LEFT
                   : null);
 
-      if (join != null) {
+      if (join != null && i < fields.length - 1) {
         if (!joins.containsKey(chain)) {
           joins.put(chain, from.join(field, join));
         }
