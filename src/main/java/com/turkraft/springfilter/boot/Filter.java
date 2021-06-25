@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.bson.conversions.Bson;
 
 /**
  * This annotation can be used in Spring controllers to quickly build a filter as a
@@ -41,8 +40,9 @@ public @interface Filter {
 
   /**
    * The class of the entity on which filtering is applied. It should be provided when using
-   * MongoDB's {@link Bson} and {@link Document}, but not when using JPA's
-   * {@link org.springframework.data.jpa.domain.Specification Specification&lt;T&gt;}.
+   * MongoDB's {@link org.bson.conversions.Bson Bson} and {@link @link org.bson.Document Document},
+   * but not when using JPA's {@link org.springframework.data.jpa.domain.Specification
+   * Specification&lt;T&gt;}.
    */
   Class<?> entityClass() default Void.class;
 
