@@ -9,6 +9,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.turkraft.springfilter.SpringFilterUtils;
 import com.turkraft.springfilter.compiler.node.IExpression;
 
+/**
+ * Resolver for {@link com.turkraft.springfilter.boot.FilterSpecification
+ * FilterSpecification&lt;T&gt;}, or {@link org.springframework.data.jpa.domain.Specification
+ * Specification&lt;T&gt;} annotated with {@link Filter}.
+ */
+
 public class SpecificationFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override

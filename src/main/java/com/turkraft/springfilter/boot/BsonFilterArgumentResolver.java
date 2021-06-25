@@ -12,6 +12,10 @@ import com.turkraft.springfilter.compiler.node.IExpression;
 import com.turkraft.springfilter.generator.BsonGenerator;
 import com.turkraft.springfilter.generator.BsonGeneratorUtils;
 
+/**
+ * Resolver for {@link Bson} and {@link Document} annotated with {@link Filter}.
+ */
+
 public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
@@ -46,6 +50,7 @@ public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver
     }
 
     return BsonGeneratorUtils.getDocumentFromBson(bson);
+
   }
 
   private Bson getBson(Class<?> entityClass, String[] inputs) {
