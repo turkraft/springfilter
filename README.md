@@ -154,19 +154,19 @@ MongoDB is also partially supported as an alternative to JPA. The query input is
 ### Usage
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@Filter(entityClass = Car.class) Document doc, Pageable page) {
+public List<Entity> search(@Filter(entityClass = Entity.class) Document doc, Pageable page) {
   // your repo may implement DocumentExecutor for easy usage
   return repo.findAll(doc, page); 
 }
 ```
 ```java
-Bson bson = BsonGenerator.run(Car.class, filter);
+Bson bson = BsonGenerator.run(Entity.class, filter);
 Document doc = BsonUtils.getDocumentFromBson(bson);
 Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Functions are currently not supported
+> :warning: Functions are currently not supported with MongoDB
 
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
