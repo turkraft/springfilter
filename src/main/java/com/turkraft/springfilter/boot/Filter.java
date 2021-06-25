@@ -8,8 +8,9 @@ import org.bson.conversions.Bson;
 
 /**
  * This annotation can be used in Spring controllers to quickly build a filter as a
- * {@link org.springframework.data.jpa.domain.Specification Specification&lt;T&gt;}, {@link Bson},
- * or {@link Document}. The filter's input will be taken from the request's query parameters.
+ * {@link org.springframework.data.jpa.domain.Specification Specification&lt;T&gt;},
+ * {@link org.bson.conversions.Bson Bson}, or {@link org.bson.Document Document}. The filter's input
+ * will be taken from the request's query parameters.
  *
  * <br>
  * <br>

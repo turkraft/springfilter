@@ -13,7 +13,8 @@ import com.turkraft.springfilter.generator.BsonGenerator;
 import com.turkraft.springfilter.generator.BsonGeneratorUtils;
 
 /**
- * Resolver for {@link Bson} and {@link Document} annotated with {@link Filter}.
+ * Resolver for {@link org.bson.conversions.Bson Bson} and {@link org.bson.Document Document}
+ * annotated with {@link Filter}.
  */
 
 public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver {
