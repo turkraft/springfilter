@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import com.turkraft.springfilter.SpringFilterParameters;
 
+/**
+ * Configuration class used to load properties as an alternative to setting the static fields when
+ * using Spring.
+ */
+
 @Configuration
 public class SpringFilterAutoConfig {
 

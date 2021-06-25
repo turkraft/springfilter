@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.boot;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,6 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 import com.turkraft.springfilter.compiler.Parser;
 import com.turkraft.springfilter.compiler.node.IExpression;
 import com.turkraft.springfilter.generator.ExpressionGenerator;
+
+/**
+ * The filter's {@link org.springframework.data.jpa.domain.Specification Specification&lt;T&gt;}.
+ */
 
 public class FilterSpecification<T> implements Specification<T> {
 
@@ -43,16 +46,14 @@ public class FilterSpecification<T> implements Specification<T> {
 
     Predicate predicate = null;
 
-    Map<String, Join<?, ?>> joins = new HashMap<String, Join<?, ?>>();
-
     if (input != null) {
       predicate = !input.trim().isEmpty()
           ? (Predicate) ExpressionGenerator.run(Parser.parse(input), root, query, criteriaBuilder,
-              joins, payload)
+              new HashMap<String, Join<?, ?>>(), payload)
           : null;
     } else {
-      predicate =
-          (Predicate) ExpressionGenerator.run(filter, root, query, criteriaBuilder, joins, payload);
+      predicate = (Predicate) ExpressionGenerator.run(filter, root, query, criteriaBuilder,
+          new HashMap<String, Join<?, ?>>(), payload);
     }
 
     return predicate;

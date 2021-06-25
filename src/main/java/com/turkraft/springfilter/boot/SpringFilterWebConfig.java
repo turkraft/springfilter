@@ -6,6 +6,10 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.turkraft.springfilter.SpringFilterUtils;
 
+/**
+ * Configuration class used to load the resolvers.
+ */
+
 @Configuration
 public class SpringFilterWebConfig implements WebMvcConfigurer {
 
