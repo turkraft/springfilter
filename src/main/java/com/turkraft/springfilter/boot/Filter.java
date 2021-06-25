@@ -40,8 +40,8 @@ public @interface Filter {
 
   /**
    * The class of the entity on which filtering is applied. It should be provided when using
-   * MongoDB's {@link org.bson.conversions.Bson Bson} and {@link @link org.bson.Document Document},
-   * but not when using JPA's {@link org.springframework.data.jpa.domain.Specification
+   * MongoDB's {@link org.bson.conversions.Bson Bson} and {@link org.bson.Document Document}, but
+   * not when using JPA's {@link org.springframework.data.jpa.domain.Specification
    * Specification&lt;T&gt;}.
    */
   Class<?> entityClass() default Void.class;
