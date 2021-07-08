@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.Nullable;
@@ -27,8 +28,10 @@ public interface DocumentExecutor<T, I> {
   }
 
   default Page<T> findAll(@Nullable Document doc, Pageable pageable) {
-    return new PageImpl<>(getMongoOperations().find(
-        BsonGeneratorUtils.getQueryFromDocument(doc).with(pageable), getMetadata().getJavaType()));
+    Query query = BsonGeneratorUtils.getQueryFromDocument(doc).with(pageable);
+    long count = getMongoOperations().count(query, getMetadata().getJavaType());
+    List<T> content = getMongoOperations().find(query, getMetadata().getJavaType());
+    return new PageImpl<>(content, pageable, count);
   }
 
   default List<T> findAll(@Nullable Document doc, Sort sort) {
