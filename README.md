@@ -44,11 +44,11 @@ Your API will gain a full featured search functionality. You don't work with API
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web** and **spring-webmvc**
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@Filter Specification<Entity> spec, Pageable page) {
+public Page<Entity> search(@Filter Specification<Entity> spec, Pageable page) {
   return repo.findAll(spec, page);
 }
 ```
-> The repository should implement `JpaSpecificationExecutor` in order to execute Spring's Specification, `SimpleJpaRepository` is a well known implementation. You can remove the `Pageable` argument if pagination is not needed.
+> The repository should implement `JpaSpecificationExecutor` in order to execute Spring's Specification, `SimpleJpaRepository` is a well known implementation. You can remove the `Pageable` argument and return a `List` if pagination is not needed.
 > 
 ### b. Specification
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
@@ -154,7 +154,7 @@ MongoDB is also partially supported as an alternative to JPA. The query input is
 ### Usage
 ```java
 @GetMapping(value = "/search")
-public List<Entity> search(@Filter(entityClass = Entity.class) Document doc, Pageable page) {
+public Page<Entity> search(@Filter(entityClass = Entity.class) Document doc, Pageable page) {
   // your repo may implement DocumentExecutor for easy usage
   return repo.findAll(doc, page); 
 }
