@@ -101,7 +101,7 @@ public enum FunctionType {
   }
 
   public boolean isVariadic() {
-    return argumentTypes[0].isArray();
+    return argumentTypes.length > 0 && argumentTypes[0].isArray();
   }
 
   public static FunctionType getMatch(
