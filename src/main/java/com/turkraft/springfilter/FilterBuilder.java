@@ -27,8 +27,6 @@ import com.turkraft.springfilter.compiler.token.input.Text;
 
 public class FilterBuilder {
 
-  private FilterBuilder() {}
-
   /* FILTER */
 
   public static Filter filter(IExpression body) {
