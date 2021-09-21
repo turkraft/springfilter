@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bson.BsonNull;
 import org.bson.conversions.Bson;
+import org.springframework.data.annotation.Id;
 import com.mongodb.client.model.Filters;
 import com.turkraft.springfilter.compiler.node.Arguments;
 import com.turkraft.springfilter.compiler.node.Field;
@@ -57,8 +58,8 @@ public class BsonGenerator implements Generator<Bson> {
     }
 
     String key = ((Field) expression.getLeft()).getName();
-    Object input = ((Input) expression.getRight()).getValue()
-        .getValueAs(EntityFieldTypeResolver.resolve(key, entityClass));
+    Class<?> fieldClass = EntityFieldTypeResolver.resolve(key, entityClass);
+    Object input = ((Input) expression.getRight()).getValue().getValueAs(fieldClass);
 
     switch (expression.getComparator()) {
 
@@ -81,6 +82,13 @@ public class BsonGenerator implements Generator<Bson> {
         return Filters.lte(key, input);
 
       case LIKE: {
+        // https://github.com/turkraft/spring-filter/issues/94
+        if (String.class.isAssignableFrom(fieldClass) && !key.contains(".")) {
+          java.lang.reflect.Field field = EntityFieldTypeResolver.getField(entityClass, key);
+          if (field.isAnnotationPresent(Id.class)) {
+            return Filters.where("/" + input + "/.test(this._id)");
+          }
+        }
         return Filters.regex(key, input.toString());
       }
 
