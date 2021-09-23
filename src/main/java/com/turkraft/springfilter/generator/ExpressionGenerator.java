@@ -61,8 +61,8 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
       CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins,
       Object payload) {
-    return run(expression, new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder, joins,
-        payload);
+    return run(expression, new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder,
+        joins, payload);
   }
 
   public static Expression<?> run(
@@ -207,51 +207,66 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
     switch (type) {
 
+      case ALL:
+        return criteriaBuilder.all(getSubquery(expression));
+
+      case ANY:
+        return criteriaBuilder.any(getSubquery(expression));
+
+      case SOME:
+        return criteriaBuilder.some(getSubquery(expression));
+
       case EXISTS:
-
-        if (expression.getArguments().getValues().size() != 2) {
-          throw new InvalidQueryException(
-              "The function " + expression.getName() + " needs two arguments");
-        }
-
-        if (!(expression.getArguments().getValues().get(0) instanceof Field)) {
-          throw new InvalidQueryException(
-              "The function " + expression.getName() + " needs a field as its first argument");
-        }
-
-        Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
-
-        Path<?> field = tableNode.getValue()
-            .get(((Field) expression.getArguments().getValues().get(0)).getName());
-
-        if (!(field instanceof PluralAttributePath)) {
-          throw new InvalidQueryException("The function " + expression.getName()
-              + "'s first argument should be a field referring to a relation");
-        }
-
-        Root<?> subRootEntity = subquery
-            .from(((PluralAttributePath<?>) field).getAttribute().getElementType().getJavaType());
-
-        ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subRootEntity);
-
-        Expression<?> predicate =
-            ExpressionGenerator.run(expression.getArguments().getValues().get(1), node,
-                criteriaQuery, criteriaBuilder, joins);
-
-        if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
-          throw new InvalidQueryException(
-              "The function " + expression.getName() + " needs a predicate as its second argument");
-        }
-
-        subquery.select(criteriaBuilder.literal(1));
-        subquery.where((Expression<Boolean>) predicate);
-        return criteriaBuilder.exists(subquery);
+        return criteriaBuilder.exists(getSubquery(expression));
 
       default:
 
     }
 
     throw new InvalidQueryException("Unsupported function " + type.name().toLowerCase());
+
+  }
+
+  @SuppressWarnings({"unchecked"})
+  private Subquery<Integer> getSubquery(Function expression) {
+
+    if (expression.getArguments().getValues().size() != 2) {
+      throw new InvalidQueryException(
+          "The function " + expression.getName() + " needs two arguments");
+    }
+
+    if (!(expression.getArguments().getValues().get(0) instanceof Field)) {
+      throw new InvalidQueryException(
+          "The function " + expression.getName() + " needs a field as its first argument");
+    }
+
+    Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+
+    Path<?> field =
+        tableNode.getValue().get(((Field) expression.getArguments().getValues().get(0)).getName());
+
+    if (!(field instanceof PluralAttributePath)) {
+      throw new InvalidQueryException("The function " + expression.getName()
+          + "'s first argument should be a field referring to a relation");
+    }
+
+    Root<?> subRootEntity = subquery
+        .from(((PluralAttributePath<?>) field).getAttribute().getElementType().getJavaType());
+
+    ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subRootEntity);
+
+    Expression<?> predicate = ExpressionGenerator.run(expression.getArguments().getValues().get(1),
+        node, criteriaQuery, criteriaBuilder, joins);
+
+    if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
+      throw new InvalidQueryException(
+          "The function " + expression.getName() + " needs a predicate as its second argument");
+    }
+
+    subquery.select(criteriaBuilder.literal(1));
+    subquery.where((Expression<Boolean>) predicate);
+
+    return subquery;
 
   }
 

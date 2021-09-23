@@ -36,6 +36,12 @@ public enum FunctionType {
 
   CURRENTTIMESTAMP(false),
 
+  ALL(true),
+
+  ANY(true),
+
+  SOME(true),
+
   EXISTS(true);
 
   private final boolean customizedBehavior;
