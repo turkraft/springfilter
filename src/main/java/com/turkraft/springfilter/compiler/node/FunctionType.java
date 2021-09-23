@@ -8,37 +8,43 @@ import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public enum FunctionType {
 
-  ABSOLUTE(Number.class),
+  ABSOLUTE(false, Number.class),
 
-  AVERAGE(Number.class),
+  AVERAGE(false, Number.class),
 
-  MIN(Number.class),
+  MIN(false, Number.class),
 
-  MAX(Number.class),
+  MAX(false, Number.class),
 
-  SUM(Number.class),
+  SUM(false, Number.class),
 
-  SIZE(Collection.class),
+  SIZE(false, Collection.class),
 
-  LENGTH(String.class),
+  LENGTH(false, String.class),
 
-  TRIM(String.class),
+  TRIM(false, String.class),
 
-  UPPER(String.class),
+  UPPER(false, String.class),
 
-  LOWER(String.class),
+  LOWER(false, String.class),
 
-  CONCAT(String[].class),
+  CONCAT(false, String[].class),
 
-  CURRENTTIME,
+  CURRENTTIME(false),
 
-  CURRENTDATE,
+  CURRENTDATE(false),
 
-  CURRENTTIMESTAMP;
+  CURRENTTIMESTAMP(false),
+
+  EXISTS(true);
+
+  private final boolean customizedBehavior;
 
   private final Class<?>[] argumentTypes;
 
-  FunctionType(Class<?>... argumentTypes) {
+  FunctionType(boolean customizedBehavior, Class<?>... argumentTypes) {
+
+    this.customizedBehavior = customizedBehavior;
 
     this.argumentTypes = argumentTypes;
 
@@ -46,6 +52,10 @@ public enum FunctionType {
       throw new RuntimeException("Variadic functions can only have one argument type");
     }
 
+  }
+
+  public boolean hasCustomizedBehavior() {
+    return customizedBehavior;
   }
 
   public Class<?>[] getArgumentTypes() {
@@ -56,6 +66,10 @@ public enum FunctionType {
 
     if (!name().equalsIgnoreCase(name)) {
       return false;
+    }
+
+    if (customizedBehavior) {
+      return true;
     }
 
     if (argumentTypes.length > expressions.size()) {
@@ -82,7 +96,6 @@ public enum FunctionType {
       return true;
 
     }
-
 
     for (int i = 0; i < argumentTypes.length; i++) {
 
@@ -116,6 +129,15 @@ public enum FunctionType {
 
     return null;
 
+  }
+
+  public static FunctionType from(String name) {
+    for (FunctionType type : values()) {
+      if (type.name().equalsIgnoreCase(name)) {
+        return type;
+      }
+    }
+    return null;
   }
 
 }

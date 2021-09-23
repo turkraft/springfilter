@@ -18,34 +18,38 @@ public class ExpressionGeneratorUtils {
 
   private ExpressionGeneratorUtils() {}
 
-  public static Path<?> getDatabasePath(Root<?> table, String fieldPath) {
-    return getDatabasePath(table, new HashMap<>(), null, fieldPath);
+  public static Path<?> getDatabasePath(Root<?> root, String fieldPath) {
+    return getDatabasePath(new ExpressionDatabasePath(null, root), new HashMap<>(), null, fieldPath);
+  }
+
+  public static Path<?> getDatabasePath(ExpressionDatabasePath tableNode, String fieldPath) {
+    return getDatabasePath(tableNode, new HashMap<>(), null, fieldPath);
   }
 
   public static Path<?> getDatabasePath(
-      Root<?> table,
+      ExpressionDatabasePath tableNode,
       Map<String, Join<?, ?>> joins,
       String fieldPath) {
-    return getDatabasePath(table, joins, null, fieldPath);
+    return getDatabasePath(tableNode, joins, null, fieldPath);
   }
 
   public static Path<?> getDatabasePath(
-      Root<?> table,
+      ExpressionDatabasePath tableNode,
       Map<String, Join<?, ?>> joins,
       Object payload,
       String fieldPath) {
-    return getDatabasePath(table, joins, payload, fieldPath, null);
+    return getDatabasePath(tableNode, joins, payload, fieldPath, null);
   }
 
   public static Path<?> getDatabasePath(
-      Root<?> table,
+      ExpressionDatabasePath tableNode,
       Map<String, Join<?, ?>> joins,
       Object payload,
       String fieldPath,
       BiFunction<Path<?>, Object, Boolean> authorizer) {
 
     if (!fieldPath.contains(".")) {
-      return authorize(authorizer, table.get(fieldPath), payload, fieldPath);
+      return authorize(authorizer, tableNode.getValue().get(fieldPath), payload, fieldPath);
     }
 
     if (!SpringFilterUtils.isHibernateCoreDependencyPresent()) {
@@ -54,8 +58,8 @@ public class ExpressionGeneratorUtils {
       // TODO: instead of throwing an exception, try to join with JPA only
     }
 
-    Path<?> path = table;
-    From<?, ?> from = table;
+    Path<?> path = tableNode.getValue();
+    From<?, ?> from = tableNode.getValue();
 
     String[] fields = fieldPath.split("\\.");
 
@@ -64,6 +68,13 @@ public class ExpressionGeneratorUtils {
     for (int i = 0; i < fields.length; i++) {
 
       String field = fields[i];
+
+      if (field.equalsIgnoreCase("up")) {
+        tableNode = tableNode.getParent();
+        path = tableNode.getValue();
+        from = tableNode.getValue();
+        continue;
+      }
 
       path = from.get(field);
 
