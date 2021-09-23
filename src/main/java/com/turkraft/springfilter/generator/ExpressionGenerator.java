@@ -11,8 +11,10 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.springframework.expression.ExpressionException;
 import com.turkraft.springfilter.Pair;
@@ -32,6 +34,26 @@ import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public class ExpressionGenerator implements Generator<Expression<?>> {
 
+  private static Expression<?> run(
+      IExpression expression,
+      ExpressionDatabasePath tableNode,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    return (new ExpressionGenerator(tableNode, criteriaQuery, criteriaBuilder, joins, payload))
+        .generate(expression);
+  }
+
+  private static Expression<?> run(
+      IExpression expression,
+      ExpressionDatabasePath tableNode,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins) {
+    return run(expression, tableNode, criteriaQuery, criteriaBuilder, joins, null);
+  }
+
   public static Expression<?> run(
       IExpression expression,
       Root<?> root,
@@ -39,8 +61,8 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
       CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins,
       Object payload) {
-    return (new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload))
-        .generate(expression);
+    return run(expression, new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder, joins,
+        payload);
   }
 
   public static Expression<?> run(
@@ -52,19 +74,24 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
     return run(expression, root, criteriaQuery, criteriaBuilder, joins, null);
   }
 
-  private Root<?> root;
+  private ExpressionDatabasePath tableNode;
   private CriteriaQuery<?> criteriaQuery;
   private CriteriaBuilder criteriaBuilder;
   private Map<String, Join<?, ?>> joins;
   private Object payload;
 
-  public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
+  public ExpressionGenerator(ExpressionDatabasePath tableNode, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
-    this.root = root;
+    this.tableNode = tableNode;
     this.criteriaQuery = criteriaQuery;
     this.criteriaBuilder = criteriaBuilder;
     this.joins = joins;
     this.payload = payload;
+  }
+
+  public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
+    this(new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder, joins, payload);
   }
 
   public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
@@ -79,7 +106,7 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
   @Override
   public Expression<?> generate(Field expression) {
-    return ExpressionGeneratorUtils.getDatabasePath(root, joins, payload, expression.getName(),
+    return ExpressionGeneratorUtils.getDatabasePath(tableNode, joins, payload, expression.getName(),
         ExpressionGeneratorParameters.FILTERING_AUTHORIZATION);
   }
 
@@ -87,84 +114,140 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
   @Override
   public Expression<?> generate(Function expression) {
 
-    List<Pair<IExpression, Expression<?>>> expressions = new LinkedList<>();
-
-    // the generated expression is directly stored in the list if it's not based on an input,
-    // otherwise we will generate it later
-
-    for (IExpression argument : expression.getArguments().getValues()) {
-      if (argument instanceof Input) {
-        expressions.add(new Pair<IExpression, Expression<?>>(argument, null));
-      } else {
-        expressions.add(new Pair<IExpression, Expression<?>>(argument, generate(argument)));
-      }
-    }
-
-    FunctionType type = FunctionType.getMatch(expression.getName(), expressions);
+    FunctionType type = FunctionType.from(expression.getName());
 
     if (type == null) {
-      throw new InvalidQueryException("The function " + expression.getName()
-          + " didn't have any match, input types may be wrong");
+      throw new InvalidQueryException("The function " + expression.getName() + " does not exist");
     }
 
-    // the following method is used to get the expression of the argument at the given index
+    if (!type.hasCustomizedBehavior()) {
 
-    java.util.function.Function<Integer, Expression<?>> getter = (index) -> {
-      if (expressions.get(index).getKey() instanceof Input) {
-        return generate(((Input) expressions.get(index).getKey()),
-            type.isVariadic() ? type.getArgumentTypes()[0].getComponentType()
-                : type.getArgumentTypes()[index]);
+      List<Pair<IExpression, Expression<?>>> expressions = new LinkedList<>();
+
+      // the generated expression is directly stored in the list if it's not based on an input,
+      // otherwise we will generate it later
+
+      for (IExpression argument : expression.getArguments().getValues()) {
+        if (argument instanceof Input) {
+          expressions.add(new Pair<IExpression, Expression<?>>(argument, null));
+        } else {
+          expressions.add(new Pair<IExpression, Expression<?>>(argument, generate(argument)));
+        }
       }
-      return expressions.get(index).getValue();
-    };
+
+      if (!type.matches(expression.getName(), expressions)) {
+        throw new InvalidQueryException(
+            "Input type given to the function " + expression.getName() + " are incorrect");
+      }
+
+      // the following method is used to get the expression of the argument at the given index
+
+      java.util.function.Function<Integer, Expression<?>> getter = (index) -> {
+        if (expressions.get(index).getKey() instanceof Input) {
+          return generate(((Input) expressions.get(index).getKey()),
+              type.isVariadic() ? type.getArgumentTypes()[0].getComponentType()
+                  : type.getArgumentTypes()[index]);
+        }
+        return expressions.get(index).getValue();
+      };
+
+      switch (type) {
+
+        case ABSOLUTE:
+          return criteriaBuilder.abs((Expression<Number>) getter.apply(0));
+
+        case AVERAGE:
+          return criteriaBuilder.avg((Expression<Number>) getter.apply(0));
+
+        case MIN:
+          return criteriaBuilder.min((Expression<Number>) getter.apply(0));
+
+        case MAX:
+          return criteriaBuilder.max((Expression<Number>) getter.apply(0));
+
+        case SUM:
+          return criteriaBuilder.sum((Expression<Number>) getter.apply(0));
+
+        case CURRENTDATE:
+          return criteriaBuilder.currentDate();
+
+        case CURRENTTIME:
+          return criteriaBuilder.currentTime();
+
+        case CURRENTTIMESTAMP:
+          return criteriaBuilder.currentTimestamp();
+
+        case SIZE:
+          return criteriaBuilder.size((Expression<Collection>) getter.apply(0));
+
+        case LENGTH:
+          return criteriaBuilder.length((Expression<String>) getter.apply(0));
+
+        case TRIM:
+          return criteriaBuilder.trim((Expression<String>) getter.apply(0));
+
+        case UPPER:
+          return criteriaBuilder.upper((Expression<String>) getter.apply(0));
+
+        case LOWER:
+          return criteriaBuilder.lower((Expression<String>) getter.apply(0));
+
+        case CONCAT:
+          List<Expression<String>> strings = new ArrayList<Expression<String>>(expressions.size());
+          for (Pair<IExpression, Expression<?>> pair : expressions) {
+            strings.add((Expression<String>) getter.apply(expressions.indexOf(pair)));
+          }
+          return SpringFilterUtils.merge(criteriaBuilder::concat, strings);
+
+        default:
+
+      }
+
+    }
 
     switch (type) {
 
-      case ABSOLUTE:
-        return criteriaBuilder.abs((Expression<Number>) getter.apply(0));
+      case EXISTS:
 
-      case AVERAGE:
-        return criteriaBuilder.avg((Expression<Number>) getter.apply(0));
-
-      case MIN:
-        return criteriaBuilder.min((Expression<Number>) getter.apply(0));
-
-      case MAX:
-        return criteriaBuilder.max((Expression<Number>) getter.apply(0));
-
-      case SUM:
-        return criteriaBuilder.sum((Expression<Number>) getter.apply(0));
-
-      case CURRENTDATE:
-        return criteriaBuilder.currentDate();
-
-      case CURRENTTIME:
-        return criteriaBuilder.currentTime();
-
-      case CURRENTTIMESTAMP:
-        return criteriaBuilder.currentTimestamp();
-
-      case SIZE:
-        return criteriaBuilder.size((Expression<Collection>) getter.apply(0));
-
-      case LENGTH:
-        return criteriaBuilder.length((Expression<String>) getter.apply(0));
-
-      case TRIM:
-        return criteriaBuilder.trim((Expression<String>) getter.apply(0));
-
-      case UPPER:
-        return criteriaBuilder.upper((Expression<String>) getter.apply(0));
-
-      case LOWER:
-        return criteriaBuilder.lower((Expression<String>) getter.apply(0));
-
-      case CONCAT:
-        List<Expression<String>> strings = new ArrayList<Expression<String>>(expressions.size());
-        for (Pair<IExpression, Expression<?>> pair : expressions) {
-          strings.add((Expression<String>) getter.apply(expressions.indexOf(pair)));
+        if (expression.getArguments().getValues().size() != 2) {
+          throw new InvalidQueryException(
+              "The function " + expression.getName() + " needs two arguments");
         }
-        return SpringFilterUtils.merge(criteriaBuilder::concat, strings);
+
+        if (!(expression.getArguments().getValues().get(0) instanceof Field)) {
+          throw new InvalidQueryException(
+              "The function " + expression.getName() + " needs a field as its first argument");
+        }
+
+        Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+
+        Path<?> field = tableNode.getValue()
+            .get(((Field) expression.getArguments().getValues().get(0)).getName());
+
+        if (!(field instanceof PluralAttributePath)) {
+          throw new InvalidQueryException("The function " + expression.getName()
+              + "'s first argument should be a field referring to a relation");
+        }
+
+        Root<?> subRootEntity = subquery
+            .from(((PluralAttributePath<?>) field).getAttribute().getElementType().getJavaType());
+
+        ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subRootEntity);
+
+        Expression<?> predicate =
+            ExpressionGenerator.run(expression.getArguments().getValues().get(1), node,
+                criteriaQuery, criteriaBuilder, joins);
+
+        if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
+          throw new InvalidQueryException(
+              "The function " + expression.getName() + " needs a predicate as its second argument");
+        }
+
+        subquery.select(criteriaBuilder.literal(1));
+        subquery.where((Expression<Boolean>) predicate);
+        return criteriaBuilder.exists(subquery);
+
+      default:
 
     }
 
@@ -385,35 +468,19 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
   }
 
   public Root<?> getRoot() {
-    return root;
-  }
-
-  public void setRoot(Root<?> root) {
-    this.root = root;
+    return tableNode.getValue();
   }
 
   public CriteriaQuery<?> getCriteriaQuery() {
     return criteriaQuery;
   }
 
-  public void setCriteriaQuery(CriteriaQuery<?> criteriaQuery) {
-    this.criteriaQuery = criteriaQuery;
-  }
-
   public CriteriaBuilder getCriteriaBuilder() {
     return criteriaBuilder;
   }
 
-  public void setCriteriaBuilder(CriteriaBuilder criteriaBuilder) {
-    this.criteriaBuilder = criteriaBuilder;
-  }
-
   public Map<String, Join<?, ?>> getJoins() {
     return joins;
-  }
-
-  public void setJoins(Map<String, Join<?, ?>> joins) {
-    this.joins = joins;
   }
 
   public Object getPayload() {
