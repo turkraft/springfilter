@@ -207,14 +207,14 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
     switch (type) {
 
-      case ALL:
-        return criteriaBuilder.all(getSubquery(expression));
-
-      case ANY:
-        return criteriaBuilder.any(getSubquery(expression));
-
-      case SOME:
-        return criteriaBuilder.some(getSubquery(expression));
+      // case ALL:
+      // return criteriaBuilder.all(getSubquery(expression));
+      //
+      // case ANY:
+      // return criteriaBuilder.any(getSubquery(expression));
+      //
+      // case SOME:
+      // return criteriaBuilder.some(getSubquery(expression));
 
       case EXISTS:
         return criteriaBuilder.exists(getSubquery(expression));
