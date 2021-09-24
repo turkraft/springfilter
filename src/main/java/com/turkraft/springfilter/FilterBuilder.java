@@ -27,6 +27,8 @@ import com.turkraft.springfilter.compiler.token.input.Text;
 
 public class FilterBuilder {
 
+  public static final String UP = "up";
+
   /* FILTER */
 
   public static Filter filter(IExpression body) {
@@ -35,20 +37,20 @@ public class FilterBuilder {
 
   /* NOTHING */
 
-  public static IExpression nothing() {
+  public static Nothing nothing() {
     return Nothing.builder().build();
   }
 
   /* PRIORITY */
 
-  public static IExpression priority(IExpression body) {
+  public static Priority priority(IExpression body) {
     return Priority.builder().body(body).build();
   }
 
   /* FIELD */
 
-  public static IExpression field(String name) {
-    return Field.builder().name(name).build();
+  public static Field field(String... names) {
+    return Field.builder().name(String.join(".", names)).build();
   }
 
   /* INPUTS */
@@ -500,6 +502,14 @@ public class FilterBuilder {
 
   public static IExpression currentTimestamp() {
     return function(FunctionType.CURRENTTIMESTAMP);
+  }
+
+  public static IExpression exists(Field field, IExpression arg) {
+    return function(FunctionType.EXISTS, field, arg);
+  }
+
+  public static IExpression exists(String field, IExpression arg) {
+    return exists(field(field), arg);
   }
 
   /* HELPERS */
