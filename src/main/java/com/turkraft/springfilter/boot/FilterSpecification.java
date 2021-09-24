@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.boot;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,6 +27,8 @@ public class FilterSpecification<T> implements Specification<T> {
 
   private Object payload;
 
+  private Map<String, Join<?, ?>> joins;
+
   public FilterSpecification(String input) {
     Objects.requireNonNull(input);
     this.input = input;
@@ -49,11 +52,11 @@ public class FilterSpecification<T> implements Specification<T> {
     if (input != null) {
       predicate = !input.trim().isEmpty()
           ? (Predicate) ExpressionGenerator.run(Parser.parse(input), root, query, criteriaBuilder,
-              new HashMap<String, Join<?, ?>>(), payload)
+              getJoins(), payload)
           : null;
     } else {
       predicate = (Predicate) ExpressionGenerator.run(filter, root, query, criteriaBuilder,
-          new HashMap<String, Join<?, ?>>(), payload);
+          getJoins(), payload);
     }
 
     return predicate;
@@ -64,12 +67,27 @@ public class FilterSpecification<T> implements Specification<T> {
     return input;
   }
 
+  public IExpression getFilter() {
+    return filter;
+  }
+
   public Object getPayload() {
     return payload;
   }
 
   public void setPayload(Object payload) {
     this.payload = payload;
+  }
+
+  public Map<String, Join<?, ?>> getJoins() {
+    if (joins == null) {
+      joins = new HashMap<String, Join<?, ?>>();
+    }
+    return joins;
+  }
+
+  public void setJoins(Map<String, Join<?, ?>> joins) {
+    this.joins = joins;
   }
 
 }

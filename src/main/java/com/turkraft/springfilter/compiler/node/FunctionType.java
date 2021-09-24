@@ -36,11 +36,11 @@ public enum FunctionType {
 
   CURRENTTIMESTAMP(false),
 
-  ALL(true),
-
-  ANY(true),
-
-  SOME(true),
+  // ALL(true),
+  //
+  // ANY(true),
+  //
+  // SOME(true),
 
   EXISTS(true);
 
