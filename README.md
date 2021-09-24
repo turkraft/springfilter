@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 </dependency>
 ```
 
@@ -131,8 +131,15 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> concat </th> <td> returns the concatenation of given strings </td> <td> <b>concat(</b>firstName<b>,</b> ' '<b>,</b> lastName<b>)</b> </td> </tr>
 </table>
 
+#### Subqueries
+The functions below involve subqueries. You may use the keyword `up` to access the parent query. For example `up.id` refers to the parent entity's `id` field.
+<table>
+  <tr> <th>Name</th> <th>Description</th> <th>Example</th> <th>Explanation</th> </tr>
+  <tr> <td> exists </th> <td> returns the existence of a subquery result </td> <td> not <b>exists(</b>wheels<b>,</b> up.id : carId and diameter > 10<b>)</b> </td> <td> returns  true if none of the wheels of the car has a diameter greater than 10. <br> ⚠️ the link between the parent and child should be done manually using `up` for now.</td> </tr>
+</table>
+
 ## Configuration
-You may want to customize the behavior of the different processes taking place. For now, you can only change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
+You may want to customize the behavior of the different processes taking place. For now, you can change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
 
 ### Date format
 You are able to change the date format by setting the static formatters inside the `SpringFilterParameters` class. You may see below the default patterns and how you can set them with properties:
