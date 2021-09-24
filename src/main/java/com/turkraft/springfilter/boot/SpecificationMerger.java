@@ -18,21 +18,13 @@ public class SpecificationMerger<T> implements Specification<T> {
 
   private List<Specification<T>> specifications;
 
-  private Map<String, Join<?, ?>> joins;
-
-  public SpecificationMerger() {
-    this(new HashMap<String, Join<?, ?>>());
-  }
-
-  public SpecificationMerger(Map<String, Join<?, ?>> joins) {
-    this.joins = joins;
-  }
-
   @Override
   public Predicate toPredicate(
       Root<T> root,
       CriteriaQuery<?> query,
       CriteriaBuilder criteriaBuilder) {
+
+    Map<String, Join<?, ?>> joins = new HashMap<String, Join<?, ?>>();
 
     Specification<T> result = null;
 
