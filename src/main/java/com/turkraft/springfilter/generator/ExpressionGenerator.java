@@ -230,6 +230,8 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
   @SuppressWarnings({"unchecked"})
   private Subquery<Integer> getSubquery(Function expression) {
 
+    // /!\ TODO: this method won't work with all/any/some, subquery's select() should be refactored
+
     if (expression.getArguments().getValues().size() != 2) {
       throw new InvalidQueryException(
           "The function " + expression.getName() + " needs two arguments");
@@ -250,10 +252,10 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
           + "'s first argument should be a field referring to a relation");
     }
 
-    Root<?> subRootEntity = subquery
+    Root<?> subroot = subquery
         .from(((PluralAttributePath<?>) field).getAttribute().getElementType().getJavaType());
 
-    ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subRootEntity);
+    ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subroot);
 
     Expression<?> predicate = ExpressionGenerator.run(expression.getArguments().getValues().get(1),
         node, criteriaQuery, criteriaBuilder, joins);
