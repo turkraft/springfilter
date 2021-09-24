@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiFunction;
+import org.springframework.data.jpa.domain.Specification;
+import com.turkraft.springfilter.boot.SpecificationMerger;
 import com.turkraft.springfilter.compiler.Parser;
 import com.turkraft.springfilter.compiler.node.IExpression;
 
@@ -71,6 +73,29 @@ public class SpringFilterUtils {
   // requireNonNullElse comes with Java 9
   public static <T> T requireNonNullElse(T obj, T defaultObj) {
     return obj != null ? obj : defaultObj;
+  }
+
+  @SafeVarargs
+  public static <T> Specification<T> mergeSpecifications(Specification<T>... specifications) {
+
+    SpecificationMerger<T> merger = new SpecificationMerger<T>();
+
+    for (Specification<T> specification : specifications) {
+
+      if (specification == null) {
+        continue;
+      }
+
+      if (specification instanceof SpecificationMerger) {
+        merger.getSpecifications()
+            .addAll(((SpecificationMerger<T>) specification).getSpecifications());
+      } else {
+        merger.getSpecifications().add(specification);
+      }
+    }
+
+    return merger;
+
   }
 
 }
