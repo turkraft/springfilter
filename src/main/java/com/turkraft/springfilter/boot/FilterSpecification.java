@@ -67,6 +67,10 @@ public class FilterSpecification<T> implements Specification<T> {
     return input;
   }
 
+  public IExpression getFilter() {
+    return filter;
+  }
+
   public Object getPayload() {
     return payload;
   }

@@ -10,6 +10,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
+import com.turkraft.springfilter.compiler.node.Nothing;
 
 public class SpecificationMerger<T> implements Specification<T> {
 
@@ -42,7 +43,18 @@ public class SpecificationMerger<T> implements Specification<T> {
       }
 
       if (specification instanceof FilterSpecification) {
-        ((FilterSpecification<T>) specification).setJoins(joins);
+
+        FilterSpecification<T> filterSpecification = (FilterSpecification<T>) specification;
+
+        if ((filterSpecification.getInput() == null
+            || filterSpecification.getInput().trim().isEmpty())
+            && (filterSpecification.getFilter() == null
+                || filterSpecification.getFilter() instanceof Nothing)) {
+          continue;
+        }
+
+        filterSpecification.setJoins(joins);
+
       }
 
       result = result == null ? specification : specification.and(result);
