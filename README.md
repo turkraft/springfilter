@@ -134,7 +134,7 @@ A function is characterized by its name (case insensitive) followed by parenthes
 #### Subqueries
 <table>
   <tr> <th>Name</th> <th>Description</th> <th>Example</th> <th>Explanation</th> </tr>
-  <tr> <td> exists </th> <td> returns the existence of a subquery result </td> <td> not <b>exists(</b>wheels<b>,</b> diameter > 10<b>)</b> </td> <td> returns  true if none of the wheels of the car has a diameter greater than 10</td> </tr>
+  <tr> <td> exists </th> <td> returns the existence of a subquery result </td> <td> not <b>exists(</b>wheels.diameter > 10<b>)</b> </td> <td> returns  true if none of the wheels of the car has a diameter greater than 10</td> </tr>
 </table>
 
 ## Configuration
