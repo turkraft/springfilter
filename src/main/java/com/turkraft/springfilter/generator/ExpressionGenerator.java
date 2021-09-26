@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -87,6 +86,7 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
     this.criteriaBuilder = criteriaBuilder;
     this.joins = joins;
     this.payload = payload;
+    criteriaQuery.distinct(true);
   }
 
   public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
@@ -232,33 +232,14 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
     // /!\ TODO: this method won't work with all/any/some, subquery's select() should be refactored
 
-    if (expression.getArguments().getValues().size() != 2) {
-      throw new InvalidQueryException(
-          "The function " + expression.getName() + " needs two arguments");
-    }
-
-    if (!(expression.getArguments().getValues().get(0) instanceof Field)) {
-      throw new InvalidQueryException(
-          "The function " + expression.getName() + " needs a field as its first argument");
-    }
-
     Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
 
-    Path<?> field =
-        tableNode.getValue().get(((Field) expression.getArguments().getValues().get(0)).getName());
-
-    if (!(field instanceof PluralAttributePath)) {
-      throw new InvalidQueryException("The function " + expression.getName()
-          + "'s first argument should be a field referring to a relation");
-    }
-
-    Root<?> subroot = subquery
-        .from(((PluralAttributePath<?>) field).getAttribute().getElementType().getJavaType());
+    Root<?> subroot = subquery.correlate(tableNode.getValue());
 
     ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subroot);
 
-    Expression<?> predicate = ExpressionGenerator.run(expression.getArguments().getValues().get(1),
-        node, criteriaQuery, criteriaBuilder, joins);
+    Expression<?> predicate = ExpressionGenerator.run(expression.getArguments().getValues().get(0),
+        node, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
 
     if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
       throw new InvalidQueryException(
