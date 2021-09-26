@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Attribute.PersistentAttributeType;
 import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
-import com.turkraft.springfilter.FilterBuilder;
 import com.turkraft.springfilter.SpringFilterUtils;
 import com.turkraft.springfilter.exception.UnauthorizedPathException;
 
@@ -70,13 +69,6 @@ public class ExpressionGeneratorUtils {
     for (int i = 0; i < fields.length; i++) {
 
       String field = fields[i];
-
-      if (field.equalsIgnoreCase(FilterBuilder.UP)) {
-        tableNode = tableNode.getParent();
-        path = tableNode.getValue();
-        from = tableNode.getValue();
-        continue;
-      }
 
       path = from.get(field);
 

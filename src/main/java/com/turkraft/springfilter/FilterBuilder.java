@@ -27,8 +27,6 @@ import com.turkraft.springfilter.compiler.token.input.Text;
 
 public class FilterBuilder {
 
-  public static final String UP = "up";
-
   /* FILTER */
 
   public static Filter filter(IExpression body) {
@@ -504,12 +502,8 @@ public class FilterBuilder {
     return function(FunctionType.CURRENTTIMESTAMP);
   }
 
-  public static IExpression exists(Field field, IExpression arg) {
-    return function(FunctionType.EXISTS, field, arg);
-  }
-
-  public static IExpression exists(String field, IExpression arg) {
-    return exists(field(field), arg);
+  public static IExpression exists(IExpression arg) {
+    return function(FunctionType.EXISTS, arg);
   }
 
   /* HELPERS */
