@@ -132,10 +132,9 @@ A function is characterized by its name (case insensitive) followed by parenthes
 </table>
 
 #### Subqueries
-The functions below involve subqueries. You may use the keyword `up` to access the parent query. For example `up.id` refers to the parent entity's `id` field.
 <table>
   <tr> <th>Name</th> <th>Description</th> <th>Example</th> <th>Explanation</th> </tr>
-  <tr> <td> exists </th> <td> returns the existence of a subquery result </td> <td> not <b>exists(</b>wheels<b>,</b> up.id : carId and diameter > 10<b>)</b> </td> <td> returns  true if none of the wheels of the car has a diameter greater than 10. <br> ⚠️ the link between parent and child should be done manually using <b>up</b> for now.</td> </tr>
+  <tr> <td> exists </th> <td> returns the existence of a subquery result </td> <td> not <b>exists(</b>wheels<b>,</b> diameter > 10<b>)</b> </td> <td> returns  true if none of the wheels of the car has a diameter greater than 10</td> </tr>
 </table>
 
 ## Configuration
