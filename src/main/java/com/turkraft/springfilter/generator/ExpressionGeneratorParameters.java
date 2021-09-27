@@ -13,6 +13,8 @@ public class ExpressionGeneratorParameters {
 
   public static boolean CASE_SENSITIVE_LIKE_OPERATOR;
 
+  public static boolean DISTINCT_QUERIES; // should we keep this property?
+
   static {
 
     FILTERING_AUTHORIZATION = null;
@@ -20,6 +22,8 @@ public class ExpressionGeneratorParameters {
     ENABLE_ASTERISK_WITH_LIKE_OPERATOR = true;
 
     CASE_SENSITIVE_LIKE_OPERATOR = false;
+
+    DISTINCT_QUERIES = false;
 
   }
 
