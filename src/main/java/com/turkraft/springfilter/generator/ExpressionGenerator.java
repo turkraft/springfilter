@@ -33,26 +33,6 @@ import com.turkraft.springfilter.exception.InvalidQueryException;
 
 public class ExpressionGenerator implements Generator<Expression<?>> {
 
-  private static Expression<?> run(
-      IExpression expression,
-      ExpressionDatabasePath tableNode,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins,
-      Object payload) {
-    return (new ExpressionGenerator(tableNode, criteriaQuery, criteriaBuilder, joins, payload))
-        .generate(expression);
-  }
-
-  private static Expression<?> run(
-      IExpression expression,
-      ExpressionDatabasePath tableNode,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
-    return run(expression, tableNode, criteriaQuery, criteriaBuilder, joins, null);
-  }
-
   public static Expression<?> run(
       IExpression expression,
       Root<?> root,
@@ -60,8 +40,8 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
       CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins,
       Object payload) {
-    return run(expression, new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder,
-        joins, payload);
+    return (new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload))
+        .generate(expression);
   }
 
   public static Expression<?> run(
@@ -73,25 +53,28 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
     return run(expression, root, criteriaQuery, criteriaBuilder, joins, null);
   }
 
-  private ExpressionDatabasePath tableNode;
+  public static Expression<?> run(
+      IExpression expression,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return run(expression, root, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
+  }
+
+  private Root<?> root;
   private CriteriaQuery<?> criteriaQuery;
   private CriteriaBuilder criteriaBuilder;
   private Map<String, Join<?, ?>> joins;
   private Object payload;
 
-  public ExpressionGenerator(ExpressionDatabasePath tableNode, CriteriaQuery<?> criteriaQuery,
+  public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
-    this.tableNode = tableNode;
+    this.root = root;
     this.criteriaQuery = criteriaQuery;
     this.criteriaBuilder = criteriaBuilder;
     this.joins = joins;
     this.payload = payload;
     criteriaQuery.distinct(true);
-  }
-
-  public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
-    this(new ExpressionDatabasePath(null, root), criteriaQuery, criteriaBuilder, joins, payload);
   }
 
   public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
@@ -106,7 +89,7 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
   @Override
   public Expression<?> generate(Field expression) {
-    return ExpressionGeneratorUtils.getDatabasePath(tableNode, joins, payload, expression.getName(),
+    return ExpressionGeneratorUtils.getDatabasePath(root, joins, payload, expression.getName(),
         ExpressionGeneratorParameters.FILTERING_AUTHORIZATION);
   }
 
@@ -232,18 +215,21 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
 
     // /!\ TODO: this method won't work with all/any/some, subquery's select() should be refactored
 
+    if (expression.getArguments().getValues().size() != 1) {
+      throw new InvalidQueryException(
+          "The function " + expression.getName() + " needs one argument");
+    }
+
     Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
 
-    Root<?> subroot = subquery.correlate(tableNode.getValue());
-
-    ExpressionDatabasePath node = new ExpressionDatabasePath(this.tableNode, subroot);
+    Root<?> subroot = subquery.correlate(root);
 
     Expression<?> predicate = ExpressionGenerator.run(expression.getArguments().getValues().get(0),
-        node, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
+        subroot, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
 
     if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
       throw new InvalidQueryException(
-          "The function " + expression.getName() + " needs a predicate as its second argument");
+          "The function " + expression.getName() + " needs a predicate as its first argument");
     }
 
     subquery.select(criteriaBuilder.literal(1));
@@ -466,7 +452,7 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
   }
 
   public Root<?> getRoot() {
-    return tableNode.getValue();
+    return root;
   }
 
   public CriteriaQuery<?> getCriteriaQuery() {
