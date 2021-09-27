@@ -19,38 +19,33 @@ public class ExpressionGeneratorUtils {
   private ExpressionGeneratorUtils() {}
 
   public static Path<?> getDatabasePath(Root<?> root, String fieldPath) {
-    return getDatabasePath(new ExpressionDatabasePath(null, root), new HashMap<>(), null,
-        fieldPath);
-  }
-
-  public static Path<?> getDatabasePath(ExpressionDatabasePath tableNode, String fieldPath) {
-    return getDatabasePath(tableNode, new HashMap<>(), null, fieldPath);
+    return getDatabasePath(root, new HashMap<>(), null, fieldPath);
   }
 
   public static Path<?> getDatabasePath(
-      ExpressionDatabasePath tableNode,
+      Root<?> root,
       Map<String, Join<?, ?>> joins,
       String fieldPath) {
-    return getDatabasePath(tableNode, joins, null, fieldPath);
+    return getDatabasePath(root, joins, null, fieldPath);
   }
 
   public static Path<?> getDatabasePath(
-      ExpressionDatabasePath tableNode,
+      Root<?> root,
       Map<String, Join<?, ?>> joins,
       Object payload,
       String fieldPath) {
-    return getDatabasePath(tableNode, joins, payload, fieldPath, null);
+    return getDatabasePath(root, joins, payload, fieldPath, null);
   }
 
   public static Path<?> getDatabasePath(
-      ExpressionDatabasePath tableNode,
+      Root<?> root,
       Map<String, Join<?, ?>> joins,
       Object payload,
       String fieldPath,
       BiFunction<Path<?>, Object, Boolean> authorizer) {
 
     if (!fieldPath.contains(".")) {
-      return authorize(authorizer, tableNode.getValue().get(fieldPath), payload, fieldPath);
+      return authorize(authorizer, root.get(fieldPath), payload, fieldPath);
     }
 
     if (!SpringFilterUtils.isHibernateCoreDependencyPresent()) {
@@ -59,8 +54,8 @@ public class ExpressionGeneratorUtils {
       // TODO: instead of throwing an exception, try to join with JPA only
     }
 
-    Path<?> path = tableNode.getValue();
-    From<?, ?> from = tableNode.getValue();
+    Path<?> path = root;
+    From<?, ?> from = root;
 
     String[] fields = fieldPath.split("\\.");
 
