@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import com.turkraft.springfilter.SpringFilterParameters;
+import com.turkraft.springfilter.generator.ExpressionGeneratorParameters;
 
 /**
  * Configuration class used to load properties as an alternative to setting the static fields when
@@ -17,7 +18,8 @@ public class SpringFilterAutoConfig {
       @Value("${turkraft.springfilter.dateformatter.pattern:#{null}}") String datePattern,
       @Value("${turkraft.springfilter.localdateformatter.pattern:#{null}}") String localDatePattern,
       @Value("${turkraft.springfilter.localdatetimeformatter.pattern:#{null}}") String localDateTimePattern,
-      @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern) {
+      @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern,
+      @Value("${turkraft.springfilter.jpa.distinctqueries:#{null}}") Boolean distinctQueries) {
 
     if (datePattern != null) {
       SpringFilterParameters.DATE_FORMATTER.applyPattern(datePattern);
@@ -35,6 +37,10 @@ public class SpringFilterAutoConfig {
     if (offsetDateTimePattern != null) {
       SpringFilterParameters.OFFSETDATETIME_FORMATTER =
           DateTimeFormatter.ofPattern(offsetDateTimePattern);
+    }
+
+    if (distinctQueries != null) {
+      ExpressionGeneratorParameters.DISTINCT_QUERIES = distinctQueries;
     }
 
   }

@@ -74,7 +74,7 @@ public class ExpressionGenerator implements Generator<Expression<?>> {
     this.criteriaBuilder = criteriaBuilder;
     this.joins = joins;
     this.payload = payload;
-    criteriaQuery.distinct(true);
+    criteriaQuery.distinct(ExpressionGeneratorParameters.DISTINCT_QUERIES);
   }
 
   public ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
