@@ -33,7 +33,7 @@
 		<lombok.version>1.18.16</lombok.version>
 		<hibernate.version>5.5.7.Final</hibernate.version>
 		<springframework.version>5.2.12.RELEASE</springframework.version>
-		<spring-data-jpa.version>2.3.6.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>2.5.5</spring-data-jpa.version>
 		<spring-data-mongodb.version>3.0.9.RELEASE</spring-data-mongodb.version>
 		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
 		<springdoc-openapi-ui.version>1.5.4</springdoc-openapi-ui.version>
