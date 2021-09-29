@@ -40,7 +40,7 @@
 		<h2database-h2.version>1.4.200</h2database-h2.version>
 		<de.flapdoodle.embed.mongo.version>2.2.0</de.flapdoodle.embed.mongo.version>
 		<javafaker.version>1.0.2</javafaker.version>
-		<junit.version>5.7.1</junit.version>
+		<junit.version>5.8.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
