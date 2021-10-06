@@ -35,10 +35,11 @@
 		<springframework.version>5.3.10</springframework.version>
 		<spring-data-jpa.version>2.5.5</spring-data-jpa.version>
 		<spring-data-mongodb.version>3.2.5</spring-data-mongodb.version>
-		<springframework-boot.version>2.3.9.RELEASE</springframework-boot.version>
+		<springframework-boot.version>2.5.5</springframework-boot.version>
 		<springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
-		<de.flapdoodle.embed.mongo.version>2.2.0</de.flapdoodle.embed.mongo.version>
+		<jackson-databind.version>2.12.2</jackson-databind.version>
+		<de.flapdoodle.embed.mongo.version>3.0.0</de.flapdoodle.embed.mongo.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.8.1</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -126,6 +127,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-databind.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<version>${de.flapdoodle.embed.mongo.version}</version>
@@ -160,13 +167,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.turkraft.springfilter.jpa.Application</mainClass>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -223,6 +223,13 @@
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.turkraft.springfilter.jpa.Application</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
