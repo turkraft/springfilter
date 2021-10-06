@@ -22,8 +22,12 @@ public class Text implements IInput {
 
   @Override
   public boolean canBe(Class<?> klass) {
-    return String.class.isAssignableFrom(klass) || Character.class.isAssignableFrom(klass)
-        || Date.class.isAssignableFrom(klass) || klass.isEnum();
+    return String.class.isAssignableFrom(klass) || char.class.isAssignableFrom(klass)
+        || Character.class.isAssignableFrom(klass) || Date.class.isAssignableFrom(klass)
+        || LocalDate.class.isAssignableFrom(klass) || LocalDateTime.class.isAssignableFrom(klass)
+        || OffsetDateTime.class.isAssignableFrom(klass) || Instant.class.isAssignableFrom(klass)
+        || Number.class.isAssignableFrom(klass) || UUID.class.isAssignableFrom(klass)
+        || klass.isEnum();
   }
 
   @Override

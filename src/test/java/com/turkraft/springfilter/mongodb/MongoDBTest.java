@@ -11,7 +11,7 @@ import static com.turkraft.springfilter.FilterBuilder.not;
 import static com.turkraft.springfilter.FilterBuilder.numbers;
 import static com.turkraft.springfilter.FilterBuilder.or;
 import static com.turkraft.springfilter.FilterBuilder.strings;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
