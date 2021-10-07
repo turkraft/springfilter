@@ -30,7 +30,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<lombok.version>1.18.20</lombok.version>
+		<lombok.version>1.18.22</lombok.version>
 		<hibernate.version>5.5.7.Final</hibernate.version>
 		<springframework.version>5.3.10</springframework.version>
 		<spring-data-jpa.version>2.5.5</spring-data-jpa.version>
