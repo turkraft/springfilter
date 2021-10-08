@@ -89,4 +89,27 @@ public class FilterSpecification<T> implements Specification<T> {
     this.joins = joins;
   }
 
+  @SafeVarargs
+  public static <T> Specification<T> merge(Specification<T>... specifications) {
+
+    SpecificationMerger<T> merger = new SpecificationMerger<T>();
+
+    for (Specification<T> specification : specifications) {
+
+      if (specification == null) {
+        continue;
+      }
+
+      if (specification instanceof SpecificationMerger) {
+        merger.getSpecifications()
+            .addAll(((SpecificationMerger<T>) specification).getSpecifications());
+      } else {
+        merger.getSpecifications().add(specification);
+      }
+    }
+
+    return merger;
+
+  }
+
 }
