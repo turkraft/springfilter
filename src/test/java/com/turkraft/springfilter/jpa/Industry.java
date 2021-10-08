@@ -8,17 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Industry {
 
   @Id
@@ -30,5 +22,29 @@ public class Industry {
   @JsonIgnoreProperties({"employees", "industry"})
   @OneToMany(mappedBy = "industry")
   private List<Company> companies;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public List<Company> getCompanies() {
+    return companies;
+  }
+
+  public void setCompanies(List<Company> companies) {
+    this.companies = companies;
+  }
 
 }

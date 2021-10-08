@@ -9,17 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Company {
 
   @Id
@@ -35,5 +27,37 @@ public class Company {
   @JsonIgnoreProperties({"company", "manager", "staff", "payslips"})
   @OneToMany(mappedBy = "company")
   private List<Employee> employees;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Industry getIndustry() {
+    return industry;
+  }
+
+  public void setIndustry(Industry industry) {
+    this.industry = industry;
+  }
+
+  public List<Employee> getEmployees() {
+    return employees;
+  }
+
+  public void setEmployees(List<Employee> employees) {
+    this.employees = employees;
+  }
 
 }

@@ -7,10 +7,10 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import com.turkraft.springfilter.SpringFilterUtils;
-import com.turkraft.springfilter.compiler.node.IExpression;
-import com.turkraft.springfilter.generator.BsonGenerator;
-import com.turkraft.springfilter.generator.BsonGeneratorUtils;
+import com.turkraft.springfilter.FilterUtils;
+import com.turkraft.springfilter.parser.FilterParser.FilterContext;
+import com.turkraft.springfilter.parser.generator.bson.BsonGenerator;
+import com.turkraft.springfilter.parser.generator.bson.BsonGeneratorUtils;
 
 /**
  * Resolver for {@link org.bson.conversions.Bson Bson} and {@link org.bson.Document Document}
@@ -56,9 +56,9 @@ public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver
 
   private Bson getBson(Class<?> entityClass, String[] inputs) {
 
-    IExpression filter = SpringFilterUtils.getFilterFromInputs(inputs);
+    FilterContext filter = FilterUtils.getFilterFromInputs(inputs);
 
-    return filter == null ? null : BsonGenerator.run(entityClass, filter);
+    return filter == null ? null : BsonGenerator.run(filter, entityClass);
 
   }
 

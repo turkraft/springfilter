@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.Nullable;
-import com.turkraft.springfilter.generator.BsonGeneratorUtils;
+import com.turkraft.springfilter.parser.generator.bson.BsonGeneratorUtils;
 
 @NoRepositoryBean
 public interface DocumentExecutor<T, I> {

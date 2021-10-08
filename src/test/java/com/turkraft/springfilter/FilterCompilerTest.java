@@ -3,7 +3,8 @@ package com.turkraft.springfilter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import com.turkraft.springfilter.compiler.Parser;
+import com.turkraft.springfilter.parser.Filter;
+import com.turkraft.springfilter.parser.generator.query.QueryGenerator;
 
 class FilterCompilerTest {
 
@@ -20,7 +21,7 @@ class FilterCompilerTest {
 
       "(x : 1 or (y : 2 and z : 3))",
 
-      "(productSpecification in (261, 262, 263, 264, 265) or category is empty)"
+      "(productSpec in (261, 262, 263, 264, 265) or category is empty)"
 
   })
   void compilerTest(String input) throws Exception {
@@ -30,9 +31,9 @@ class FilterCompilerTest {
     // this will let us catch tokenizer/parser errors and will make sure that the compiler is
     // deterministic
 
-    String output = Parser.parse(input).generate();
+    String output = QueryGenerator.run(Filter.from(input));
 
-    assertEquals(output, Parser.parse(output).generate());
+    assertEquals(output, QueryGenerator.run(Filter.from(output)));
 
   }
 

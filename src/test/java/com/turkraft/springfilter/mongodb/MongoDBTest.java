@@ -5,26 +5,25 @@ import static com.turkraft.springfilter.FilterBuilder.equal;
 import static com.turkraft.springfilter.FilterBuilder.greaterThan;
 import static com.turkraft.springfilter.FilterBuilder.greaterThanOrEqual;
 import static com.turkraft.springfilter.FilterBuilder.in;
+import static com.turkraft.springfilter.FilterBuilder.inputs;
 import static com.turkraft.springfilter.FilterBuilder.lessThan;
 import static com.turkraft.springfilter.FilterBuilder.lessThanOrEqual;
 import static com.turkraft.springfilter.FilterBuilder.not;
-import static com.turkraft.springfilter.FilterBuilder.numbers;
 import static com.turkraft.springfilter.FilterBuilder.or;
-import static com.turkraft.springfilter.FilterBuilder.strings;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import com.mongodb.client.model.Filters;
-import com.turkraft.springfilter.compiler.node.IExpression;
-import com.turkraft.springfilter.generator.BsonGenerator;
+import com.turkraft.springfilter.parser.Filter;
+import com.turkraft.springfilter.parser.generator.bson.BsonGenerator;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MongoDBTest {
 
-  void queryTest(IExpression expression, Bson query) {
-    assertEquals(query, BsonGenerator.run(Car.class, expression));
+  void queryTest(Filter expression, Bson query) {
+    assertEquals(query, BsonGenerator.run(expression, Car.class));
   }
 
   @Test
@@ -76,8 +75,8 @@ class MongoDBTest {
 
   @Test
   void inTest() throws Exception {
-    queryTest(in("id", strings("x", "y", "z")), Filters.in("id", "x", "y", "z"));
-    queryTest(in("someNumber", numbers(1, 2, 3)), Filters.in("someNumber", 1, 2, 3));
+    queryTest(in("id", inputs("x", "y", "z")), Filters.in("id", "x", "y", "z"));
+    queryTest(in("someNumber", inputs(1, 2, 3)), Filters.in("someNumber", 1, 2, 3));
   }
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.turkraft.springfilter.SpringFilterUtils;
+import com.turkraft.springfilter.FilterUtils;
 
 /**
  * Configuration class used to load the resolvers.
@@ -16,11 +16,11 @@ public class SpringFilterWebConfig implements WebMvcConfigurer {
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 
-    if (SpringFilterUtils.isSpecificationDependencyPresent()) {
+    if (FilterUtils.isSpecificationDependencyPresent()) {
       argumentResolvers.add(new SpecificationFilterArgumentResolver());
     }
 
-    if (SpringFilterUtils.isSpringDataMongoDbDependencyPresent()) {
+    if (FilterUtils.isSpringDataMongoDbDependencyPresent()) {
       argumentResolvers.add(new BsonFilterArgumentResolver());
     }
 

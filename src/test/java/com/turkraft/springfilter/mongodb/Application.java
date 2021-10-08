@@ -29,9 +29,14 @@ public class Application implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws IOException {
-    mongoTemplate.save(Car.builder().name("Audi").someDate(Date.from(Instant.now())).build());
-    mongoTemplate.save(Car.builder().name("Merco")
-        .someDate(Date.from(Instant.now().minusSeconds(60 * 60 * 24))).build());
+    Car audi = new Car();
+    audi.setName("Audi");
+    audi.setSomeDate(Date.from(Instant.now()));
+    Car merco = new Car();
+    merco.setName("Merco");
+    merco.setSomeDate(Date.from(Instant.now().minusSeconds(60 * 60 * 24)));
+    mongoTemplate.save(audi);
+    mongoTemplate.save(merco);
   }
 
   @Autowired
