@@ -26,6 +26,7 @@ public class FilterSpecification<T> implements Specification<T> {
 
   private Object payload;
 
+  // should be set when common join set with other specifications is required
   private Map<String, Join<?, ?>> joins;
 
   public FilterSpecification(String input) {
@@ -48,14 +49,17 @@ public class FilterSpecification<T> implements Specification<T> {
 
     Predicate predicate = null;
 
+    Map<String, Join<?, ?>> j = joins != null ? joins : new HashMap<String, Join<?, ?>>();
+
     if (input != null) {
-      predicate = !input.trim().isEmpty()
-          ? (Predicate) ExpressionGenerator.run(Filter.from(input), root, query, criteriaBuilder,
-              getJoins(), payload)
-          : null;
+      predicate =
+          !input.trim().isEmpty()
+              ? (Predicate) ExpressionGenerator.run(Filter.from(input), root, query,
+                  criteriaBuilder, j, payload)
+              : null;
     } else {
-      predicate = (Predicate) ExpressionGenerator.run(filter, root, query, criteriaBuilder,
-          getJoins(), payload);
+      predicate =
+          (Predicate) ExpressionGenerator.run(filter, root, query, criteriaBuilder, j, payload);
     }
 
     return predicate;
@@ -79,9 +83,6 @@ public class FilterSpecification<T> implements Specification<T> {
   }
 
   public Map<String, Join<?, ?>> getJoins() {
-    if (joins == null) {
-      joins = new HashMap<String, Join<?, ?>>();
-    }
     return joins;
   }
 
