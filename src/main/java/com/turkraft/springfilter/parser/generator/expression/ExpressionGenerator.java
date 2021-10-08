@@ -376,7 +376,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
     if (ctx.arguments.size() != 1) {
       throw new BadFilterFunctionUsageException(
-          "The function '" + ctx.ID().getText() + "' needs a single argument");
+          "The function '" + ctx.ID().getText() + "' needs one argument");
     }
 
     Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);

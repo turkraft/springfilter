@@ -95,7 +95,7 @@ public class FilterBuilder {
     FunctionContext ctx = new FunctionContext(new PredicateContext());
     ctx.addChild(terminalNode(FilterLexer.ID, name));
     for (Filter argument : arguments) {
-      ctx.addChild(argument);
+      ctx.arguments.add((PredicateContext) argument);
     }
     return ctx;
   }
