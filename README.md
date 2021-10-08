@@ -7,7 +7,7 @@
 </p>
 
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
-Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess. From a technical point of view, I compile a simple syntax to JPA predicates.
+Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess.
 
 ## Example ([try it live](https://spring-filter.herokuapp.com))
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
@@ -34,7 +34,7 @@ Your API will gain a full featured search functionality. You don't work with API
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -68,8 +68,9 @@ Predicate predicate = ExpressionGenerator.run(String query, Root<?> r, CriteriaQ
 ```java
 /* Using static methods */
 import static com.turkraft.springfilter.FilterBuilder.*;
-Filter filter = filter(like("name", "%jose%"));
+Filter filter = like("name", "%jose%");
 String query = filter.generate(); // name ~ '%jose%'
+// filter = Filter.from(query);
 // Predicate predicate = ExpressionGenerator.run(filter, Root<?> r, CriteriaQuery<?> cq, CriteriaBuilder cb);
 // Specification<Entity> spec = new FilterSpecification<Entity>(filter);
 ```
@@ -138,10 +139,10 @@ A function is characterized by its name (case insensitive) followed by parenthes
 </table>
 
 ## Configuration
-You may want to customize the behavior of the different processes taking place. For now, you can change the date format but advanced customization will be soon available in order to let you completely personalize the tokenizer, the parser, the query builder, with the possibility of adding custom functions and much more.
+You can change the date formats as shown below.
 
 ### Date format
-You are able to change the date format by setting the static formatters inside the `SpringFilterParameters` class. You may see below the default patterns and how you can set them with properties:
+You are able to change the date format by setting the static formatters inside the `FilterParameters` class. You may see below the default patterns and how you can set them with properties:
 
 <table>
   <tr> <th>Type</th> <th>Default Pattern</th> <th>Property Name</th> </tr>
@@ -166,13 +167,16 @@ public Page<Entity> search(@Filter(entityClass = Entity.class) Document doc, Pag
 }
 ```
 ```java
-Bson bson = BsonGenerator.run(Entity.class, filter);
+Bson bson = BsonGenerator.run(Filter.from(query), Entity.class);
 Document doc = BsonUtils.getDocumentFromBson(bson);
 Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
 > :warning: Functions are currently not supported with MongoDB
+
+## Customization
+If you need to customize the behavior of the filter, the way to go is to extend the `FilterBaseVisitor` class, by taking `QueryGenerator` or `ExpressionGenerator` as examples. In order to also modify the query syntax, you should start by cloning the repository and editing the `Filter.g4` file. 
 
 ## Articles
 * [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)

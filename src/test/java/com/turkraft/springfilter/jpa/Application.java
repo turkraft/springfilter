@@ -59,32 +59,41 @@ public class Application implements ApplicationRunner {
 
     List<Industry> industries = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
-      industries.add(Industry.builder().name(faker.company().industry()).build());
+      Industry industry = new Industry();
+      industry.setName(faker.company().industry());
+      industries.add(industry);
     }
     industryRepository.saveAll(industries);
 
     List<Company> companies = new ArrayList<>();
     for (int i = 0; i < 5; i++) {
-      companies.add(Company.builder().name(faker.company().name())
-          .industry(faker.options().nextElement(industries)).build());
+      Company company = new Company();
+      company.setName(faker.company().name());
+      company.setIndustry(faker.options().nextElement(industries));
+      companies.add(company);
     }
     companyRepository.saveAll(companies);
 
     List<Employee> employees = new ArrayList<>();
     for (int i = 0; i < 30; i++) {
-      employees.add(Employee.builder().firstName(faker.name().firstName())
-          .lastName(faker.name().lastName()).birthDate(faker.date().birthday())
-          .maritalStatus(faker.options().option(MaritalStatus.class))
-          .salary(faker.random().nextInt(1000, 10000))
-          .company(faker.options().nextElement(companies))
-          .manager(employees.isEmpty() ? null : faker.options().nextElement(employees)).build());
+      Employee employee = new Employee();
+      employee.setFirstName(faker.name().firstName());
+      employee.setLastName(faker.name().lastName());
+      employee.setBirthDate(faker.date().birthday());
+      employee.setMaritalStatus(faker.options().option(MaritalStatus.class));
+      employee.setSalary(faker.random().nextInt(1000, 10000));
+      employee.setCompany(faker.options().nextElement(companies));
+      employee.setManager(employees.isEmpty() ? null : faker.options().nextElement(employees));
+      employees.add(employee);
     }
     employeeRepository.saveAll(employees);
 
     List<Payslip> payslips = new ArrayList<>();
     for (int i = 0; i < 50; i++) {
-      payslips.add(Payslip.builder().employee(faker.options().nextElement(employees))
-          .date(faker.date().past(360, TimeUnit.DAYS)).build());
+      Payslip payslip = new Payslip();
+      payslip.setEmployee(faker.options().nextElement(employees));
+      payslip.setDate(faker.date().past(360, TimeUnit.DAYS));
+      payslips.add(payslip);
     }
     payslipRepository.saveAll(payslips);
 

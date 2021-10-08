@@ -6,8 +6,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import com.turkraft.springfilter.SpringFilterUtils;
-import com.turkraft.springfilter.compiler.node.IExpression;
+import com.turkraft.springfilter.FilterUtils;
+import com.turkraft.springfilter.parser.FilterParser.FilterContext;
 
 /**
  * Resolver for {@link com.turkraft.springfilter.boot.FilterSpecification
@@ -47,7 +47,7 @@ public class SpecificationFilterArgumentResolver implements HandlerMethodArgumen
 
   private <T> Specification<?> getSpecification(Class<?> specificationClass, String[] inputs) {
 
-    IExpression filter = SpringFilterUtils.getFilterFromInputs(inputs);
+    FilterContext filter = FilterUtils.getFilterFromInputs(inputs);
 
     return filter == null ? null : new FilterSpecification<T>(filter);
 

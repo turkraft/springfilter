@@ -14,17 +14,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Employee {
 
   @Id
@@ -70,6 +62,86 @@ public class Employee {
       return name().toLowerCase();
     }
 
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public Date getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public MaritalStatus getMaritalStatus() {
+    return maritalStatus;
+  }
+
+  public void setMaritalStatus(MaritalStatus maritalStatus) {
+    this.maritalStatus = maritalStatus;
+  }
+
+  public Integer getSalary() {
+    return salary;
+  }
+
+  public void setSalary(Integer salary) {
+    this.salary = salary;
+  }
+
+  public Company getCompany() {
+    return company;
+  }
+
+  public void setCompany(Company company) {
+    this.company = company;
+  }
+
+  public Employee getManager() {
+    return manager;
+  }
+
+  public void setManager(Employee manager) {
+    this.manager = manager;
+  }
+
+  public List<Employee> getStaff() {
+    return staff;
+  }
+
+  public void setStaff(List<Employee> staff) {
+    this.staff = staff;
+  }
+
+  public List<Payslip> getPayslips() {
+    return payslips;
+  }
+
+  public void setPayslips(List<Payslip> payslips) {
+    this.payslips = payslips;
   }
 
 }

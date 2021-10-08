@@ -10,17 +10,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Payslip {
 
   @Id
@@ -34,5 +26,29 @@ public class Payslip {
   // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FilterConfig.DATE_FORMATTER.toPattern())
   @Temporal(TemporalType.DATE)
   private Date date;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public Employee getEmployee() {
+    return employee;
+  }
+
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
 }

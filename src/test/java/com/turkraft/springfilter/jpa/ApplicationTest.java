@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import com.turkraft.springfilter.SpringFilterParameters;
+import com.turkraft.springfilter.FilterParameters;
 import com.turkraft.springfilter.boot.FilterSpecification;
 import com.turkraft.springfilter.jpa.Employee.MaritalStatus;
 
@@ -47,7 +47,6 @@ public class ApplicationTest {
     }
 
     for (int i = 0; i < inputResults.size(); i++) {
-      System.out.println(inputResults.get(i).getFirstName());
       Hibernate.initialize(inputResults.get(i).getPayslips());
       assertTrue(predicate.test(inputResults.get(i)));
     }
@@ -89,7 +88,7 @@ public class ApplicationTest {
   public void equalDateTest(Employee employee) {
     validate(
         String.format("birthDate : '%s'",
-            SpringFilterParameters.DATE_FORMATTER.format(employee.getBirthDate())),
+            FilterParameters.DATE_FORMATTER.format(employee.getBirthDate())),
         e -> e.getBirthDate().equals(employee.getBirthDate()));
   }
 
