@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
@@ -43,7 +42,7 @@ public class FilterBuilder {
 
   public static FilterContext filter(Filter predicate) {
     FilterContext ctx = new FilterContext(null, 0);
-    ctx.addChild((RuleContext) predicate);
+    ctx.addChild(predicate);
     return ctx;
   }
 
@@ -96,7 +95,7 @@ public class FilterBuilder {
     FunctionContext ctx = new FunctionContext(new PredicateContext());
     ctx.addChild(terminalNode(FilterLexer.ID, name));
     for (Filter argument : arguments) {
-      ctx.addChild((RuleContext) argument);
+      ctx.addChild(argument);
     }
     return ctx;
   }
@@ -123,7 +122,7 @@ public class FilterBuilder {
     return ctx;
   }
 
-  public static Collection<Filter> inputs(Collection<Object> inputs) {
+  public static <C extends Collection<?>> Collection<Filter> inputs(C inputs) {
     return inputs.stream().map(FilterBuilder::input).collect(Collectors.toList());
   }
 
