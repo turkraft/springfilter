@@ -31,9 +31,13 @@ import com.turkraft.springfilter.parser.operation.PrefixOperation;
 public class BsonGenerator extends FilterBaseVisitor<Bson> {
 
   public static Bson run(Filter filter, Class<?> entityClass) {
-    Objects.requireNonNull(entityClass);
     Objects.requireNonNull(filter);
+    Objects.requireNonNull(entityClass);
     return new BsonGenerator(entityClass).visit(filter);
+  }
+
+  public static Bson run(String query, Class<?> entityClass) {
+    return run(Filter.from(query), entityClass);
   }
 
   private final Class<?> entityClass;

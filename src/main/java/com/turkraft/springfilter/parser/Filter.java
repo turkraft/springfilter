@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.parser;
 
+import java.util.Objects;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -9,6 +10,7 @@ import com.turkraft.springfilter.parser.generator.query.QueryGenerator;
 public class Filter extends ParserRuleContext {
 
   public static FilterContext parse(String input) {
+    Objects.requireNonNull(input);
     return new FilterParser(new CommonTokenStream(new FilterLexer(CharStreams.fromString(input))))
         .filter();
   }

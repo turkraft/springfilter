@@ -72,6 +72,39 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     return run(filter, root, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
   }
 
+  public static Expression<?> run(
+      String query,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins,
+      Object payload) {
+    Objects.requireNonNull(query);
+    Objects.requireNonNull(root);
+    Objects.requireNonNull(criteriaQuery);
+    Objects.requireNonNull(criteriaBuilder);
+    Objects.requireNonNull(joins);
+    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload)
+        .visit(Filter.from(query));
+  }
+
+  public static Expression<?> run(
+      String query,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins) {
+    return run(query, root, criteriaQuery, criteriaBuilder, joins, null);
+  }
+
+  public static Expression<?> run(
+      String query,
+      Root<?> root,
+      CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder) {
+    return run(query, root, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
+  }
+
   private final Root<?> root;
   private final CriteriaQuery<?> criteriaQuery;
   private final CriteriaBuilder criteriaBuilder;
