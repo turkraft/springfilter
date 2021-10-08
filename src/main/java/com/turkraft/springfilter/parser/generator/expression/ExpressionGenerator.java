@@ -14,6 +14,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import com.turkraft.springfilter.FilterParameters;
 import com.turkraft.springfilter.FilterUtils;
 import com.turkraft.springfilter.exception.BadFilterFunctionUsageException;
 import com.turkraft.springfilter.exception.BadFilterSyntaxException;
@@ -209,7 +210,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
           right = criteriaBuilder.literal(pattern);
         }
 
-        if (!ExpressionGeneratorParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
+        if (!FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
           left = criteriaBuilder.upper((Expression<String>) left);
           right = criteriaBuilder.upper((Expression<String>) right);
         }

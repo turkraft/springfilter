@@ -12,12 +12,16 @@ public class FilterParameters {
   public static DateTimeFormatter LOCALDATETIME_FORMATTER;
   public static DateTimeFormatter OFFSETDATETIME_FORMATTER;
 
+  public static boolean CASE_SENSITIVE_LIKE_OPERATOR;
+
   static {
 
     DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
     LOCALDATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     LOCALDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss");
     OFFSETDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
+
+    CASE_SENSITIVE_LIKE_OPERATOR = false;
 
   }
 

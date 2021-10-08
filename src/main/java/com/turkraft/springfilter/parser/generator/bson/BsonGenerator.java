@@ -7,6 +7,7 @@ import org.bson.BsonNull;
 import org.bson.conversions.Bson;
 import org.springframework.data.annotation.Id;
 import com.mongodb.client.model.Filters;
+import com.turkraft.springfilter.FilterParameters;
 import com.turkraft.springfilter.exception.BadFilterSyntaxException;
 import com.turkraft.springfilter.exception.InternalFilterException;
 import com.turkraft.springfilter.exception.UnimplementFilterOperationException;
@@ -143,7 +144,11 @@ public class BsonGenerator extends FilterBaseVisitor<Bson> {
             return Filters.where("/" + input + "/.test(this._id)");
           }
         }
-        return Filters.regex(fieldName, input.toString());
+        if (FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
+          return Filters.regex(fieldName, input.toString());
+        } else {
+          return Filters.regex(fieldName, input.toString(), "i");
+        }
 
       case EQUAL:
         return Filters.eq(fieldName, input);
