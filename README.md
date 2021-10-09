@@ -110,7 +110,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
   <tr> <td>in</th> <td>checks if an expression is present in the right expressions</td> <td>status <b>in (</b>'initialized'<b>,</b> 'active'<b>)</b></td> </tr>
 </table>
 
-> Note that the `*` character can also be used instead of `%` when using the `~` comparator. By default, this comparator is case insensitive, the behavior can be changed with `ExpressionGeneratorParameters.CASE_SENSITIVE_LIKE_OPERATOR`.
+> Note that the `*` character can also be used instead of `%` when using the `~` comparator. By default, this comparator is case insensitive, the behavior can be changed with `FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR`.
 
 ### Functions
 A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
@@ -139,7 +139,6 @@ A function is characterized by its name (case insensitive) followed by parenthes
 </table>
 
 ## Configuration
-You can change the date formats as shown below.
 
 ### Date format
 You are able to change the date format by setting the static formatters inside the `FilterParameters` class. You may see below the default patterns and how you can set them with properties:
@@ -173,7 +172,7 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Functions are currently not supported with MongoDB
+> :warning: Functions are currently not supported with MongoDB, and the `~` operator actually uses the [regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator
 
 ## Customization
 If you need to customize the behavior of the filter, the way to go is to extend the `FilterBaseVisitor` class, by taking `QueryGenerator` or `ExpressionGenerator` as examples. In order to also modify the query syntax, you should start by cloning the repository and editing the `Filter.g4` file. 
