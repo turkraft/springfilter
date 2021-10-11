@@ -14,6 +14,8 @@ public class FilterParameters {
 
   public static boolean CASE_SENSITIVE_LIKE_OPERATOR;
 
+  public static FilterFunction[] CUSTOM_FUNCTIONS;
+
   static {
 
     DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
@@ -22,6 +24,8 @@ public class FilterParameters {
     OFFSETDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
 
     CASE_SENSITIVE_LIKE_OPERATOR = false;
+
+    CUSTOM_FUNCTIONS = null;
 
   }
 
