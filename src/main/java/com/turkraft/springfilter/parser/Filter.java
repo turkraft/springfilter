@@ -9,20 +9,25 @@ import com.turkraft.springfilter.parser.generator.query.QueryGenerator;
 
 public class Filter extends ParserRuleContext {
 
-  public static FilterContext parse(String input) {
-    Objects.requireNonNull(input);
-    return new FilterParser(new CommonTokenStream(new FilterLexer(CharStreams.fromString(input))))
-        .filter();
-  }
-
-  public static FilterContext from(String input) {
-    return parse(input);
-  }
-
   Filter() {}
 
   Filter(ParserRuleContext parent, int invokingStateNumber) {
     super(parent, invokingStateNumber);
+  }
+
+  public static FilterContext parse(String input) {
+    Objects.requireNonNull(input);
+    FilterLexer lexer = new FilterLexer(CharStreams.fromString(input));
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+    FilterParser parser = new FilterParser(new CommonTokenStream(lexer));
+    parser.removeErrorListeners();
+    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+    return parser.filter();
+  }
+
+  public static FilterContext from(String input) {
+    return parse(input);
   }
 
   public String generate() {
