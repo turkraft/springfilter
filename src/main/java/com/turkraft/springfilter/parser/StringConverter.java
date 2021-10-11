@@ -37,6 +37,11 @@ public class StringConverter {
       return input.charAt(0);
     }
 
+    if (boolean.class.isAssignableFrom(expectedType)
+        || Boolean.class.isAssignableFrom(expectedType)) {
+      return Boolean.valueOf(input);
+    }
+
     if (Date.class.isAssignableFrom(expectedType)) {
       Date date = FilterParameters.DATE_FORMATTER.parse(input, new ParsePosition(0));
       if (date != null) {

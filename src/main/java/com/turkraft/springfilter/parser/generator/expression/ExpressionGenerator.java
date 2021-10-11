@@ -14,6 +14,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import com.turkraft.springfilter.FilterFunction;
 import com.turkraft.springfilter.FilterParameters;
 import com.turkraft.springfilter.FilterUtils;
 import com.turkraft.springfilter.exception.BadFilterFunctionUsageException;
@@ -327,7 +328,9 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   @Override
   public Expression<?> visitFunction(FunctionContext ctx) {
 
-    switch (ctx.ID().getText().toLowerCase()) {
+    String functionName = ctx.ID().getText().toLowerCase();
+
+    switch (functionName) {
 
       case "abs":
       case "absolute":
@@ -382,6 +385,20 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
     }
 
+    if (FilterParameters.CUSTOM_FUNCTIONS != null) {
+      for (FilterFunction filterFunction : FilterParameters.CUSTOM_FUNCTIONS) {
+        if (filterFunction.getName().equalsIgnoreCase(functionName)) {
+          Expression<?>[] args = new Expression[filterFunction.getInputTypes() != null
+              ? filterFunction.getInputTypes().length
+              : 0];
+          for (int i = 0; i < args.length; i++) {
+            args[i] = getFunctionArgument(ctx, i, filterFunction.getInputTypes()[i]);
+          }
+          return criteriaBuilder.function(functionName, filterFunction.getOutputType(), args);
+        }
+      }
+    }
+
     throw new UnknownFilterFunctionException("Unknown function '" + ctx.ID().getText() + "'");
 
   }
@@ -392,9 +409,9 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
       int index,
       Class<T> expectedClass) {
 
-    if (index > ctx.arguments.size()) {
-      throw new BadFilterFunctionUsageException(
-          "The function '" + ctx.ID().getText() + "' expects at least " + index + " arguments");
+    if (index >= ctx.arguments.size()) {
+      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText()
+          + "' expects at least " + (index + 1) + " arguments");
     }
 
     if (ctx.arguments.get(index) instanceof InputContext) {

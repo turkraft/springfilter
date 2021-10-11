@@ -17,7 +17,8 @@ public class SpringFilterAutoConfig {
       @Value("${turkraft.springfilter.dateformatter.pattern:#{null}}") String datePattern,
       @Value("${turkraft.springfilter.localdateformatter.pattern:#{null}}") String localDatePattern,
       @Value("${turkraft.springfilter.localdatetimeformatter.pattern:#{null}}") String localDateTimePattern,
-      @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern) {
+      @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern,
+      @Value("${turkraft.springfilter.operator.like.casesensitive:#{null}}") Boolean caseSensitiveLikeOperator) {
 
     if (datePattern != null) {
       FilterParameters.DATE_FORMATTER.applyPattern(datePattern);
@@ -28,13 +29,16 @@ public class SpringFilterAutoConfig {
     }
 
     if (localDateTimePattern != null) {
-      FilterParameters.LOCALDATETIME_FORMATTER =
-          DateTimeFormatter.ofPattern(localDateTimePattern);
+      FilterParameters.LOCALDATETIME_FORMATTER = DateTimeFormatter.ofPattern(localDateTimePattern);
     }
 
     if (offsetDateTimePattern != null) {
       FilterParameters.OFFSETDATETIME_FORMATTER =
           DateTimeFormatter.ofPattern(offsetDateTimePattern);
+    }
+
+    if (caseSensitiveLikeOperator != null) {
+      FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR = caseSensitiveLikeOperator;
     }
 
   }
