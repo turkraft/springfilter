@@ -388,7 +388,9 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     if (FilterParameters.CUSTOM_FUNCTIONS != null) {
       for (FilterFunction filterFunction : FilterParameters.CUSTOM_FUNCTIONS) {
         if (filterFunction.getName().equalsIgnoreCase(functionName)) {
-          Expression<?>[] args = new Expression[filterFunction.getInputTypes().length];
+          Expression<?>[] args = new Expression[filterFunction.getInputTypes() != null
+              ? filterFunction.getInputTypes().length
+              : 0];
           for (int i = 0; i < args.length; i++) {
             args[i] = getFunctionArgument(ctx, i, filterFunction.getInputTypes()[i]);
           }
@@ -407,9 +409,9 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
       int index,
       Class<T> expectedClass) {
 
-    if (index > ctx.arguments.size()) {
-      throw new BadFilterFunctionUsageException(
-          "The function '" + ctx.ID().getText() + "' expects at least " + index + " arguments");
+    if (index >= ctx.arguments.size()) {
+      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText()
+          + "' expects at least " + (index + 1) + " arguments");
     }
 
     if (ctx.arguments.get(index) instanceof InputContext) {
