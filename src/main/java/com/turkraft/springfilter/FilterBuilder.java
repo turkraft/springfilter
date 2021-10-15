@@ -2,6 +2,7 @@ package com.turkraft.springfilter;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
@@ -94,14 +95,14 @@ public class FilterBuilder {
   public static Filter function(String name, Collection<Filter> arguments) {
     FunctionContext ctx = new FunctionContext(new PredicateContext());
     ctx.addChild(terminalNode(FilterLexer.ID, name));
-    for (Filter argument : arguments) {
-      ctx.arguments.add((PredicateContext) argument);
-    }
+    if (arguments != null)
+      for (Filter argument : arguments)
+        ctx.arguments.add((PredicateContext) argument);
     return ctx;
   }
 
   public static Filter function(String name, Filter... arguments) {
-    return function(name, Arrays.asList(arguments));
+    return function(name, arguments != null ? Arrays.asList(arguments) : Collections.emptyList());
   }
 
   public static Filter field(String field) {
@@ -123,10 +124,14 @@ public class FilterBuilder {
   }
 
   public static <C extends Collection<?>> Collection<Filter> inputs(C inputs) {
+    if (inputs == null)
+      return null;
     return inputs.stream().map(FilterBuilder::input).collect(Collectors.toList());
   }
 
   public static Collection<Filter> inputs(Object... inputs) {
+    if (inputs == null)
+      return null;
     return inputs(Arrays.asList(inputs));
   }
 
@@ -141,6 +146,8 @@ public class FilterBuilder {
   }
 
   public static Filter and(Filter... predicates) {
+    if (predicates == null)
+      return null;
     return and(Arrays.asList(predicates));
   }
 
@@ -153,11 +160,13 @@ public class FilterBuilder {
   }
 
   public static Filter or(Filter... predicates) {
+    if (predicates == null)
+      return null;
     return or(Arrays.asList(predicates));
   }
 
   public static Filter in(Filter left, Collection<? extends Filter> arguments) {
-    if (arguments.isEmpty())
+    if (arguments == null || arguments.isEmpty())
       return null;
     InfixContext ctx = new InfixContext(new PredicateContext());
     // doing some trick here to obey the visitors
