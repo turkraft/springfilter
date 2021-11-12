@@ -174,6 +174,25 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 
 > :warning: Functions are currently not supported with MongoDB, and the `~` operator actually uses the [regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator
 
+## JavaScript Query Builder
+
+Instead of manually writing string queries in your frontend applications, you may use the [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) which is similar to the Java `FilterBuilder` class.
+
+### Usage
+
+```javascript
+import { SpringFilterQueryBuilder as builder } from 'https://cdn.jsdelivr.net/npm/spring-filter-query-builder@0.3.0/src/index.min.js';
+const filter =
+    builder.or(
+        builder.and(
+            builder.equal("test.test1", "testvalue1"),
+            builder.isNotNull("test.test2")
+        ),
+        builder.notEqual("test.test2", "testvalue2")
+    );
+const req = await fetch('http://api/person?filter=' + filter.toString());
+```
+
 ## Customization
 If you need to customize the behavior of the filter, the way to go is to extend the `FilterBaseVisitor` class, by taking `QueryGenerator` or `ExpressionGenerator` as examples. In order to also modify the query syntax, you should start by cloning the repository and editing the `Filter.g4` file. 
 
@@ -184,7 +203,8 @@ If you need to customize the behavior of the filter, the way to go is to extend 
 Ideas and pull requests are always welcome. [Google's Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) is used for formatting.
 
 ## Contributors
-Thanks to [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) for adding support to MongoDB.
+* Thanks to [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) for adding support to MongoDB.
+* Thanks to [@sisimomo](https://github.com/sisimomo) for creating the JavaScript query builder.
 
 ## License
 Distributed under the [MIT license](LICENSE).
