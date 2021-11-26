@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import org.springframework.data.jpa.domain.Specification;
 
 public class SpecificationMerger<T> implements Specification<T> {
@@ -18,16 +20,14 @@ public class SpecificationMerger<T> implements Specification<T> {
   private List<Specification<T>> specifications;
 
   @Override
-  public Predicate toPredicate(
-      Root<T> root,
-      CriteriaQuery<?> query,
+  public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
       CriteriaBuilder criteriaBuilder) {
 
     Map<String, Join<?, ?>> joins = new HashMap<String, Join<?, ?>>();
 
     Specification<T> result = null;
 
-    for (Specification<T> specification : specifications) {
+    for (Specification<T> specification : getSpecifications()) {
 
       if (specification == null) {
         continue;
