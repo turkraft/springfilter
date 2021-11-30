@@ -35,7 +35,7 @@
 		<springframework.version>5.3.13</springframework.version>
 		<spring-data-jpa.version>2.6.0</spring-data-jpa.version>
 		<spring-data-mongodb.version>3.3.0</spring-data-mongodb.version>
-		<springframework-boot.version>2.6.0</springframework-boot.version>
+		<springframework-boot.version>2.6.1</springframework-boot.version>
 		<springdoc-openapi-ui.version>1.5.12</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
 		<jackson-databind.version>2.13.0</jackson-databind.version>
