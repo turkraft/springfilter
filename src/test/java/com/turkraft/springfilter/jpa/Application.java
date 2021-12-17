@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.springdoc.core.SwaggerUiConfigParameters;
 import org.springdoc.core.SwaggerUiOAuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +15,24 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.boot.Filter;
 import com.turkraft.springfilter.jpa.Employee.MaritalStatus;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@SpringBootApplication
+@SpringBootApplication(
+    exclude = {MongoAutoConfiguration.class, EmbeddedMongoAutoConfiguration.class})
 @RestController
 @Import({org.springdoc.core.SpringDocConfigProperties.class,
     org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration.class,
@@ -120,9 +127,9 @@ public class Application implements ApplicationRunner {
   }
 
   @GetMapping(value = "employee")
-  public List<Employee> getEmployees(
-      @Parameter(in = ParameterIn.QUERY, schema = @Schema(type = "string"), allowEmptyValue = true,
-          example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)") @Filter Specification<Employee> filter) {
+  public List<Employee> getEmployees(@Parameter(in = ParameterIn.QUERY,
+      schema = @Schema(type = "string"), allowEmptyValue = true,
+      example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)") @Filter Specification<Employee> filter) {
     return employeeRepository.findAll(filter);
   }
 
