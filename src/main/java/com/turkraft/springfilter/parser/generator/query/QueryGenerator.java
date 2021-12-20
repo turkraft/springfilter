@@ -70,6 +70,9 @@ public class QueryGenerator extends FilterBaseVisitor<String> {
     if (op == InfixOperation.IN) {
       return visitIn(ctx);
     }
+    if (op == InfixOperation.AND || op == InfixOperation.OR) {
+      return "(" + visit(ctx.left) + " " + ctx.operator.getText() + " " + visit(ctx.right) + ")";
+    }
     return visit(ctx.left) + " " + ctx.operator.getText() + " " + visit(ctx.right);
   }
 
