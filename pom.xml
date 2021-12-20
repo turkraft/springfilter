@@ -280,6 +280,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${springframework-boot.version}</version>
 				<configuration>
 					<mainClass>com.turkraft.springfilter.jpa.Application</mainClass>
 				</configuration>
