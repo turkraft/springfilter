@@ -2,8 +2,10 @@ package com.turkraft.springfilter.parser.generator.query;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+
 import com.turkraft.springfilter.exception.UnimplementFilterOperationException;
 import com.turkraft.springfilter.parser.Filter;
 import com.turkraft.springfilter.parser.FilterBaseVisitor;
@@ -11,6 +13,7 @@ import com.turkraft.springfilter.parser.FilterLexer;
 import com.turkraft.springfilter.parser.FilterParser;
 import com.turkraft.springfilter.parser.FilterParser.FilterContext;
 import com.turkraft.springfilter.parser.FilterParser.PrefixContext;
+import com.turkraft.springfilter.parser.FilterParser.PriorityContext;
 import com.turkraft.springfilter.parser.operation.InfixOperation;
 import com.turkraft.springfilter.parser.operation.PrefixOperation;
 
@@ -34,6 +37,9 @@ public class QueryGenerator extends FilterBaseVisitor<String> {
 
   @Override
   public String visitPriority(FilterParser.PriorityContext ctx) {
+    if (ctx.predicate() instanceof PriorityContext) {
+      return visitPriority((PriorityContext) ctx.predicate());
+    }
     return "(" + visit(ctx.predicate()) + ")";
   }
 
@@ -70,7 +76,8 @@ public class QueryGenerator extends FilterBaseVisitor<String> {
     if (op == InfixOperation.IN) {
       return visitIn(ctx);
     }
-    if (op == InfixOperation.AND || op == InfixOperation.OR) {
+    if ((!(ctx.parent instanceof FilterContext) && !(ctx.parent instanceof PriorityContext))
+        && (op == InfixOperation.AND || op == InfixOperation.OR)) {
       return "(" + visit(ctx.left) + " " + ctx.operator.getText() + " " + visit(ctx.right) + ")";
     }
     return visit(ctx.left) + " " + ctx.operator.getText() + " " + visit(ctx.right);
