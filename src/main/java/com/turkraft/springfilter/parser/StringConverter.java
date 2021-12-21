@@ -146,13 +146,13 @@ public class StringConverter {
       return null;
     }
 
+    else if (input instanceof BigDecimal) {
+      return "'" + input + "'";
+    }
+
     if (input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
         || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive()) {
       return input.toString();
-    }
-
-    else if (input instanceof BigDecimal) {
-      return "'" + input + "'";
     }
 
     else if (input instanceof Date) {
