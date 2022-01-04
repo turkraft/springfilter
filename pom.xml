@@ -39,7 +39,7 @@
 		<springdoc-openapi-ui.version>1.6.3</springdoc-openapi-ui.version>
 		<h2database-h2.version>1.4.200</h2database-h2.version>
 		<jackson-databind.version>2.13.1</jackson-databind.version>
-		<de.flapdoodle.embed.mongo.version>3.2.5</de.flapdoodle.embed.mongo.version>
+		<de.flapdoodle.embed.mongo.version>3.2.6</de.flapdoodle.embed.mongo.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<junit.version>5.8.2</junit.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
