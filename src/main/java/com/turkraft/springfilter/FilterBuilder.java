@@ -62,10 +62,10 @@ public class FilterBuilder {
           return left;
       }
     InfixContext ctx = new InfixContext(new PredicateContext());
-    ctx.left = (PredicateContext) left;
+    ctx.left = normalize(left);
     ctx.left.setParent(ctx);
     ctx.operator = token(operation);
-    ctx.right = (PredicateContext) right;
+    ctx.right = normalize(right);
     ctx.right.setParent(ctx);
     return ctx;
   }
@@ -73,7 +73,7 @@ public class FilterBuilder {
   public static Filter prefix(Filter left, PrefixOperation operation) {
     PrefixContext ctx = new PrefixContext(new PredicateContext());
     ctx.operator = token(operation);
-    ctx.left = (PredicateContext) left;
+    ctx.left = normalize(left);
     ctx.left.setParent(ctx);
     return ctx;
   }
@@ -81,7 +81,7 @@ public class FilterBuilder {
   public static Filter postfix(PostfixOperation operation, Filter right) {
     PostfixContext ctx = new PostfixContext(new PredicateContext());
     ctx.operator = token(operation);
-    ctx.right = (PredicateContext) right;
+    ctx.right = normalize(right);
     ctx.right.setParent(ctx);
     return ctx;
   }
@@ -170,7 +170,7 @@ public class FilterBuilder {
       return null;
     InfixContext ctx = new InfixContext(new PredicateContext());
     // doing some trick here to obey the visitors
-    ctx.left = (PredicateContext) left;
+    ctx.left = normalize(left);
     ctx.operator = token(InfixOperation.IN);
     for (Filter argument : arguments) {
       if (argument == null)
@@ -399,6 +399,16 @@ public class FilterBuilder {
 
   public enum NullCascade {
     TAKE_ONE_IF_ONE_NULL, TAKE_NONE_IF_ONE_NULL
+  }
+
+  private static PredicateContext normalize(Filter filter) {
+    if (filter == null)
+      return null;
+    if (filter instanceof FilterContext)
+      return ((FilterContext)filter).predicate();
+    if (filter instanceof PredicateContext)
+      return (PredicateContext) filter;
+    throw new FilterBuilderException("Could not normalize " + filter);
   }
 
 }
