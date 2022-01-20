@@ -48,7 +48,7 @@ public Page<Entity> search(@Filter Specification<Entity> spec, Pageable page) {
   return repo.findAll(spec, page);
 }
 ```
-> The repository should implement `JpaSpecificationExecutor` in order to execute Spring's Specification, `SimpleJpaRepository` is a well known implementation. You can remove the `Pageable` argument and return a `List` if pagination is not needed.
+> The repository should implement `JpaSpecificationExecutor` in order to execute Spring's Specification, `SimpleJpaRepository` is a well known implementation. You can remove the `Pageable` argument and return a `List` if pagination and sorting are not needed.
 > 
 ### b. Specification
 > Requires **javax.persistence-api**, **spring-data-jpa**, **spring-web**
