@@ -81,11 +81,11 @@ String query = filter.generate(); // name ~ '%jose%'
 Field names should be directly given without any extra literals. Dots indicate nested fields. For example: `category.updatedAt`
 
 ### Inputs
-Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, dates, should be quoted. For example: `status : 'active'`
+Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false`. Others such as strings, enums, dates, should be quoted. For example: `status : 'active'`
 
 ### Operators
 <table>
-  <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <th>Literal</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td>and</th> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > '1-1-2000'</td> </tr>
   <tr> <td>or</th> <td>or's two expressions</td> <td>value ~ '%hello%' <b>or</b> name ~ '%world%'</td> </tr>
   <tr> <td>not</th> <td>not's an expression</td> <td> <b>not</b> (id > 100 or category.order is null) </td> </tr>
@@ -95,7 +95,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
 
 ### Comparators
 <table>
-  <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
+  <tr> <th>Literal</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td>~</th> <td>checks if the left (string) expression is similar to the right (string) expression</td> <td>catalog.name <b>~</b> 'electronic%'</td> </tr>
   <tr> <td>:</th> <td>checks if the left expression is equal to the right expression</td> <td>id <b>:</b> 5</td> </tr>
   <tr> <td>!</th> <td>checks if the left expression is not equal to the right expression</td> <td>username <b>!</b> 'torshid'</td> </tr>
