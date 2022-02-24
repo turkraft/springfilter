@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +14,9 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+
 import com.turkraft.springfilter.FilterFunction;
 import com.turkraft.springfilter.FilterParameters;
 import com.turkraft.springfilter.FilterUtils;
@@ -40,68 +43,42 @@ import com.turkraft.springfilter.parser.operation.PrefixOperation;
 
 public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
-  public static Expression<?> run(
-      Filter filter,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins,
-      Object payload) {
+  public static Expression<?> run(Filter filter, Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
     Objects.requireNonNull(filter);
     Objects.requireNonNull(root);
     Objects.requireNonNull(criteriaQuery);
     Objects.requireNonNull(criteriaBuilder);
     Objects.requireNonNull(joins);
-    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload)
-        .visit(filter);
+    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload).visit(filter);
   }
 
-  public static Expression<?> run(
-      Filter filter,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+  public static Expression<?> run(Filter filter, Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins) {
     return run(filter, root, criteriaQuery, criteriaBuilder, joins, null);
   }
 
-  public static Expression<?> run(
-      Filter filter,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
+  public static Expression<?> run(Filter filter, Root<?> root, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder) {
     return run(filter, root, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
   }
 
-  public static Expression<?> run(
-      String query,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins,
-      Object payload) {
+  public static Expression<?> run(String query, Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
     Objects.requireNonNull(query);
     Objects.requireNonNull(root);
     Objects.requireNonNull(criteriaQuery);
     Objects.requireNonNull(criteriaBuilder);
     Objects.requireNonNull(joins);
-    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload)
-        .visit(Filter.from(query));
+    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload).visit(Filter.from(query));
   }
 
-  public static Expression<?> run(
-      String query,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder,
-      Map<String, Join<?, ?>> joins) {
+  public static Expression<?> run(String query, Root<?> root, CriteriaQuery<?> criteriaQuery,
+      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins) {
     return run(query, root, criteriaQuery, criteriaBuilder, joins, null);
   }
 
-  public static Expression<?> run(
-      String query,
-      Root<?> root,
-      CriteriaQuery<?> criteriaQuery,
+  public static Expression<?> run(String query, Root<?> root, CriteriaQuery<?> criteriaQuery,
       CriteriaBuilder criteriaBuilder) {
     return run(query, root, criteriaQuery, criteriaBuilder, new HashMap<String, Join<?, ?>>());
   }
@@ -114,8 +91,8 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
   private final ParseTreeProperty<Class<?>> expectedInputTypes;
 
-  private ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
+  private ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins, Object payload) {
     this.root = root;
     this.criteriaQuery = criteriaQuery;
     this.criteriaBuilder = criteriaBuilder;
@@ -150,7 +127,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
       case IS_NULL:
       case IS_EMPTY:
 
-        if (Collection.class.isAssignableFrom(left.getJavaType())) {
+        if (Collection.class.isAssignableFrom(getJavaType(left))) {
           return criteriaBuilder.isEmpty((Expression<Collection<?>>) left);
         } else {
           return criteriaBuilder.isNull(left);
@@ -159,7 +136,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
       case IS_NOT_NULL:
       case IS_NOT_EMPTY:
 
-        if (Collection.class.isAssignableFrom(left.getJavaType())) {
+        if (Collection.class.isAssignableFrom(getJavaType(left))) {
           return criteriaBuilder.isNotEmpty((Expression<Collection<?>>) left);
         } else {
           return criteriaBuilder.isNotNull(left);
@@ -180,12 +157,10 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     switch (op) {
 
       case AND:
-        return criteriaBuilder.and((Expression<Boolean>) visit(ctx.left),
-            (Expression<Boolean>) visit(ctx.right));
+        return criteriaBuilder.and((Expression<Boolean>) visit(ctx.left), (Expression<Boolean>) visit(ctx.right));
 
       case OR:
-        return criteriaBuilder.or((Expression<Boolean>) visit(ctx.left),
-            (Expression<Boolean>) visit(ctx.right));
+        return criteriaBuilder.or((Expression<Boolean>) visit(ctx.left), (Expression<Boolean>) visit(ctx.right));
 
       case LIKE:
       case EQUAL:
@@ -217,13 +192,13 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
     else if (ctx.right instanceof InputContext) {
       left = visit(ctx.left);
-      expectedInputTypes.put(ctx.right, left.getJavaType());
+      expectedInputTypes.put(ctx.right, getJavaType(left));
       right = visit(ctx.right);
     }
 
     else if (ctx.left instanceof InputContext) {
       right = visit(ctx.right);
-      expectedInputTypes.put(ctx.left, right.getJavaType());
+      expectedInputTypes.put(ctx.left, getJavaType(right));
       left = visit(ctx.left);
     }
 
@@ -294,7 +269,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
       Expression<?> expression = null;
 
       if (argument instanceof InputContext) {
-        expectedInputTypes.put(argument, left.getJavaType());
+        expectedInputTypes.put(argument, getJavaType(left));
         expression = visit(argument);
       } else {
         expression = visit(argument);
@@ -388,9 +363,8 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     if (FilterParameters.CUSTOM_FUNCTIONS != null) {
       for (FilterFunction filterFunction : FilterParameters.CUSTOM_FUNCTIONS) {
         if (filterFunction.getName().equalsIgnoreCase(functionName)) {
-          Expression<?>[] args = new Expression[filterFunction.getInputTypes() != null
-              ? filterFunction.getInputTypes().length
-              : 0];
+          Expression<?>[] args =
+              new Expression[filterFunction.getInputTypes() != null ? filterFunction.getInputTypes().length : 0];
           for (int i = 0; i < args.length; i++) {
             args[i] = getFunctionArgument(ctx, i, filterFunction.getInputTypes()[i]);
           }
@@ -404,14 +378,11 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Expression<T> getFunctionArgument(
-      FunctionContext ctx,
-      int index,
-      Class<T> expectedClass) {
+  private <T> Expression<T> getFunctionArgument(FunctionContext ctx, int index, Class<T> expectedClass) {
 
     if (index >= ctx.arguments.size()) {
-      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText()
-          + "' expects at least " + (index + 1) + " arguments");
+      throw new BadFilterFunctionUsageException(
+          "The function '" + ctx.ID().getText() + "' expects at least " + (index + 1) + " arguments");
     }
 
     if (ctx.arguments.get(index) instanceof InputContext) {
@@ -426,16 +397,15 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   private Subquery<Integer> getSubquery(FunctionContext ctx) {
 
     if (ctx.arguments.size() != 1) {
-      throw new BadFilterFunctionUsageException(
-          "The function '" + ctx.ID().getText() + "' needs one argument");
+      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText() + "' needs one argument");
     }
 
     Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
 
     Root<?> subroot = subquery.correlate(root);
 
-    Expression<?> predicate = ExpressionGenerator.run(ctx.arguments.get(0), subroot, criteriaQuery,
-        criteriaBuilder, new HashMap<String, Join<?, ?>>());
+    Expression<?> predicate = ExpressionGenerator.run(ctx.arguments.get(0), subroot, criteriaQuery, criteriaBuilder,
+        new HashMap<String, Join<?, ?>>());
 
     if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
       throw new BadFilterFunctionUsageException(
@@ -459,16 +429,16 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   public Expression<?> visitInput(InputContext ctx) {
 
     if (expectedInputTypes.get(ctx) == null) {
-      throw new InternalFilterException(
-          "The expected class should be set previous to visiting the input");
+      throw new InternalFilterException("The expected class should be set previous to visiting the input");
     }
 
-    Object value = StringConverter.convert(ctx.getText(), expectedInputTypes.get(ctx));
+    Class<?> expectedInputType = expectedInputTypes.get(ctx);
+
+    Object value = StringConverter.convert(ctx.getText(), expectedInputType);
 
     if (value == null) {
-      throw new InternalFilterException(
-          "The input '" + StringConverter.cleanStringInput(ctx.getText())
-              + "' could not be converted to " + expectedInputTypes.get(ctx));
+      throw new InternalFilterException("The input '" + StringConverter.cleanStringInput(ctx.getText())
+          + "' could not be converted to " + expectedInputType);
     }
 
     return criteriaBuilder.literal(value);
@@ -497,6 +467,19 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
   public void setPayload(Object payload) {
     this.payload = payload;
+  }
+
+  private Class<?> getJavaType(Expression<?> expression) {
+
+    if (ExpressionGeneratorParameters.JAVA_TYPE_MODIFIER != null) {
+      Class<?> modifiedInputType = ExpressionGeneratorParameters.JAVA_TYPE_MODIFIER.apply(expression);
+      if (modifiedInputType != null) {
+        return modifiedInputType;
+      }
+    }
+
+    return expression.getJavaType();
+
   }
 
 }
