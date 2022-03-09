@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
+
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+
 import com.turkraft.springfilter.exception.FilterBuilderException;
 import com.turkraft.springfilter.parser.Filter;
 import com.turkraft.springfilter.parser.FilterLexer;
@@ -29,8 +31,8 @@ import com.turkraft.springfilter.parser.operation.PrefixOperation;
 public class FilterBuilder {
 
   private static Token token(int tokenType) {
-    return new CommonToken(tokenType, StringConverter
-        .cleanStringInput(FilterLexer.VOCABULARY.getDisplayName(tokenType)).toLowerCase());
+    return new CommonToken(tokenType,
+        StringConverter.cleanStringInput(FilterLexer.VOCABULARY.getDisplayName(tokenType)).toLowerCase());
   }
 
   private static Token token(IOperation operation) {
@@ -47,11 +49,7 @@ public class FilterBuilder {
     return ctx;
   }
 
-  public static Filter infix(
-      Filter left,
-      InfixOperation operation,
-      Filter right,
-      NullCascade nullCascade) {
+  public static Filter infix(Filter left, InfixOperation operation, Filter right, NullCascade nullCascade) {
     if (left == null || right == null)
       switch (nullCascade) {
         case TAKE_NONE_IF_ONE_NULL:
@@ -227,8 +225,7 @@ public class FilterBuilder {
   }
 
   public static Filter greaterThanOrEqual(Filter left, Filter right) {
-    return infix(left, InfixOperation.GREATER_THAN_OR_EQUAL, right,
-        NullCascade.TAKE_NONE_IF_ONE_NULL);
+    return infix(left, InfixOperation.GREATER_THAN_OR_EQUAL, right, NullCascade.TAKE_NONE_IF_ONE_NULL);
   }
 
   public static Filter greaterThanOrEqual(String field, Object input) {
@@ -333,6 +330,34 @@ public class FilterBuilder {
     return sum(field(field));
   }
 
+  public static Filter sum(Collection<Filter> arguments) {
+    return function("sum", arguments);
+  }
+
+  public static Filter sum(Filter argument1, Filter argument2) {
+    return sum(Arrays.asList(argument1, argument2));
+  }
+
+  public static Filter diff(Filter argument1, Filter argument2) {
+    return function("diff", argument1, argument2);
+  }
+
+  public static Filter prod(Filter argument1, Filter argument2) {
+    return function("prod", argument1, argument2);
+  }
+
+  public static Filter quot(Filter argument1, Filter argument2) {
+    return function("quot", argument1, argument2);
+  }
+
+  public static Filter mod(Filter argument1, Filter argument2) {
+    return function("mod", argument1, argument2);
+  }
+
+  public static Filter sqrt(Filter argument) {
+    return function("sqrt", argument);
+  }
+
   public static Filter size(Filter argument) {
     return function("size", argument);
   }
@@ -405,7 +430,7 @@ public class FilterBuilder {
     if (filter == null)
       return null;
     if (filter instanceof FilterContext)
-      return ((FilterContext)filter).predicate();
+      return ((FilterContext) filter).predicate();
     if (filter instanceof PredicateContext)
       return (PredicateContext) filter;
     throw new FilterBuilderException("Could not normalize " + filter);
