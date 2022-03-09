@@ -183,6 +183,10 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   @SuppressWarnings({"unchecked", "rawtypes", "incomplete-switch"})
   private Expression<?> visitComparison(InfixContext ctx, InfixOperation op) {
 
+    if (op == InfixOperation.LIKE) {
+      return visitLike(ctx);
+    }
+
     Expression<?> left = null;
     Expression<?> right = null;
 
@@ -209,23 +213,6 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
     switch (op) {
 
-      case LIKE:
-
-        if (ctx.right instanceof InputContext) {
-          String pattern = StringConverter.cleanStringInput(ctx.right.getText());
-          if (ExpressionGeneratorParameters.ENABLE_ASTERISK_WITH_LIKE_OPERATOR) {
-            pattern = pattern.replace('*', '%');
-          }
-          right = criteriaBuilder.literal(pattern);
-        }
-
-        if (!FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
-          left = criteriaBuilder.upper((Expression<String>) left);
-          right = criteriaBuilder.upper((Expression<String>) right);
-        }
-
-        return criteriaBuilder.like((Expression<String>) left, (Expression<String>) right);
-
       case EQUAL:
         return criteriaBuilder.equal(left, right);
 
@@ -251,6 +238,35 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     }
 
     throw new UnimplementFilterOperationException(op);
+
+  }
+
+  @SuppressWarnings({"unchecked"})
+  private Expression<?> visitLike(InfixContext ctx) {
+
+    expectedInputTypes.put(ctx.left, String.class);
+    expectedInputTypes.put(ctx.right, String.class);
+
+    Expression<?> left = visit(ctx.left), right = visit(ctx.right);
+
+    if (ctx.right instanceof InputContext) {
+      String pattern = StringConverter.cleanStringInput(ctx.right.getText());
+      if (ExpressionGeneratorParameters.ENABLE_ASTERISK_WITH_LIKE_OPERATOR) {
+        pattern = pattern.replace('*', '%');
+      }
+      right = criteriaBuilder.literal(pattern);
+    }
+
+    if (Number.class.isAssignableFrom(left.getJavaType())) {
+      left = left.as(String.class); // cast number to string
+    }
+
+    if (!FilterParameters.CASE_SENSITIVE_LIKE_OPERATOR) {
+      left = criteriaBuilder.upper((Expression<String>) left);
+      right = criteriaBuilder.upper((Expression<String>) right);
+    }
+
+    return criteriaBuilder.like((Expression<String>) left, (Expression<String>) right);
 
   }
 
