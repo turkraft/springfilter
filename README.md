@@ -120,11 +120,12 @@ A function is characterized by its name (case insensitive) followed by parenthes
   <tr> <td> average </th> <td> returns the average </td> <td> <b>average(</b>ratings<b>)</b> </td> </tr>
   <tr> <td> min </th> <td> returns the minimum </td> <td> <b>min(</b>ratings<b>)</b> </td> </tr>
   <tr> <td> max </th> <td> returns the maximum </td> <td> <b>max(</b>ratings<b>)</b> </td> </tr>
-  <tr> <td> sum </th> <td> returns the sum </td> <td> <b>sum(</b>scores<b>)</b>, <b>sum(</b>a<b>,</b> b<b>)</b> </td> </tr>
+  <tr> <td> sum </th> <td> returns the sum </td> <td> <b>sum(</b>a<b>,</b> b<b>)</b>, <b>sum(</b>scores<b>)</b></td> </tr>
   <tr> <td> diff </th> <td> returns the difference </td> <td> <b>diff(</b>a<b>,</b> b<b>)</b> </td> </tr>
   <tr> <td> prod </th> <td> returns the product </td> <td> <b>prod(</b>a<b>,</b> b<b>)</b> </td> </tr>
   <tr> <td> quot </th> <td> returns the quotient </td> <td> <b>quot(</b>a<b>,</b> b<b>)</b> </td> </tr>
   <tr> <td> mod </th> <td> returns the modulus </td> <td> <b>mod(</b>a<b>,</b> b<b>)</b> </td> </tr>
+  <tr> <td> sqrt </th> <td> returns the square root </td> <td> <b>sqrt(</b>a<b>)</b> </td> </tr>
   <tr> <td> currentDate </th> <td> returns the current date </td> <td> <b>currentDate()</b> </td> </tr>
   <tr> <td> currentTime </th> <td> returns the current time </td> <td> <b>currentTime()</b> </td> </tr>
   <tr> <td> currentTimestamp </th> <td> returns the current time stamp </td> <td> <b>currentTimestamp()</b> </td> </tr>
