@@ -50,8 +50,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     Objects.requireNonNull(criteriaQuery);
     Objects.requireNonNull(criteriaBuilder);
     Objects.requireNonNull(joins);
-    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload)
-        .visit(filter);
+    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload).visit(filter);
   }
 
   public static Expression<?> run(Filter filter, Root<?> root, CriteriaQuery<?> criteriaQuery,
@@ -71,8 +70,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     Objects.requireNonNull(criteriaQuery);
     Objects.requireNonNull(criteriaBuilder);
     Objects.requireNonNull(joins);
-    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload)
-        .visit(Filter.from(query));
+    return new ExpressionGenerator(root, criteriaQuery, criteriaBuilder, joins, payload).visit(Filter.from(query));
   }
 
   public static Expression<?> run(String query, Root<?> root, CriteriaQuery<?> criteriaQuery,
@@ -93,8 +91,8 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
   private final ParseTreeProperty<Class<?>> expectedInputTypes;
 
-  private ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery,
-      CriteriaBuilder criteriaBuilder, Map<String, Join<?, ?>> joins, Object payload) {
+  private ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+      Map<String, Join<?, ?>> joins, Object payload) {
     this.root = root;
     this.criteriaQuery = criteriaQuery;
     this.criteriaBuilder = criteriaBuilder;
@@ -159,12 +157,10 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     switch (op) {
 
       case AND:
-        return criteriaBuilder.and((Expression<Boolean>) visit(ctx.left),
-            (Expression<Boolean>) visit(ctx.right));
+        return criteriaBuilder.and((Expression<Boolean>) visit(ctx.left), (Expression<Boolean>) visit(ctx.right));
 
       case OR:
-        return criteriaBuilder.or((Expression<Boolean>) visit(ctx.left),
-            (Expression<Boolean>) visit(ctx.right));
+        return criteriaBuilder.or((Expression<Boolean>) visit(ctx.left), (Expression<Boolean>) visit(ctx.right));
 
       case LIKE:
       case EQUAL:
@@ -326,7 +322,33 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
         return criteriaBuilder.max(getFunctionArgument(ctx, 0, Number.class));
 
       case "sum":
-        return criteriaBuilder.sum(getFunctionArgument(ctx, 0, Number.class));
+        if (ctx.arguments.size() == 1) {
+          return criteriaBuilder.sum(getFunctionArgument(ctx, 0, Number.class));
+        }
+        List<Expression<Number>> sumArguments = new ArrayList<Expression<Number>>();
+        for (int i = 0; i < ctx.arguments.size(); i++) {
+          sumArguments.add(getFunctionArgument(ctx, i, Number.class));
+        }
+        return FilterUtils.merge(criteriaBuilder::sum, sumArguments);
+
+      case "diff":
+        return criteriaBuilder.diff(getFunctionArgument(ctx, 0, Number.class),
+            getFunctionArgument(ctx, 1, Number.class));
+
+      case "prod":
+        return criteriaBuilder.prod(getFunctionArgument(ctx, 0, Number.class),
+            getFunctionArgument(ctx, 1, Number.class));
+
+      case "quot":
+        return criteriaBuilder.quot(getFunctionArgument(ctx, 0, Number.class),
+            getFunctionArgument(ctx, 1, Number.class));
+
+      case "mod":
+        return criteriaBuilder.mod(getFunctionArgument(ctx, 0, Integer.class),
+            getFunctionArgument(ctx, 1, Integer.class));
+
+      case "sqrt":
+        return criteriaBuilder.sqrt(getFunctionArgument(ctx, 0, Number.class));
 
       case "size":
         return criteriaBuilder.size(getFunctionArgument(ctx, 0, Collection.class));
@@ -344,11 +366,11 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
         return criteriaBuilder.lower(getFunctionArgument(ctx, 0, String.class));
 
       case "concat":
-        List<Expression<String>> arguments = new ArrayList<Expression<String>>();
+        List<Expression<String>> concatArguments = new ArrayList<Expression<String>>();
         for (int i = 0; i < ctx.arguments.size(); i++) {
-          arguments.add(getFunctionArgument(ctx, i, String.class));
+          concatArguments.add(getFunctionArgument(ctx, i, String.class));
         }
-        return FilterUtils.merge(criteriaBuilder::concat, arguments);
+        return FilterUtils.merge(criteriaBuilder::concat, concatArguments);
 
       case "currenttime":
         return criteriaBuilder.currentTime();
@@ -367,9 +389,8 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     if (FilterParameters.CUSTOM_FUNCTIONS != null) {
       for (FilterFunction filterFunction : FilterParameters.CUSTOM_FUNCTIONS) {
         if (filterFunction.getName().equalsIgnoreCase(functionName)) {
-          Expression<?>[] args = new Expression[filterFunction.getInputTypes() != null
-              ? filterFunction.getInputTypes().length
-              : 0];
+          Expression<?>[] args =
+              new Expression[filterFunction.getInputTypes() != null ? filterFunction.getInputTypes().length : 0];
           for (int i = 0; i < args.length; i++) {
             args[i] = getFunctionArgument(ctx, i, filterFunction.getInputTypes()[i]);
           }
@@ -383,12 +404,11 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Expression<T> getFunctionArgument(FunctionContext ctx, int index,
-      Class<T> expectedClass) {
+  private <T> Expression<T> getFunctionArgument(FunctionContext ctx, int index, Class<T> expectedClass) {
 
     if (index >= ctx.arguments.size()) {
-      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText()
-          + "' expects at least " + (index + 1) + " arguments");
+      throw new BadFilterFunctionUsageException(
+          "The function '" + ctx.ID().getText() + "' expects at least " + (index + 1) + " arguments");
     }
 
     if (ctx.arguments.get(index) instanceof InputContext) {
@@ -403,16 +423,15 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   private Subquery<Integer> getSubquery(FunctionContext ctx) {
 
     if (ctx.arguments.size() != 1) {
-      throw new BadFilterFunctionUsageException(
-          "The function '" + ctx.ID().getText() + "' needs one argument");
+      throw new BadFilterFunctionUsageException("The function '" + ctx.ID().getText() + "' needs one argument");
     }
 
     Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
 
     Root<?> subroot = subquery.correlate(root);
 
-    Expression<?> predicate = ExpressionGenerator.run(ctx.arguments.get(0), subroot, criteriaQuery,
-        criteriaBuilder, new HashMap<String, Join<?, ?>>());
+    Expression<?> predicate = ExpressionGenerator.run(ctx.arguments.get(0), subroot, criteriaQuery, criteriaBuilder,
+        new HashMap<String, Join<?, ?>>());
 
     if (!Boolean.class.isAssignableFrom(predicate.getJavaType())) {
       throw new BadFilterFunctionUsageException(
@@ -436,8 +455,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   public Expression<?> visitInput(InputContext ctx) {
 
     if (expectedInputTypes.get(ctx) == null) {
-      throw new InternalFilterException(
-          "The expected class should be set previous to visiting the input");
+      throw new InternalFilterException("The expected class should be set previous to visiting the input");
     }
 
     Class<?> expectedInputType = expectedInputTypes.get(ctx);
@@ -445,9 +463,8 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
     Object value = StringConverter.convert(ctx.getText(), expectedInputType);
 
     if (value == null) {
-      throw new InternalFilterException(
-          "The input '" + StringConverter.cleanStringInput(ctx.getText())
-              + "' could not be converted to " + expectedInputType);
+      throw new InternalFilterException("The input '" + StringConverter.cleanStringInput(ctx.getText())
+          + "' could not be converted to " + expectedInputType);
     }
 
     return criteriaBuilder.literal(value);
@@ -481,8 +498,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
   private Class<?> getJavaType(Expression<?> expression) {
 
     if (ExpressionGeneratorParameters.JAVA_TYPE_MODIFIER != null) {
-      Class<?> modifiedInputType =
-          ExpressionGeneratorParameters.JAVA_TYPE_MODIFIER.apply(expression);
+      Class<?> modifiedInputType = ExpressionGeneratorParameters.JAVA_TYPE_MODIFIER.apply(expression);
       if (modifiedInputType != null) {
         return modifiedInputType;
       }

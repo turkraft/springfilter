@@ -31,16 +31,14 @@ public class StringConverter {
       return input;
     }
 
-    if (char.class.isAssignableFrom(expectedType)
-        || Character.class.isAssignableFrom(expectedType)) {
+    if (char.class.isAssignableFrom(expectedType) || Character.class.isAssignableFrom(expectedType)) {
       if (input.length() != 1) {
         throw new ClassCastException("The input '" + input + "' could not be cast to Char");
       }
       return input.charAt(0);
     }
 
-    if (boolean.class.isAssignableFrom(expectedType)
-        || Boolean.class.isAssignableFrom(expectedType)) {
+    if (boolean.class.isAssignableFrom(expectedType) || Boolean.class.isAssignableFrom(expectedType)) {
       return Boolean.valueOf(input);
     }
 
@@ -65,8 +63,7 @@ public class StringConverter {
       try {
         return LocalDateTime.parse(input, FilterParameters.LOCALDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
-        throw new ClassCastException(
-            "The input '" + input + "' could not be parsed to LocalDateTime");
+        throw new ClassCastException("The input '" + input + "' could not be parsed to LocalDateTime");
       }
     }
 
@@ -74,8 +71,7 @@ public class StringConverter {
       try {
         return OffsetDateTime.parse(input, FilterParameters.OFFSETDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
-        throw new ClassCastException(
-            "The input '" + input + "' could not be parsed to OffsetDateTime");
+        throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetDateTime");
       }
     }
 
@@ -101,8 +97,8 @@ public class StringConverter {
           return e;
         }
       }
-      throw new ClassCastException("The input '" + input + "' didn't match any enum constant of "
-          + expectedType.getSimpleName());
+      throw new ClassCastException(
+          "The input '" + input + "' didn't match any enum constant of " + expectedType.getSimpleName());
     }
 
     if (BigDecimal.class.isAssignableFrom(expectedType)) {
@@ -118,13 +114,11 @@ public class StringConverter {
 
     if (number != null) {
 
-      if (short.class.isAssignableFrom(expectedType)
-          || Short.class.isAssignableFrom(expectedType)) {
+      if (short.class.isAssignableFrom(expectedType) || Short.class.isAssignableFrom(expectedType)) {
         return number.shortValue();
       }
 
-      if (int.class.isAssignableFrom(expectedType)
-          || Integer.class.isAssignableFrom(expectedType)) {
+      if (int.class.isAssignableFrom(expectedType) || Integer.class.isAssignableFrom(expectedType)) {
         return number.intValue();
       }
 
@@ -132,14 +126,16 @@ public class StringConverter {
         return number.longValue();
       }
 
-      if (float.class.isAssignableFrom(expectedType)
-          || Float.class.isAssignableFrom(expectedType)) {
+      if (float.class.isAssignableFrom(expectedType) || Float.class.isAssignableFrom(expectedType)) {
         return number.floatValue();
       }
 
-      if (double.class.isAssignableFrom(expectedType)
-          || Double.class.isAssignableFrom(expectedType)) {
+      if (double.class.isAssignableFrom(expectedType) || Double.class.isAssignableFrom(expectedType)) {
         return number.doubleValue();
+      }
+
+      if (Number.class.isAssignableFrom(expectedType)) {
+        return number;
       }
 
     }
@@ -158,9 +154,8 @@ public class StringConverter {
       return "'" + input + "'";
     }
 
-    if (input instanceof Boolean || input instanceof Number || input instanceof Character
-        || input instanceof String || input instanceof Enum || input instanceof UUID
-        || input.getClass().isPrimitive()) {
+    if (input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
+        || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive()) {
       return input.toString();
     }
 
@@ -189,10 +184,9 @@ public class StringConverter {
   }
 
   public static boolean isSupportedAsInput(Object input) {
-    return input instanceof Boolean || input instanceof Number || input instanceof Character
-        || input instanceof String || input instanceof Enum || input instanceof UUID
-        || input.getClass().isPrimitive() || input instanceof Date || input instanceof LocalDate
-        || input instanceof LocalDateTime || input instanceof OffsetDateTime
+    return input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
+        || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive() || input instanceof Date
+        || input instanceof LocalDate || input instanceof LocalDateTime || input instanceof OffsetDateTime
         || input instanceof Instant;
   }
 
