@@ -61,10 +61,12 @@ public class FilterBuilder {
       }
     InfixContext ctx = new InfixContext(new PredicateContext());
     ctx.left = normalize(left);
-    ctx.left.setParent(ctx);
+    if (ctx.left != null)
+      ctx.left.setParent(ctx);
     ctx.operator = token(operation);
     ctx.right = normalize(right);
-    ctx.right.setParent(ctx);
+    if (ctx.right != null)
+      ctx.right.setParent(ctx);
     return ctx;
   }
 
