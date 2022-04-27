@@ -154,6 +154,7 @@ You are able to change the date format by setting the static formatters inside t
   <tr> <td> java.time.LocalDate </th> <td> dd-MM-yyyy </td> <td> turkraft.springfilter.localdateformatter.pattern </td> </tr>
   <tr> <td> java.time.LocalDateTime </th> <td> dd-MM-yyyy'T'HH:mm:ss </td> <td> turkraft.springfilter.localdatetimeformatter.pattern </td> </tr>
   <tr> <td> java.time.OffsetDateTime </th> <td> dd-MM-yyyy'T'HH:mm:ss.SSSXXX </td> <td> turkraft.springfilter.offsetdatetimeformatter.pattern </td> </tr>
+  <tr> <td> java.time.LocalTime </th> <td> HH:mm:ss </td> <td> turkraft.springfilter.localtimeformatter.pattern </td> </tr>
   <tr> <td> java.time.Instant </th> <td> dd-MM-yyyy'T'HH:mm:ss.SSSXXX </td> <td> <i>Parses using DateTimeFormatter.ISO_INSTANT</i> </td> </tr>
 </table>
 
