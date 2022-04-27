@@ -6,6 +6,7 @@ import java.text.ParsePosition;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
@@ -72,6 +73,14 @@ public class StringConverter {
         return OffsetDateTime.parse(input, FilterParameters.OFFSETDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
         throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetDateTime");
+      }
+    }
+
+    if (LocalTime.class.isAssignableFrom(expectedType)) {
+      try {
+        return LocalTime.parse(input, FilterParameters.LOCALTIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to LocalTime");
       }
     }
 
@@ -175,6 +184,10 @@ public class StringConverter {
       return FilterParameters.OFFSETDATETIME_FORMATTER.format((OffsetDateTime) input);
     }
 
+    else if (input instanceof LocalTime) {
+      return FilterParameters.LOCALTIME_FORMATTER.format((LocalTime) input);
+    }
+
     else if (input instanceof Instant) {
       return input.toString();
     }
@@ -187,7 +200,7 @@ public class StringConverter {
     return input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
         || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive() || input instanceof Date
         || input instanceof LocalDate || input instanceof LocalDateTime || input instanceof OffsetDateTime
-        || input instanceof Instant;
+        || input instanceof LocalTime || input instanceof Instant;
   }
 
   public static String cleanStringInput(String input) {
