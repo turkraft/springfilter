@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.CodecRegistryProvider;
 @Component
 public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
-  @Autowired
+  @Autowired(required = false)
   CodecRegistryProvider codecRegistryProvider;
 
   @Override
