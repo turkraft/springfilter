@@ -199,6 +199,10 @@ const filter =
 const req = await fetch('http://api/person?filter=' + filter.toString());
 ```
 
+## Angular Query Builder
+
+Please see [documentation](https://github.com/68ociredef/spring-filter-ng).
+
 ## Customization
 If you need to customize the behavior of the filter, the way to go is to extend the `FilterBaseVisitor` class, by taking `QueryGenerator` or `ExpressionGenerator` as examples. In order to also modify the query syntax, you should start by cloning the repository and editing the `Filter.g4` file. 
 
@@ -210,7 +214,8 @@ Ideas and pull requests are always welcome. [Google's Java Style](https://github
 
 ## Contributors
 * Thanks to [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) for adding support to MongoDB.
-* Thanks to [@sisimomo](https://github.com/sisimomo) for creating the JavaScript query builder.
+* Thanks to [@sisimomo](https://github.com/sisimomo) for creating the [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder).
+* Thanks to [@68ociredef](https://github.com/68ociredef) for creating the [Angular query builder](https://github.com/68ociredef/spring-filter-ng).
 
 ## License
 Distributed under the [MIT license](LICENSE).
