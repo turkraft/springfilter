@@ -15,10 +15,10 @@ import com.turkraft.springfilter.FilterUtils;
 @Configuration
 public class SpringFilterWebConfig implements WebMvcConfigurer {
 
-  @Autowired
+  @Autowired(required = false)
   SpecificationFilterArgumentResolver specificationFilterArgumentResolver;
 
-  @Autowired
+  @Autowired(required = false)
   BsonFilterArgumentResolver bsonFilterArgumentResolver;
 
   @Override
