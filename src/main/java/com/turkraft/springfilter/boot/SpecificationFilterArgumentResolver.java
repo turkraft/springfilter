@@ -2,6 +2,7 @@ package com.turkraft.springfilter.boot;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -15,6 +16,7 @@ import com.turkraft.springfilter.parser.FilterParser.FilterContext;
  * Specification&lt;T&gt;} annotated with {@link Filter}.
  */
 
+@Component
 public class SpecificationFilterArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
