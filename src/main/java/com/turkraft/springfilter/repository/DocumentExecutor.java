@@ -29,7 +29,7 @@ public interface DocumentExecutor<T, I> {
 
   default Page<T> findAll(@Nullable Document doc, Pageable pageable) {
     Query query = BsonGeneratorUtils.getQueryFromDocument(doc).with(pageable);
-    long count = count(doc);
+    long count = getMongoOperations().count(query, getMetadata().getJavaType());
     List<T> content = getMongoOperations().find(query, getMetadata().getJavaType());
     return new PageImpl<>(content, pageable, count);
   }
