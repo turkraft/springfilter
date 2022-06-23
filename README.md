@@ -178,6 +178,17 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
+### MongoDB Codecs
+When using MongoDB and have codecs added to global CodecRegistryProvider. Add the following implementation to inject them to BsonGeneratorParameters
+```java
+@Configuration
+public class MongoDBCodecConfiguration {
+    public MongoDBCodecConfiguration(Autowired CodecRegistryProvider codecRegistryProvider) {
+        BsonGeneratorParameters.setCodecRegistry(codecRegistryProvider.getCodecRegistry());
+    }
+}
+```
+
 > :warning: Functions are currently not supported with MongoDB, and the `~` operator actually uses the [regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator
 
 ## JavaScript Query Builder

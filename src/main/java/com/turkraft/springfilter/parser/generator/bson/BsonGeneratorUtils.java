@@ -20,7 +20,7 @@ public class BsonGeneratorUtils {
     }
 
     BsonDocument bsonDocument =
-        bson.toBsonDocument(BsonDocument.class, BsonGeneratorParameters.CODEC_REGISTRY);
+        bson.toBsonDocument(BsonDocument.class, BsonGeneratorParameters.getCodecRegistry());
     DocumentCodec codec = new DocumentCodec();
     DecoderContext decoderContext = DecoderContext.builder().build();
     return codec.decode(new BsonDocumentReader(bsonDocument), decoderContext);
