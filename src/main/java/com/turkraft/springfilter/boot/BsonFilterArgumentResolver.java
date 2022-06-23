@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.boot;
 
+import com.turkraft.springfilter.parser.generator.bson.BsonGeneratorParameters;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
