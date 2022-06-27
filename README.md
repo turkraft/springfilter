@@ -179,13 +179,25 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 ```
 
 ### MongoDB Codecs
-When using MongoDB and have codecs added to global CodecRegistryProvider. Add the following implementation to inject them to BsonGeneratorParameters
+When using MongoDB and have codecs added to global CodecRegistryProvider. Add the one of the following implementations to inject them to BsonGeneratorParameters
 ```java
 @Configuration
 public class MongoDBCodecConfiguration {
-    public MongoDBCodecConfiguration(Autowired CodecRegistryProvider codecRegistryProvider) {
-        BsonGeneratorParameters.setCodecRegistry(codecRegistryProvider.getCodecRegistry());
-    }
+  public MongoDBCodecConfiguration(CodecRegistryProvider codecRegistryProvider) {
+    BsonGeneratorParameters.setCodecRegistry(codecRegistryProvider.getCodecRegistry());
+  }
+}
+```
+```java
+@Configuration
+public class MongoDBCodecConfiguration {
+
+  @Autowired
+  CodecRegistryProvider codecRegistryProvider;
+
+  public MongoDBCodecConfiguration() {
+    BsonGeneratorParameters.setCodecRegistry(codecRegistryProvider.getCodecRegistry());
+  }
 }
 ```
 
