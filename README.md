@@ -163,6 +163,8 @@ MongoDB is also partially supported as an alternative to JPA. The query input is
 
 > Requires **spring-data-mongodb** 
 
+> :warning: Functions are currently not supported with MongoDB, and the `~` operator actually uses the [regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator.
+
 ### Usage
 ```java
 @GetMapping(value = "/search")
@@ -178,7 +180,18 @@ Query query = BsonUtils.getQueryFromDocument(doc);
 // ...
 ```
 
-> :warning: Functions are currently not supported with MongoDB, and the `~` operator actually uses the [regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator
+### Parameters
+
+#### Codec Registry
+The codec registry can be customized using the `BsonGeneratorParameters.setCodecRegistry` method. You may also use the `CodecRegistryProvider` as follows:
+```java
+@Configuration
+public class MongoDBCodecConfiguration {
+  public MongoDBCodecConfiguration(CodecRegistryProvider codecRegistryProvider) {
+    BsonGeneratorParameters.setCodecRegistry(codecRegistryProvider.getCodecRegistry());
+  }
+}
+```
 
 ## JavaScript Query Builder
 

@@ -1,8 +1,6 @@
 package com.turkraft.springfilter.boot;
 
-import com.turkraft.springfilter.parser.generator.bson.BsonGeneratorParameters;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -20,16 +18,6 @@ import com.turkraft.springfilter.parser.generator.bson.BsonGeneratorUtils;
  */
 
 public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver {
-
-  public final CodecRegistry codecRegistry;
-
-  public BsonFilterArgumentResolver() {
-    this(BsonGeneratorParameters.CODEC_REGISTRY);
-  }
-
-  public BsonFilterArgumentResolver(CodecRegistry codecRegistry) {
-    this.codecRegistry = codecRegistry;
-  }
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
@@ -62,7 +50,7 @@ public class BsonFilterArgumentResolver implements HandlerMethodArgumentResolver
       return bson;
     }
 
-    return BsonGeneratorUtils.getDocumentFromBson(bson, codecRegistry);
+    return BsonGeneratorUtils.getDocumentFromBson(bson);
 
   }
 

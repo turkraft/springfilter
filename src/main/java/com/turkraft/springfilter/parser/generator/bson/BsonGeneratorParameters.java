@@ -8,7 +8,7 @@ public class BsonGeneratorParameters {
 
   private BsonGeneratorParameters() {}
 
-  public static CodecRegistry CODEC_REGISTRY;
+  private static CodecRegistry CODEC_REGISTRY;
 
   static {
 
@@ -18,4 +18,11 @@ public class BsonGeneratorParameters {
 
   }
 
+  public static CodecRegistry getCodecRegistry() {
+    return CODEC_REGISTRY;
+  }
+
+  public static void setCodecRegistry(CodecRegistry codecRegistry) {
+    CODEC_REGISTRY = codecRegistry;
+  }
 }

@@ -26,7 +26,7 @@ public class BsonGeneratorUtils {
     }
 
     if (codecRegistry == null) {
-      codecRegistry = BsonGeneratorParameters.CODEC_REGISTRY;
+      codecRegistry = BsonGeneratorParameters.getCodecRegistry();
     }
 
     BsonDocument bsonDocument =
