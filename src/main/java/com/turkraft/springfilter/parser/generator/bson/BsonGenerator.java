@@ -3,7 +3,6 @@ package com.turkraft.springfilter.parser.generator.bson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.bson.BsonNull;
 import org.bson.conversions.Bson;
 import org.springframework.data.annotation.Id;
 import com.mongodb.client.model.Filters;
@@ -74,10 +73,10 @@ public class BsonGenerator extends FilterBaseVisitor<Bson> {
     switch (op) {
 
       case IS_NULL:
-        return Filters.eq(fieldName, BsonNull.VALUE);
+        return Filters.not(Filters.exists(fieldName));
 
       case IS_NOT_NULL:
-        return Filters.ne(fieldName, BsonNull.VALUE);
+        return Filters.exists(fieldName);
 
       case IS_EMPTY:
         return Filters.size(fieldName, 0);

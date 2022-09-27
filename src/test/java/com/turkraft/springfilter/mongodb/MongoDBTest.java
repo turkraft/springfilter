@@ -6,6 +6,8 @@ import static com.turkraft.springfilter.FilterBuilder.greaterThan;
 import static com.turkraft.springfilter.FilterBuilder.greaterThanOrEqual;
 import static com.turkraft.springfilter.FilterBuilder.in;
 import static com.turkraft.springfilter.FilterBuilder.inputs;
+import static com.turkraft.springfilter.FilterBuilder.isNotNull;
+import static com.turkraft.springfilter.FilterBuilder.isNull;
 import static com.turkraft.springfilter.FilterBuilder.lessThan;
 import static com.turkraft.springfilter.FilterBuilder.lessThanOrEqual;
 import static com.turkraft.springfilter.FilterBuilder.not;
@@ -57,9 +59,25 @@ class MongoDBTest {
   }
 
   @Test
+  void nullTest() throws Exception {
+    queryTest(isNull("id"), Filters.not(Filters.exists("id")));
+  }
+
+  @Test
+  void isNotNullTest() throws Exception {
+    queryTest(isNotNull("id"), Filters.exists("id"));
+  }
+
+  @Test
   void andTest() throws Exception {
     queryTest(and(equal("name", "x"), equal("id", "y")),
         Filters.and(Filters.eq("name", "x"), Filters.eq("id", "y")));
+  }
+
+  @Test
+  void andNullTest() throws Exception {
+    queryTest(and(equal("name", "x"), isNull("id")),
+        Filters.and(Filters.eq("name", "x"), Filters.not(Filters.exists("id"))));
   }
 
   @Test
