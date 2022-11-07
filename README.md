@@ -175,8 +175,8 @@ public Page<Entity> search(@Filter(entityClass = Entity.class) Document doc, Pag
 ```
 ```java
 Bson bson = BsonGenerator.run(Filter.from(query), Entity.class);
-Document doc = BsonUtils.getDocumentFromBson(bson);
-Query query = BsonUtils.getQueryFromDocument(doc);
+Document doc = BsonGeneratorUtils.getDocumentFromBson(bson);
+Query query = BsonGeneratorUtils.getQueryFromDocument(doc);
 // ...
 ```
 
