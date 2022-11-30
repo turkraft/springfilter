@@ -17,11 +17,14 @@ import com.turkraft.springfilter.FilterParameters;
 
 public class StringConverter {
 
-  public static final NumberFormat NUMBER_FORMAT;
+  public static final ThreadLocal<NumberFormat> NUMBER_FORMAT;
 
   static {
-    NUMBER_FORMAT = NumberFormat.getInstance(Locale.US);
-    NUMBER_FORMAT.setGroupingUsed(false); // in order to not count commas as part of number
+    NUMBER_FORMAT = ThreadLocal.withInitial(() -> {
+      NumberFormat nf = NumberFormat.getInstance(Locale.US);
+      nf.setGroupingUsed(false); // in order to not count commas as part of number
+      return nf;
+    });
   }
 
   public static Object convert(String input, Class<?> expectedType) {
@@ -119,7 +122,7 @@ public class StringConverter {
     }
 
     ParsePosition position = new ParsePosition(0);
-    Number number = NUMBER_FORMAT.parse(input, position);
+    Number number = NUMBER_FORMAT.get().parse(input, position);
 
     if (number != null) {
 
