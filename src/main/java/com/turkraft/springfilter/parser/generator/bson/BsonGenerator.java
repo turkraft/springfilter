@@ -42,7 +42,7 @@ public class BsonGenerator extends FilterBaseVisitor<Bson> {
 
   private final Class<?> entityClass;
 
-  private BsonGenerator(Class<?> entityClass) {
+  protected BsonGenerator(Class<?> entityClass) {
     this.entityClass = entityClass;
   }
 

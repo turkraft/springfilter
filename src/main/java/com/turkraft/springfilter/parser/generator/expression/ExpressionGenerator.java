@@ -91,7 +91,7 @@ public class ExpressionGenerator extends FilterBaseVisitor<Expression<?>> {
 
   private final ParseTreeProperty<Class<?>> expectedInputTypes;
 
-  private ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
+  protected ExpressionGenerator(Root<?> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder,
       Map<String, Join<?, ?>> joins, Object payload) {
     this.root = root;
     this.criteriaQuery = criteriaQuery;

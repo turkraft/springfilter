@@ -6,7 +6,7 @@ import com.turkraft.springfilter.FilterUtils;
 
 public class BsonGeneratorParameters {
 
-  private BsonGeneratorParameters() {}
+  protected BsonGeneratorParameters() {}
 
   private static CodecRegistry CODEC_REGISTRY;
 

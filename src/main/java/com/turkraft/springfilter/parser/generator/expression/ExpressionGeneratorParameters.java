@@ -8,7 +8,7 @@ import javax.persistence.criteria.Path;
 
 public class ExpressionGeneratorParameters {
 
-  private ExpressionGeneratorParameters() {}
+  protected ExpressionGeneratorParameters() {}
 
   public static BiFunction<Path<?>, Object, Boolean> FILTERING_AUTHORIZATION;
   public static Function<Expression<?>, Class<?>> JAVA_TYPE_MODIFIER;
