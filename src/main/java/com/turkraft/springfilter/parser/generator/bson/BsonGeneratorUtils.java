@@ -13,7 +13,7 @@ import org.springframework.lang.Nullable;
 
 public class BsonGeneratorUtils {
 
-  private BsonGeneratorUtils() {}
+  protected BsonGeneratorUtils() {}
 
   public static Document getDocumentFromBson(Bson bson) {
     return getDocumentFromBson(bson, null);
