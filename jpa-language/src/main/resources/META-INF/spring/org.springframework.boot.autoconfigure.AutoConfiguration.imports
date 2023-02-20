@@ -1,0 +1,3 @@
+com.turkraft.springfilter.language.SizeFunction
+com.turkraft.springfilter.language.CountFunction
+com.turkraft.springfilter.language.ExistsFunction
