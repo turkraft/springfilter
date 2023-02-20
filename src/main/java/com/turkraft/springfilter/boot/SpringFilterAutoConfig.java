@@ -18,7 +18,10 @@ public class SpringFilterAutoConfig {
       @Value("${turkraft.springfilter.localdateformatter.pattern:#{null}}") String localDatePattern,
       @Value("${turkraft.springfilter.localdatetimeformatter.pattern:#{null}}") String localDateTimePattern,
       @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern,
+      @Value("${turkraft.springfilter.offsettimeformatter.pattern:#{null}}") String offsetTimePattern,
       @Value("${turkraft.springfilter.localtimeformatter.pattern:#{null}}") String localTimeFormatterPattern,
+      @Value("${turkraft.springfilter.yearmonthformatter.pattern:#{null}}") String yearMonthFormatterPattern,
+      @Value("${turkraft.springfilter.monthdayformatter.pattern:#{null}}") String monthDayFormatterPattern,
       @Value("${turkraft.springfilter.operator.like.casesensitive:#{null}}") Boolean caseSensitiveLikeOperator) {
 
     if (datePattern != null) {
@@ -38,9 +41,24 @@ public class SpringFilterAutoConfig {
           DateTimeFormatter.ofPattern(offsetDateTimePattern);
     }
 
+    if (offsetTimePattern != null) {
+      FilterParameters.OFFSETTIME_FORMATTER =
+          DateTimeFormatter.ofPattern(offsetTimePattern);
+    }
+
     if (localTimeFormatterPattern != null) {
       FilterParameters.LOCALTIME_FORMATTER =
           DateTimeFormatter.ofPattern(localTimeFormatterPattern);
+    }
+
+    if (yearMonthFormatterPattern != null) {
+      FilterParameters.YEARMONTH_FORMATTER =
+          DateTimeFormatter.ofPattern(yearMonthFormatterPattern);
+    }
+
+    if (monthDayFormatterPattern != null) {
+      FilterParameters.MONTHDAY_FORMATTER =
+          DateTimeFormatter.ofPattern(monthDayFormatterPattern);
     }
 
     if (caseSensitiveLikeOperator != null) {

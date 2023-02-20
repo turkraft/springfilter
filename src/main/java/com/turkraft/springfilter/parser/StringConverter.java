@@ -7,7 +7,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Locale;
@@ -79,6 +82,14 @@ public class StringConverter {
       }
     }
 
+    if (OffsetTime.class.isAssignableFrom(expectedType)) {
+      try {
+        return OffsetTime.parse(input, FilterParameters.OFFSETTIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetTime");
+      }
+    }
+
     if (LocalTime.class.isAssignableFrom(expectedType)) {
       try {
         return LocalTime.parse(input, FilterParameters.LOCALTIME_FORMATTER);
@@ -92,6 +103,22 @@ public class StringConverter {
         return Instant.parse(input);
       } catch (DateTimeParseException e) {
         throw new ClassCastException("The input '" + input + "' could not be parsed to Instant");
+      }
+    }
+
+    if (YearMonth.class.isAssignableFrom(expectedType)) {
+      try {
+        return YearMonth.parse(input);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to YearMonth");
+      }
+    }
+
+    if (MonthDay.class.isAssignableFrom(expectedType)) {
+      try {
+        return MonthDay.parse(input);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to MonthDay");
       }
     }
 
@@ -187,8 +214,20 @@ public class StringConverter {
       return FilterParameters.OFFSETDATETIME_FORMATTER.format((OffsetDateTime) input);
     }
 
+    else if (input instanceof OffsetTime) {
+      return FilterParameters.OFFSETDATETIME_FORMATTER.format((OffsetTime) input);
+    }
+
     else if (input instanceof LocalTime) {
       return FilterParameters.LOCALTIME_FORMATTER.format((LocalTime) input);
+    }
+
+    else if (input instanceof YearMonth) {
+      return FilterParameters.YEARMONTH_FORMATTER.format((YearMonth) input);
+    }
+
+    else if (input instanceof MonthDay) {
+      return FilterParameters.MONTHDAY_FORMATTER.format((MonthDay) input);
     }
 
     else if (input instanceof Instant) {
@@ -203,7 +242,8 @@ public class StringConverter {
     return input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
         || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive() || input instanceof Date
         || input instanceof LocalDate || input instanceof LocalDateTime || input instanceof OffsetDateTime
-        || input instanceof LocalTime || input instanceof Instant;
+        || input instanceof LocalTime || input instanceof Instant || input instanceof OffsetTime
+        || input instanceof YearMonth || input instanceof MonthDay;
   }
 
   public static String cleanStringInput(String input) {

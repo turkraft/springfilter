@@ -16,7 +16,7 @@ import com.turkraft.springfilter.exception.UnauthorizedFilterPathException;
 
 public class ExpressionGeneratorUtils {
 
-  private ExpressionGeneratorUtils() {}
+  protected ExpressionGeneratorUtils() {}
 
   public static Path<?> getDatabasePath(Root<?> root, String fieldPath) {
     return getDatabasePath(root, new HashMap<>(), null, fieldPath);
