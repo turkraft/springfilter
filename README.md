@@ -53,7 +53,7 @@ available so that it's not a headache anymore to generate valid queries in front
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -72,7 +72,7 @@ The repository should implement `JpaSpecificationExecutor` in order to execute S
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -89,7 +89,7 @@ Page<Entity> search(@Filter(entityClass = Entity.class) Query query, Pageable pa
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
