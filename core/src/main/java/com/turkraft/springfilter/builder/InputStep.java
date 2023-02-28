@@ -10,14 +10,14 @@ import com.turkraft.springfilter.parser.node.InputNode;
 public interface InputStep extends Step {
 
   default InputStepImpl input(Object value) {
-    return new InputStepImpl(getOperators(), getFilterStringConverter(), new InputNode(value));
+    return new InputStepImpl(getOperators(), new InputNode(value));
   }
 
   class InputStepImpl extends StepWithResultImpl implements ComparisonStep {
 
-    InputStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    InputStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

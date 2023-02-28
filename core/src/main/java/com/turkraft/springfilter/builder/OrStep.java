@@ -9,16 +9,16 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface OrStep extends StepWithResult {
 
   default OrStepImpl or(StepWithResult with) {
-    return new OrStepImpl(getOperators(), getFilterStringConverter(),
+    return new OrStepImpl(getOperators(),
         get().infix(getOperators().getInfixOperator(OrOperator.class),
             with.get()));
   }
 
   class OrStepImpl extends StepWithResultImpl implements LogicStep {
 
-    OrStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    OrStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

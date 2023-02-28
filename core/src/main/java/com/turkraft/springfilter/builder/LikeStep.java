@@ -9,16 +9,16 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface LikeStep extends StepWithResult {
 
   default LikeStepImpl like(StepWithResult to) {
-    return new LikeStepImpl(getOperators(), getFilterStringConverter(),
+    return new LikeStepImpl(getOperators(),
         get().infix(getOperators().getInfixOperator(LikeOperator.class),
             to.get()));
   }
 
   class LikeStepImpl extends StepWithResultImpl implements LogicStep {
 
-    LikeStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    LikeStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

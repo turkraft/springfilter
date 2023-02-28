@@ -9,15 +9,15 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface GreaterThanStep extends StepWithResult {
 
   default GreaterThanStepImpl greaterThan(StepWithResult to) {
-    return new GreaterThanStepImpl(getOperators(), getFilterStringConverter(), get()
+    return new GreaterThanStepImpl(getOperators(), get()
         .infix(getOperators().getInfixOperator(GreaterThanOperator.class), to.get()));
   }
 
   class GreaterThanStepImpl extends StepWithResultImpl implements LogicStep {
 
-    GreaterThanStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    GreaterThanStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

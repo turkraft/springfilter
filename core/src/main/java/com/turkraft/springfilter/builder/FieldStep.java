@@ -10,14 +10,14 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface FieldStep extends Step {
 
   default FieldStepImpl field(String name) {
-    return new FieldStepImpl(getOperators(), getFilterStringConverter(), new FieldNode(name));
+    return new FieldStepImpl(getOperators(), new FieldNode(name));
   }
 
   class FieldStepImpl extends StepWithResultImpl implements ComparisonStep, LogicStep {
 
-    FieldStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    FieldStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

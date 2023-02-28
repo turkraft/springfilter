@@ -9,15 +9,15 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface IsEmptyStep extends StepWithResult {
 
   default IsEmptyStepImpl isEmpty() {
-    return new IsEmptyStepImpl(getOperators(), getFilterStringConverter(),
+    return new IsEmptyStepImpl(getOperators(),
         get().postfix(getOperators().getPostfixOperator(IsEmptyOperator.class)));
   }
 
   class IsEmptyStepImpl extends StepWithResultImpl implements LogicStep {
 
-    IsEmptyStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    IsEmptyStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

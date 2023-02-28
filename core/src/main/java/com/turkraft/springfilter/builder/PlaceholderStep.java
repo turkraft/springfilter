@@ -11,15 +11,15 @@ import com.turkraft.springfilter.parser.node.PlaceholderNode;
 public interface PlaceholderStep extends Step {
 
   default PlaceholderStepImpl placeholder(FilterPlaceholder placeholder) {
-    return new PlaceholderStepImpl(getOperators(), getFilterStringConverter(),
+    return new PlaceholderStepImpl(getOperators(),
         new PlaceholderNode(placeholder));
   }
 
   class PlaceholderStepImpl extends StepWithResultImpl implements ComparisonStep, LogicStep {
 
-    PlaceholderStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    PlaceholderStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

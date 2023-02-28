@@ -10,15 +10,15 @@ import com.turkraft.springfilter.parser.node.PriorityNode;
 public interface PriorityStep extends Step {
 
   default PriorityStepImpl priority(StepWithResult value) {
-    return new PriorityStepImpl(getOperators(), getFilterStringConverter(),
+    return new PriorityStepImpl(getOperators(),
         new PriorityNode(value.get()));
   }
 
   class PriorityStepImpl extends StepWithResultImpl implements LogicStep {
 
-    PriorityStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    PriorityStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

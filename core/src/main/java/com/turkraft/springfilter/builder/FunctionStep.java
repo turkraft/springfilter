@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public interface FunctionStep extends Step {
 
   default FunctionStepImpl function(FilterFunction function, List<StepWithResult> arguments) {
-    return new FunctionStepImpl(getOperators(), getFilterStringConverter(),
+    return new FunctionStepImpl(getOperators(),
         new FunctionNode(function,
             arguments.stream().map(StepWithResult::get).collect(Collectors.toList())));
   }
@@ -25,9 +25,9 @@ public interface FunctionStep extends Step {
 
   class FunctionStepImpl extends StepWithResultImpl implements ComparisonStep, LogicStep {
 
-    FunctionStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    FunctionStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

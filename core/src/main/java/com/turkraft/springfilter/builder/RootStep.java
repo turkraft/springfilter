@@ -17,11 +17,11 @@ public class RootStep extends AbstractStep
     PlaceholderStep {
 
   public RootStep(FilterOperators operators, FilterStringConverter filterStringConverter) {
-    super(operators, filterStringConverter);
+    super(operators);
   }
 
   public StepWithResult from(FilterNode node) {
-    return new StepWithResultImpl(getOperators(), getFilterStringConverter(), node);
+    return new StepWithResultImpl(getOperators(), node);
   }
 
   private StepWithResult and(@Nullable StepWithResult left, @Nullable StepWithResult right) {
@@ -34,7 +34,7 @@ public class RootStep extends AbstractStep
     if (right == null) {
       return left;
     }
-    return new StepWithResultImpl(getOperators(), getFilterStringConverter(),
+    return new StepWithResultImpl(getOperators(),
         new InfixOperationNode(left.get(), getOperators().getInfixOperator(
             AndOperator.class), right.get()));
   }
@@ -61,7 +61,7 @@ public class RootStep extends AbstractStep
     if (right == null) {
       return left;
     }
-    return new StepWithResultImpl(getOperators(), getFilterStringConverter(),
+    return new StepWithResultImpl(getOperators(),
         new InfixOperationNode(left.get(), getOperators().getInfixOperator(
             OrOperator.class), right.get()));
   }

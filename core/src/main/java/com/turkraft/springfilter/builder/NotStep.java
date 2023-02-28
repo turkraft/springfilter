@@ -9,16 +9,16 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface NotStep extends StepWithResult {
 
   default NotStepImpl not() {
-    return new NotStepImpl(getOperators(), getFilterStringConverter(),
+    return new NotStepImpl(getOperators(),
         get().prefix(
             getOperators().getPrefixOperator(NotOperator.class)));
   }
 
   class NotStepImpl extends StepWithResultImpl implements LogicStep {
 
-    NotStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    NotStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

@@ -9,7 +9,7 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface EqualStep extends StepWithResult {
 
   default EqualStepImpl equal(StepWithResult to) {
-    return new EqualStepImpl(getOperators(), getFilterStringConverter(),
+    return new EqualStepImpl(getOperators(),
         get().infix(
             getOperators().getInfixOperator(EqualOperator.class),
             to.get()));
@@ -17,9 +17,9 @@ public interface EqualStep extends StepWithResult {
 
   class EqualStepImpl extends StepWithResultImpl implements LogicStep {
 
-    EqualStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    EqualStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

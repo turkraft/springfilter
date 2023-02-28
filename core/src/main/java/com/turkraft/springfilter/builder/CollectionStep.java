@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public interface CollectionStep extends Step {
 
   default CollectionStepImpl collection(List<StepWithResult> items) {
-    return new CollectionStepImpl(getOperators(), getFilterStringConverter(),
+    return new CollectionStepImpl(getOperators(),
         new CollectionNode(items.stream().map(StepWithResult::get).collect(Collectors.toList())));
   }
 
@@ -23,9 +23,9 @@ public interface CollectionStep extends Step {
 
   class CollectionStepImpl extends StepWithResultImpl implements ComparisonStep {
 
-    CollectionStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    CollectionStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }

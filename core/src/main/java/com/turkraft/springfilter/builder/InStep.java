@@ -10,16 +10,16 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public interface InStep extends StepWithResult {
 
   default InStepImpl in(StepWithResult to) {
-    return new InStepImpl(getOperators(), getFilterStringConverter(),
+    return new InStepImpl(getOperators(),
         get().infix(getOperators().getInfixOperator(InOperator.class),
             to.get()));
   }
 
   class InStepImpl extends StepWithResultImpl implements LogicStep {
 
-    InStepImpl(FilterOperators operators, FilterStringConverter filterStringConverter,
+    InStepImpl(FilterOperators operators,
         FilterNode result) {
-      super(operators, filterStringConverter, result);
+      super(operators, result);
     }
 
   }
