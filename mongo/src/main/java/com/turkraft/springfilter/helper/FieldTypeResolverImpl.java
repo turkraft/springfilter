@@ -42,7 +42,7 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
     }
   }
 
-  private static Class<?> getFirstTypeParameterOf(Field field) {
+  private Class<?> getFirstTypeParameterOf(Field field) {
     return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
   }
 

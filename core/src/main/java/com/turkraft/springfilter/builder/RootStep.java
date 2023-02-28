@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.builder;
 
 
-import com.turkraft.springfilter.converter.FilterStringConverter;
 import com.turkraft.springfilter.definition.FilterOperators;
 import com.turkraft.springfilter.language.AndOperator;
 import com.turkraft.springfilter.language.OrOperator;
@@ -16,7 +15,7 @@ public class RootStep extends AbstractStep
     implements FieldStep, InputStep, CollectionStep, FunctionStep, PriorityStep,
     PlaceholderStep {
 
-  public RootStep(FilterOperators operators, FilterStringConverter filterStringConverter) {
+  public RootStep(FilterOperators operators) {
     super(operators);
   }
 
