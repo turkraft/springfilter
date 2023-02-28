@@ -48,7 +48,7 @@ public abstract class AbstractStep implements Step {
     }
 
     public String generate() {
-      return Objects.requireNonNull(getFilterStringConverter().transform(get()),
+      return Objects.requireNonNull(getFilterStringConverter().convert(get()),
           "Could not find filter node to string converter!");
     }
 
