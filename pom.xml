@@ -44,7 +44,7 @@
     <de.flapdoodle.embed.mongo.version>3.3.1</de.flapdoodle.embed.mongo.version>
     <javafaker.version>1.0.2</javafaker.version>
     <junit.version>5.8.2</junit.version>
-    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
