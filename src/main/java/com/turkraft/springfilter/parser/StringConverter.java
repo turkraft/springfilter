@@ -75,19 +75,19 @@ public class StringConverter {
       }
     }
 
-    if (ZonedDateTime.class.isAssignableFrom(expectedType)) {
-      try {
-        return ZonedDateTime.parse(input, FilterParameters.ZONEDDATETIME_FORMATTER);
-      } catch (DateTimeParseException e) {
-        throw new ClassCastException("The input '" + input + "' could not be parsed to ZonedDateTime");
-      }
-    }
-
     if (OffsetTime.class.isAssignableFrom(expectedType)) {
       try {
         return OffsetTime.parse(input, FilterParameters.OFFSETTIME_FORMATTER);
       } catch (DateTimeParseException e) {
         throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetTime");
+      }
+    }
+
+    if (ZonedDateTime.class.isAssignableFrom(expectedType)) {
+      try {
+        return ZonedDateTime.parse(input, FilterParameters.ZONEDDATETIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to ZonedDateTime");
       }
     }
 
