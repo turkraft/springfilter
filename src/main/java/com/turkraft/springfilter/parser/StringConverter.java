@@ -77,7 +77,7 @@ public class StringConverter {
 
     if (ZonedDateTime.class.isAssignableFrom(expectedType)) {
       try {
-        return ZonedDateTime.parse(input, FilterParameters.OFFSETDATETIME_FORMATTER);
+        return ZonedDateTime.parse(input, FilterParameters.ZONEDDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
         throw new ClassCastException("The input '" + input + "' could not be parsed to ZonedDateTime");
       }
