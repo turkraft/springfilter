@@ -3,14 +3,7 @@ package com.turkraft.springfilter.parser;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.MonthDay;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Locale;
@@ -87,6 +80,14 @@ public class StringConverter {
         return OffsetTime.parse(input, FilterParameters.OFFSETTIME_FORMATTER);
       } catch (DateTimeParseException e) {
         throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetTime");
+      }
+    }
+
+    if (ZonedDateTime.class.isAssignableFrom(expectedType)) {
+      try {
+        return ZonedDateTime.parse(input, FilterParameters.ZONEDDATETIME_FORMATTER);
+      } catch (DateTimeParseException e) {
+        throw new ClassCastException("The input '" + input + "' could not be parsed to ZonedDateTime");
       }
     }
 

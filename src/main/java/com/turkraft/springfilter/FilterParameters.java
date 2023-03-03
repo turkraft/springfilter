@@ -12,6 +12,7 @@ public class FilterParameters {
   public static DateTimeFormatter LOCALDATETIME_FORMATTER;
   public static DateTimeFormatter OFFSETDATETIME_FORMATTER;
   public static DateTimeFormatter OFFSETTIME_FORMATTER;
+  public static DateTimeFormatter ZONEDDATETIME_FORMATTER;
   public static DateTimeFormatter LOCALTIME_FORMATTER;
   public static DateTimeFormatter YEARMONTH_FORMATTER;
   public static DateTimeFormatter MONTHDAY_FORMATTER;
@@ -27,6 +28,7 @@ public class FilterParameters {
     LOCALDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss");
     OFFSETDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
     OFFSETTIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSSXXX");
+    ZONEDDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
     LOCALTIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
     YEARMONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM");
     MONTHDAY_FORMATTER = DateTimeFormatter.ofPattern("--MM-dd");
