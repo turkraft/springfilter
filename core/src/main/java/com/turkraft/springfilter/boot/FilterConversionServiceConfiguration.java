@@ -16,16 +16,11 @@ public class FilterConversionServiceConfiguration {
   @Nullable
   private final ConversionService defaultConversionService;
 
-  @Nullable
-  private final ConverterRegistry converterRegistry;
-
   public FilterConversionServiceConfiguration(
       @Nullable @Autowired(required = false) ConversionService mvcConversionService,
-      @Nullable @Autowired(required = false) ConversionService defaultConversionService,
-      @Nullable @Autowired(required = false) ConverterRegistry converterRegistry) {
+      @Nullable @Autowired(required = false) ConversionService defaultConversionService) {
     this.mvcConversionService = mvcConversionService;
     this.defaultConversionService = defaultConversionService;
-    this.converterRegistry = converterRegistry;
   }
 
   @Bean
@@ -41,10 +36,11 @@ public class FilterConversionServiceConfiguration {
 
   @Bean
   public ConverterRegistry sfConverterRegistry() {
-    if (converterRegistry != null) {
-      return converterRegistry;
+    ConversionService conversionService = sfConversionService();
+    if (conversionService instanceof ConverterRegistry) {
+      return (ConverterRegistry) sfConversionService();
     }
-    return (ConverterRegistry) sfConversionService();
+    throw new IllegalArgumentException("Could not find any ConverterRegistry bean!");
   }
 
 }
