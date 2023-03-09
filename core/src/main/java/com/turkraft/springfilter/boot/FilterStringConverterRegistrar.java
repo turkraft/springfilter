@@ -9,7 +9,7 @@ import org.springframework.core.convert.converter.ConverterRegistry;
 public class FilterStringConverterRegistrar {
 
   public FilterStringConverterRegistrar(
-      @Qualifier("sfConversionService") ConverterRegistry converterRegistry,
+      @Qualifier("sfConverterRegistry") ConverterRegistry converterRegistry,
       FilterStringConverter filterStringConverter) {
     converterRegistry.addConverter(filterStringConverter);
   }
