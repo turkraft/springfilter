@@ -2,6 +2,7 @@ package com.turkraft.springfilter;
 
 import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.builder.StepWithResult;
+import com.turkraft.springfilter.converter.FilterStringConverter;
 import com.turkraft.springfilter.language.HelloWorldPlaceholder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,11 @@ public class FilterBuilderTest {
   @Autowired
   private HelloWorldPlaceholder helloWorldPlaceholder;
 
+  @Autowired
+  FilterStringConverter filterStringConverter;
+
   private void test(String expected, StepWithResult filter) {
-    Assertions.assertEquals(expected, filter.toString());
+    Assertions.assertEquals(expected, filterStringConverter.convert(filter.get()));
   }
 
   @Test
