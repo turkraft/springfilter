@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.Objects;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +30,8 @@ class FilterSpecificationConverterImpl implements
 
   private final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
-  public FilterSpecificationConverterImpl(ConversionService conversionService,
+  public FilterSpecificationConverterImpl(
+      @Qualifier("sfConversionService") ConversionService conversionService,
       PathExpressionHelper pathExpressionHelper,
       ExistsExpressionHelper existsExpressionHelper,
       FilterNodeProcessorFactories filterNodeProcessorFactories) {

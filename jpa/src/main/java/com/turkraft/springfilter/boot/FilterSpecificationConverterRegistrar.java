@@ -1,13 +1,15 @@
 package com.turkraft.springfilter.boot;
 
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.ConverterRegistry;
 
 @Configuration
 class FilterSpecificationConverterRegistrar {
 
-  public FilterSpecificationConverterRegistrar(ConverterRegistry converterRegistry,
+  public FilterSpecificationConverterRegistrar(
+      @Qualifier("sfConversionService") ConverterRegistry converterRegistry,
       FilterSpecificationConverter filterSpecificationConverter) {
     converterRegistry.addConverter(filterSpecificationConverter);
   }

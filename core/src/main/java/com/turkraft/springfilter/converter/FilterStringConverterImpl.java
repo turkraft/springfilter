@@ -4,6 +4,7 @@ import com.turkraft.springfilter.parser.FilterParser;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterStringTransformer;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ class FilterStringConverterImpl implements FilterStringConverter {
   private final FilterStringTransformer filterStringTransformer;
 
   public FilterStringConverterImpl(FilterParser filterParser,
-      ConversionService conversionService) {
+      @Qualifier("sfConversionService") ConversionService conversionService) {
     this.filterParser = filterParser;
     this.conversionService = conversionService;
     this.filterStringTransformer = new FilterStringTransformer(this.conversionService);

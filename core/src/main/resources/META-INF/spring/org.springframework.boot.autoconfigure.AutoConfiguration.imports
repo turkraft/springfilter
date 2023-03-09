@@ -1,6 +1,7 @@
 com.turkraft.springfilter.boot.FilterStringConverterRegistrar
 com.turkraft.springfilter.boot.FilterNodeArgumentResolverHelper
 com.turkraft.springfilter.boot.FilterNodeArgumentResolverConfigurer
+com.turkraft.springfilter.boot.FilterConversionServiceConfiguration
 
 com.turkraft.springfilter.transformer.processor.factory.FilterPlaceholderProcessorFactoryImpl
 com.turkraft.springfilter.transformer.processor.factory.FilterFunctionProcessorFactoryImpl
