@@ -28,6 +28,14 @@ Your API will gain a full featured search functionality. You don't work with API
 
 > :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
 
+## [Sponsors](https://github.com/sponsors/torshid)
+
+<table>
+<tr>
+<td><a href="https://github.com/ixorbv"><img width="64" src="https://avatars.githubusercontent.com/u/127401397?v=4"/></a></td>
+</tr>
+</table>
+
 ## Installation
 
 ```xml
