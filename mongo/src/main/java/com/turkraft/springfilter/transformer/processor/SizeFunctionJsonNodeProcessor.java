@@ -26,7 +26,7 @@ class SizeFunctionJsonNodeProcessor implements
       FunctionNode functionNode) {
     transformer.registerTargetType(functionNode, Number.class);
     return transformer.getObjectMapper().createObjectNode()
-        .set("$size", transformer.transform(functionNode.getArguments().get(0)));
+        .set("$size", transformer.transform(functionNode.getArgument(0)));
   }
 
 }

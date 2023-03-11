@@ -26,5 +26,18 @@ public class FunctionNode extends FilterNode {
   public List<FilterNode> getChildren() {
     return getArguments();
   }
-  
+
+  public FilterNode getArgument(int index, String exceptionMessage) {
+    if (getArguments().size() <= index) {
+      throw new IllegalArgumentException(exceptionMessage);
+    }
+    return getArguments().get(index);
+  }
+
+  public FilterNode getArgument(int index) {
+    return getArgument(index,
+        "The function `" + filterFunction.getName() + "` expects at least " + index
+            + " argument(s)");
+  }
+
 }

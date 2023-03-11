@@ -36,7 +36,7 @@ class ExistsFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer, FunctionNode source) {
     transformer.registerTargetType(source, Boolean.class);
     return existsExpressionHelper.wrapWithExists(transformer,
-        source.getArguments().get(0));
+        source.getArgument(0));
   }
 
 }

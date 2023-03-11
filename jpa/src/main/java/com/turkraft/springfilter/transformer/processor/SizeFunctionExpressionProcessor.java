@@ -42,7 +42,7 @@ class SizeFunctionExpressionProcessor implements
         transformer.getCriteriaBuilder().count(transformer.getCriteriaBuilder().literal(1)));
 
     Expression<?> expression = transformer.transform(
-        source.getArguments().get(0));
+        source.getArgument(0));
 
     if (expression.getJavaType().equals(Boolean.class)) {
       subquery.where((Expression<Boolean>) expression);
