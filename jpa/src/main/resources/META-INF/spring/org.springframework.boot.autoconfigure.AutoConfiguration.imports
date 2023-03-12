@@ -27,3 +27,4 @@ com.turkraft.springfilter.transformer.processor.NotInOperationExpressionProcesso
 com.turkraft.springfilter.transformer.processor.CountFunctionExpressionProcessor
 com.turkraft.springfilter.transformer.processor.ExistsFunctionExpressionProcessor
 com.turkraft.springfilter.transformer.processor.SizeFunctionExpressionProcessor
+com.turkraft.springfilter.transformer.processor.AverageFunctionExpressionProcessor

@@ -1,11 +1,13 @@
 package com.turkraft.springfilter.transformer.processor;
 
+import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.CountFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
+@IgnoreExists
 @Component
 class CountFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
@@ -30,7 +32,6 @@ class CountFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    transformer.registerTargetType(source, Number.class);
     return sizeFunctionExpressionProcessor.process(transformer, source);
   }
 
