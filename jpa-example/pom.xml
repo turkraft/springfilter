@@ -37,6 +37,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -62,7 +67,6 @@
     </dependency>
 
   </dependencies>
-
 
   <profiles>
 
@@ -97,7 +101,7 @@
                 <image>${docker.name}</image>
               </to>
               <container>
-                <environment></environment>
+                <environment/>
                 <ports>
                   <port>8080</port>
                 </ports>
