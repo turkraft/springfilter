@@ -25,7 +25,7 @@ available so that it's not a headache anymore to generate valid queries in front
   > You can access the older version in the [2.x.x branch](https://github.com/turkraft/spring-filter/tree/2.x.x).
 </details>
 
-## Example ([try it live](https://spring-filter.herokuapp.com))
+## Example ([try it live](https://spring-filter.onrender.com/))
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
@@ -44,6 +44,14 @@ available so that it's not a headache anymore to generate valid queries in front
 ```
 
 > :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/turkraft/spring-filter/issues).
+
+## [Sponsors](https://github.com/sponsors/torshid)
+
+<table>
+<tr>
+<td><a href="https://github.com/ixorbv"><img width="64" src="https://avatars.githubusercontent.com/u/127401397?v=4"/></a></td>
+</tr>
+</table>
 
 ## Integrations and Usages
 
