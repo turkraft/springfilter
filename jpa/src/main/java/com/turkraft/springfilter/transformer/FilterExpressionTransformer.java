@@ -140,7 +140,7 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
   }
 
   private Expression<?> castIfNeeded(Expression<?> expression, Class<?> targetType) {
-    if (targetType != null && expression.getJavaType() != null
+    if (expression.getJavaType() != null
         && !targetType.isAssignableFrom(expression.getJavaType())) {
       return expression.as(targetType);
     }
