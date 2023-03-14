@@ -55,30 +55,13 @@ available so that it's not a headache anymore to generate valid queries in front
 
 ## Integrations and Usages
 
-It is required to add the snapshot repository:
-
-```xml
-<repositories>
-  <repository>
-    <id>oss.sonatype.org-snapshot</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
-</repositories>
-  ```
-
 ### JPA Integration
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.4</version>
 </dependency>
 ```
 
@@ -97,7 +80,7 @@ The repository should implement `JpaSpecificationExecutor` in order to execute S
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.4</version>
 </dependency>
 ```
 
@@ -114,7 +97,7 @@ Page<Entity> search(@Filter(entityClass = Entity.class) Query query, Pageable pa
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.4</version>
 </dependency>
 ```
 
