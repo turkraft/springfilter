@@ -4,10 +4,10 @@ import com.turkraft.springfilter.definition.FilterFunction;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AverageFunction extends FilterFunction {
+public class AvgFunction extends FilterFunction {
 
-  protected AverageFunction() {
-    super("average");
+  protected AvgFunction() {
+    super("avg");
   }
 
 }

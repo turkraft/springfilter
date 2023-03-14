@@ -2,7 +2,7 @@ package com.turkraft.springfilter.transformer.processor;
 
 import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.helper.RootContext;
-import com.turkraft.springfilter.language.AverageFunction;
+import com.turkraft.springfilter.language.AvgFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import jakarta.persistence.criteria.Expression;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class AverageFunctionExpressionProcessor implements
+class AvgFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override
@@ -21,15 +21,15 @@ class AverageFunctionExpressionProcessor implements
   }
 
   @Override
-  public Class<AverageFunction> getDefinitionType() {
-    return AverageFunction.class;
+  public Class<AvgFunction> getDefinitionType() {
+    return AvgFunction.class;
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    
+
     Subquery<Double> subquery = transformer.getCriteriaQuery().subquery(Double.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
