@@ -9,7 +9,7 @@
 You need a way to dynamically filter entities without any effort? Just add me to your `pom.xml`.
 Your API will gain a full featured search functionality. You don't work with APIs? No problem, you may still not want to mess with SQL, JPA predicates, security, and all of that I guess.
 
-## Example ([try it live](https://spring-filter.herokuapp.com))
+## Example ([try it live](https://spring-filter.onrender.com/))
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
@@ -28,13 +28,21 @@ Your API will gain a full featured search functionality. You don't work with API
 
 > :rocket: Yes we support booleans, dates, enums, functions, **and even relations**! Need something else? [Tell us here](https://github.com/torshid/spring-filter/issues).
 
+## [Sponsors](https://github.com/sponsors/torshid)
+
+<table>
+<tr>
+<td><a href="https://github.com/ixorbv"><img width="64" src="https://avatars.githubusercontent.com/u/127401397?v=4"/></a></td>
+</tr>
+</table>
+
 ## Installation
 
 ```xml
 <dependency>
     <groupId>com.turkraft</groupId>
     <artifactId>spring-filter</artifactId>
-    <version>2.1.3</version>
+    <version>2.1.5</version>
 </dependency>
 ```
 

@@ -19,6 +19,7 @@ public class SpringFilterAutoConfig {
       @Value("${turkraft.springfilter.localdatetimeformatter.pattern:#{null}}") String localDateTimePattern,
       @Value("${turkraft.springfilter.offsetdatetimeformatter.pattern:#{null}}") String offsetDateTimePattern,
       @Value("${turkraft.springfilter.offsettimeformatter.pattern:#{null}}") String offsetTimePattern,
+      @Value("${turkraft.springfilter.zoneddatetimeformatter.pattern:#{null}}") String zonedDateTimePattern,
       @Value("${turkraft.springfilter.localtimeformatter.pattern:#{null}}") String localTimeFormatterPattern,
       @Value("${turkraft.springfilter.yearmonthformatter.pattern:#{null}}") String yearMonthFormatterPattern,
       @Value("${turkraft.springfilter.monthdayformatter.pattern:#{null}}") String monthDayFormatterPattern,
@@ -44,6 +45,11 @@ public class SpringFilterAutoConfig {
     if (offsetTimePattern != null) {
       FilterParameters.OFFSETTIME_FORMATTER =
           DateTimeFormatter.ofPattern(offsetTimePattern);
+    }
+
+    if (zonedDateTimePattern != null) {
+      FilterParameters.ZONEDDATETIME_FORMATTER =
+              DateTimeFormatter.ofPattern(zonedDateTimePattern);
     }
 
     if (localTimeFormatterPattern != null) {
