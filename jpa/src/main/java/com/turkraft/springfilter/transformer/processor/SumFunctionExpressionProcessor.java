@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.transformer.processor;
 
+import com.turkraft.springfilter.helper.PossibleAggregatedExpression;
 import com.turkraft.springfilter.helper.RootContext;
 import com.turkraft.springfilter.language.SumFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 class SumFunctionExpressionProcessor implements
-    FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
+    FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>>,
+    PossibleAggregatedExpression {
 
   @Override
   public Class<FilterExpressionTransformer> getTransformerType() {
@@ -49,6 +51,11 @@ class SumFunctionExpressionProcessor implements
 
     return subquery;
 
+  }
+
+  @Override
+  public boolean isAggregated(FunctionNode functionNode) {
+    return functionNode.getArguments().size() == 1;
   }
 
 }
