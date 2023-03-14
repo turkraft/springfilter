@@ -3,6 +3,7 @@ package com.turkraft.springfilter.example.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -55,6 +56,9 @@ public class Employee {
 
   @ElementCollection
   private List<String> children;
+
+  @Embedded
+  private Address address;
 
   public enum MaritalStatus {
 
@@ -154,6 +158,14 @@ public class Employee {
 
   public void setChildren(List<String> children) {
     this.children = children;
+  }
+
+  public Address getAddress() {
+    return address;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
   }
 
 }

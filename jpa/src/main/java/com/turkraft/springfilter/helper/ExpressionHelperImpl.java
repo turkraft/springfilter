@@ -50,7 +50,6 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
       return rootContext.getPaths().get(fieldPath);
     }
 
-    From<?, ?> from = rootContext.getRoot();
     Path<?> path = rootContext.getRoot();
 
     String[] fields = fieldPath.split("\\.");
@@ -69,29 +68,26 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
 
       Path<?> nextPath = null;
 
-      if (from instanceof MapJoin) {
+      if (path instanceof MapJoin) {
         if (field.equals("key") || field.equals("keys")) {
-          nextPath = ((MapJoin<?, ?, ?>) from).key();
+          nextPath = ((MapJoin<?, ?, ?>) path).key();
         } else if (field.equals("value") || field.equals("values")) {
-          nextPath = ((MapJoin<?, ?, ?>) from).value();
+          nextPath = ((MapJoin<?, ?, ?>) path).value();
         }
       }
 
       if (nextPath == null) {
-        nextPath = from.get(field);
+        nextPath = path.get(field);
       }
 
-      boolean shouldJoin = !(from instanceof MapJoin) && shouldJoin(nextPath);
+      boolean shouldJoin =
+          !(path instanceof MapJoin) && path instanceof From && shouldJoin(nextPath);
 
       if (shouldJoin) {
         if (!rootContext.getPaths().containsKey(chain)) {
-          rootContext.getPaths().put(chain, from.join(field));
+          rootContext.getPaths().put(chain, ((From<?, ?>) path).join(field));
         }
-        if (i < fields.length - 1) {
-          from = (From<?, ?>) rootContext.getPaths().get(chain);
-        } else {
-          nextPath = rootContext.getPaths().get(chain);
-        }
+        nextPath = rootContext.getPaths().get(chain);
       }
 
       path = nextPath;

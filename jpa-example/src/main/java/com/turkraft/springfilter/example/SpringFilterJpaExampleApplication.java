@@ -2,6 +2,7 @@ package com.turkraft.springfilter.example;
 
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.converter.FilterSpecification;
+import com.turkraft.springfilter.example.model.Address;
 import com.turkraft.springfilter.example.model.Company;
 import com.turkraft.springfilter.example.model.Employee;
 import com.turkraft.springfilter.example.model.Employee.MaritalStatus;
@@ -91,6 +92,12 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
       employee.setChildren(
           Stream.generate(faker.name()::firstName).limit(5).skip(faker.random().nextInt(0, 5))
               .collect(Collectors.toList()));
+      employee.setAddress(new Address() {{
+        setCity(faker.address().city());
+        setCountry(faker.address().country());
+        setPostalCode(faker.address().zipCode());
+        setStreetAndNumber(faker.address().streetAddress());
+      }});
       employees.add(employee);
     }
     employeeRepository.saveAll(employees);
