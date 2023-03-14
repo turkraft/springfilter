@@ -259,7 +259,7 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
 
     subquery.select(transformer.getCriteriaBuilder().literal(1));
 
-    if (expression.getJavaType().equals(Boolean.class)) {
+    if (Boolean.class.equals(expression.getJavaType())) {
       subquery.where((Expression<Boolean>) expression);
     }
 
