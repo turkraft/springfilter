@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SignFunction extends FilterFunction {
 
-  protected SignFunction() {
+  public SignFunction() {
     super("sign");
   }
 

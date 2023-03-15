@@ -30,7 +30,7 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
 
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
-  FilterJsonNodeArgumentResolver(
+  public FilterJsonNodeArgumentResolver(
       ConversionService conversionService, ObjectMapper objectMapper,
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       JsonNodeHelper jsonNodeHelper,

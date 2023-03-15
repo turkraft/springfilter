@@ -23,7 +23,7 @@ public class FilterSpecificationArgumentResolver implements HandlerMethodArgumen
 
   protected final FilterSpecificationConverter filterSpecificationConverter;
 
-  FilterSpecificationArgumentResolver(
+  public FilterSpecificationArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       FilterSpecificationConverter filterSpecificationConverter) {
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;

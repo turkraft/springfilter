@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ModFunction extends FilterFunction {
 
-  protected ModFunction() {
+  public ModFunction() {
     super("mod");
   }
 

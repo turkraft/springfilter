@@ -23,7 +23,7 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
 
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
-  FilterJsonNodeArgumentResolverConfigurer(
+  public FilterJsonNodeArgumentResolverConfigurer(
       @Lazy ConversionService conversionService,
       @Lazy ObjectMapper objectMapper,
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,

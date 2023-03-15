@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LnFunction extends FilterFunction {
 
-  protected LnFunction() {
+  public LnFunction() {
     super("ln");
   }
 

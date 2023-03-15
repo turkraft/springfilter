@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SumFunction extends FilterFunction {
 
-  protected SumFunction() {
+  public SumFunction() {
     super("sum");
   }
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TrimFunction extends FilterFunction {
 
-  protected TrimFunction() {
+  public TrimFunction() {
     super("trim");
   }
 

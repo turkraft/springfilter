@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ToBigIntegerFunction extends FilterFunction {
 
-  protected ToBigIntegerFunction() {
+  public ToBigIntegerFunction() {
     super("toBigInteger");
   }
 

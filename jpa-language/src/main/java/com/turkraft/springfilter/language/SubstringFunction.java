@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubstringFunction extends FilterFunction {
 
-  protected SubstringFunction() {
+  public SubstringFunction() {
     super("substring");
   }
 

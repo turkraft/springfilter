@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QuotFunction extends FilterFunction {
 
-  protected QuotFunction() {
+  public QuotFunction() {
     super("quot");
   }
 

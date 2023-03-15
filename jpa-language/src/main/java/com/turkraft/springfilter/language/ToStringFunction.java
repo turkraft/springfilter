@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ToStringFunction extends FilterFunction {
 
-  protected ToStringFunction() {
+  public ToStringFunction() {
     super("toString");
   }
 

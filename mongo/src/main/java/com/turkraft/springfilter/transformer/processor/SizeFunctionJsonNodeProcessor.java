@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SizeFunctionJsonNodeProcessor implements
     FilterFunctionProcessor<FilterJsonNodeTransformer, JsonNode> {
-
-
+  
   @Override
   public Class<FilterJsonNodeTransformer> getTransformerType() {
     return FilterJsonNodeTransformer.class;

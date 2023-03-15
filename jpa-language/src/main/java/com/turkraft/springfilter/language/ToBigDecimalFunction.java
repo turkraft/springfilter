@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ToBigDecimalFunction extends FilterFunction {
 
-  protected ToBigDecimalFunction() {
+  public ToBigDecimalFunction() {
     super("toBigDecimal");
   }
 

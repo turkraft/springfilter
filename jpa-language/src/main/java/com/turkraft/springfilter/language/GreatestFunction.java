@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GreatestFunction extends FilterFunction {
 
-  protected GreatestFunction() {
+  public GreatestFunction() {
     super("greatest");
   }
 

@@ -15,7 +15,7 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
   protected final FieldTypeResolver fieldTypeResolver;
 
-  JsonNodeHelperImpl(ObjectMapper objectMapper,
+  public JsonNodeHelperImpl(ObjectMapper objectMapper,
       FieldTypeResolver fieldTypeResolver) {
     this.objectMapper = objectMapper;
     this.fieldTypeResolver = fieldTypeResolver;

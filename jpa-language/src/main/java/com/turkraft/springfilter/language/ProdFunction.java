@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProdFunction extends FilterFunction {
 
-  protected ProdFunction() {
+  public ProdFunction() {
     super("prod");
   }
 

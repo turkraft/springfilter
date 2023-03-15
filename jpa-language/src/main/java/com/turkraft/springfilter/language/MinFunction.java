@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MinFunction extends FilterFunction {
 
-  protected MinFunction() {
+  public MinFunction() {
     super("min");
   }
 

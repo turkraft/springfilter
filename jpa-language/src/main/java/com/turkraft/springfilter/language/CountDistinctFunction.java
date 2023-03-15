@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountDistinctFunction extends FilterFunction {
 
-  protected CountDistinctFunction() {
+  public CountDistinctFunction() {
     super("countDistinct");
   }
 

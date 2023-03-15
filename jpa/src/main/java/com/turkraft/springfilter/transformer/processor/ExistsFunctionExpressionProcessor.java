@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class ExistsFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
-  private final ExistsExpressionHelper existsExpressionHelper;
+  protected final ExistsExpressionHelper existsExpressionHelper;
 
   ExistsFunctionExpressionProcessor(
       @Lazy ExistsExpressionHelper existsExpressionHelper) {

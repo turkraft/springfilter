@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiffFunction extends FilterFunction {
 
-  protected DiffFunction() {
+  public DiffFunction() {
     super("diff");
   }
 

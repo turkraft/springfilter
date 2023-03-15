@@ -14,7 +14,7 @@ public class FilterSpecificationArgumentResolverConfigurer implements WebMvcConf
 
   protected final FilterSpecificationConverter filterSpecificationConverter;
 
-  FilterSpecificationArgumentResolverConfigurer(
+  public FilterSpecificationArgumentResolverConfigurer(
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       @Lazy FilterSpecificationConverter filterSpecificationConverter) {
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;

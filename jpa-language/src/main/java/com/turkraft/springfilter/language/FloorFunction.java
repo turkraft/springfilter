@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FloorFunction extends FilterFunction {
 
-  protected FloorFunction() {
+  public FloorFunction() {
     super("floor");
   }
 

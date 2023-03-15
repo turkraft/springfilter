@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ToFloatFunction extends FilterFunction {
 
-  protected ToFloatFunction() {
+  public ToFloatFunction() {
     super("toFloat");
   }
 

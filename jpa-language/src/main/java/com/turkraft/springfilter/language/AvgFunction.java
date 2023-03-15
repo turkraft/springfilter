@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AvgFunction extends FilterFunction {
 
-  protected AvgFunction() {
+  public AvgFunction() {
     super("avg");
   }
 
