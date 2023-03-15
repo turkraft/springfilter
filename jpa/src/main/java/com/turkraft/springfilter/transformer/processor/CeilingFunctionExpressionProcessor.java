@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class CeilingFunctionExpressionProcessor implements
+public class CeilingFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

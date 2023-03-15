@@ -15,7 +15,7 @@ import org.springframework.core.convert.ConversionService;
 
 public class FilterStringTransformer implements FilterNodeTransformer<String> {
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
   public FilterStringTransformer(ConversionService conversionService) {
     this.conversionService = conversionService;

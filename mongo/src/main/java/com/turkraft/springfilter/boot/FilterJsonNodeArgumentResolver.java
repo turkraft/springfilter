@@ -18,17 +18,17 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
+public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
-  private final ObjectMapper objectMapper;
+  protected final ObjectMapper objectMapper;
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  private final JsonNodeHelper jsonNodeHelper;
+  protected final JsonNodeHelper jsonNodeHelper;
 
-  private final FilterNodeProcessorFactories filterNodeProcessorFactories;
+  protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
   FilterJsonNodeArgumentResolver(
       ConversionService conversionService, ObjectMapper objectMapper,

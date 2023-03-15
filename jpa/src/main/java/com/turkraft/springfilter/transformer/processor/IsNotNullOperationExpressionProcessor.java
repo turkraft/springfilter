@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class IsNotNullOperationExpressionProcessor implements
+public class IsNotNullOperationExpressionProcessor implements
     FilterPostfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.Subquery;
 import org.springframework.stereotype.Component;
 
 @Component
-class SumFunctionExpressionProcessor implements
+public class SumFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>>,
     PossibleAggregatedExpression {
 

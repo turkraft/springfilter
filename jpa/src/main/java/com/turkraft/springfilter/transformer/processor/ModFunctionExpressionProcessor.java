@@ -8,7 +8,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class ModFunctionExpressionProcessor implements
+public class ModFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

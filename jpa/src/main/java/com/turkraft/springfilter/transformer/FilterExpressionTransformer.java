@@ -27,11 +27,11 @@ import org.springframework.lang.Nullable;
 
 public class FilterExpressionTransformer implements FilterNodeTransformer<Expression<?>> {
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
-  private final PathExpressionHelper pathExpressionHelper;
+  protected final PathExpressionHelper pathExpressionHelper;
 
-  private final ExistsExpressionHelper existsExpressionHelper;
+  protected final ExistsExpressionHelper existsExpressionHelper;
 
   private final RootContext rootContext;
 

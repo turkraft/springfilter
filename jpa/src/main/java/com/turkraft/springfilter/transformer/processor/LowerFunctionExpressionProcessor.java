@@ -8,7 +8,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class LowerFunctionExpressionProcessor implements
+public class LowerFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

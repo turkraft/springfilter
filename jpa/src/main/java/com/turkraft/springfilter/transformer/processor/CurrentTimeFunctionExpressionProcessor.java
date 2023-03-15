@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class CurrentTimeFunctionExpressionProcessor implements
+public class CurrentTimeFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

@@ -11,10 +11,10 @@ import org.springframework.lang.Nullable;
 public class FilterConversionServiceConfiguration {
 
   @Nullable
-  private final ConversionService mvcConversionService;
+  protected final ConversionService mvcConversionService;
 
   @Nullable
-  private final ConversionService defaultConversionService;
+  protected final ConversionService defaultConversionService;
 
   public FilterConversionServiceConfiguration(
       @Nullable @Autowired(required = false) ConversionService mvcConversionService,

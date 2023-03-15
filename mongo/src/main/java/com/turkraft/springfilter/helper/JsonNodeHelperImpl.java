@@ -9,11 +9,11 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Service;
 
 @Service
-class JsonNodeHelperImpl implements JsonNodeHelper {
+public class JsonNodeHelperImpl implements JsonNodeHelper {
 
-  private final ObjectMapper objectMapper;
+  protected final ObjectMapper objectMapper;
 
-  private final FieldTypeResolver fieldTypeResolver;
+  protected final FieldTypeResolver fieldTypeResolver;
 
   JsonNodeHelperImpl(ObjectMapper objectMapper,
       FieldTypeResolver fieldTypeResolver) {

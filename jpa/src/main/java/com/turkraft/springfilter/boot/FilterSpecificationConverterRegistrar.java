@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.ConverterRegistry;
 
 @Configuration
-class FilterSpecificationConverterRegistrar {
+public class FilterSpecificationConverterRegistrar {
 
   public FilterSpecificationConverterRegistrar(
       @Qualifier("sfConverterRegistry") ConverterRegistry converterRegistry,

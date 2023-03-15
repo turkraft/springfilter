@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class MinFunctionExpressionProcessor implements
+public class MinFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

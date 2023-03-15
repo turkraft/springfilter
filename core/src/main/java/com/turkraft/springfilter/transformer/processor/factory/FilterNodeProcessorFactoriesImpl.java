@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class FilterNodeProcessorFactoriesImpl implements FilterNodeProcessorFactories {
 
-  private final FilterFunctionProcessorFactory functionProcessorFactory;
+  protected final FilterFunctionProcessorFactory functionProcessorFactory;
 
-  private final FilterPlaceholderProcessorFactory placeholderProcessorFactory;
+  protected final FilterPlaceholderProcessorFactory placeholderProcessorFactory;
 
-  private final FilterOperationProcessorFactory operationProcessorFactory;
+  protected final FilterOperationProcessorFactory operationProcessorFactory;
 
   public FilterNodeProcessorFactoriesImpl(
       FilterFunctionProcessorFactory functionProcessorFactory,
@@ -19,7 +19,7 @@ public class FilterNodeProcessorFactoriesImpl implements FilterNodeProcessorFact
     this.placeholderProcessorFactory = placeholderProcessorFactory;
     this.operationProcessorFactory = operationProcessorFactory;
   }
-  
+
   @Override
   public FilterFunctionProcessorFactory getFunctionProcessorFactory() {
     return functionProcessorFactory;

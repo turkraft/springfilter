@@ -9,7 +9,7 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 
 @Component
-class TodayFunctionJsonNodeProcessor implements
+public class TodayFunctionJsonNodeProcessor implements
     FilterFunctionProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   @Override

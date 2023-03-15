@@ -17,11 +17,11 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-class FilterSpecificationArgumentResolver implements HandlerMethodArgumentResolver {
+public class FilterSpecificationArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  private final FilterSpecificationConverter filterSpecificationConverter;
+  protected final FilterSpecificationConverter filterSpecificationConverter;
 
   FilterSpecificationArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,

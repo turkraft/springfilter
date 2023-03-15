@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-class FilterSpecificationConverterImpl implements
+public class FilterSpecificationConverterImpl implements
     FilterSpecificationConverter {
 
   private final ConversionService conversionService;

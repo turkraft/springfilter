@@ -13,15 +13,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Component
 public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigurer {
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
-  private final ObjectMapper objectMapper;
+  protected final ObjectMapper objectMapper;
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  private final JsonNodeHelper jsonNodeHelper;
+  protected final JsonNodeHelper jsonNodeHelper;
 
-  private final FilterNodeProcessorFactories filterNodeProcessorFactories;
+  protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
   FilterJsonNodeArgumentResolverConfigurer(
       @Lazy ConversionService conversionService,

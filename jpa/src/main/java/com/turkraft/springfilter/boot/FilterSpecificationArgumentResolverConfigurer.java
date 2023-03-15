@@ -10,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Component
 public class FilterSpecificationArgumentResolverConfigurer implements WebMvcConfigurer {
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  private final FilterSpecificationConverter filterSpecificationConverter;
+  protected final FilterSpecificationConverter filterSpecificationConverter;
 
   FilterSpecificationArgumentResolverConfigurer(
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,

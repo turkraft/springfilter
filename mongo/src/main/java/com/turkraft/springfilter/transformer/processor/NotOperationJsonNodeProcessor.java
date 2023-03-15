@@ -7,7 +7,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class NotOperationJsonNodeProcessor implements
+public class NotOperationJsonNodeProcessor implements
     FilterPrefixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   @Override

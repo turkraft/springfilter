@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class IsNotEmptyOperationExpressionProcessor implements
+public class IsNotEmptyOperationExpressionProcessor implements
     FilterPostfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
   private final ExistsExpressionHelper existsExpressionHelper;

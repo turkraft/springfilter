@@ -7,7 +7,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class SizeFunctionJsonNodeProcessor implements
+public class SizeFunctionJsonNodeProcessor implements
     FilterFunctionProcessor<FilterJsonNodeTransformer, JsonNode> {
 
 

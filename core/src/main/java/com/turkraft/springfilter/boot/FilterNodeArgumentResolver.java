@@ -8,9 +8,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver {
+public class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
   FilterNodeArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper) {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class GreatestFunctionExpressionProcessor implements
+public class GreatestFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

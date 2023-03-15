@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-class FilterPlaceholderProcessorFactoryImpl extends
+public class FilterPlaceholderProcessorFactoryImpl extends
     AbstractFilterNodeProcessorFactory<PlaceholderNode, FilterPlaceholderProcessor<?, PlaceholderNode>> implements
     FilterPlaceholderProcessorFactory {
 

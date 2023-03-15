@@ -10,13 +10,13 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.stereotype.Service;
 
 @Service
-class FilterStringConverterImpl implements FilterStringConverter {
+public class FilterStringConverterImpl implements FilterStringConverter {
 
-  private final FilterParser filterParser;
+  protected final FilterParser filterParser;
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
-  private final FilterStringTransformer filterStringTransformer;
+  protected final FilterStringTransformer filterStringTransformer;
 
   public FilterStringConverterImpl(FilterParser filterParser,
       @Qualifier("sfConversionService") ConversionService conversionService) {

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-class FilterFunctionProcessorFactoryImpl extends
+public class FilterFunctionProcessorFactoryImpl extends
     AbstractFilterNodeProcessorFactory<FunctionNode, FilterFunctionProcessor<?, ?>> implements
     FilterFunctionProcessorFactory {
 
