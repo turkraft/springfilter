@@ -1,8 +1,8 @@
 # Spring Filter
 
 <p align="center">
-  <a href="https://github.com/turkraft/spring-filter">
-    <img src="https://raw.githubusercontent.com/turkraft/spring-filter/3.x.x/.github/logo.png" alt="Spring Filter Logo">
+  <a href="https://github.com/turkraft/springfilter">
+    <img src="https://raw.githubusercontent.com/turkraft/springfilter/main/.github/logo.png" alt="Spring Filter Logo">
   </a>
 </p>
 
