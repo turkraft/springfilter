@@ -15,9 +15,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 @Service
 public class FilterNodeArgumentResolverHelper {
 
-  private final FilterStringConverter filterStringConverter;
+  protected final FilterStringConverter filterStringConverter;
 
-  private final FilterBuilder builder;
+  protected final FilterBuilder builder;
 
   FilterNodeArgumentResolverHelper(@Lazy FilterStringConverter filterStringConverter,
       @Lazy FilterBuilder builder) {

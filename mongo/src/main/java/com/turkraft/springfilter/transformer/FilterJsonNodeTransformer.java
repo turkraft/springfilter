@@ -21,11 +21,11 @@ import org.springframework.lang.Nullable;
 
 public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode> {
 
-  private final ConversionService conversionService;
+  protected final ConversionService conversionService;
 
-  private final ObjectMapper objectMapper;
+  protected final ObjectMapper objectMapper;
 
-  private final FilterNodeProcessorFactories filterNodeProcessorFactories;
+  protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
   private final Class<?> entityType;
 

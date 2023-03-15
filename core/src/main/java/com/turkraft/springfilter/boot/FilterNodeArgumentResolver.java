@@ -10,7 +10,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
+  protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
   FilterNodeArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper) {

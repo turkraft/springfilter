@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class JsonNodeHelperImpl implements JsonNodeHelper {
 
-  private final ObjectMapper objectMapper;
+  protected final ObjectMapper objectMapper;
 
-  private final FieldTypeResolver fieldTypeResolver;
+  protected final FieldTypeResolver fieldTypeResolver;
 
   JsonNodeHelperImpl(ObjectMapper objectMapper,
       FieldTypeResolver fieldTypeResolver) {

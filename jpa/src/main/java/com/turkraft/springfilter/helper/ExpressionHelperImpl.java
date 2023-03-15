@@ -32,13 +32,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelper {
 
-  private final EntityManager entityManager;
+  protected final EntityManager entityManager;
 
-  private final Set<Class<? extends FilterDefinition>> ignoreExistsForDefinitions;
+  protected final Set<Class<? extends FilterDefinition>> ignoreExistsForDefinitions;
 
-  private final FilterFunctionProcessorFactory filterFunctionProcessorFactory;
+  protected final FilterFunctionProcessorFactory filterFunctionProcessorFactory;
 
-  private final FilterOperationProcessorFactory operationProcessorFactory;
+  protected final FilterOperationProcessorFactory operationProcessorFactory;
 
   public ExpressionHelperImpl(EntityManager entityManager,
       @IgnoreExists Set<FilterNodeProcessor<?, ?, ?, ?>> ignoreExistsForProcessors,
