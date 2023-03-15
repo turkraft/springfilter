@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class HelloWorldPlaceholderExpressionProcessor implements
+public class HelloWorldPlaceholderExpressionProcessor implements
     FilterPlaceholderProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

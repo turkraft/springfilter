@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelper {
+public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelper {
 
   private final EntityManager entityManager;
 

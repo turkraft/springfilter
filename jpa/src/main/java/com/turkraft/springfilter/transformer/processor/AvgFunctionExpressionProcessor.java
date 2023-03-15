@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class AvgFunctionExpressionProcessor implements
+public class AvgFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

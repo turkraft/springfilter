@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class CountFunctionExpressionProcessor implements
+public class CountFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   private final SizeFunctionExpressionProcessor sizeFunctionExpressionProcessor;

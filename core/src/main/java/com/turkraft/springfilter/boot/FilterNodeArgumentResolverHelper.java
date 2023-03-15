@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 
 @Service
-class FilterNodeArgumentResolverHelper {
+public class FilterNodeArgumentResolverHelper {
 
   private final FilterStringConverter filterStringConverter;
 

@@ -18,7 +18,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
+public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
 
   private final ConversionService conversionService;
 

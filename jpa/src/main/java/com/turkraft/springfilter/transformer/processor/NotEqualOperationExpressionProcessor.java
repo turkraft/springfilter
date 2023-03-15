@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
 @Component
-class NotEqualOperationExpressionProcessor implements
+public class NotEqualOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

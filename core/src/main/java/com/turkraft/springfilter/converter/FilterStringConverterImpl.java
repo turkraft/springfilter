@@ -10,7 +10,7 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.stereotype.Service;
 
 @Service
-class FilterStringConverterImpl implements FilterStringConverter {
+public class FilterStringConverterImpl implements FilterStringConverter {
 
   private final FilterParser filterParser;
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class IsEmptyOperationExpressionProcessor implements
+public class IsEmptyOperationExpressionProcessor implements
     FilterPostfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
   private final IsNotEmptyOperationExpressionProcessor isNotEmptyOperationExpressionProcessor;

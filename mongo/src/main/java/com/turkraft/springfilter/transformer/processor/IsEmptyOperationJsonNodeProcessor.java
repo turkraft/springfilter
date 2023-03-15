@@ -7,7 +7,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class IsEmptyOperationJsonNodeProcessor implements
+public class IsEmptyOperationJsonNodeProcessor implements
     FilterPostfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
 

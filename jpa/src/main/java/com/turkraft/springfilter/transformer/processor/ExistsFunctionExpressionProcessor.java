@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class ExistsFunctionExpressionProcessor implements
+public class ExistsFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   private final ExistsExpressionHelper existsExpressionHelper;

@@ -9,7 +9,7 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 
 @Component
-class TodayFunctionExpressionProcessor implements
+public class TodayFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

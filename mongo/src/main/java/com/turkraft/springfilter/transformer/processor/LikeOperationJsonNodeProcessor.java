@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 @Component
-class LikeOperationJsonNodeProcessor implements
+public class LikeOperationJsonNodeProcessor implements
     FilterInfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   private final FieldTypeResolver fieldTypeResolver;

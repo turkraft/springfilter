@@ -8,7 +8,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class OrOperationJsonNodeProcessor extends InfixOperationJsonNodeProcessor {
+public class OrOperationJsonNodeProcessor extends InfixOperationJsonNodeProcessor {
 
   OrOperationJsonNodeProcessor(JsonNodeHelper jsonNodeHelper) {
     super(jsonNodeHelper);

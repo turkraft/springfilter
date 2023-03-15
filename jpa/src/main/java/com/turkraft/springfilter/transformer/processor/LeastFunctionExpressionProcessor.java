@@ -10,7 +10,7 @@ import jakarta.persistence.criteria.Subquery;
 import org.springframework.stereotype.Component;
 
 @Component
-class LeastFunctionExpressionProcessor implements
+public class LeastFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override

@@ -7,7 +7,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class InsensitiveLikeOperationJsonNodeProcessor implements
+public class InsensitiveLikeOperationJsonNodeProcessor implements
     FilterInfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   private final LikeOperationJsonNodeProcessor likeOperationJsonNodeProcessor;

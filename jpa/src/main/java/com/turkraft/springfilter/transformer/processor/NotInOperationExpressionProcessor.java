@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-class NotInOperationExpressionProcessor implements
+public class NotInOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
   private final InOperationExpressionProcessor inOperationExpressionProcessor;
@@ -36,7 +36,7 @@ class NotInOperationExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       InfixOperationNode source) {
-    
+
     transformer.registerTargetType(source, Boolean.class);
 
     Subquery<Integer> subquery = transformer.getCriteriaQuery().subquery(Integer.class);

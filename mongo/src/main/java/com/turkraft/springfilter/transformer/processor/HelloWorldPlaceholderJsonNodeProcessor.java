@@ -7,7 +7,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class HelloWorldPlaceholderJsonNodeProcessor implements
+public class HelloWorldPlaceholderJsonNodeProcessor implements
     FilterPlaceholderProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   @Override

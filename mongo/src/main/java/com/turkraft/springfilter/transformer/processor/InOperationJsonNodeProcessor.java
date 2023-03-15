@@ -9,7 +9,7 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 @Component
-class InOperationJsonNodeProcessor implements
+public class InOperationJsonNodeProcessor implements
     FilterInfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
   private final FieldTypeResolver fieldTypeResolver;
