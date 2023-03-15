@@ -111,7 +111,8 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
     return targetTypes.get(node);
   }
 
-  private Object castIfNeeded(Object value, Class<?> targetType) {
+  @Nullable
+  private Object castIfNeeded(@Nullable Object value, @Nullable Class<?> targetType) {
     if (value != null && targetType != null && !targetType.isAssignableFrom(value.getClass())) {
       return conversionService.convert(value, targetType);
     }
