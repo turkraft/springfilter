@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.lang.Nullable;
 
 public class FilterExpressionTransformer implements FilterNodeTransformer<Expression<?>> {
 
@@ -139,8 +140,8 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
     return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
   }
 
-  private Expression<?> castIfNeeded(Expression<?> expression, Class<?> targetType) {
-    if (expression.getJavaType() != null
+  private Expression<?> castIfNeeded(Expression<?> expression, @Nullable Class<?> targetType) {
+    if (targetType != null && expression.getJavaType() != null
         && !targetType.isAssignableFrom(expression.getJavaType())) {
       return expression.as(targetType);
     }

@@ -14,6 +14,8 @@ import com.turkraft.springfilter.parser.node.PrefixOperationNode;
 import com.turkraft.springfilter.parser.node.PriorityNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import com.turkraft.springfilter.transformer.processor.FilterNodeProcessor;
+import com.turkraft.springfilter.transformer.processor.factory.FilterFunctionProcessorFactory;
+import com.turkraft.springfilter.transformer.processor.factory.FilterOperationProcessorFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.From;
@@ -34,13 +36,21 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
 
   private final Set<Class<? extends FilterDefinition>> ignoreExistsForDefinitions;
 
+  private final FilterFunctionProcessorFactory filterFunctionProcessorFactory;
+
+  private final FilterOperationProcessorFactory operationProcessorFactory;
+
   public ExpressionHelperImpl(EntityManager entityManager,
-      @IgnoreExists Set<FilterNodeProcessor<?, ?, ?, ?>> ignoreExistsForProcessors) {
+      @IgnoreExists Set<FilterNodeProcessor<?, ?, ?, ?>> ignoreExistsForProcessors,
+      FilterFunctionProcessorFactory filterFunctionProcessorFactory,
+      FilterOperationProcessorFactory operationProcessorFactory) {
     this.entityManager = entityManager;
     ignoreExistsForDefinitions = ignoreExistsForProcessors.stream().map(
             FilterNodeProcessor::getDefinitionType)
         .collect(
             Collectors.toSet());
+    this.filterFunctionProcessorFactory = filterFunctionProcessorFactory;
+    this.operationProcessorFactory = operationProcessorFactory;
   }
 
   @Override
@@ -56,9 +66,7 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
 
     String chain = null;
 
-    for (int i = 0; i < fields.length; i++) {
-
-      String field = fields[i];
+    for (String field : fields) {
 
       if (chain == null) {
         chain = field;
@@ -157,6 +165,15 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
         return false;
       }
 
+      if (filterFunctionProcessorFactory.getProcessor(transformer.getClass(),
+          functionNode.getFunction()
+              .getClass()) instanceof PossibleAggregatedExpression processor) {
+        if (processor.isAggregated(functionNode)) {
+          transformer.registerIgnoreExists(functionNode);
+          return false;
+        }
+      }
+
       for (FilterNode argument : functionNode.getArguments()) {
         if (requiresExists(transformer, argument)) {
           return true;
@@ -177,21 +194,35 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
     }
 
     if (node instanceof OperationNode operationNode) {
+
       if (ignoreExistsForDefinitions.contains(operationNode.getOperator().getClass())) {
         transformer.registerIgnoreExists(operationNode);
         return false;
       }
+
+      if (operationProcessorFactory.getProcessor(transformer.getClass(),
+          operationNode.getOperator()
+              .getClass()) instanceof PossibleAggregatedExpression processor) {
+        if (processor.isAggregated(operationNode)) {
+          transformer.registerIgnoreExists(operationNode);
+          return false;
+        }
+      }
+
       if (node instanceof PrefixOperationNode) {
         return requiresExists(transformer, ((PrefixOperationNode) node).getRight());
       }
+
       if (node instanceof InfixOperationNode) {
         return requiresExists(transformer, ((InfixOperationNode) node).getLeft()) || requiresExists(
             transformer,
             ((InfixOperationNode) node).getRight());
       }
+
       if (node instanceof PostfixOperationNode) {
         return requiresExists(transformer, ((PostfixOperationNode) node).getLeft());
       }
+
     }
 
     throw new UnsupportedOperationException("Unsupported node " + node);
@@ -228,7 +259,7 @@ class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelp
 
     subquery.select(transformer.getCriteriaBuilder().literal(1));
 
-    if (expression.getJavaType().equals(Boolean.class)) {
+    if (Boolean.class.equals(expression.getJavaType())) {
       subquery.where((Expression<Boolean>) expression);
     }
 
