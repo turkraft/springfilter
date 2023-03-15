@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocalDateFunction extends FilterFunction {
 
-  protected LocalDateFunction() {
+  public LocalDateFunction() {
     super("localDate");
   }
 

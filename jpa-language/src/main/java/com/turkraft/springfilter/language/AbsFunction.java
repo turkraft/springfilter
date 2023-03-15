@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AbsFunction extends FilterFunction {
 
-  protected AbsFunction() {
+  public AbsFunction() {
     super("abs");
   }
 

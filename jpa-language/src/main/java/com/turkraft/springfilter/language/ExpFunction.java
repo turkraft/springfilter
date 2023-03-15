@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExpFunction extends FilterFunction {
 
-  protected ExpFunction() {
+  public ExpFunction() {
     super("exp");
   }
 

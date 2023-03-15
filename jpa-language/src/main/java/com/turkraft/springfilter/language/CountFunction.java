@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountFunction extends FilterFunction {
 
-  protected CountFunction() {
+  public CountFunction() {
     super("count");
   }
 

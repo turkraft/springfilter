@@ -19,13 +19,14 @@ public class FilterNodeArgumentResolverHelper {
 
   protected final FilterBuilder builder;
 
-  FilterNodeArgumentResolverHelper(@Lazy FilterStringConverter filterStringConverter,
+  public FilterNodeArgumentResolverHelper(@Lazy FilterStringConverter filterStringConverter,
       @Lazy FilterBuilder builder) {
     this.filterStringConverter = filterStringConverter;
     this.builder = builder;
   }
 
-  Optional<FilterNode> resolve(MethodParameter methodParameter, NativeWebRequest nativeWebRequest,
+  public Optional<FilterNode> resolve(MethodParameter methodParameter,
+      NativeWebRequest nativeWebRequest,
       boolean entityClassRequired) {
 
     Filter annotation = methodParameter.getParameterAnnotation(Filter.class);

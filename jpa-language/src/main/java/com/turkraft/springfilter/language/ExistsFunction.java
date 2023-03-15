@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExistsFunction extends FilterFunction {
 
-  protected ExistsFunction() {
+  public ExistsFunction() {
     super("exists");
   }
 

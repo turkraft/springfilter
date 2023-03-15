@@ -12,7 +12,7 @@ public abstract class InfixOperationJsonNodeProcessor implements
 
   private final JsonNodeHelper jsonNodeHelper;
 
-  InfixOperationJsonNodeProcessor(JsonNodeHelper jsonNodeHelper) {
+  public InfixOperationJsonNodeProcessor(JsonNodeHelper jsonNodeHelper) {
     this.jsonNodeHelper = jsonNodeHelper;
   }
 

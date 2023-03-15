@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MaxFunction extends FilterFunction {
 
-  protected MaxFunction() {
+  public MaxFunction() {
     super("max");
   }
 

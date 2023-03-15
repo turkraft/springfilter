@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocateFunction extends FilterFunction {
 
-  protected LocateFunction() {
+  public LocateFunction() {
     super("locate");
   }
 

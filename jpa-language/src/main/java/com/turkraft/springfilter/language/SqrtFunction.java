@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SqrtFunction extends FilterFunction {
 
-  protected SqrtFunction() {
+  public SqrtFunction() {
     super("sqrt");
   }
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class IsEmptyOperationExpressionProcessor implements
     FilterPostfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
-  private final IsNotEmptyOperationExpressionProcessor isNotEmptyOperationExpressionProcessor;
+  protected final IsNotEmptyOperationExpressionProcessor isNotEmptyOperationExpressionProcessor;
 
   IsEmptyOperationExpressionProcessor(
       IsNotEmptyOperationExpressionProcessor isNotEmptyOperationExpressionProcessor) {

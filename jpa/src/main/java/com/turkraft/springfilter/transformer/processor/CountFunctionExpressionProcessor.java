@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class CountFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
-  private final SizeFunctionExpressionProcessor sizeFunctionExpressionProcessor;
+  protected final SizeFunctionExpressionProcessor sizeFunctionExpressionProcessor;
 
   public CountFunctionExpressionProcessor(
       SizeFunctionExpressionProcessor sizeFunctionExpressionProcessor) {

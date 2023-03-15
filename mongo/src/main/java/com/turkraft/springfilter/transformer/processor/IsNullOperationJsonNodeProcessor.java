@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 public class IsNullOperationJsonNodeProcessor implements
     FilterPostfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
-
   @Override
   public Class<FilterJsonNodeTransformer> getTransformerType() {
     return FilterJsonNodeTransformer.class;

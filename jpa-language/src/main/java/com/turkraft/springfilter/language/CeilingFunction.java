@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CeilingFunction extends FilterFunction {
 
-  protected CeilingFunction() {
+  public CeilingFunction() {
     super("ceiling");
   }
 

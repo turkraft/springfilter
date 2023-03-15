@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NegFunction extends FilterFunction {
 
-  protected NegFunction() {
+  public NegFunction() {
     super("neg");
   }
 

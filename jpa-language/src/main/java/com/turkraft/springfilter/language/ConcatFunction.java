@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConcatFunction extends FilterFunction {
 
-  protected ConcatFunction() {
+  public ConcatFunction() {
     super("concat");
   }
 

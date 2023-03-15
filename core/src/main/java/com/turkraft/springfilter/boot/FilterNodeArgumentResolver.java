@@ -12,7 +12,7 @@ public class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver
 
   protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  FilterNodeArgumentResolver(
+  public FilterNodeArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper) {
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
   }

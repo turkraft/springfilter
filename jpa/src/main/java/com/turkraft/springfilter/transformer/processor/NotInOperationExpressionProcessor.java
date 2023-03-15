@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class NotInOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
-  private final InOperationExpressionProcessor inOperationExpressionProcessor;
+  protected final InOperationExpressionProcessor inOperationExpressionProcessor;
 
   public NotInOperationExpressionProcessor(
       InOperationExpressionProcessor inOperationExpressionProcessor) {

@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 public class LikeOperationJsonNodeProcessor implements
     FilterInfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
-  private final FieldTypeResolver fieldTypeResolver;
+  protected final FieldTypeResolver fieldTypeResolver;
 
-  LikeOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver) {
+  public LikeOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver) {
     this.fieldTypeResolver = fieldTypeResolver;
   }
 

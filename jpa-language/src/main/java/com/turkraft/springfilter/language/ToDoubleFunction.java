@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ToDoubleFunction extends FilterFunction {
 
-  protected ToDoubleFunction() {
+  public ToDoubleFunction() {
     super("toDouble");
   }
 

@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 public class InOperationJsonNodeProcessor implements
     FilterInfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
-  private final FieldTypeResolver fieldTypeResolver;
+  protected final FieldTypeResolver fieldTypeResolver;
 
-  InOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver) {
+  public InOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver) {
     this.fieldTypeResolver = fieldTypeResolver;
   }
 

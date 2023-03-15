@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LengthFunction extends FilterFunction {
 
-  protected LengthFunction() {
+  public LengthFunction() {
     super("length");
   }
 

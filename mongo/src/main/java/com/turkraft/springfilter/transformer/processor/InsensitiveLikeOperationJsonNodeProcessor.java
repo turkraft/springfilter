@@ -12,7 +12,7 @@ public class InsensitiveLikeOperationJsonNodeProcessor implements
 
   private final LikeOperationJsonNodeProcessor likeOperationJsonNodeProcessor;
 
-  InsensitiveLikeOperationJsonNodeProcessor(
+  public InsensitiveLikeOperationJsonNodeProcessor(
       LikeOperationJsonNodeProcessor likeOperationJsonNodeProcessor) {
     this.likeOperationJsonNodeProcessor = likeOperationJsonNodeProcessor;
   }

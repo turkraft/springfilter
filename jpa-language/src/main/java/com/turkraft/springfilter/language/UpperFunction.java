@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpperFunction extends FilterFunction {
 
-  protected UpperFunction() {
+  public UpperFunction() {
     super("upper");
   }
 

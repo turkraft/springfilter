@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AllFunction extends FilterFunction {
 
-  protected AllFunction() {
+  public AllFunction() {
     super("all");
   }
 

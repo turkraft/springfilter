@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrentTimestampFunction extends FilterFunction {
 
-  protected CurrentTimestampFunction() {
+  public CurrentTimestampFunction() {
     super("currentTimestamp");
   }
 

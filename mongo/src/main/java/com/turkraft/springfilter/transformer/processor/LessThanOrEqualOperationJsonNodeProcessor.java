@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LessThanOrEqualOperationJsonNodeProcessor extends InfixOperationJsonNodeProcessor {
 
-  LessThanOrEqualOperationJsonNodeProcessor(JsonNodeHelper jsonNodeHelper) {
+  public LessThanOrEqualOperationJsonNodeProcessor(JsonNodeHelper jsonNodeHelper) {
     super(jsonNodeHelper);
   }
 
