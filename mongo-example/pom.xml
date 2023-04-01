@@ -16,7 +16,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <de.flapdoodle.embed.mongo.spring30x.version>4.6.1</de.flapdoodle.embed.mongo.spring30x.version>
+    <de.flapdoodle.embed.mongo.spring30x.version>4.6.2</de.flapdoodle.embed.mongo.spring30x.version>
     <springdoc-openapi-starter-webmvc-ui.version>2.0.3</springdoc-openapi-starter-webmvc-ui.version>
     <docker.name>torshid/springfilter-mongo-example</docker.name>
   </properties>
