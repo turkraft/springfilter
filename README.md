@@ -27,7 +27,7 @@ available so that it's not a headache anymore to generate valid queries in front
 
 ## Example ([try it live](https://spring-filter.onrender.com/))
 
-*/search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ('audi', 'land rover') **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
+*/search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
 ```java
 /* Entity used in the query above */
