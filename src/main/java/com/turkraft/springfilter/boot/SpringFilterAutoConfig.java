@@ -1,9 +1,10 @@
 package com.turkraft.springfilter.boot;
 
+import com.turkraft.springfilter.FilterParameters;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import com.turkraft.springfilter.FilterParameters;
 
 /**
  * Configuration class used to load properties as an alternative to setting the static fields when

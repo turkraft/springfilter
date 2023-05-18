@@ -1,15 +1,22 @@
 package com.turkraft.springfilter.parser;
 
+import com.turkraft.springfilter.FilterParameters;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
-
-import com.turkraft.springfilter.FilterParameters;
 
 public class StringConverter {
 
@@ -209,7 +216,7 @@ public class StringConverter {
     } else if (input instanceof Date) {
       return FilterParameters.DATE_FORMATTER.get().format(input);
     } else if (input instanceof LocalDate) {
-      return FilterParameters.LOCALDATE_FORMATTER.get().format((LocalDate) input);
+      return FilterParameters.LOCALDATE_FORMATTER.format((LocalDate) input);
     } else if (input instanceof LocalDateTime) {
       return FilterParameters.LOCALDATETIME_FORMATTER.format((LocalDateTime) input);
     } else if (input instanceof OffsetDateTime) {
