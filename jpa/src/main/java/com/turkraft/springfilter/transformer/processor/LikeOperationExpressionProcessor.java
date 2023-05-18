@@ -1,11 +1,16 @@
 package com.turkraft.springfilter.transformer.processor;
 
 import com.turkraft.springfilter.language.LikeOperator;
+import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
+import com.turkraft.springfilter.parser.node.InputNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
 
+/**
+ * Note: the behavior of this operation might differ between different SQL dialects.
+ */
 @Component
 public class LikeOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
@@ -28,7 +33,25 @@ public class LikeOperationExpressionProcessor implements
     transformer.registerTargetType(source.getRight(), String.class);
     return transformer.getCriteriaBuilder()
         .like((Expression<String>) transformer.transform(source.getLeft()),
-            (Expression<String>) transformer.transform(source.getRight()));
+            getLikePatternExpression(transformer, source.getRight()));
+  }
+
+  @SuppressWarnings("unchecked")
+  public Expression<String> getLikePatternExpression(FilterExpressionTransformer transformer,
+      FilterNode node) {
+
+    if (!(node instanceof InputNode)) {
+      return (Expression<String>) transformer.transform(node);
+    }
+
+    String pattern = ((InputNode) node).getValue().toString().replace("*", "%");
+
+    if (!pattern.contains("%")) {
+      pattern = "%" + pattern + "%";
+    }
+
+    return transformer.getCriteriaBuilder().literal(pattern);
+
   }
 
 }

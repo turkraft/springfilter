@@ -10,6 +10,13 @@ import org.springframework.stereotype.Component;
 public class InsensitiveLikeOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
 
+  private final LikeOperationExpressionProcessor likeOperationExpressionProcessor;
+
+  public InsensitiveLikeOperationExpressionProcessor(
+      LikeOperationExpressionProcessor likeOperationExpressionProcessor) {
+    this.likeOperationExpressionProcessor = likeOperationExpressionProcessor;
+  }
+
   @Override
   public Class<FilterExpressionTransformer> getTransformerType() {
     return FilterExpressionTransformer.class;
@@ -30,7 +37,8 @@ public class InsensitiveLikeOperationExpressionProcessor implements
         .like(transformer.getCriteriaBuilder()
                 .upper((Expression<String>) transformer.transform(source.getLeft())),
             transformer.getCriteriaBuilder()
-                .upper((Expression<String>) transformer.transform(source.getRight())));
+                .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
+                    source.getRight())));
   }
 
 }
