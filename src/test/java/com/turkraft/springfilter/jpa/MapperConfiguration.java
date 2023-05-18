@@ -29,8 +29,9 @@ public class MapperConfiguration {
       public void serialize(
           Date date,
           JsonGenerator jsonGenerator,
-          SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        jsonGenerator.writeString(FilterParameters.DATE_FORMATTER.format(date));
+          SerializerProvider serializerProvider)
+          throws IOException, JsonProcessingException {
+        jsonGenerator.writeString(FilterParameters.DATE_FORMATTER.get().format(date));
       }
     });
     mapper.registerModule(simpleModule);

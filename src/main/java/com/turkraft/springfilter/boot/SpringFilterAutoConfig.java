@@ -26,7 +26,8 @@ public class SpringFilterAutoConfig {
       @Value("${turkraft.springfilter.operator.like.casesensitive:#{null}}") Boolean caseSensitiveLikeOperator) {
 
     if (datePattern != null) {
-      FilterParameters.DATE_FORMATTER.applyPattern(datePattern);
+      FilterParameters.DATE_FORMATTER = ThreadLocal.withInitial(
+          () -> new SimpleDateFormat(datePattern));
     }
 
     if (localDatePattern != null) {
@@ -49,7 +50,7 @@ public class SpringFilterAutoConfig {
 
     if (zonedDateTimePattern != null) {
       FilterParameters.ZONEDDATETIME_FORMATTER =
-              DateTimeFormatter.ofPattern(zonedDateTimePattern);
+          DateTimeFormatter.ofPattern(zonedDateTimePattern);
     }
 
     if (localTimeFormatterPattern != null) {

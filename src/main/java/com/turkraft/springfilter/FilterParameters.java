@@ -5,9 +5,10 @@ import java.time.format.DateTimeFormatter;
 
 public class FilterParameters {
 
-  private FilterParameters() {}
+  private FilterParameters() {
+  }
 
-  public static SimpleDateFormat DATE_FORMATTER;
+  public static ThreadLocal<SimpleDateFormat> DATE_FORMATTER;
   public static DateTimeFormatter LOCALDATE_FORMATTER;
   public static DateTimeFormatter LOCALDATETIME_FORMATTER;
   public static DateTimeFormatter OFFSETDATETIME_FORMATTER;
@@ -23,7 +24,7 @@ public class FilterParameters {
 
   static {
 
-    DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
+    DATE_FORMATTER = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MM-yyyy"));
     LOCALDATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     LOCALDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss");
     OFFSETDATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");

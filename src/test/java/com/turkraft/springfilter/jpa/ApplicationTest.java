@@ -88,7 +88,7 @@ public class ApplicationTest {
   public void equalDateTest(Employee employee) {
     validate(
         String.format("birthDate : '%s'",
-            FilterParameters.DATE_FORMATTER.format(employee.getBirthDate())),
+            FilterParameters.DATE_FORMATTER.get().format(employee.getBirthDate())),
         e -> e.getBirthDate().equals(employee.getBirthDate()));
   }
 

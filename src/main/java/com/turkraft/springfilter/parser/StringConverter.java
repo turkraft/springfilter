@@ -31,24 +31,26 @@ public class StringConverter {
       return input;
     }
 
-    if (char.class.isAssignableFrom(expectedType) || Character.class.isAssignableFrom(expectedType)) {
+    if (char.class.isAssignableFrom(expectedType) || Character.class.isAssignableFrom(
+        expectedType)) {
       if (input.length() != 1) {
         throw new ClassCastException("The input '" + input + "' could not be cast to Char");
       }
       return input.charAt(0);
     }
 
-    if (boolean.class.isAssignableFrom(expectedType) || Boolean.class.isAssignableFrom(expectedType)) {
+    if (boolean.class.isAssignableFrom(expectedType) || Boolean.class.isAssignableFrom(
+        expectedType)) {
       return Boolean.valueOf(input);
     }
 
     if (Date.class.isAssignableFrom(expectedType)) {
-      Date date = FilterParameters.DATE_FORMATTER.parse(input, new ParsePosition(0));
+      Date date = FilterParameters.DATE_FORMATTER.get().parse(input, new ParsePosition(0));
       if (date != null) {
         return date;
       }
       throw new ClassCastException("The input '" + input + "' could not be parsed to Date ("
-          + FilterParameters.DATE_FORMATTER.toPattern() + ")");
+          + FilterParameters.DATE_FORMATTER.get().toPattern() + ")");
     }
 
     if (LocalDate.class.isAssignableFrom(expectedType)) {
@@ -63,7 +65,8 @@ public class StringConverter {
       try {
         return LocalDateTime.parse(input, FilterParameters.LOCALDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
-        throw new ClassCastException("The input '" + input + "' could not be parsed to LocalDateTime");
+        throw new ClassCastException(
+            "The input '" + input + "' could not be parsed to LocalDateTime");
       }
     }
 
@@ -71,7 +74,8 @@ public class StringConverter {
       try {
         return OffsetDateTime.parse(input, FilterParameters.OFFSETDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
-        throw new ClassCastException("The input '" + input + "' could not be parsed to OffsetDateTime");
+        throw new ClassCastException(
+            "The input '" + input + "' could not be parsed to OffsetDateTime");
       }
     }
 
@@ -87,7 +91,8 @@ public class StringConverter {
       try {
         return ZonedDateTime.parse(input, FilterParameters.ZONEDDATETIME_FORMATTER);
       } catch (DateTimeParseException e) {
-        throw new ClassCastException("The input '" + input + "' could not be parsed to ZonedDateTime");
+        throw new ClassCastException(
+            "The input '" + input + "' could not be parsed to ZonedDateTime");
       }
     }
 
@@ -138,7 +143,8 @@ public class StringConverter {
         }
       }
       throw new ClassCastException(
-          "The input '" + input + "' didn't match any enum constant of " + expectedType.getSimpleName());
+          "The input '" + input + "' didn't match any enum constant of "
+              + expectedType.getSimpleName());
     }
 
     if (BigDecimal.class.isAssignableFrom(expectedType)) {
@@ -154,11 +160,13 @@ public class StringConverter {
 
     if (number != null) {
 
-      if (short.class.isAssignableFrom(expectedType) || Short.class.isAssignableFrom(expectedType)) {
+      if (short.class.isAssignableFrom(expectedType) || Short.class.isAssignableFrom(
+          expectedType)) {
         return number.shortValue();
       }
 
-      if (int.class.isAssignableFrom(expectedType) || Integer.class.isAssignableFrom(expectedType)) {
+      if (int.class.isAssignableFrom(expectedType) || Integer.class.isAssignableFrom(
+          expectedType)) {
         return number.intValue();
       }
 
@@ -166,11 +174,13 @@ public class StringConverter {
         return number.longValue();
       }
 
-      if (float.class.isAssignableFrom(expectedType) || Float.class.isAssignableFrom(expectedType)) {
+      if (float.class.isAssignableFrom(expectedType) || Float.class.isAssignableFrom(
+          expectedType)) {
         return number.floatValue();
       }
 
-      if (double.class.isAssignableFrom(expectedType) || Double.class.isAssignableFrom(expectedType)) {
+      if (double.class.isAssignableFrom(expectedType) || Double.class.isAssignableFrom(
+          expectedType)) {
         return number.doubleValue();
       }
 
@@ -188,50 +198,31 @@ public class StringConverter {
 
     if (input == null) {
       return null;
-    }
-
-    else if (input instanceof BigDecimal) {
+    } else if (input instanceof BigDecimal) {
       return "'" + input + "'";
     }
 
-    if (input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
+    if (input instanceof Boolean || input instanceof Number || input instanceof Character
+        || input instanceof String
         || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive()) {
       return input.toString();
-    }
-
-    else if (input instanceof Date) {
-      return FilterParameters.DATE_FORMATTER.format(input);
-    }
-
-    else if (input instanceof LocalDate) {
-      return FilterParameters.LOCALDATE_FORMATTER.format((LocalDate) input);
-    }
-
-    else if (input instanceof LocalDateTime) {
+    } else if (input instanceof Date) {
+      return FilterParameters.DATE_FORMATTER.get().format(input);
+    } else if (input instanceof LocalDate) {
+      return FilterParameters.LOCALDATE_FORMATTER.get().format((LocalDate) input);
+    } else if (input instanceof LocalDateTime) {
       return FilterParameters.LOCALDATETIME_FORMATTER.format((LocalDateTime) input);
-    }
-
-    else if (input instanceof OffsetDateTime) {
+    } else if (input instanceof OffsetDateTime) {
       return FilterParameters.OFFSETDATETIME_FORMATTER.format((OffsetDateTime) input);
-    }
-
-    else if (input instanceof OffsetTime) {
+    } else if (input instanceof OffsetTime) {
       return FilterParameters.OFFSETDATETIME_FORMATTER.format((OffsetTime) input);
-    }
-
-    else if (input instanceof LocalTime) {
+    } else if (input instanceof LocalTime) {
       return FilterParameters.LOCALTIME_FORMATTER.format((LocalTime) input);
-    }
-
-    else if (input instanceof YearMonth) {
+    } else if (input instanceof YearMonth) {
       return FilterParameters.YEARMONTH_FORMATTER.format((YearMonth) input);
-    }
-
-    else if (input instanceof MonthDay) {
+    } else if (input instanceof MonthDay) {
       return FilterParameters.MONTHDAY_FORMATTER.format((MonthDay) input);
-    }
-
-    else if (input instanceof Instant) {
+    } else if (input instanceof Instant) {
       return input.toString();
     }
 
@@ -240,9 +231,12 @@ public class StringConverter {
   }
 
   public static boolean isSupportedAsInput(Object input) {
-    return input instanceof Boolean || input instanceof Number || input instanceof Character || input instanceof String
-        || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive() || input instanceof Date
-        || input instanceof LocalDate || input instanceof LocalDateTime || input instanceof OffsetDateTime
+    return input instanceof Boolean || input instanceof Number || input instanceof Character
+        || input instanceof String
+        || input instanceof Enum || input instanceof UUID || input.getClass().isPrimitive()
+        || input instanceof Date
+        || input instanceof LocalDate || input instanceof LocalDateTime
+        || input instanceof OffsetDateTime
         || input instanceof LocalTime || input instanceof Instant || input instanceof OffsetTime
         || input instanceof YearMonth || input instanceof MonthDay;
   }
