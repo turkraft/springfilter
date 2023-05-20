@@ -17,7 +17,7 @@ available so that it's not a headache anymore to generate valid queries in front
 <details>
   <summary>:warning: <b><u>About Release 3.0.0</u></b></summary>
   
-  > Spring Filter 3.0.0 is a new release built from the group up. It includes much better integration with Spring, with many new features, enhancements and bug fixes.
+  > Spring Filter 3.0.0 is a new release built from the ground up. It includes much better integration with Spring, with many new features, enhancements and bug fixes.
   > The language syntax didn't change, frontend applications will therefore not require any modification.
   > The new `FilterBuilder` class is incompatible with the previous one and other breaking changes are present but the basic usage of the library remains similar.
   > Please feel free to [create an issue](https://github.com/turkraft/spring-filter/issues) if you notice anything wrong. [Consider supporting the project by sponsoring us](https://github.com/sponsors/torshid).
