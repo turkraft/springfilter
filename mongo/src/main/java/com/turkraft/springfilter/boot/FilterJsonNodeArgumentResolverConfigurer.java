@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
   public FilterJsonNodeArgumentResolverConfigurer(
-      @Lazy ConversionService conversionService,
+      @Lazy @Qualifier("sfConversionService") ConversionService conversionService,
       @Lazy ObjectMapper objectMapper,
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       @Lazy JsonNodeHelper jsonNodeHelper,
