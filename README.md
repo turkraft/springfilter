@@ -119,16 +119,14 @@ Instead of manually writing string queries in your frontend applications, you ma
 the [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder).
 
 ```javascript
-import {SpringFilterQueryBuilder as builder} from 'https://cdn.jsdelivr.net/npm/spring-filter-query-builder@0.3.0/src/index.min.js';
+import { sfAnd, sfEqual, sfGt, sfIsNull, sfLike, sfNot, sfOr } from 'spring-filter-query-builder';
 
-const filter =
-    builder.or(
-        builder.and(
-            builder.equal("test.test1", "testvalue1"),
-            builder.isNotNull("test.test2")
-        ),
-        builder.notEqual("test.test2", "testvalue2")
-    );
+const filter = sfAnd([
+  sfAnd([sfEqual('status', 'active'), sfGt('createdAt', '1-1-2000')]),
+  sfOr([sfLike('value', '*hello*'), sfLike('name', '*world*')]),
+  sfNot(sfOr([sfGt('id', 100), sfIsNull('category.order')])),
+]);
+
 const req = await fetch('http://api/person?filter=' + filter.toString());
 ```
 
