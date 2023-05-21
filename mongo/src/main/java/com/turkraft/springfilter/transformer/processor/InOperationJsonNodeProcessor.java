@@ -45,7 +45,8 @@ public class InOperationJsonNodeProcessor implements
     return transformer.getObjectMapper().createObjectNode().set("$and",
         transformer.getObjectMapper().createArrayNode()
             .add(transformer.getObjectMapper().createObjectNode()
-                .set("$isArray", transformer.transform(source.getRight())))
+                .set("$isArray", transformer.getObjectMapper().createArrayNode()
+                    .add(transformer.transform(source.getRight()))))
             .add(transformer.getObjectMapper().createObjectNode().set("$in",
                 transformer.getObjectMapper().createArrayNode()
                     .add(transformer.transform(source.getLeft()))
