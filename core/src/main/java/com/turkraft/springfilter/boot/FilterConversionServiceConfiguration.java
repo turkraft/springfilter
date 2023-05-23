@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.boot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -17,8 +18,8 @@ public class FilterConversionServiceConfiguration {
   protected final ConversionService defaultConversionService;
 
   public FilterConversionServiceConfiguration(
-      @Nullable @Autowired(required = false) ConversionService mvcConversionService,
-      @Nullable @Autowired(required = false) ConversionService defaultConversionService) {
+      @Nullable @Autowired(required = false) @Qualifier("mvcConversionService") ConversionService mvcConversionService,
+      @Nullable @Autowired(required = false) @Qualifier("defaultConversionService") ConversionService defaultConversionService) {
     this.mvcConversionService = mvcConversionService;
     this.defaultConversionService = defaultConversionService;
   }
