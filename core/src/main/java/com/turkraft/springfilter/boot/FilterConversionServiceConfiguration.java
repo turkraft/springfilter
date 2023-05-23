@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.boot;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +18,15 @@ public class FilterConversionServiceConfiguration {
   @Nullable
   protected final ConversionService defaultConversionService;
 
+  protected final List<ConversionService> conversionServices;
+
   public FilterConversionServiceConfiguration(
       @Nullable @Autowired(required = false) @Qualifier("mvcConversionService") ConversionService mvcConversionService,
-      @Nullable @Autowired(required = false) @Qualifier("defaultConversionService") ConversionService defaultConversionService) {
+      @Nullable @Autowired(required = false) @Qualifier("defaultConversionService") ConversionService defaultConversionService,
+      @Nullable @Autowired(required = false) List<ConversionService> conversionServices) {
     this.mvcConversionService = mvcConversionService;
     this.defaultConversionService = defaultConversionService;
+    this.conversionServices = conversionServices;
   }
 
   @Bean
@@ -31,6 +36,9 @@ public class FilterConversionServiceConfiguration {
     }
     if (mvcConversionService != null) {
       return mvcConversionService;
+    }
+    if (conversionServices != null && !conversionServices.isEmpty()) {
+      return conversionServices.get(0);
     }
     throw new IllegalArgumentException("Could not find any ConversionService bean!");
   }
