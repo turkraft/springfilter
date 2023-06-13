@@ -1,12 +1,14 @@
 package com.turkraft.springfilter.converter;
 
 import com.turkraft.springfilter.parser.FilterParser;
+import com.turkraft.springfilter.parser.ParseContext;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterStringTransformer;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,8 +40,8 @@ public class FilterStringConverterImpl implements FilterStringConverter {
   }
 
   @Override
-  public FilterNode convert(String node) {
-    return filterParser.parse(node);
+  public FilterNode convert(String node, @Nullable ParseContext ctx) {
+    return filterParser.parse(node, ctx);
   }
 
   @Override
