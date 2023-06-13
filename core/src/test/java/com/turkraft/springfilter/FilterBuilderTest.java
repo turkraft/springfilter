@@ -28,7 +28,7 @@ public class FilterBuilderTest {
   private HelloWorldPlaceholder helloWorldPlaceholder;
 
   @Autowired
-  FilterStringConverter filterStringConverter;
+  private FilterStringConverter filterStringConverter;
 
   private void test(String expected, StepWithResult filter) {
     Assertions.assertEquals(expected, filterStringConverter.convert(filter.get()));

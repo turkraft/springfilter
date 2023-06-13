@@ -5,6 +5,7 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,7 @@ class FilterParserImpl implements FilterParser {
   }
 
   @Override
-  public FilterNode parse(String input) {
+  public FilterNode parse(String input, @Nullable ParseContext ctx) {
 
     com.turkraft.springfilter.parser.AntlrFilterLexer lexer = new com.turkraft.springfilter.parser.AntlrFilterLexer(
         CharStreams.fromString(input),
@@ -34,7 +35,7 @@ class FilterParserImpl implements FilterParser {
     parser.removeErrorListeners();
     parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
-    return antlrParser.parse(parser.filter());
+    return antlrParser.parse(parser.filter(), ctx);
 
   }
 

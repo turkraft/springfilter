@@ -22,6 +22,7 @@ import com.turkraft.springfilter.parser.node.PriorityNode;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,100 +41,101 @@ class AntlrParser {
     this.functions = functions;
   }
 
-  public FilterNode parse(AntlrBaseContext ctx) {
+  public FilterNode parse(AntlrBaseContext antlrCtx, @Nullable ParseContext ctx) {
 
-    if (ctx instanceof FilterContext) {
-      return parse(((FilterContext) ctx).expression());
+    if (antlrCtx instanceof FilterContext) {
+      return parse(((FilterContext) antlrCtx).expression(), ctx);
     }
 
-    if (ctx instanceof PriorityContext) {
-      return new PriorityNode(parse(((PriorityContext) ctx).expression()));
+    if (antlrCtx instanceof PriorityContext) {
+      return new PriorityNode(parse(((PriorityContext) antlrCtx).expression(), ctx));
     }
 
-    if (ctx instanceof InputContext) {
-      String text = ctx.getText().startsWith("'") && ctx.getText().endsWith("'")
-          ? ctx.getText().substring(1, ctx.getText().length() - 1)
-          : ctx.getText();
+    if (antlrCtx instanceof InputContext) {
+      String text = antlrCtx.getText().startsWith("'") && antlrCtx.getText().endsWith("'")
+          ? antlrCtx.getText().substring(1, antlrCtx.getText().length() - 1)
+          : antlrCtx.getText();
       return new InputNode(text.replace("\\'", "'"));
     }
 
-    if (ctx instanceof FieldContext) {
-      return new FieldNode(ctx.getText());
+    if (antlrCtx instanceof FieldContext) {
+      return new FieldNode(
+          ctx != null ? ctx.getFieldMapper().apply(antlrCtx.getText()) : antlrCtx.getText());
     }
 
-    if (ctx instanceof PlaceholderContext) {
+    if (antlrCtx instanceof PlaceholderContext) {
       return new PlaceholderNode(
           placeholders.getPlaceholder(
-              ctx.getText().substring(1, ctx.getText().length() - 1)));
+              antlrCtx.getText().substring(1, antlrCtx.getText().length() - 1)));
     }
 
-    if (ctx instanceof CollectionContext) {
+    if (antlrCtx instanceof CollectionContext) {
       return new CollectionNode(
-          ((CollectionContext) ctx).items.stream().map(this::parse)
+          ((CollectionContext) antlrCtx).items.stream().map(antlrCtx1 -> parse(antlrCtx1, ctx))
               .collect(Collectors.toList()));
     }
 
-    if (ctx instanceof FunctionContext) {
+    if (antlrCtx instanceof FunctionContext) {
       return new FunctionNode(
-          functions.getFunction(((FunctionContext) ctx).ID().getText()),
-          ((FunctionContext) ctx).arguments.stream().map(this::parse)
+          functions.getFunction(((FunctionContext) antlrCtx).ID().getText()),
+          ((FunctionContext) antlrCtx).arguments.stream().map(antlrCtx1 -> parse(antlrCtx1, ctx))
               .collect(Collectors.toList()));
     }
 
-    if (ctx instanceof PrefixExpressionContext) {
-      return operators.getPrefixOperator(ctx.getChild(0).getText())
-          .toNode(parse((AntlrBaseContext) ctx.getChild(1)));
+    if (antlrCtx instanceof PrefixExpressionContext) {
+      return operators.getPrefixOperator(antlrCtx.getChild(0).getText())
+          .toNode(parse((AntlrBaseContext) antlrCtx.getChild(1), ctx));
     }
 
-    if (ctx instanceof ExpressionContext) {
+    if (antlrCtx instanceof ExpressionContext) {
 
-      if (ctx.getChildCount() == 1) {
-        return parse((AntlrBaseContext) ctx.getChild(0));
-      } else if (ctx.getChildCount() == 2) {
+      if (antlrCtx.getChildCount() == 1) {
+        return parse((AntlrBaseContext) antlrCtx.getChild(0), ctx);
+      } else if (antlrCtx.getChildCount() == 2) {
 
-        if (ctx.getChild(0) instanceof TerminalNode) {
-          return operators.getPrefixOperator(ctx.getChild(0).getText())
-              .toNode(parse((AntlrBaseContext) ctx.getChild(1)));
+        if (antlrCtx.getChild(0) instanceof TerminalNode) {
+          return operators.getPrefixOperator(antlrCtx.getChild(0).getText())
+              .toNode(parse((AntlrBaseContext) antlrCtx.getChild(1), ctx));
         }
 
-        return operators.getPostfixOperator(ctx.getChild(1).getText())
-            .toNode(parse((AntlrBaseContext) ctx.getChild(0)));
+        return operators.getPostfixOperator(antlrCtx.getChild(1).getText())
+            .toNode(parse((AntlrBaseContext) antlrCtx.getChild(0), ctx));
 
       } else {
 
         int lowestPriorityIndex = -1;
         int lowestPriorityValue = Integer.MAX_VALUE;
 
-        for (int i = 0; i < ctx.getChildCount(); i++) {
-          if (ctx.getChild(i) instanceof ExpressionContext) {
-            if (((ExpressionContext) ctx.getChild(i))._p <= lowestPriorityValue) {
-              lowestPriorityValue = ((ExpressionContext) ctx.getChild(i))._p;
+        for (int i = 0; i < antlrCtx.getChildCount(); i++) {
+          if (antlrCtx.getChild(i) instanceof ExpressionContext) {
+            if (((ExpressionContext) antlrCtx.getChild(i))._p <= lowestPriorityValue) {
+              lowestPriorityValue = ((ExpressionContext) antlrCtx.getChild(i))._p;
               lowestPriorityIndex = i;
             }
           }
         }
 
-        ExpressionContext subCtx = new ExpressionContext(ctx, 0);
+        ExpressionContext subCtx = new ExpressionContext(antlrCtx, 0);
 
         for (int i = 0; i < lowestPriorityIndex - 1; i++) {
 
-          if (ctx.getChild(i) instanceof TerminalNode) {
-            subCtx.addChild((TerminalNode) ctx.getChild(i));
-          } else if (ctx.getChild(i) instanceof ParserRuleContext) {
-            subCtx.addChild((ParserRuleContext) ctx.getChild(i));
+          if (antlrCtx.getChild(i) instanceof TerminalNode) {
+            subCtx.addChild((TerminalNode) antlrCtx.getChild(i));
+          } else if (antlrCtx.getChild(i) instanceof ParserRuleContext) {
+            subCtx.addChild((ParserRuleContext) antlrCtx.getChild(i));
           }
 
         }
 
-        return operators.getInfixOperator(ctx.getChild(lowestPriorityIndex - 1).getText())
-            .toNode(parse(subCtx),
-                parse((AntlrBaseContext) ctx.getChild(lowestPriorityIndex)));
+        return operators.getInfixOperator(antlrCtx.getChild(lowestPriorityIndex - 1).getText())
+            .toNode(parse(subCtx, ctx),
+                parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx));
 
       }
 
     }
 
-    throw new UnsupportedOperationException("Unsupported context " + ctx);
+    throw new UnsupportedOperationException("Unsupported context " + antlrCtx);
 
   }
 
