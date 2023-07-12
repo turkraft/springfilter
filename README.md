@@ -6,13 +6,9 @@
   </a>
 </p>
 
-Need a way to dynamically filter entities without effort? With Spring Filter, your API will gain a
-full-featured search functionality. If you don't have a web API, you may still use the powerful
-filter builder in order to generate complex SQL or Mongo queries.
+Are you looking for an effortless way to dynamically filter entities? Look no further than Spring Filter. With Spring Filter, your API will benefit from a comprehensive search functionality. Even if you don't have a web API, you can still leverage the powerful filter builder to generate complex SQL or Mongo queries.
 
-Since the library is very modular and well integrated with Spring, you can add custom operators and
-functions, or even bring support to a different platform. JavaScript filter builders are also
-available so that it's not a headache anymore to generate valid queries in frontend applications.
+The library's modular design and seamless integration with Spring make it easy to extend with custom operators and functions, or even integrate it into a different platform. Say goodbye to the headache of generating valid queries in frontend applications, as JavaScript filter builders are also available to simplify the process.
 
 <details>
   <summary>:warning: <b><u>About Release 3.0.0</u></b></summary>
