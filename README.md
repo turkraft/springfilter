@@ -47,6 +47,8 @@ available so that it's not a headache anymore to generate valid queries in front
 
 ## [Sponsors](https://github.com/sponsors/torshid)
 
+Sponsor our project and gain the advantage of having your issues prioritized for prompt resolution.
+
 <table>
 <tr>
 <td><a href="https://github.com/ixorbv"><img width="64" src="https://avatars.githubusercontent.com/u/127401397?v=4"/></a></td>
