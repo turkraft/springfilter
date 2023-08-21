@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import java.util.List;
@@ -24,17 +25,21 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
 
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
+  protected final FieldTypeResolver fieldTypeResolver;
+
   public FilterJsonNodeArgumentResolverConfigurer(
       @Lazy @Qualifier("sfConversionService") ConversionService conversionService,
       @Lazy ObjectMapper objectMapper,
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       @Lazy JsonNodeHelper jsonNodeHelper,
-      @Lazy FilterNodeProcessorFactories filterNodeProcessorFactories) {
+      @Lazy FilterNodeProcessorFactories filterNodeProcessorFactories,
+      FieldTypeResolver fieldTypeResolver) {
     this.conversionService = conversionService;
     this.objectMapper = objectMapper;
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
     this.jsonNodeHelper = jsonNodeHelper;
     this.filterNodeProcessorFactories = filterNodeProcessorFactories;
+    this.fieldTypeResolver = fieldTypeResolver;
   }
 
   @Override
@@ -42,7 +47,7 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
       List<HandlerMethodArgumentResolver> resolvers) {
     resolvers.add(new FilterJsonNodeArgumentResolver(conversionService, objectMapper,
         filterNodeArgumentResolverHelper, jsonNodeHelper,
-        filterNodeProcessorFactories));
+        filterNodeProcessorFactories, fieldTypeResolver));
   }
 
 }

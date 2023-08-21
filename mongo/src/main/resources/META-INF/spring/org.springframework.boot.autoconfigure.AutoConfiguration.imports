@@ -3,6 +3,8 @@ com.turkraft.springfilter.boot.FilterJsonNodeArgumentResolverConfigurer
 com.turkraft.springfilter.helper.JsonNodeHelperImpl
 com.turkraft.springfilter.helper.FieldTypeResolverImpl
 
+com.turkraft.springfilter.converter.StringObjectIdConverter
+
 com.turkraft.springfilter.transformer.processor.TodayFunctionJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.OrOperationJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.NotOperationJsonNodeProcessor
