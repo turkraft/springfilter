@@ -53,7 +53,7 @@ public class LikeOperationJsonNodeProcessor implements
 
       Field field = fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName());
 
-      if (field.isAnnotationPresent(Id.class)) {
+      if (field.isAnnotationPresent(Id.class) && field.getType().equals(String.class)) {
 
         /*
             $function: {
