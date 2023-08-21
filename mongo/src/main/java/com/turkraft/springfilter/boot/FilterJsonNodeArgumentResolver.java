@@ -2,6 +2,7 @@ package com.turkraft.springfilter.boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
@@ -30,16 +31,20 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
 
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
+  protected final FieldTypeResolver fieldTypeResolver;
+
   public FilterJsonNodeArgumentResolver(
       ConversionService conversionService, ObjectMapper objectMapper,
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       JsonNodeHelper jsonNodeHelper,
-      FilterNodeProcessorFactories filterNodeProcessorFactories) {
+      FilterNodeProcessorFactories filterNodeProcessorFactories,
+      FieldTypeResolver fieldTypeResolver) {
     this.conversionService = conversionService;
     this.objectMapper = objectMapper;
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
     this.jsonNodeHelper = jsonNodeHelper;
     this.filterNodeProcessorFactories = filterNodeProcessorFactories;
+    this.fieldTypeResolver = fieldTypeResolver;
   }
 
   @Override
@@ -94,7 +99,7 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
     }
 
     FilterJsonNodeTransformer filterJsonNodeTransformer = new FilterJsonNodeTransformer(
-        conversionService, objectMapper, filterNodeProcessorFactories,
+        conversionService, objectMapper, filterNodeProcessorFactories, fieldTypeResolver,
         methodParameter.getParameterAnnotation(Filter.class).entityClass());
 
     ObjectNode jsonResult = jsonNodeHelper.wrapWithMongoExpression(

@@ -1,8 +1,10 @@
 package com.turkraft.springfilter.helper;
 
+import com.turkraft.springfilter.converter.StringObjectIdConverter.CustomObjectId;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 
 // source: https://github.com/RutledgePaulV/rest-query-engine
@@ -33,6 +35,9 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
   }
 
   private Class<?> normalize(Field field) {
+    if (field.getAnnotation(Id.class) != null && field.getType().equals(String.class)) {
+      return CustomObjectId.class;
+    }
     if (Collection.class.isAssignableFrom(field.getType())) {
       return getFirstTypeParameterOf(field);
     } else if (field.getType().isArray()) {

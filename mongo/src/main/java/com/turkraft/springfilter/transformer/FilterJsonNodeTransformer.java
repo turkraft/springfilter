@@ -2,6 +2,7 @@ package com.turkraft.springfilter.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -13,10 +14,12 @@ import com.turkraft.springfilter.parser.node.PostfixOperationNode;
 import com.turkraft.springfilter.parser.node.PrefixOperationNode;
 import com.turkraft.springfilter.parser.node.PriorityNode;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.annotation.Id;
 import org.springframework.lang.Nullable;
 
 public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode> {
@@ -27,6 +30,8 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
 
   protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
 
+  protected final FieldTypeResolver fieldTypeResolver;
+
   private final Class<?> entityType;
 
   private final Map<FilterNode, Class<?>> targetTypes = new HashMap<>();
@@ -34,11 +39,13 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
   public FilterJsonNodeTransformer(ConversionService conversionService,
       ObjectMapper objectMapper,
       FilterNodeProcessorFactories filterNodeProcessorFactories,
+      FieldTypeResolver fieldTypeResolver,
       Class<?> entityType) {
     this.conversionService = conversionService;
     this.objectMapper = objectMapper;
     this.filterNodeProcessorFactories = filterNodeProcessorFactories;
     this.entityType = entityType;
+    this.fieldTypeResolver = fieldTypeResolver;
   }
 
   @Override
@@ -48,6 +55,10 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
 
   @Override
   public JsonNode transformField(FieldNode node) {
+    Field field = fieldTypeResolver.getField(getEntityType(), node.getName());
+    if (field.isAnnotationPresent(Id.class)) {
+      return objectMapper.createObjectNode().textNode("$_id");
+    }
     return objectMapper.createObjectNode().textNode("$" + node.getName());
   }
 

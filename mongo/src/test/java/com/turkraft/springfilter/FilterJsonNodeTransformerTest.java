@@ -3,6 +3,7 @@ package com.turkraft.springfilter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turkraft.springfilter.builder.FilterBuilder;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
@@ -38,12 +39,15 @@ public class FilterJsonNodeTransformerTest {
   @Autowired
   private FilterNodeProcessorFactories filterNodeProcessorFactories;
 
+  @Autowired
+  private FieldTypeResolver fieldTypeResolver;
+
   private FilterJsonNodeTransformer transformer;
 
   @BeforeEach
   void init() {
     transformer = new FilterJsonNodeTransformer(conversionService, objectMapper,
-        filterNodeProcessorFactories, TestEntity.class);
+        filterNodeProcessorFactories, fieldTypeResolver, TestEntity.class);
   }
 
   private void test(String expectedJson, FilterNode filterNode) {
