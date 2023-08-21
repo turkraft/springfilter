@@ -40,8 +40,13 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
     JsonNode leftResult = transformer.transform(source.getLeft());
 
-    transformer.registerTargetType(source.getRight(),
-        transformer.getRegisteredTargetType(source.getLeft()));
+    if (transformer.getRegisteredTargetType(source.getLeft()) != null) {
+      transformer.registerTargetType(source.getRight(),
+          transformer.getRegisteredTargetType(source.getLeft()));
+    } else if (transformer.getRegisteredTargetType(source.getRight()) != null) {
+      transformer.registerTargetType(source.getLeft(),
+          transformer.getRegisteredTargetType(source.getRight()));
+    }
 
     JsonNode rightResult = transformer.transform(source.getRight());
 
