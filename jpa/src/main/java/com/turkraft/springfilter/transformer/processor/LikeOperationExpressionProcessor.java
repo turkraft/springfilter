@@ -44,7 +44,15 @@ public class LikeOperationExpressionProcessor implements
       return (Expression<String>) transformer.transform(node);
     }
 
-    String pattern = ((InputNode) node).getValue().toString().replace("*", "%");
+    String pattern = ((InputNode) node).getValue().toString();
+
+    pattern = pattern.replace("\\\\%", "\\%");
+
+    pattern = pattern.replace("\\\\*", "X_ESCAPED_STAR_X");
+
+    pattern = pattern.replace("*", "%");
+
+    pattern = pattern.replace("X_ESCAPED_STAR_X", "*");
 
     if (!pattern.contains("%")) {
       pattern = "%" + pattern + "%";
