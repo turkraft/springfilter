@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/turkraft/springfilter">
-    <img src="https://raw.githubusercontent.com/turkraft/springfilter/main/.github/logo.png" alt="Spring Filter Logo">
+    <img src="https://raw.githubusercontent.com/turkraft/springfilter/main/.github/logo.png?raw=true" alt="Spring Filter Logo">
   </a>
 </p>
 
