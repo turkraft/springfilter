@@ -21,7 +21,7 @@ The library's modular design and seamless integration with Spring make it easy t
   > You can access the older version in the [2.x.x branch](https://github.com/turkraft/spring-filter/tree/2.x.x).
 </details>
 
-## Example ([try it live](https://spring-filter.onrender.com/))
+## Example ([try it live](https://springfilter-jpa.onrender.com/))
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
