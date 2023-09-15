@@ -98,7 +98,8 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
 
   @Operation(hidden = true)
   @GetMapping("/")
-  public void index(HttpServletResponse response) throws IOException {
+  public void index(HttpServletResponse response)
+      throws IOException {
     response.sendRedirect("swagger-ui.html");
   }
 
@@ -120,7 +121,7 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
 
   @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY,
       schema = @Schema(type = "string"),
-      example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)"))
+      example = "maritalStatus in ['DIVORCED', 'SEPARATED'] and (size(staff) > 2 or manager is not null)"))
   @GetMapping(value = "employee")
   public List<Employee> getEmployees(
       @Parameter(hidden = true) @Filter(entityClass = Employee.class) Document filter) {

@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.example.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.Id;
@@ -40,13 +39,16 @@ public class Employee {
 
   public enum MaritalStatus {
 
-    UNKNOWN, MARRIED, WIDOWED, DIVORCED, SINGLE, SEPARATED;
+    UNKNOWN, MARRIED, WIDOWED, DIVORCED, SINGLE, SEPARATED
 
+    /* need to add a custom enum->string mongo converter in order to open the following code
+       otherwise mongo uses name() when serializing and this creates inconsistencies with jackson
     @JsonValue
     @Override
     public String toString() {
       return name().toLowerCase();
     }
+     */
 
   }
 
