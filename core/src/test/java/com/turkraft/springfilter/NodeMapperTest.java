@@ -52,9 +52,9 @@ public class NodeMapperTest {
           return null;
         });
 
-    FilterNode node = filterParser.parse("x : y : z", ctx);
+    FilterNode node = filterParser.parse("x : y ! z", ctx);
 
-    Assertions.assertEquals("x ! y ! z", filterStringConverter.convert(node));
+    Assertions.assertEquals("x ! y : z", filterStringConverter.convert(node));
 
   }
 
