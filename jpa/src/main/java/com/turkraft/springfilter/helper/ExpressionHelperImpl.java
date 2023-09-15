@@ -19,6 +19,7 @@ import com.turkraft.springfilter.transformer.processor.factory.FilterOperationPr
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.From;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.MapJoin;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
@@ -93,7 +94,10 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
 
       if (shouldJoin) {
         if (!rootContext.getPaths().containsKey(chain)) {
-          rootContext.getPaths().put(chain, ((From<?, ?>) path).join(field));
+          rootContext.getPaths().put(chain, ((From<?, ?>) path).join(field,
+              nextPath.getModel().getBindableType() == BindableType.SINGULAR_ATTRIBUTE
+                  ? JoinType.LEFT
+                  : JoinType.INNER));
         }
         nextPath = rootContext.getPaths().get(chain);
       }
