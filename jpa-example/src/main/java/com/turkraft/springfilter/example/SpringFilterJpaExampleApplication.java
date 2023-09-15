@@ -136,7 +136,7 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
 
   @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY,
       schema = @Schema(type = "string"),
-      example = "maritalStatus in ('divorced', 'separated') and (size(staff) > 2 or manager is not null)"))
+      example = "maritalStatus in ['divorced', 'separated'] and (size(staff) > 2 or manager is not null)"))
   @GetMapping(value = "employee")
   public List<Employee> getEmployees(
       @Parameter(hidden = true) FilterSpecification<Employee> filter) {
