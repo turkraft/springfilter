@@ -5,6 +5,7 @@ import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
+import com.turkraft.springfilter.transformer.ListExpression;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.persistence.criteria.Expression;
 import org.springframework.stereotype.Component;
@@ -47,8 +48,22 @@ public class InOperationExpressionProcessor implements
 
     transformer.registerTargetType(source.getRight(), left.getJavaType());
 
+    Expression<?> right = transformer.transform(source.getRight());
+
+    if (right instanceof ListExpression<?> listExpression) {
+
+      In<Object> in = transformer.getCriteriaBuilder().in(left);
+
+      for (Expression<?> value : listExpression.getValues()) {
+        in.value(value);
+      }
+
+      return in;
+
+    }
+
     return transformer.getCriteriaBuilder().in(left)
-        .value((Expression) transformer.transform(source.getRight()));
+        .value((Expression) right);
 
   }
 
