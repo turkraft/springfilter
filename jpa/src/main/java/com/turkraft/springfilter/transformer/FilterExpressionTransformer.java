@@ -141,6 +141,9 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
   }
 
   private Expression<?> castIfNeeded(Expression<?> expression, @Nullable Class<?> targetType) {
+    if (targetType != null && expression instanceof ConvertibleExpression convertibleExpression) {
+      return convertibleExpression.convertTo(targetType);
+    }
     if (targetType != null && expression.getJavaType() != null
         && !targetType.isAssignableFrom(expression.getJavaType())) {
       return expression.as(targetType);
