@@ -59,7 +59,7 @@ Sponsor our project and gain the advantage of having your issues prioritized for
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.1.2</version>
+  <version>3.1.5</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ The repository should implement `JpaSpecificationExecutor` in order to execute S
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.1.2</version>
+  <version>3.1.5</version>
 </dependency>
 ```
 
@@ -89,13 +89,29 @@ Page<Entity> search(@Filter(entityClass = Entity.class) Query query, Pageable pa
 }
 ```
 
+#### Using MongoRepository
+
+```java
+public interface EntityRepository extends MongoRepository<Entity, String> {
+  @Query("?0")
+  List<Employee> findAll(Document document);
+  @Query("?0")
+  Page<Employee> findAll(Document document, Pageable pageable);
+}
+
+@GetMapping(value = "/search")
+Page<Entity> search(@Filter(entityClass = Entity.class) Document document, Pageable page) {
+    return entityRepository.findAll(query, page);
+}
+```
+
 ### Filter Builder
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.1.2</version>
+  <version>3.1.5</version>
 </dependency>
 ```
 
