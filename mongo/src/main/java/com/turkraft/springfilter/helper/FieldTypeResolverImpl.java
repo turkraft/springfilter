@@ -5,6 +5,7 @@ import com.turkraft.springfilter.converter.StringCustomUUIDConverter.CustomUUID;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
   @Override
 
   public Class<?> resolve(Class<?> root, String path) {
+    if (root.getName().equals(Map.class.getName())){
+      return String.class;
+    }
     String[] splitField = path.split("\\.", 2);
     if (splitField.length == 1) {
       return normalize(getField(root, splitField[0]));
