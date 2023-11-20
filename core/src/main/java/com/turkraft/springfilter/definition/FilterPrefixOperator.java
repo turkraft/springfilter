@@ -5,6 +5,10 @@ import com.turkraft.springfilter.parser.node.PrefixOperationNode;
 
 public abstract class FilterPrefixOperator extends FilterOperator {
 
+  public FilterPrefixOperator(String[] tokens, int priority) {
+    super(tokens, priority);
+  }
+
   public FilterPrefixOperator(String token, int priority) {
     super(token, priority);
   }

@@ -30,15 +30,27 @@ public class InsensitiveLikeOperationExpressionProcessor implements
   @SuppressWarnings("unchecked")
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, InfixOperationNode source) {
+
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getLeft(), String.class);
     transformer.registerTargetType(source.getRight(), String.class);
-    return transformer.getCriteriaBuilder()
-        .like(transformer.getCriteriaBuilder()
-                .upper((Expression<String>) transformer.transform(source.getLeft())),
-            transformer.getCriteriaBuilder()
-                .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
-                    source.getRight())));
+
+    if (likeOperationExpressionProcessor.getEscapeCharacter() == null) {
+      return transformer.getCriteriaBuilder()
+          .like(transformer.getCriteriaBuilder()
+                  .upper((Expression<String>) transformer.transform(source.getLeft())),
+              transformer.getCriteriaBuilder()
+                  .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
+                      source.getRight())));
+    } else {
+      return transformer.getCriteriaBuilder()
+          .like(transformer.getCriteriaBuilder()
+                  .upper((Expression<String>) transformer.transform(source.getLeft())),
+              transformer.getCriteriaBuilder()
+                  .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
+                      source.getRight())), likeOperationExpressionProcessor.getEscapeCharacter());
+    }
+
   }
 
 }

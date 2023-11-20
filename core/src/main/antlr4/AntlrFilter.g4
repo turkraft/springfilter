@@ -15,26 +15,26 @@ grammar AntlrFilter;
     }
 
     boolean tryOperator(Class<? extends FilterOperator> targetClass) {
-      for (FilterOperator operator : operators.getSortedOperators()) {
+      for (Pair<FilterOperator, String> operatorWithToken : operators.getSortedOperators()) {
         boolean matched = true;
-        for (int i = 0; i < operator.getToken().length(); i++) {
-          if (_input.LA(i + 1) != operator.getToken().charAt(i)) {
+        for (int i = 0; i < operatorWithToken.b.length(); i++) {
+          if (Character.toLowerCase((char)_input.LA(i + 1)) != operatorWithToken.b.charAt(i)) {
             matched = false;
             break;
           }
         }
         if (matched) {
-          if (!targetClass.isAssignableFrom(operator.getClass())) {
+          if (!targetClass.isAssignableFrom(operatorWithToken.a.getClass())) {
             return false;
           }
-          _input.seek(_input.index() + operator.getToken().length() - 1);
+          _input.seek(_input.index() + operatorWithToken.b.length() - 1);
           return true;
         }
       }
       return false;
     }
 
-    private Deque <Token> deque = new LinkedList<Token> ();
+    private Deque<Token> deque = new LinkedList<Token>();
    
     private Token previousToken;
     private Token nextToken;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class InsensitiveLikeOperator extends FilterInfixOperator {
 
   public InsensitiveLikeOperator() {
-    super("~~", 100);
+    super(new String[]{"~~", "ilike"}, 100);
   }
 
 }
