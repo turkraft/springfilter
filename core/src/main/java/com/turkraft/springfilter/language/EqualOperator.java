@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class EqualOperator extends FilterInfixOperator {
 
   public EqualOperator() {
-    super(":", 100);
+    super(new String[]{":", "="}, 100);
   }
 
 }
