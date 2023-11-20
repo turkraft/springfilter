@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.definition;
 
 import java.util.List;
+import org.antlr.v4.runtime.misc.Pair;
 
 public interface FilterOperators {
 
@@ -12,8 +13,10 @@ public interface FilterOperators {
 
   default FilterPrefixOperator getPrefixOperator(String token) {
     for (FilterPrefixOperator prefixOperator : getPrefixOperators()) {
-      if (prefixOperator.getToken().equals(token)) {
-        return prefixOperator;
+      for (String prefixOperatorToken : prefixOperator.getTokens()) {
+        if (prefixOperatorToken.equalsIgnoreCase(token)) {
+          return prefixOperator;
+        }
       }
     }
     throw new UnsupportedOperationException("Unrecognized prefix operator `" + token + "`");
@@ -30,8 +33,10 @@ public interface FilterOperators {
 
   default FilterInfixOperator getInfixOperator(String token) {
     for (FilterInfixOperator infixOperator : getInfixOperators()) {
-      if (infixOperator.getToken().equals(token)) {
-        return infixOperator;
+      for (String infixOperatorToken : infixOperator.getTokens()) {
+        if (infixOperatorToken.equalsIgnoreCase(token)) {
+          return infixOperator;
+        }
       }
     }
     throw new UnsupportedOperationException("Unrecognized infix operator `" + token + "`");
@@ -48,8 +53,10 @@ public interface FilterOperators {
 
   default FilterPostfixOperator getPostfixOperator(String token) {
     for (FilterPostfixOperator postfixOperator : getPostfixOperators()) {
-      if (postfixOperator.getToken().equals(token)) {
-        return postfixOperator;
+      for (String postfixOperatorToken : postfixOperator.getTokens()) {
+        if (postfixOperatorToken.equalsIgnoreCase(token)) {
+          return postfixOperator;
+        }
       }
     }
     throw new UnsupportedOperationException("Unrecognized postfix operator `" + token + "`");
@@ -64,6 +71,6 @@ public interface FilterOperators {
                 "Unrecognized operator " + type.getSimpleName()));
   }
 
-  List<FilterOperator> getSortedOperators();
+  List<Pair<FilterOperator, String>> getSortedOperators();
 
 }

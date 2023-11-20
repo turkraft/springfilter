@@ -2,6 +2,7 @@ package com.turkraft.springfilter.definition;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,7 @@ class FilterOperatorsImpl implements FilterOperators {
 
   private final List<FilterPostfixOperator> postfixOperators;
 
-  private final List<FilterOperator> sortedOperators;
+  private final List<Pair<FilterOperator, String>> sortedOperators;
 
   public FilterOperatorsImpl(List<FilterPrefixOperator> prefixOperators,
       List<FilterInfixOperator> infixOperators,
@@ -22,12 +23,18 @@ class FilterOperatorsImpl implements FilterOperators {
     this.infixOperators = infixOperators;
     this.postfixOperators = postfixOperators;
     sortedOperators = new LinkedList<>();
-    sortedOperators.addAll(getPrefixOperators());
-    sortedOperators.addAll(getInfixOperators());
-    sortedOperators.addAll(getPostfixOperators());
-    sortedOperators.sort((o1, o2) -> -Integer.compare(o1.getPriority(), o2.getPriority()));
+    getPrefixOperators().forEach(this::addSortedOperator);
+    getInfixOperators().forEach(this::addSortedOperator);
+    getPostfixOperators().forEach(this::addSortedOperator);
+    sortedOperators.sort((o1, o2) -> -Integer.compare(o1.a.getPriority(), o2.a.getPriority()));
     sortedOperators.sort(
-        (o1, o2) -> -Integer.compare(o1.getToken().length(), o2.getToken().length()));
+        (o1, o2) -> -Integer.compare(o1.b.length(), o2.b.length()));
+  }
+
+  private void addSortedOperator(FilterOperator operator) {
+    for (String token : operator.getTokens()) {
+      sortedOperators.add(new Pair<>(operator, token.toLowerCase()));
+    }
   }
 
   @Override
@@ -46,7 +53,7 @@ class FilterOperatorsImpl implements FilterOperators {
   }
 
   @Override
-  public List<FilterOperator> getSortedOperators() {
+  public List<Pair<FilterOperator, String>> getSortedOperators() {
     return sortedOperators;
   }
 
