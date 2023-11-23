@@ -55,11 +55,17 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
 
   @Override
   public JsonNode transformField(FieldNode node) {
-    Field field = fieldTypeResolver.getField(getEntityType(), node.getName());
-    if (field.isAnnotationPresent(Id.class)) {
-      return objectMapper.createObjectNode().textNode("$_id");
+    try {
+      Field field = fieldTypeResolver.getField(getEntityType(), node.getName());
+
+      if (field.isAnnotationPresent(Id.class)) {
+        return objectMapper.createObjectNode().textNode("$_id");
+      }
+
+      return objectMapper.createObjectNode().textNode("$" + node.getName());
+    } catch (IllegalArgumentException e) {
+      return objectMapper.createObjectNode().textNode("$" + node.getName());
     }
-    return objectMapper.createObjectNode().textNode("$" + node.getName());
   }
 
   @Override
