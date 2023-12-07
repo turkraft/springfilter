@@ -1,14 +1,13 @@
 package com.turkraft.springfilter.language;
 
-import org.springframework.stereotype.Component;
-
 import com.turkraft.springfilter.definition.FilterInfixOperator;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GreaterThanOrEqualOperator extends FilterInfixOperator {
 
   public GreaterThanOrEqualOperator() {
-    super(">:", 100);
+    super(new String[]{">:", ">="}, 100);
   }
 
 }

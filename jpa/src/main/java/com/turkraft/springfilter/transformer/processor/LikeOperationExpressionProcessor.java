@@ -6,6 +6,8 @@ import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.parser.node.InputNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import jakarta.persistence.criteria.Expression;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LikeOperationExpressionProcessor implements
     FilterInfixOperationProcessor<FilterExpressionTransformer, Expression<?>> {
+
+  @Value("${springfilter.jpa.like_escape_character:#{null}}")
+  private Character escapeCharacter;
 
   @Override
   public Class<FilterExpressionTransformer> getTransformerType() {
@@ -28,12 +33,21 @@ public class LikeOperationExpressionProcessor implements
   @SuppressWarnings("unchecked")
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, InfixOperationNode source) {
+    
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getLeft(), String.class);
     transformer.registerTargetType(source.getRight(), String.class);
-    return transformer.getCriteriaBuilder()
-        .like((Expression<String>) transformer.transform(source.getLeft()),
-            getLikePatternExpression(transformer, source.getRight()));
+
+    if (getEscapeCharacter() == null) {
+      return transformer.getCriteriaBuilder()
+          .like((Expression<String>) transformer.transform(source.getLeft()),
+              getLikePatternExpression(transformer, source.getRight()));
+    } else {
+      return transformer.getCriteriaBuilder()
+          .like((Expression<String>) transformer.transform(source.getLeft()),
+              getLikePatternExpression(transformer, source.getRight()), escapeCharacter);
+    }
+
   }
 
   @SuppressWarnings("unchecked")
@@ -60,6 +74,11 @@ public class LikeOperationExpressionProcessor implements
 
     return transformer.getCriteriaBuilder().literal(pattern);
 
+  }
+
+  @Nullable
+  public Character getEscapeCharacter() {
+    return escapeCharacter;
   }
 
 }
