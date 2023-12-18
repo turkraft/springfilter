@@ -52,7 +52,7 @@
     <revision>${springfilter.version}</revision>
     <springfilter.version>3.0.0-SNAPSHOT</springfilter.version>
     <springboot.version>3.2.0</springboot.version>
-    <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.2.3</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
