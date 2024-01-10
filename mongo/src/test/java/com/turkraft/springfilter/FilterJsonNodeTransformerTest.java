@@ -86,4 +86,17 @@ public class FilterJsonNodeTransformerTest {
         fb.field("string").notEqual(fb.input("hello")).get());
   }
 
+  @Test
+  void nestedEntityTest() {
+    test("""
+            {
+              "$eq" : [
+                "$nested.field",
+                "value"
+              ]
+            }
+            """,
+        fb.field("nested.field").equal(fb.input("value")).get());
+  }
+
 }

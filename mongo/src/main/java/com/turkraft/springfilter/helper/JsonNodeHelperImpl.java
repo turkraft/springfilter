@@ -32,10 +32,10 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
     if (source.getLeft() instanceof FieldNode fieldNode) {
       transformer.registerTargetType(source.getRight(),
-          fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
+          fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName()).getType());
     } else if (source.getRight() instanceof FieldNode fieldNode) {
       transformer.registerTargetType(source.getLeft(),
-          fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
+          fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName()).getType());
     }
 
     JsonNode leftResult = transformer.transform(source.getLeft());

@@ -36,10 +36,10 @@ public class InOperationJsonNodeProcessor implements
 
     if (source.getLeft() instanceof FieldNode fieldNode) {
       transformer.registerTargetType(source.getRight(),
-          fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
+          fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName()).getType());
     } else if (source.getRight() instanceof FieldNode fieldNode) {
       transformer.registerTargetType(source.getLeft(),
-          fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
+          fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName()).getType());
     }
 
     return transformer.getObjectMapper().createObjectNode().set("$and",

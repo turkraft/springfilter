@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 
 public interface FieldTypeResolver {
 
-  Class<?> resolve(Class<?> root, String path);
-
-  Field getField(Class<?> klass, String fieldName);
+  Field getField(Class<?> klass, String path);
 
 }
