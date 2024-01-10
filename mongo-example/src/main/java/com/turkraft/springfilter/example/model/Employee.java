@@ -2,12 +2,8 @@ package com.turkraft.springfilter.example.model;
 
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.annotation.Id;
 
 public class Employee {
-
-  @Id
-  private String id;
 
   private String firstName;
 
@@ -28,14 +24,6 @@ public class Employee {
   private List<Payslip> payslips;
 
   private List<String> children;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public enum MaritalStatus {
 

@@ -42,58 +42,87 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   @Autowired
   private MongoTemplate mongoTemplate;
 
+  private static final Faker faker = new Faker(new Random(1));
+
   @Override
   public void run(String... args) {
 
-    Faker faker = new Faker(new Random(1));
-
     List<Industry> industries = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
-      Industry industry = new Industry();
-      industry.setName(faker.company().industry());
+      Industry industry = generateIndustry();
+      industry.setCompanies(
+          Stream.generate(this::generateCompany)
+              .limit(5).skip(faker.random().nextInt(0, 5)).toList());
       industries.add(industry);
     }
     mongoTemplate.insertAll(industries);
 
     List<Company> companies = new ArrayList<>();
     for (int i = 0; i < 5; i++) {
-      Company company = new Company();
-      company.setName(faker.company().name());
-      company.setIndustry(faker.options().nextElement(industries));
-      company.setWebsites(
-          Stream.generate(() -> Map.entry(faker.company().buzzword(), faker.company().url()))
-              .limit(3).skip(faker.random().nextInt(0, 3))
-              .collect(Collectors.toMap(Entry::getKey, Entry::getValue)));
+      Company company = generateCompany();
+      company.setIndustry(generateIndustry());
+      company.setEmployees(
+          Stream.generate(this::generateEmployee)
+              .limit(10).skip(faker.random().nextInt(0, 10)).toList());
       companies.add(company);
     }
     mongoTemplate.insertAll(companies);
 
     List<Employee> employees = new ArrayList<>();
     for (int i = 0; i < 30; i++) {
-      Employee employee = new Employee();
-      employee.setFirstName(faker.name().firstName());
-      employee.setLastName(faker.name().lastName());
-      employee.setBirthDate(faker.date().birthday());
-      employee.setMaritalStatus(faker.options().option(MaritalStatus.class));
-      employee.setSalary(faker.random().nextInt(1000, 10000));
-      employee.setCompany(faker.options().nextElement(companies));
-      employee.setManager(employees.isEmpty() ? null : faker.options().nextElement(employees));
-      employee.setChildren(
-          Stream.generate(faker.name()::firstName).limit(5).skip(faker.random().nextInt(0, 5))
-              .collect(Collectors.toList()));
+      Employee employee = generateEmployee();
+      employee.setCompany(generateCompany());
+      employee.setManager(faker.number().numberBetween(0, 10) < 2 ? null : generateEmployee());
+      employee.setStaff(
+          Stream.generate(this::generateEmployee)
+              .limit(5).skip(faker.random().nextInt(0, 5)).toList());
       employees.add(employee);
     }
     mongoTemplate.insertAll(employees);
 
     List<Payslip> payslips = new ArrayList<>();
     for (int i = 0; i < 50; i++) {
-      Payslip payslip = new Payslip();
-      payslip.setEmployee(faker.options().nextElement(employees));
-      payslip.setDate(faker.date().past(360, TimeUnit.DAYS));
+      Payslip payslip = generatePayslip();
+      payslip.setEmployee(generateEmployee());
       payslips.add(payslip);
     }
     mongoTemplate.insertAll(payslips);
 
+  }
+
+  private static Industry generateIndustry() {
+    Industry industry = new Industry();
+    industry.setName(faker.company().industry());
+    return industry;
+  }
+
+  private Company generateCompany() {
+    Company company = new Company();
+    company.setName(faker.company().name());
+    company.setWebsites(
+        Stream.generate(() -> Map.entry(faker.company().buzzword(), faker.company().url()))
+            .limit(3).skip(faker.random().nextInt(0, 3))
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue)));
+    return company;
+  }
+
+  private Employee generateEmployee() {
+    Employee employee = new Employee();
+    employee.setFirstName(faker.name().firstName());
+    employee.setLastName(faker.name().lastName());
+    employee.setBirthDate(faker.date().birthday());
+    employee.setMaritalStatus(faker.options().option(MaritalStatus.class));
+    employee.setSalary(faker.random().nextInt(1000, 10000));
+    employee.setChildren(
+        Stream.generate(faker.name()::firstName).limit(5).skip(faker.random().nextInt(0, 5))
+            .collect(Collectors.toList()));
+    return employee;
+  }
+
+  private static Payslip generatePayslip() {
+    Payslip payslip = new Payslip();
+    payslip.setDate(faker.date().past(360, TimeUnit.DAYS));
+    return payslip;
   }
 
   @Operation(hidden = true)

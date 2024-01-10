@@ -14,6 +14,11 @@ import org.springframework.util.ReflectionUtils;
 class FieldTypeResolverImpl implements FieldTypeResolver {
 
   @Override
+  public Class<?> resolve(Class<?> klass, String path) {
+    return normalize(getField(klass, path));
+  }
+
+  @Override
   public Field getField(Class<?> klass, final String path) {
 
     String[] fieldNames = path.split("\\.");
