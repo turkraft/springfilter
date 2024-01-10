@@ -54,7 +54,7 @@
     <springboot.version>3.2.0</springboot.version>
     <maven-surefire-plugin.version>3.2.3</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
