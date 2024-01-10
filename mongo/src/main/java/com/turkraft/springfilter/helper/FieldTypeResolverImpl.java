@@ -8,33 +8,37 @@ import java.util.Collection;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
-
-// source: https://github.com/RutledgePaulV/rest-query-engine
-
-// this class is only used by the BsonGenerator, and adds the lang3 dependency unfortunately
-// it should be possible to get rid of it and use reflection/LambdaMetafactory
+import org.springframework.util.ReflectionUtils;
 
 @Service
 class FieldTypeResolverImpl implements FieldTypeResolver {
 
   @Override
-
-  public Class<?> resolve(Class<?> root, String path) {
-    String[] splitField = path.split("\\.", 2);
-    if (splitField.length == 1) {
-      return normalize(getField(root, splitField[0]));
-    } else {
-      return resolve(normalize(getField(root, splitField[0])), splitField[1]);
-    }
+  public Class<?> resolve(Class<?> klass, String path) {
+    return normalize(getField(klass, path));
   }
 
   @Override
-  public Field getField(final Class<?> klass, final String fieldName) {
-    Field field = org.apache.commons.lang3.reflect.FieldUtils.getField(klass, fieldName, true);
-    if (field == null) {
-      throw new IllegalArgumentException("Could not find field '" + fieldName + "' in " + klass);
+  public Field getField(Class<?> klass, final String path) {
+
+    String[] fieldNames = path.split("\\.");
+
+    Field lastField = null;
+
+    for (String fieldName : fieldNames) {
+
+      lastField = ReflectionUtils.findField(klass, fieldName);
+
+      if (lastField != null) {
+        klass = normalize(lastField);
+      } else {
+        throw new IllegalArgumentException("Could not find field '" + fieldName + "' in " + klass);
+      }
+
     }
-    return field;
+
+    return lastField;
+
   }
 
   private Class<?> normalize(Field field) {
@@ -42,7 +46,7 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
     if (field.isAnnotationPresent(Id.class) && field.getType().equals(String.class)) {
       return CustomObjectId.class;
     }
-    
+
     if (field.getType().equals(UUID.class)) {
       return CustomUUID.class;
     }

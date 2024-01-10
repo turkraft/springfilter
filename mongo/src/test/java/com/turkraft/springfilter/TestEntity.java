@@ -14,6 +14,8 @@ public class TestEntity {
 
   private int integer;
 
+  private NestedTestEntity nested;
+
   public String getId() {
     return id;
   }
@@ -46,4 +48,12 @@ public class TestEntity {
     this.integer = integer;
   }
 
+  public NestedTestEntity getNested() {
+    return nested;
+  }
+
+  public void setNested(NestedTestEntity nested) {
+    this.nested = nested;
+  }
+  
 }
