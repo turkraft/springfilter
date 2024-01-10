@@ -17,7 +17,7 @@
 
   <properties>
     <de.flapdoodle.embed.mongo.spring30x.version>4.11.0</de.flapdoodle.embed.mongo.spring30x.version>
-    <springdoc-openapi-starter-webmvc-ui.version>2.2.0</springdoc-openapi-starter-webmvc-ui.version>
+    <springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
     <docker.name>torshid/springfilter-mongo-example</docker.name>
   </properties>
 
