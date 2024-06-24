@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 public class JsonNodeHelperImpl implements JsonNodeHelper {
 
   protected final ObjectMapper objectMapper;
-
+  protected final TransformerUtils transformerUtils;
   protected final FieldTypeResolver fieldTypeResolver;
 
   public JsonNodeHelperImpl(ObjectMapper objectMapper,
-      FieldTypeResolver fieldTypeResolver) {
+                            FieldTypeResolver fieldTypeResolver,
+                            TransformerUtils transformerUtils) {
     this.objectMapper = objectMapper;
     this.fieldTypeResolver = fieldTypeResolver;
+    this.transformerUtils = transformerUtils;
   }
 
   @Override
@@ -28,7 +30,7 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
   @Override
   public JsonNode transform(FilterJsonNodeTransformer transformer, InfixOperationNode source,
-      String mongoOperator) {
+                            String mongoOperator) {
 
     if (source.getLeft() instanceof FieldNode fieldNode) {
       transformer.registerTargetType(source.getRight(),
@@ -42,19 +44,20 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
     if (transformer.getRegisteredTargetType(source.getLeft()) != null) {
       transformer.registerTargetType(source.getRight(),
-          transformer.getRegisteredTargetType(source.getLeft()));
+              transformer.getRegisteredTargetType(source.getLeft()));
     } else if (transformer.getRegisteredTargetType(source.getRight()) != null) {
       transformer.registerTargetType(source.getLeft(),
-          transformer.getRegisteredTargetType(source.getRight()));
+              transformer.getRegisteredTargetType(source.getRight()));
     }
 
     JsonNode rightResult = transformer.transform(source.getRight());
 
-    return transformer.getObjectMapper().createObjectNode().set(mongoOperator,
-        transformer.getObjectMapper().createArrayNode()
-            .add(leftResult)
-            .add(rightResult));
+    JsonNode result = transformer.getObjectMapper().createObjectNode().set(mongoOperator,
+            transformer.getObjectMapper().createArrayNode()
+                    .add(leftResult)
+                    .add(rightResult));
 
+    return transformerUtils.wrapArrays(transformer, result, source, mongoOperator);
   }
 
 }

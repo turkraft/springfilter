@@ -8,4 +8,5 @@ public interface FieldTypeResolver {
 
   Field getField(Class<?> klass, String path);
 
+  boolean isIterable(Class<?> klass, String path);
 }

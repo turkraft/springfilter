@@ -61,6 +61,14 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
 
   }
 
+  public boolean isIterable(Class<?> klass, String path) {
+    return isIterable(getField(klass, path));
+  }
+
+  private boolean isIterable(Field field) {
+    return Collection.class.isAssignableFrom(field.getType()) || field.getType().isArray();
+  }
+
   private Class<?> getFirstTypeParameterOf(Field field) {
     return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
   }
