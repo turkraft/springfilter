@@ -2,7 +2,6 @@ package com.turkraft.springfilter.helper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Lists;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
@@ -98,8 +97,8 @@ class TransformerUtilsImpl implements TransformerUtils{
             String input = (i > 0) ? "$$this.".concat(arrayPaths.get(i)) : "$".concat(arrayPaths.get(i));
 
             if (resultNode == null) {
-                List<String> split = Lists.newArrayList(transformer.transform(source.getLeft()).asText()
-                        .split(arrayPaths.get(i), 2));
+                List<String> split = new ArrayList<>(List.of(transformer.transform(source.getLeft()).asText()
+                        .split(arrayPaths.get(i), 2)));
 
                 if (split.size() == 1) {
                     split.add("");
@@ -166,8 +165,7 @@ class TransformerUtilsImpl implements TransformerUtils{
     }
 
     private static FilterNode getFilterNode(FilterJsonNodeTransformer transformer, InfixOperationNode source, List<String> arrayPaths, int i) {
-        List<String> split = Lists.newArrayList(transformer.transform(source.getLeft()).asText()
-                .split(arrayPaths.get(i), 2));
+        List<String> split = new ArrayList<>(List.of(transformer.transform(source.getLeft()).asText().split(arrayPaths.get(i), 2)));
 
         if (split.size() == 1) {
             split.add("");
