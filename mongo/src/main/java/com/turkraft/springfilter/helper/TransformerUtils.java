@@ -10,4 +10,6 @@ public interface TransformerUtils {
     JsonNode wrapArraysRegex(FilterJsonNodeTransformer transformer, JsonNode node, InfixOperationNode source);
 
     JsonNode wrapArrays(FilterJsonNodeTransformer transformer, JsonNode node, InfixOperationNode source, String mongoOperator);
+
+    JsonNode simplify(FilterJsonNodeTransformer transformer, JsonNode node);
 }
