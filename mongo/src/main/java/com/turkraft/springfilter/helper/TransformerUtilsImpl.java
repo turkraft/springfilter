@@ -249,12 +249,12 @@ class TransformerUtilsImpl implements TransformerUtils{
             JsonNode anyElementChild = arrayNode.get(i);
             if (anyElementChild.has("$anyElementTrue") && anyElementChild.get("$anyElementTrue").has("$map")) {
                 var mapNode = anyElementChild.get("$anyElementTrue").get("$map");
-                if (mapNode.has("input") && mapNode.get("input").has("$ifNull")) {
-                    var ifNullArray = mapNode.get("input").get("$ifNull").get(0);
-                    if (ifNullArray.isTextual() && map.containsKey(ifNullArray.asText())) {
-                        fuseExistingAndNew(transformer, map, ifNullArray, mapNode, currentOperator, toRemove, i);
+                if (mapNode.has("input")) {
+                    var inputAsText= mapNode.get("input").asText();
+                    if (map.containsKey(inputAsText)) {
+                        fuseExistingAndNew(transformer, map, inputAsText, mapNode, currentOperator, toRemove, i);
                     } else {
-                        map.put(ifNullArray.asText(), anyElementChild);
+                        map.put(inputAsText, anyElementChild);
                     }
                 }
             }
@@ -263,8 +263,8 @@ class TransformerUtilsImpl implements TransformerUtils{
         toRemove.forEach(arrayNode::remove);
     }
 
-    private static void fuseExistingAndNew(FilterJsonNodeTransformer transformer, HashMap<String, JsonNode> map, JsonNode ifNullArray, JsonNode mapNode, String currentOperator, List<Integer> toRemove, int i) {
-        var existing = map.get(ifNullArray.asText());
+    private static void fuseExistingAndNew(FilterJsonNodeTransformer transformer, HashMap<String, JsonNode> map, String inputNode, JsonNode mapNode, String currentOperator, List<Integer> toRemove, int i) {
+        var existing = map.get(inputNode);
         ObjectNode existingMap = (ObjectNode) existing.get("$anyElementTrue").get("$map");
         var existingIn = existingMap.get("in");
         var newIn = mapNode.get("in");
