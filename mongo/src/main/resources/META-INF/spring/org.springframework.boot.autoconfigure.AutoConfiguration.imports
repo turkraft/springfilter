@@ -6,6 +6,7 @@ com.turkraft.springfilter.helper.TransformerUtilsImpl
 
 com.turkraft.springfilter.converter.StringCustomObjectIdConverter
 com.turkraft.springfilter.converter.StringCustomUUIDConverter
+com.turkraft.springfilter.converter.StringCustomDateConverter
 
 com.turkraft.springfilter.transformer.processor.TodayFunctionJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.OrOperationJsonNodeProcessor

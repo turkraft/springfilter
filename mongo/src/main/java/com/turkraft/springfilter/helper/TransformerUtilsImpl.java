@@ -229,11 +229,17 @@ class TransformerUtilsImpl implements TransformerUtils{
         if (node.has("$and") && node.get("$and").isArray()) {
             result = simplifyAnd(transformer, node);
             fuseAnyElements(transformer, result, "$and");
+            if(result.has("$and") && result.get("$and").size() == 1){
+                result = result.get("$and").get(0);
+            }
 
         }
         if (node.has("$or") && node.get("$or").isArray()) {
             result = simplifyOr(transformer, node);
             fuseAnyElements(transformer, result, "$or");
+            if(result.has("$or") && result.get("$or").size() == 1){
+                result = result.get("$or").get(0);
+            }
         }
         return result;
     }

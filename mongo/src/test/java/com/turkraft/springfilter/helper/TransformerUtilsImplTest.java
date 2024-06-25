@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.POJONode;
 import com.turkraft.springfilter.TestEntity;
 import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
@@ -67,8 +68,10 @@ class TransformerUtilsImplTest {
 
     @Test
     void simplifyShouldFuseAndElementsWhenAndPresent() {
+        // {$and: [ { $and: [ {}, {} ] }, {} , {}]}
+        // =>
+        // {$and: [ {}, {}, {}, {}]}
         //arrange
-        // $and: [ { $and: [ {}, {} ] }, {} , {}]
         ArrayNode arrayNode = transformer.getObjectMapper().createArrayNode();
         arrayNode.add(mock(ObjectNode.class));
         arrayNode.add(mock(ObjectNode.class));
@@ -92,8 +95,10 @@ class TransformerUtilsImplTest {
 
     @Test
     void simplifyShouldFuseOrElementsWhenOrPresent() {
+        // {$or: [ { $or: [ {}, {} ] }, {} , {}]}
+        // =>
+        // {$or: [ {}, {}, {}, {}]}
         //arrange
-        // $or: [ { $or: [ {}, {} ] }, {} , {}]
         ArrayNode arrayNode = transformer.getObjectMapper().createArrayNode();
         arrayNode.add(mock(ObjectNode.class));
         arrayNode.add(mock(ObjectNode.class));
@@ -117,8 +122,10 @@ class TransformerUtilsImplTest {
 
     @Test
     void simplifyShouldFuseAndAndOrElementsWhenAndAndOrPresent() {
+        // {$and: [ { $and: [ { $or: [ {}, {} ] }, {} ] }, {} , {}]}
+        // =>
+        // {$and: [ { $or: [ {}, {} ] }, {} , {}, {}]}
         //arrange
-        // $and: [ { $and: [ { $or: [ {}, {} ] }, {} ] }, {} , {}]
         ArrayNode innerOrArray = transformer.getObjectMapper().createArrayNode();
         innerOrArray.add(mock(ObjectNode.class));
         innerOrArray.add(mock(ObjectNode.class));
@@ -150,14 +157,16 @@ class TransformerUtilsImplTest {
             }
         }
     }
+
     @Test
     void simplifyShouldNotFuseAnyElemenTrueWithDifferentMapping() {
-        //arrange
-        // $and: [
+        // {$and: [
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping1", [] ] }, as: "this", in: filter } },
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping2", [] ] }, as: "this", in: filter } },
         // {}
-        // ]
+        // ]}
+        // => no change
+        //arrange
         ObjectNode filter = transformer.getObjectMapper().createObjectNode();
         filter.put("$key", "value");
         ObjectNode filter2 = transformer.getObjectMapper().createObjectNode();
@@ -181,7 +190,7 @@ class TransformerUtilsImplTest {
         int count = 0;
         Set<String> values = new HashSet<>();
         for (JsonNode node : result.get("$and")) {
-            if(node.has("$anyElementTrue")){
+            if (node.has("$anyElementTrue")) {
                 assertTrue(node.has("$anyElementTrue"));
                 assertTrue(node.get("$anyElementTrue").get("$map").get("in").has("$key"));
                 values.add(node.get("$anyElementTrue").get("$map").get("in").get("$key").asText());
@@ -194,12 +203,17 @@ class TransformerUtilsImplTest {
 
     @Test
     void simplifyShouldFuseAnyElemenTrueWithSameMapping() {
-        //arrange
-        // $and: [
-        // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } },
-        // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } },
+        // {$and: [
+        // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } }},
+        // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } }},
         // {}
-        // ]
+        // ]}
+        // =>
+        //{$and: [
+        // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: { $and: [ filter, filter ] } } },
+        // {}
+        //]}
+        //arrange
         ObjectNode filter = transformer.getObjectMapper().createObjectNode();
         filter.put("$key", "value");
         ObjectNode filter2 = transformer.getObjectMapper().createObjectNode();
@@ -222,7 +236,7 @@ class TransformerUtilsImplTest {
         assertEquals(2, result.get("$and").size());
         int count = 0;
         for (JsonNode node : result.get("$and")) {
-            if(node.has("$anyElementTrue")){
+            if (node.has("$anyElementTrue")) {
                 assertTrue(node.has("$anyElementTrue"));
                 assertEquals(2, node.get("$anyElementTrue").get("$map").get("in").get("$and").size());
                 count++;
@@ -231,24 +245,54 @@ class TransformerUtilsImplTest {
         assertEquals(1, count);
     }
 
+    @Test
+    void simplifyShouldFuseAnyElemenTrueWithSameMappingAndRemoveSingleElementAndOrOrs() {
+        // {$and: [
+        // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter1 } },
+        // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter2 } },
+        // ]}
+        // =>
+        // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: { $and: [ filter1, filter2 ] } } }}
+        //arrange
+        ObjectNode filter = transformer.getObjectMapper().createObjectNode();
+        filter.put("$key", "value");
+        ObjectNode filter2 = transformer.getObjectMapper().createObjectNode();
+        filter2.put("$key", "value2");
+        JsonNode anyElementsNode1 = getAnyElementsNode("$mapping", filter);
+        JsonNode anyElementsNode2 = getAnyElementsNode("$mapping", filter2);
+        ObjectNode input = transformer.getObjectMapper().createObjectNode();
+        ArrayNode arrayNode = transformer.getObjectMapper().createArrayNode();
+        arrayNode.add(anyElementsNode1);
+        arrayNode.add(anyElementsNode2);
+        input.set("$and", arrayNode);
+
+
+        //act
+        JsonNode result = transformerUtils.simplify(transformer, input);
+
+        //assert
+        assertTrue(result.has("$anyElementTrue"));
+        assertEquals(2, result.get("$anyElementTrue").get("$map").get("in").get("$and").size());
+    }
+
     JsonNode getAnyElementsNode(String mapping, JsonNode filter) {
-/*        {
-            "$anyElementTrue": {
-            "$map": {
-                "input": {
-                    "$ifNull": [
-                    "$mapping",
-                                []
-                            ]
-                },
-                "as": "this",
-                "in": filter
-            }
-        }*/
+        //{
+        //    "$anyElementTrue": {
+        //    "$map": {
+        //        "input": {
+        //            "$ifNull": [
+        //            "$mapping",
+        //                        []
+        //                    ]
+        //        },
+        //        "as": "this",
+        //        "in": filter
+        //    }
+        //}
         ObjectNode result = objectMapper.createObjectNode();
         ObjectNode anyElementTrue = objectMapper.createObjectNode();
         ObjectNode map = objectMapper.createObjectNode();
-        ObjectNode input = objectMapper.createObjectNode();
+        var input = objectMapper.createObjectNode();
         ArrayNode ifNull = objectMapper.createArrayNode();
         ifNull.add(mapping);
         ifNull.add(objectMapper.createArrayNode());
