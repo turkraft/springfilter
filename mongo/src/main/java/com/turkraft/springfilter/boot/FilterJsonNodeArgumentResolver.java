@@ -1,9 +1,11 @@
 package com.turkraft.springfilter.boot;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
+import com.turkraft.springfilter.transformer.TransformerUtils;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
@@ -33,18 +35,21 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
 
   protected final FieldTypeResolver fieldTypeResolver;
 
+  protected final TransformerUtils transformerUtils;
+
   public FilterJsonNodeArgumentResolver(
-      ConversionService conversionService, ObjectMapper objectMapper,
-      FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
-      JsonNodeHelper jsonNodeHelper,
-      FilterNodeProcessorFactories filterNodeProcessorFactories,
-      FieldTypeResolver fieldTypeResolver) {
+          ConversionService conversionService, ObjectMapper objectMapper,
+          FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
+          JsonNodeHelper jsonNodeHelper,
+          FilterNodeProcessorFactories filterNodeProcessorFactories,
+          FieldTypeResolver fieldTypeResolver, TransformerUtils transformerUtils) {
     this.conversionService = conversionService;
     this.objectMapper = objectMapper;
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
     this.jsonNodeHelper = jsonNodeHelper;
     this.filterNodeProcessorFactories = filterNodeProcessorFactories;
     this.fieldTypeResolver = fieldTypeResolver;
+      this.transformerUtils = transformerUtils;
   }
 
   @Override
@@ -102,8 +107,12 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
         conversionService, objectMapper, filterNodeProcessorFactories, fieldTypeResolver,
         methodParameter.getParameterAnnotation(Filter.class).entityClass());
 
+    JsonNode transform = filterJsonNodeTransformer.transform(result.get());
+    transform = transformerUtils.simplify(filterJsonNodeTransformer,transform);
+
+
     ObjectNode jsonResult = jsonNodeHelper.wrapWithMongoExpression(
-        filterJsonNodeTransformer.transform(result.get()));
+            transform);
 
     if (methodParameter.getParameterType().isAssignableFrom(ObjectNode.class)) {
       return jsonResult;
