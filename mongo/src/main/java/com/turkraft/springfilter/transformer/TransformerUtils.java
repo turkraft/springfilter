@@ -1,8 +1,7 @@
-package com.turkraft.springfilter.helper;
+package com.turkraft.springfilter.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
-import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 
 public interface TransformerUtils {
     JsonNode wrapArrays(FilterJsonNodeTransformer transformer, JsonNode node, InfixOperationNode source);

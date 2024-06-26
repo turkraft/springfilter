@@ -1,12 +1,12 @@
-package com.turkraft.springfilter.helper;
+package com.turkraft.springfilter.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
-import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -228,15 +228,14 @@ class TransformerUtilsImpl implements TransformerUtils{
         JsonNode result = node;
         if (node.has("$and") && node.get("$and").isArray()) {
             result = simplifyAnd(transformer, node);
-            fuseAnyElements(transformer, result, "$and");
+            mergeAnyElements(transformer, result, "$and");
             if(result.has("$and") && result.get("$and").size() == 1){
                 result = result.get("$and").get(0);
             }
-
         }
         if (node.has("$or") && node.get("$or").isArray()) {
             result = simplifyOr(transformer, node);
-            fuseAnyElements(transformer, result, "$or");
+            mergeAnyElements(transformer, result, "$or");
             if(result.has("$or") && result.get("$or").size() == 1){
                 result = result.get("$or").get(0);
             }
@@ -244,7 +243,7 @@ class TransformerUtilsImpl implements TransformerUtils{
         return result;
     }
 
-    private static void fuseAnyElements(FilterJsonNodeTransformer transformer, JsonNode parentNode, String currentOperator) {
+    private static void mergeAnyElements(FilterJsonNodeTransformer transformer, JsonNode parentNode, String currentOperator) {
         ArrayNode arrayNode = (ArrayNode) parentNode.get(currentOperator);
         HashMap<String, JsonNode> map = new HashMap<>();
         List<Integer> toRemove = new ArrayList<>();
@@ -256,7 +255,7 @@ class TransformerUtilsImpl implements TransformerUtils{
                 if (mapNode.has("input") && mapNode.get("input").has("$ifNull")) {
                     var ifNullArray = mapNode.get("input").get("$ifNull").get(0);
                     if (ifNullArray.isTextual() && map.containsKey(ifNullArray.asText())) {
-                        fuseExistingAndNew(transformer, map, ifNullArray, mapNode, currentOperator, toRemove, i);
+                        mergeExistingAndNew(transformer, map, ifNullArray, mapNode, currentOperator, toRemove, i);
                     } else {
                         map.put(ifNullArray.asText(), anyElementChild);
                     }
@@ -267,7 +266,7 @@ class TransformerUtilsImpl implements TransformerUtils{
         toRemove.forEach(arrayNode::remove);
     }
 
-    private static void fuseExistingAndNew(FilterJsonNodeTransformer transformer, HashMap<String, JsonNode> map, JsonNode ifNullArray, JsonNode mapNode, String currentOperator, List<Integer> toRemove, int i) {
+    private static void mergeExistingAndNew(FilterJsonNodeTransformer transformer, HashMap<String, JsonNode> map, JsonNode ifNullArray, JsonNode mapNode, String currentOperator, List<Integer> toRemove, int i) {
         var existing = map.get(ifNullArray.asText());
         ObjectNode existingMap = (ObjectNode) existing.get("$anyElementTrue").get("$map");
         var existingIn = existingMap.get("in");

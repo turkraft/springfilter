@@ -8,7 +8,7 @@ import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.parser.node.InputNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
-import com.turkraft.springfilter.helper.TransformerUtils;
+import com.turkraft.springfilter.transformer.TransformerUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 

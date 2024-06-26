@@ -1,14 +1,13 @@
-package com.turkraft.springfilter.helper;
+package com.turkraft.springfilter.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.POJONode;
 import com.turkraft.springfilter.TestEntity;
 import com.turkraft.springfilter.builder.FilterBuilder;
+import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
-import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +66,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldFuseAndElementsWhenAndPresent() {
+    void simplifyShouldMergeAndElementsWhenAndPresent() {
         // {$and: [ { $and: [ {}, {} ] }, {} , {}]}
         // =>
         // {$and: [ {}, {}, {}, {}]}
@@ -94,7 +93,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldFuseOrElementsWhenOrPresent() {
+    void simplifyShouldMergeOrElementsWhenOrPresent() {
         // {$or: [ { $or: [ {}, {} ] }, {} , {}]}
         // =>
         // {$or: [ {}, {}, {}, {}]}
@@ -121,7 +120,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldFuseAndAndOrElementsWhenAndAndOrPresent() {
+    void simplifyShouldMergeAndAndOrElementsWhenAndAndOrPresent() {
         // {$and: [ { $and: [ { $or: [ {}, {} ] }, {} ] }, {} , {}]}
         // =>
         // {$and: [ { $or: [ {}, {} ] }, {} , {}, {}]}
@@ -159,7 +158,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldNotFuseAnyElemenTrueWithDifferentMapping() {
+    void simplifyShouldNotMergeAnyElemenTrueWithDifferentMapping() {
         // {$and: [
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping1", [] ] }, as: "this", in: filter } },
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping2", [] ] }, as: "this", in: filter } },
@@ -202,7 +201,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldFuseAnyElemenTrueWithSameMapping() {
+    void simplifyShouldMergeAnyElemenTrueWithSameMapping() {
         // {$and: [
         // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } }},
         // {$anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter } }},
@@ -246,7 +245,7 @@ class TransformerUtilsImplTest {
     }
 
     @Test
-    void simplifyShouldFuseAnyElemenTrueWithSameMappingAndRemoveSingleElementAndOrOrs() {
+    void simplifyShouldMergeAnyElemenTrueWithSameMappingAndRemoveSingleElementAndOrOrs() {
         // {$and: [
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter1 } },
         // $anyElementTrue: { $map: { input: { $ifNull: [ "$mapping", [] ] }, as: "this", in: filter2 } },

@@ -2,7 +2,7 @@ com.turkraft.springfilter.boot.FilterJsonNodeArgumentResolverConfigurer
 
 com.turkraft.springfilter.helper.JsonNodeHelperImpl
 com.turkraft.springfilter.helper.FieldTypeResolverImpl
-com.turkraft.springfilter.helper.TransformerUtilsImpl
+com.turkraft.springfilter.transformer.TransformerUtilsImpl
 
 com.turkraft.springfilter.converter.StringCustomObjectIdConverter
 com.turkraft.springfilter.converter.StringCustomUUIDConverter
