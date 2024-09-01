@@ -16,7 +16,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <antlr4-runtime.version>4.13.1</antlr4-runtime.version>
+    <antlr4-runtime.version>4.13.2</antlr4-runtime.version>
     <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
   </properties>
