@@ -16,7 +16,8 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <de.flapdoodle.embed.mongo.spring30x.version>4.11.0</de.flapdoodle.embed.mongo.spring30x.version>
+    <de.flapdoodle.embed.mongo.spring30x.version>4.11.0
+    </de.flapdoodle.embed.mongo.spring30x.version>
     <springdoc-openapi-starter-webmvc-ui.version>2.7.0</springdoc-openapi-starter-webmvc-ui.version>
     <docker.name>torshid/springfilter-mongo-example</docker.name>
   </properties>
@@ -60,12 +61,6 @@
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
       <version>1.0.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
     </dependency>
 
   </dependencies>
