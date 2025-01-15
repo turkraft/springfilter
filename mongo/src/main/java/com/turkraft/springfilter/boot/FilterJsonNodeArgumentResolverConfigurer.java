@@ -6,6 +6,7 @@ import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
+@Conditional(WebMvcConfigurerCondition.class)
 public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigurer {
 
   protected final ConversionService conversionService;
