@@ -59,7 +59,7 @@ Sponsor our project and gain the advantage of having your issues prioritized for
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.1.7</version>
+  <version>3.1.8</version>
 </dependency>
 ```
 
@@ -78,7 +78,7 @@ The repository should implement `JpaSpecificationExecutor` in order to execute S
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.1.7</version>
+  <version>3.1.8</version>
 </dependency>
 ```
 
@@ -111,7 +111,7 @@ Page<Entity> search(@Filter(entityClass = Entity.class) Document document, Pagea
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.1.7</version>
+  <version>3.1.8</version>
 </dependency>
 ```
 
