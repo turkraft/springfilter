@@ -16,7 +16,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <springdoc-openapi-starter-webmvc-ui.version>2.7.0</springdoc-openapi-starter-webmvc-ui.version>
+    <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
     <docker.name>torshid/springfilter-jpa-example</docker.name>
   </properties>
 
