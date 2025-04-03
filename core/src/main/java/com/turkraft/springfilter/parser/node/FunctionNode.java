@@ -36,7 +36,7 @@ public class FunctionNode extends FilterNode {
 
   public FilterNode getArgument(int index) {
     return getArgument(index,
-        "The function `" + filterFunction.getName() + "` expects at least " + index
+        "The function `" + filterFunction.getName() + "` expects at least " + (index + 1)
             + " argument(s)");
   }
 
