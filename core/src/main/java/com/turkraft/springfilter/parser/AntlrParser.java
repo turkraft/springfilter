@@ -57,7 +57,7 @@ class AntlrParser {
       String text = antlrCtx.getText().startsWith("'") && antlrCtx.getText().endsWith("'")
           ? antlrCtx.getText().substring(1, antlrCtx.getText().length() - 1)
           : antlrCtx.getText();
-      return map(ctx, new InputNode(text.replace("\\'", "'")));
+      return map(ctx, new InputNode(unescapeString(text)));
     }
 
     if (antlrCtx instanceof FieldContext) {
@@ -149,6 +149,10 @@ class AntlrParser {
       return input;
     }
     return Objects.requireNonNullElse(ctx.getNodeMapper().apply(input), input);
+  }
+
+  private String unescapeString(String input) {
+    return input.replace("\\'", "'").replace("\\\\", "\\");
   }
 
 }
