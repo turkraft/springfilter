@@ -25,7 +25,7 @@ public class LowerFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    transformer.registerTargetType(source.getArgument(1), String.class);
+    transformer.registerTargetType(source.getArgument(0), String.class);
     return transformer.getCriteriaBuilder()
         .lower((Expression<String>) transformer.transform(source.getArgument(0)));
   }
