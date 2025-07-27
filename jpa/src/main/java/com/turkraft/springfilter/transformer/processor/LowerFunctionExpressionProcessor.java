@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.LowerFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -25,8 +24,9 @@ public class LowerFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    transformer.registerTargetType(source.getArgument(1), String.class);
-    return transformer.getCriteriaBuilder()
+    transformer.registerTargetType(source.getArgument(0), String.class);
+    return transformer
+        .getCriteriaBuilder()
         .lower((Expression<String>) transformer.transform(source.getArgument(0)));
   }
 
