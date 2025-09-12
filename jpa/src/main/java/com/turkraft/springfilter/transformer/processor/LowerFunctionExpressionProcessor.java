@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.LowerFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
