@@ -51,7 +51,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <revision>${springfilter.version}</revision>
     <springfilter.version>3.0.0-SNAPSHOT</springfilter.version>
-    <springboot.version>3.4.5</springboot.version>
+    <springboot.version>3.5.6</springboot.version>
     <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
