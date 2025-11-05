@@ -637,6 +637,308 @@ public class ConversionConfig {
 }
 ```
 
+## Advanced: ParseContext
+
+`ParseContext` allows you to intercept and modify filter expressions during parsing. It provides two hooks: field mapping and node mapping.
+
+### Field Aliasing
+
+Map API field names to database field names:
+
+```java
+@Service
+public class ProductService {
+
+    @Autowired FilterParser parser;
+    @Autowired FilterSpecificationConverter converter;
+
+    public List<Product> search(String filter) {
+        ParseContext ctx = new ParseContextImpl(field -> {
+            return switch (field) {
+                case "price" -> "unitPrice";
+                case "category" -> "productCategory.name";
+                case "inStock" -> "inventory.quantity";
+                default -> field;
+            };
+        }, null);
+
+        FilterNode node = parser.parse(filter, ctx);
+        Specification<Product> spec = converter.convert(node);
+        return repository.findAll(spec);
+    }
+}
+```
+
+Now queries like `?filter=price > 100` automatically become `unitPrice > 100` at the database level.
+
+### Multi-Tenancy
+
+Automatically inject tenant filters into all queries:
+
+```java
+@Service
+public class TenantAwareFilterService {
+
+    @Autowired FilterParser parser;
+    @Autowired FilterSpecificationConverter converter;
+    @Autowired FilterBuilder fb;
+
+    public <T> Specification<T> parse(String filter, Long tenantId) {
+        ParseContext ctx = new ParseContextImpl(null, userNode -> {
+            FilterNode tenantFilter = fb.field("tenantId").equal(fb.input(tenantId)).get();
+            return fb.and(tenantFilter, userNode).get();
+        });
+
+        FilterNode node = parser.parse(filter, ctx);
+        return converter.convert(node);
+    }
+}
+```
+
+```java
+@GetMapping("/products")
+Page<Product> search(@Filter String filter, @AuthenticationPrincipal User user) {
+    Specification<Product> spec = tenantService.parse(filter, user.getTenantId());
+    return repository.findAll(spec, pageable);
+}
+```
+
+User queries `status : 'active'` but the actual query becomes `tenantId : 123 and status : 'active'`.
+
+### Security Filters
+
+Inject row-level security filters based on user permissions:
+
+```java
+@Service
+public class SecureFilterService {
+
+    @Autowired FilterParser parser;
+    @Autowired FilterSpecificationConverter converter;
+    @Autowired FilterBuilder fb;
+
+    public Specification<Document> parseSecure(String userQuery, User user) {
+        ParseContext ctx = new ParseContextImpl(null, userNode -> {
+            if (user.hasRole("ADMIN")) {
+                return userNode;
+            }
+
+            FilterNode securityFilter = fb.field("ownerId").equal(fb.input(user.getId()))
+                .or(fb.field("department").equal(fb.input(user.getDepartment())))
+                .get();
+
+            return fb.and(securityFilter, userNode).get();
+        });
+
+        FilterNode node = parser.parse(userQuery, ctx);
+        return converter.convert(node);
+    }
+}
+```
+
+Regular users automatically get filtered to their own documents or department documents. Admins see everything.
+
+### Dynamic Field Access Control
+
+Restrict which fields users can filter on:
+
+```java
+public class FieldAccessControlContext implements ParseContext {
+
+    private final Set<String> allowedFields;
+
+    public FieldAccessControlContext(User user) {
+        this.allowedFields = user.hasRole("ADMIN")
+            ? Set.of("id", "name", "email", "salary", "ssn", "department")
+            : Set.of("id", "name", "department");
+    }
+
+    @Override
+    public UnaryOperator<String> getFieldMapper() {
+        return field -> {
+            if (!allowedFields.contains(field)) {
+                throw new SecurityException("Access denied to field: " + field);
+            }
+            return field;
+        };
+    }
+}
+```
+
+```java
+@GetMapping("/employees")
+List<Employee> search(@Filter String filter, @AuthenticationPrincipal User user) {
+    ParseContext ctx = new FieldAccessControlContext(user);
+    FilterNode node = parser.parse(filter, ctx);
+    Specification<Employee> spec = converter.convert(node);
+    return repository.findAll(spec);
+}
+```
+
+Non-admin users trying `?filter=salary > 50000` will get a `SecurityException`.
+
+### Query Rewriting for Soft Deletes
+
+Automatically filter out soft-deleted records:
+
+```java
+@Service
+public class SoftDeleteFilterService {
+
+    @Autowired FilterParser parser;
+    @Autowired FilterSpecificationConverter converter;
+    @Autowired FilterBuilder fb;
+
+    public <T> Specification<T> parseWithSoftDelete(String userQuery) {
+        ParseContext ctx = new ParseContextImpl(null, userNode -> {
+            FilterNode notDeleted = fb.field("deletedAt").isNull().get();
+            return fb.and(notDeleted, userNode).get();
+        });
+
+        FilterNode node = parser.parse(userQuery, ctx);
+        return converter.convert(node);
+    }
+}
+```
+
+All queries automatically include `deletedAt is null`.
+
+### Audit Logging
+
+Log all filter queries with user context:
+
+```java
+@Service
+public class AuditingFilterService {
+
+    @Autowired FilterParser parser;
+    @Autowired FilterSpecificationConverter converter;
+    @Autowired AuditLogger auditLogger;
+
+    public <T> Specification<T> parseWithAudit(String query, User user) {
+        ParseContext ctx = new ParseContextImpl(null, node -> {
+            auditLogger.log("User {} executed filter: {}", user.getId(), query);
+            return node;
+        });
+
+        FilterNode node = parser.parse(query, ctx);
+        return converter.convert(node);
+    }
+}
+```
+
+### Field Name Normalization
+
+Handle different naming conventions:
+
+```java
+public class NormalizingParseContext implements ParseContext {
+
+    @Override
+    public UnaryOperator<String> getFieldMapper() {
+        return field -> {
+            String normalized = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field);
+
+            if (normalized.endsWith("_id")) {
+                return normalized.substring(0, normalized.length() - 3);
+            }
+
+            return normalized;
+        };
+    }
+}
+```
+
+```java
+ParseContext ctx = new NormalizingParseContext();
+FilterNode node = parser.parse("userId : 123 and userName ~ 'john%'", ctx);
+```
+
+Converts `userId` to `user` and `userName` to `user_name` automatically.
+
+### Combining Multiple Contexts
+
+Chain multiple parse contexts for complex scenarios:
+
+```java
+public class CompositeParseContext implements ParseContext {
+
+    private final List<ParseContext> contexts;
+
+    public CompositeParseContext(ParseContext... contexts) {
+        this.contexts = Arrays.asList(contexts);
+    }
+
+    @Override
+    public UnaryOperator<String> getFieldMapper() {
+        return field -> {
+            String result = field;
+            for (ParseContext ctx : contexts) {
+                result = ctx.getFieldMapper().apply(result);
+            }
+            return result;
+        };
+    }
+
+    @Override
+    public UnaryOperator<FilterNode> getNodeMapper() {
+        return node -> {
+            FilterNode result = node;
+            for (ParseContext ctx : contexts) {
+                result = ctx.getNodeMapper().apply(result);
+            }
+            return result;
+        };
+    }
+}
+```
+
+```java
+ParseContext ctx = new CompositeParseContext(
+    new FieldAccessControlContext(user),
+    new TenantFilterContext(user.getTenantId()),
+    new SoftDeleteContext()
+);
+```
+
+Apply multiple transformations in a single pass.
+
+### Request-Scoped Context
+
+Use Spring's request scope for context-aware parsing:
+
+```java
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class RequestParseContext implements ParseContext {
+
+    @Autowired HttpServletRequest request;
+    @Autowired UserService userService;
+
+    @Override
+    public UnaryOperator<FilterNode> getNodeMapper() {
+        return node -> {
+            User user = userService.getCurrentUser();
+            FilterNode tenantFilter = fb.field("tenantId")
+                .equal(fb.input(user.getTenantId())).get();
+            return fb.and(tenantFilter, node).get();
+        };
+    }
+}
+```
+
+```java
+@GetMapping("/products")
+Page<Product> search(@Filter String filter) {
+    ParseContext ctx = applicationContext.getBean(RequestParseContext.class);
+    FilterNode node = parser.parse(filter, ctx);
+    Specification<Product> spec = converter.convert(node);
+    return repository.findAll(spec, pageable);
+}
+```
+
+Context automatically uses current request's user information.
+
 ## Testing
 
 ### Unit Testing with Filter Builder
