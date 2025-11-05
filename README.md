@@ -59,7 +59,7 @@ Filter JPA entities directly in database queries. The module converts filter exp
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2</version>
 </dependency>
 ```
 
@@ -114,7 +114,7 @@ Filter MongoDB documents using Spring Data MongoDB queries.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2</version>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ Filter in-memory collections using Java Predicates. Works with any POJO, no data
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2</version>
 </dependency>
 ```
 
@@ -222,7 +222,7 @@ Build filter expressions programmatically instead of writing filter strings manu
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2</version>
 </dependency>
 ```
 
