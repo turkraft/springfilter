@@ -55,10 +55,15 @@ grammar AntlrFilter;
       }
       deque.addLast(nextToken = next);
       List<Token> tokens = findOperatorCombination(builder.toString(), getOperatorType());
-      for (int i = tokens.size() - 1; i >= 0; i--) {
-        deque.addFirst(tokens.get(i));
+      if (tokens != null) {
+        for (int i = tokens.size() - 1; i >= 0; i--) {
+          deque.addFirst(tokens.get(i));
+        }
+        return deque.pollFirst();
+      } else {
+        Token result = new CommonToken(SYMBOL, builder.toString());
+        return previousToken = result;
       }
-      return deque.pollFirst();
     }
    
     private List<Token> findOperatorCombination(String sequence, OperatorType type) {
@@ -155,6 +160,9 @@ grammar AntlrFilter;
     };
    
     private boolean isBeforeAtom() {
+      if (nextToken == null) {
+        return false;
+      }
       int type = nextToken.getType();
       return
            type == AntlrFilterParser.NUMBER || type == AntlrFilterParser.ID
@@ -163,6 +171,9 @@ grammar AntlrFilter;
     }
    
     private boolean isAfterAtom() {
+      if (previousToken == null) {
+        return false;
+      }
       int type = previousToken.getType();
       return
            type == AntlrFilterParser.NUMBER || type == AntlrFilterParser.ID
