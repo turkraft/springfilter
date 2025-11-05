@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>parent</artifactId>
+    <groupId>com.turkraft.springfilter</groupId>
+    <version>${revision}</version>
+  </parent>
+
+  <artifactId>predicate-language</artifactId>
+
+  <name>${project.groupId}:${project.artifactId}</name>
+
+  <properties>
+
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.turkraft.springfilter</groupId>
+      <artifactId>core</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <failOnError>false</failOnError>
+          <failOnWarnings>false</failOnWarnings>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
