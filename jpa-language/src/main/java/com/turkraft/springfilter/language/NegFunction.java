@@ -10,4 +10,14 @@ public class NegFunction extends FilterFunction {
     super("neg");
   }
 
+  @Override
+  public String getDescription() {
+    return "Negate a number";
+  }
+
+  @Override
+  public String getExample() {
+    return "neg(value) < -100";
+  }
+
 }

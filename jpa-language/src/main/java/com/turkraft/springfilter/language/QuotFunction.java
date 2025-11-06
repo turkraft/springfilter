@@ -10,4 +10,14 @@ public class QuotFunction extends FilterFunction {
     super("quot");
   }
 
+  @Override
+  public String getDescription() {
+    return "Divide two numbers";
+  }
+
+  @Override
+  public String getExample() {
+    return "quot(total, count) > 50";
+  }
+
 }

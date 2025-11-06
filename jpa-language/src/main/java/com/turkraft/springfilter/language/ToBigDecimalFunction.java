@@ -10,4 +10,14 @@ public class ToBigDecimalFunction extends FilterFunction {
     super("toBigDecimal");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to BigDecimal";
+  }
+
+  @Override
+  public String getExample() {
+    return "toBigDecimal(amount) > 1000.50";
+  }
+
 }

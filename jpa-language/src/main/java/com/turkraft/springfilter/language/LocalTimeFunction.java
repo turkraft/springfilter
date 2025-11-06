@@ -10,4 +10,14 @@ public class LocalTimeFunction extends FilterFunction {
     super("localTime");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current local time";
+  }
+
+  @Override
+  public String getExample() {
+    return "startTime < localTime()";
+  }
+
 }

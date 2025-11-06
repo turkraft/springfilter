@@ -10,4 +10,14 @@ public class EqualOperator extends FilterInfixOperator {
     super(new String[]{":", "="}, 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Values are equal";
+  }
+
+  @Override
+  public String getExample() {
+    return "status : 'active'";
+  }
+
 }

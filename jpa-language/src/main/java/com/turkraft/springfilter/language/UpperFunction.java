@@ -10,4 +10,14 @@ public class UpperFunction extends FilterFunction {
     super("upper");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to uppercase";
+  }
+
+  @Override
+  public String getExample() {
+    return "upper(name) ~ 'JOHN%'";
+  }
+
 }

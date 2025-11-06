@@ -10,4 +10,14 @@ public class MinFunction extends FilterFunction {
     super("min");
   }
 
+  @Override
+  public String getDescription() {
+    return "Minimum collection value";
+  }
+
+  @Override
+  public String getExample() {
+    return "min(orderItems.price) < 10";
+  }
+
 }

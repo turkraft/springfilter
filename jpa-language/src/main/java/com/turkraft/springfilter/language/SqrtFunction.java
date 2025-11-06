@@ -10,4 +10,14 @@ public class SqrtFunction extends FilterFunction {
     super("sqrt");
   }
 
+  @Override
+  public String getDescription() {
+    return "Square root";
+  }
+
+  @Override
+  public String getExample() {
+    return "sqrt(area) > 10";
+  }
+
 }

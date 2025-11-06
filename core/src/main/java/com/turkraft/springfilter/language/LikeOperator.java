@@ -10,4 +10,14 @@ public class LikeOperator extends FilterInfixOperator {
     super(new String[]{"~", "like"}, 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Pattern match (case-sensitive)";
+  }
+
+  @Override
+  public String getExample() {
+    return "name ~ 'John%'";
+  }
+
 }

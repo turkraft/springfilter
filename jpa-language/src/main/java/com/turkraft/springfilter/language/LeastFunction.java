@@ -10,4 +10,14 @@ public class LeastFunction extends FilterFunction {
     super("least");
   }
 
+  @Override
+  public String getDescription() {
+    return "Minimum value in subquery";
+  }
+
+  @Override
+  public String getExample() {
+    return "least(price) < 10";
+  }
+
 }

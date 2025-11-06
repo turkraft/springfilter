@@ -10,4 +10,14 @@ public class SizeFunction extends FilterFunction {
     super("size");
   }
 
+  @Override
+  public String getDescription() {
+    return "Collection element count";
+  }
+
+  @Override
+  public String getExample() {
+    return "size(orders) > 5";
+  }
+
 }

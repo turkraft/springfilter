@@ -10,4 +10,14 @@ public class LowerFunction extends FilterFunction {
     super("lower");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to lowercase";
+  }
+
+  @Override
+  public String getExample() {
+    return "lower(name) ~ 'john%'";
+  }
+
 }

@@ -10,4 +10,14 @@ public class CeilingFunction extends FilterFunction {
     super("ceiling");
   }
 
+  @Override
+  public String getDescription() {
+    return "Round up to nearest integer";
+  }
+
+  @Override
+  public String getExample() {
+    return "ceiling(price) : 100";
+  }
+
 }

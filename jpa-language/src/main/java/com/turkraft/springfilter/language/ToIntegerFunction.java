@@ -10,4 +10,14 @@ public class ToIntegerFunction extends FilterFunction {
     super("toInteger");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to integer";
+  }
+
+  @Override
+  public String getExample() {
+    return "toInteger(code) > 100";
+  }
+
 }

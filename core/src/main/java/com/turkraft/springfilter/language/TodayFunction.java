@@ -10,4 +10,14 @@ public class TodayFunction extends FilterFunction {
     super("today");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current day name";
+  }
+
+  @Override
+  public String getExample() {
+    return "dayOfWeek : today()";
+  }
+
 }

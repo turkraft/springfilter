@@ -10,4 +10,14 @@ public class LengthFunction extends FilterFunction {
     super("length");
   }
 
+  @Override
+  public String getDescription() {
+    return "String character count";
+  }
+
+  @Override
+  public String getExample() {
+    return "length(name) > 5";
+  }
+
 }

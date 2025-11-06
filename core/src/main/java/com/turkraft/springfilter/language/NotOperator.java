@@ -11,4 +11,14 @@ public class NotOperator extends FilterPrefixOperator {
     super("not", 150);
   }
 
+  @Override
+  public String getDescription() {
+    return "Negate condition";
+  }
+
+  @Override
+  public String getExample() {
+    return "not status : 'deleted'";
+  }
+
 }

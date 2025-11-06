@@ -10,4 +10,14 @@ public class LocalDateTimeFunction extends FilterFunction {
     super("localDateTime");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current local date and time";
+  }
+
+  @Override
+  public String getExample() {
+    return "createdAt < localDateTime()";
+  }
+
 }

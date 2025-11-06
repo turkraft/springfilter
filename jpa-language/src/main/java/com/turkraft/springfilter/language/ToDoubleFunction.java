@@ -10,4 +10,14 @@ public class ToDoubleFunction extends FilterFunction {
     super("toDouble");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to double";
+  }
+
+  @Override
+  public String getExample() {
+    return "toDouble(value) > 99.99";
+  }
+
 }

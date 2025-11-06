@@ -10,4 +10,14 @@ public class DiffFunction extends FilterFunction {
     super("diff");
   }
 
+  @Override
+  public String getDescription() {
+    return "Subtract two numbers";
+  }
+
+  @Override
+  public String getExample() {
+    return "diff(endDate, startDate) > 30";
+  }
+
 }

@@ -10,4 +10,14 @@ public class ExpFunction extends FilterFunction {
     super("exp");
   }
 
+  @Override
+  public String getDescription() {
+    return "Exponential (e^x)";
+  }
+
+  @Override
+  public String getExample() {
+    return "exp(rate) > 10";
+  }
+
 }

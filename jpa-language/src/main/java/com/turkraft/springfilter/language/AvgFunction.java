@@ -10,4 +10,14 @@ public class AvgFunction extends FilterFunction {
     super("avg");
   }
 
+  @Override
+  public String getDescription() {
+    return "Average of collection values";
+  }
+
+  @Override
+  public String getExample() {
+    return "avg(orderItems.price) > 50";
+  }
+
 }

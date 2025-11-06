@@ -10,4 +10,14 @@ public class ModFunction extends FilterFunction {
     super("mod");
   }
 
+  @Override
+  public String getDescription() {
+    return "Modulus (remainder after division)";
+  }
+
+  @Override
+  public String getExample() {
+    return "mod(id, 10) : 0";
+  }
+
 }

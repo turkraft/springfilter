@@ -10,4 +10,14 @@ public class AllFunction extends FilterFunction {
     super("all");
   }
 
+  @Override
+  public String getDescription() {
+    return "All values match (not implemented)";
+  }
+
+  @Override
+  public String getExample() {
+    return "price > all(subquery)";
+  }
+
 }

@@ -10,4 +10,14 @@ public class InsensitiveLikeOperator extends FilterInfixOperator {
     super(new String[]{"~~", "ilike"}, 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Pattern match (case-insensitive)";
+  }
+
+  @Override
+  public String getExample() {
+    return "name ~~ 'john%'";
+  }
+
 }

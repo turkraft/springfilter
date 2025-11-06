@@ -10,4 +10,14 @@ public class CurrentTimeFunction extends FilterFunction {
     super("currentTime");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current database time";
+  }
+
+  @Override
+  public String getExample() {
+    return "eventTime > currentTime()";
+  }
+
 }

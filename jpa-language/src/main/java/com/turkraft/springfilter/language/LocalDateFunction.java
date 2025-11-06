@@ -10,4 +10,14 @@ public class LocalDateFunction extends FilterFunction {
     super("localDate");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current local date";
+  }
+
+  @Override
+  public String getExample() {
+    return "dueDate : localDate()";
+  }
+
 }

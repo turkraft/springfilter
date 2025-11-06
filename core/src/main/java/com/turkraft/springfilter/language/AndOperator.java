@@ -10,4 +10,14 @@ public class AndOperator extends FilterInfixOperator {
     super("and", 50);
   }
 
+  @Override
+  public String getDescription() {
+    return "Both conditions must be true";
+  }
+
+  @Override
+  public String getExample() {
+    return "status : 'active' and age > 18";
+  }
+
 }

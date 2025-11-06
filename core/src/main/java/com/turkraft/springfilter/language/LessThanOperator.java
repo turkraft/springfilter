@@ -11,4 +11,14 @@ public class LessThanOperator extends FilterInfixOperator {
     super("<", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Less than";
+  }
+
+  @Override
+  public String getExample() {
+    return "age < 18";
+  }
+
 }

@@ -10,4 +10,14 @@ public class ToBigIntegerFunction extends FilterFunction {
     super("toBigInteger");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to BigInteger";
+  }
+
+  @Override
+  public String getExample() {
+    return "toBigInteger(value) > 1000000";
+  }
+
 }

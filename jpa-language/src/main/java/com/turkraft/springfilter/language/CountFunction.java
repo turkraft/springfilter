@@ -10,4 +10,14 @@ public class CountFunction extends FilterFunction {
     super("count");
   }
 
+  @Override
+  public String getDescription() {
+    return "Collection element count";
+  }
+
+  @Override
+  public String getExample() {
+    return "count(orders) > 10";
+  }
+
 }

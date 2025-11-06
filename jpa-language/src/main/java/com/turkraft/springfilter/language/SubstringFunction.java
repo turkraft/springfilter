@@ -10,4 +10,14 @@ public class SubstringFunction extends FilterFunction {
     super("substring");
   }
 
+  @Override
+  public String getDescription() {
+    return "Extract substring";
+  }
+
+  @Override
+  public String getExample() {
+    return "substring(name, 1, 4) : 'John'";
+  }
+
 }

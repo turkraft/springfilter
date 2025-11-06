@@ -11,4 +11,14 @@ public class IsNotEmptyOperator extends FilterPostfixOperator {
     super("is not empty", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Collection or string is not empty";
+  }
+
+  @Override
+  public String getExample() {
+    return "orders is not empty";
+  }
+
 }

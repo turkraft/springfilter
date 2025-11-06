@@ -10,4 +10,14 @@ public class ConcatFunction extends FilterFunction {
     super("concat");
   }
 
+  @Override
+  public String getDescription() {
+    return "Concatenate strings";
+  }
+
+  @Override
+  public String getExample() {
+    return "concat(firstName, ' ', lastName) ~ 'John%'";
+  }
+
 }
