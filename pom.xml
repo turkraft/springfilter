@@ -69,6 +69,7 @@
     <module>mongo-example</module>
     <module>predicate-language</module>
     <module>predicate</module>
+    <module>openapi</module>
   </modules>
 
   <dependencyManagement>

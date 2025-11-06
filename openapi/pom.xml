@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>parent</artifactId>
+    <groupId>com.turkraft.springfilter</groupId>
+    <version>${revision}</version>
+  </parent>
+
+  <artifactId>openapi</artifactId>
+
+  <name>${project.groupId}:${project.artifactId}</name>
+
+  <description>
+    Automatic OpenAPI/Swagger documentation generation for Spring Filter.
+    Provides entity introspection and schema generation.
+  </description>
+
+  <properties>
+    <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.turkraft.springfilter</groupId>
+      <artifactId>core</artifactId>
+      <version>${revision}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+      <version>${springdoc-openapi.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+</project>

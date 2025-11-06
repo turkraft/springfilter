@@ -260,6 +260,28 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
     .get();
 ```
 
+## OpenAPI/Swagger
+
+Add automatic Swagger documentation for endpoints with `@Filter` parameters.
+
+```xml
+<dependency>
+  <groupId>com.turkraft.springfilter</groupId>
+  <artifactId>openapi</artifactId>
+  <version>3.2.2</version>
+</dependency>
+```
+
+Just add the dependency. Swagger UI automatically shows:
+- All filterable fields with types
+- Nested relations
+- Enum values
+- Example queries
+- Operator reference
+- Available functions
+
+Works with JPA, MongoDB, and Predicate modules.
+
 ## Frontend Integration
 
 ### JavaScript
