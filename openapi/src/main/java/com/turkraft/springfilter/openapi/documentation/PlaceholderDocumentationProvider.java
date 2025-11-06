@@ -19,6 +19,11 @@ public class PlaceholderDocumentationProvider {
   public List<PlaceholderDoc> getAllPlaceholderDocs() {
     List<PlaceholderDoc> docs = new ArrayList<>();
     for (FilterPlaceholder placeholder : filterPlaceholders.getPlaceholders()) {
+      if (placeholder
+          .getName()
+          .equals("hello")) {
+        continue;
+      }
       docs.add(createPlaceholderDoc(placeholder));
     }
     return docs;

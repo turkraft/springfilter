@@ -230,7 +230,7 @@ public class FilterSchemaGenerator {
       sb
           .append("- `")
           .append(func.getName())
-          .append("()`");
+          .append("`");
 
       if (func.getDescription() != null) {
         sb
@@ -261,7 +261,7 @@ public class FilterSchemaGenerator {
 
     for (PlaceholderDocumentationProvider.PlaceholderDoc placeholder : placeholders) {
       sb
-          .append("- `$")
+          .append("- `")
           .append(placeholder.getName())
           .append("`");
 
