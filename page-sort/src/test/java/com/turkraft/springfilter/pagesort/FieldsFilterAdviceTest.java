@@ -1,11 +1,18 @@
 package com.turkraft.springfilter.pagesort;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.turkraft.springfilter.boot.Fields;
+import com.turkraft.springfilter.boot.FieldsFilterAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +36,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsWithFieldsAnnotationAndParameter() throws Exception {
+  void testSupportsWithFieldsAnnotationAndParameter()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -47,7 +55,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsWithFieldsAnnotationButNoParameter() throws Exception {
+  void testSupportsWithFieldsAnnotationButNoParameter()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -65,7 +74,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsWithDefaultValue() throws Exception {
+  void testSupportsWithDefaultValue()
+      throws Exception {
     Method method = TestController.class.getMethod("withFieldsDefault");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -83,7 +93,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsWithoutFieldsAnnotation() throws Exception {
+  void testSupportsWithoutFieldsAnnotation()
+      throws Exception {
     Method method = TestController.class.getMethod("withoutFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -101,7 +112,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsWithNoRequestAttributes() throws Exception {
+  void testSupportsWithNoRequestAttributes()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -112,7 +124,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWrapsBody() throws Exception {
+  void testBeforeBodyWriteWrapsBody()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -125,7 +138,7 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertTrue(result instanceof MappingJacksonValue);
+      assertInstanceOf(MappingJacksonValue.class, result);
       MappingJacksonValue wrapper = (MappingJacksonValue) result;
       assertEquals(body, wrapper.getValue());
       assertNotNull(wrapper.getFilters());
@@ -135,7 +148,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWithExistingWrapper() throws Exception {
+  void testBeforeBodyWriteWithExistingWrapper()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -150,7 +164,7 @@ class FieldsFilterAdviceTest {
 
       Object result = advice.beforeBodyWrite(existingWrapper, returnType, null, null, null, null);
 
-      assertTrue(result instanceof MappingJacksonValue);
+      assertInstanceOf(MappingJacksonValue.class, result);
       MappingJacksonValue wrapper = (MappingJacksonValue) result;
       assertEquals(body, wrapper.getValue());
       assertNotNull(wrapper.getFilters());
@@ -160,7 +174,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWithEmptyParameter() throws Exception {
+  void testBeforeBodyWriteWithEmptyParameter()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -180,7 +195,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWithDefaultValue() throws Exception {
+  void testBeforeBodyWriteWithDefaultValue()
+      throws Exception {
     Method method = TestController.class.getMethod("withFieldsDefault");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -193,7 +209,7 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertTrue(result instanceof MappingJacksonValue);
+      assertInstanceOf(MappingJacksonValue.class, result);
       MappingJacksonValue wrapper = (MappingJacksonValue) result;
       assertNotNull(wrapper.getFilters());
     } finally {
@@ -202,7 +218,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWithNoRequestAttributes() throws Exception {
+  void testBeforeBodyWriteWithNoRequestAttributes()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -215,7 +232,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteSetsCorrectFilter() throws Exception {
+  void testBeforeBodyWriteSetsCorrectFilter()
+      throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -232,14 +250,15 @@ class FieldsFilterAdviceTest {
       FilterProvider filterProvider = wrapper.getFilters();
 
       assertNotNull(filterProvider);
-      assertTrue(filterProvider instanceof SimpleFilterProvider);
+      assertInstanceOf(SimpleFilterProvider.class, filterProvider);
     } finally {
       RequestContextHolder.resetRequestAttributes();
     }
   }
 
   @Test
-  void testBeforeBodyWriteWithCustomParameter() throws Exception {
+  void testBeforeBodyWriteWithCustomParameter()
+      throws Exception {
     Method method = TestController.class.getMethod("withCustomParameter");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -252,7 +271,7 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertTrue(result instanceof MappingJacksonValue);
+      assertInstanceOf(MappingJacksonValue.class, result);
       MappingJacksonValue wrapper = (MappingJacksonValue) result;
       assertNotNull(wrapper.getFilters());
     } finally {
@@ -261,7 +280,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testSupportsReturnsTrueWhenRequiredEvenIfMissing() throws Exception {
+  void testSupportsReturnsTrueWhenRequiredEvenIfMissing()
+      throws Exception {
     Method method = TestController.class.getMethod("withFieldsRequired");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -279,7 +299,8 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteThrowsWhenRequiredParameterMissing() throws Exception {
+  void testBeforeBodyWriteThrowsWhenRequiredParameterMissing()
+      throws Exception {
     Method method = TestController.class.getMethod("withFieldsRequired");
     MethodParameter returnType = new MethodParameter(method, -1);
 
@@ -333,9 +354,9 @@ class FieldsFilterAdviceTest {
 
   static class TestObject {
 
-    private String id = "123";
-    private String name = "Test";
-    private String password = "secret";
+    private final String id = "123";
+    private final String name = "Test";
+    private final String password = "secret";
 
     public String getId() {
       return id;
