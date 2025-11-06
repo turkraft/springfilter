@@ -6,9 +6,9 @@
   </a>
 </p>
 
-Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, or in-memory Java objects.
+Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, Elasticsearch indices, or in-memory Java objects.
 
-The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
+The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, Elasticsearch queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
 
 <details>
   <summary>:warning: <b><u>About Release 3.0.0</u></b></summary>
@@ -37,7 +37,7 @@ The library parses filter expressions into abstract syntax trees, then converts 
 }
 ```
 
-The library handles booleans, dates, enums, functions, and entity relations. JPA module generates criteria queries, MongoDB module generates aggregation pipelines, and predicate module filters in-memory objects.
+The library handles booleans, dates, enums, functions, and entity relations. JPA module generates criteria queries, MongoDB module generates aggregation pipelines, Elasticsearch module generates Query DSL queries, and predicate module filters in-memory objects.
 
 ## [Sponsors](https://github.com/sponsors/torshid)
 
@@ -213,6 +213,142 @@ GET /owners?filter=size(cars) : 0
 ```
 
 The predicate module supports all standard operators and the `size()` function for collections, arrays, maps, and strings.
+
+### Elasticsearch
+
+Filter Elasticsearch documents using the Elasticsearch Java Client Query DSL.
+
+```xml
+<dependency>
+  <groupId>com.turkraft.springfilter</groupId>
+  <artifactId>elasticsearch</artifactId>
+  <version>3.2.2</version>
+</dependency>
+```
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(entityClass = Car.class) co.elastic.clients.elasticsearch._types.query_dsl.Query query) {
+    return elasticsearchTemplate.search(
+        new NativeQueryBuilder()
+            .withQuery(query)
+            .build(),
+        Car.class).stream()
+        .map(SearchHit::getContent)
+        .collect(Collectors.toList());
+}
+```
+
+#### Manual Conversion
+
+```java
+@Autowired FilterQueryConverter converter;
+
+public List<Car> filterCars(String filterExpression) {
+    Query query = converter.convert(filterExpression, Car.class).toQuery();
+
+    return elasticsearchTemplate.search(
+        new NativeQueryBuilder()
+            .withQuery(query)
+            .build(),
+        Car.class).stream()
+        .map(SearchHit::getContent)
+        .collect(Collectors.toList());
+}
+```
+
+#### Supported Operations
+
+The Elasticsearch module supports all standard operations:
+- **Comparison operators**: `:`, `!`, `>`, `>=`, `<`, `<=`
+- **Logical operators**: `and`, `or`, `not`
+- **String operators**: `~` (wildcard), `~~` (case-insensitive wildcard)
+- **Collection operators**: `in`, `not in`
+- **Null/empty operators**: `is null`, `is not null`, `is empty`, `is not empty`
+
+```java
+// Comparison operators generate range queries
+?filter=age > 25
+// → RangeQuery with gt(25)
+
+// String operators generate wildcard queries
+?filter=name ~ 'J%'
+// → WildcardQuery with pattern "J*"
+
+// Collection operators generate terms queries
+?filter=status in ['ACTIVE', 'PENDING']
+// → TermsQuery
+
+// Logical operators generate bool queries
+?filter=(name : 'John' or name : 'Jane') and age > 25
+// → BoolQuery with must/should clauses
+```
+
+#### Entity Configuration
+
+Elasticsearch entities use Spring Data Elasticsearch annotations:
+
+```java
+@Document(indexName = "cars")
+public class Car {
+    @Id
+    private String id;
+
+    @Field(type = FieldType.Text)
+    private String name;
+
+    @Field(type = FieldType.Integer)
+    private Integer year;
+
+    @Field(type = FieldType.Keyword)
+    private String color;
+
+    @Field(type = FieldType.Nested)
+    private Brand brand;
+
+    @Field(type = FieldType.Keyword)
+    private List<String> tags;
+}
+```
+
+#### Complex Queries
+
+```java
+// Nested fields
+?filter=brand.name : 'audi'
+
+// Multiple conditions with precedence
+?filter=(year > 2020 and km < 30000) or (year > 2018 and km < 10000)
+
+// Collection size (uses script queries)
+?filter=tags is not empty
+
+// Mix of operators
+?filter=brand.name in ['audi', 'bmw'] and year > 2020 and color ! 'white'
+```
+
+#### Use Cases
+
+The Elasticsearch module is useful when:
+- Full-text search capabilities are needed
+- Working with large-scale data requiring horizontal scaling
+- Complex aggregations and analytics are required
+- Real-time search performance is critical
+- Document-oriented data model fits your use case
+
+```java
+@GetMapping("/products/search")
+List<Product> fullTextSearch(@Filter(entityClass = Product.class) Query query) {
+    return elasticsearchTemplate.search(
+        new NativeQueryBuilder()
+            .withQuery(query)
+            .withPageable(PageRequest.of(0, 100))
+            .build(),
+        Product.class).stream()
+        .map(SearchHit::getContent)
+        .collect(Collectors.toList());
+}
+```
 
 ### Filter Builder
 
@@ -596,14 +732,26 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 
 Now use `?q=year > 2020` instead of `?filter=year > 2020`.
 
-### Entity Class for MongoDB
+### Entity Class for MongoDB and Elasticsearch
 
-MongoDB requires explicit entity class specification:
+MongoDB and Elasticsearch require explicit entity class specification:
 
 ```java
+// MongoDB
 @GetMapping("/cars")
 List<Car> search(@Filter(entityClass = Car.class) Query query) {
     return mongoTemplate.find(query, Car.class);
+}
+
+// Elasticsearch
+@GetMapping("/cars")
+List<Car> search(@Filter(entityClass = Car.class)
+    co.elastic.clients.elasticsearch._types.query_dsl.Query query) {
+    return elasticsearchTemplate.search(
+        new NativeQueryBuilder().withQuery(query).build(),
+        Car.class).stream()
+        .map(SearchHit::getContent)
+        .collect(Collectors.toList());
 }
 ```
 
@@ -624,7 +772,8 @@ Apply filters without Spring MVC annotations:
 
 ```java
 @Autowired FilterSpecificationConverter jpaConverter;
-@Autowired FilterQueryConverter mongoConverter;
+@Autowired com.turkraft.springfilter.converter.FilterQueryConverter mongoConverter;
+@Autowired com.turkraft.springfilter.converter.FilterQueryConverter elasticsearchConverter;
 @Autowired FilterPredicateConverter predicateConverter;
 
 public void manualFiltering() {
@@ -633,8 +782,18 @@ public void manualFiltering() {
     List<Car> jpaCars = repository.findAll(spec);
 
     // MongoDB
-    Query query = mongoConverter.convert("year > 2020", Car.class);
-    List<Car> mongoCars = mongoTemplate.find(query, Car.class);
+    org.springframework.data.mongodb.core.query.Query mongoQuery =
+        mongoConverter.convert("year > 2020", Car.class);
+    List<Car> mongoCars = mongoTemplate.find(mongoQuery, Car.class);
+
+    // Elasticsearch
+    co.elastic.clients.elasticsearch._types.query_dsl.Query esQuery =
+        elasticsearchConverter.convert("year > 2020", Car.class).toQuery();
+    List<Car> esCars = elasticsearchTemplate.search(
+        new NativeQueryBuilder().withQuery(esQuery).build(),
+        Car.class).stream()
+        .map(SearchHit::getContent)
+        .collect(Collectors.toList());
 
     // Predicate
     FilterPredicate<Car> predicate = predicateConverter.convert("year > 2020", Car.class);
