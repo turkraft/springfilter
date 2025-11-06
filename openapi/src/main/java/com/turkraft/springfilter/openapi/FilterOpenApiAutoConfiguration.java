@@ -2,6 +2,7 @@ package com.turkraft.springfilter.openapi;
 
 import com.turkraft.springfilter.openapi.documentation.FunctionDocumentationProvider;
 import com.turkraft.springfilter.openapi.documentation.OperatorDocumentationProvider;
+import com.turkraft.springfilter.openapi.documentation.PlaceholderDocumentationProvider;
 import com.turkraft.springfilter.openapi.generator.FilterExampleGenerator;
 import com.turkraft.springfilter.openapi.generator.FilterSchemaGenerator;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
@@ -37,6 +38,13 @@ public class FilterOpenApiAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
+  public PlaceholderDocumentationProvider placeholderDocumentationProvider(
+      com.turkraft.springfilter.definition.FilterPlaceholders filterPlaceholders) {
+    return new PlaceholderDocumentationProvider(filterPlaceholders);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
   public FilterExampleGenerator filterExampleGenerator(EntityIntrospector entityIntrospector) {
     return new FilterExampleGenerator(entityIntrospector);
   }
@@ -45,9 +53,10 @@ public class FilterOpenApiAutoConfiguration {
   @ConditionalOnMissingBean
   public FilterSchemaGenerator filterSchemaGenerator(EntityIntrospector entityIntrospector,
       OperatorDocumentationProvider operatorDocumentationProvider,
-      FunctionDocumentationProvider functionDocumentationProvider) {
+      FunctionDocumentationProvider functionDocumentationProvider,
+      PlaceholderDocumentationProvider placeholderDocumentationProvider) {
     return new FilterSchemaGenerator(entityIntrospector, operatorDocumentationProvider,
-        functionDocumentationProvider);
+        functionDocumentationProvider, placeholderDocumentationProvider);
   }
 
   @Bean

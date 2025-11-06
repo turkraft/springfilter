@@ -2,6 +2,7 @@ package com.turkraft.springfilter.openapi.generator;
 
 import com.turkraft.springfilter.openapi.documentation.FunctionDocumentationProvider;
 import com.turkraft.springfilter.openapi.documentation.OperatorDocumentationProvider;
+import com.turkraft.springfilter.openapi.documentation.PlaceholderDocumentationProvider;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector.EntitySchema;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector.FieldInfo;
@@ -15,13 +16,16 @@ public class FilterSchemaGenerator {
   private final EntityIntrospector entityIntrospector;
   private final OperatorDocumentationProvider operatorDocumentationProvider;
   private final FunctionDocumentationProvider functionDocumentationProvider;
+  private final PlaceholderDocumentationProvider placeholderDocumentationProvider;
 
   public FilterSchemaGenerator(EntityIntrospector entityIntrospector,
       OperatorDocumentationProvider operatorDocumentationProvider,
-      FunctionDocumentationProvider functionDocumentationProvider) {
+      FunctionDocumentationProvider functionDocumentationProvider,
+      PlaceholderDocumentationProvider placeholderDocumentationProvider) {
     this.entityIntrospector = entityIntrospector;
     this.operatorDocumentationProvider = operatorDocumentationProvider;
     this.functionDocumentationProvider = functionDocumentationProvider;
+    this.placeholderDocumentationProvider = placeholderDocumentationProvider;
   }
 
   public String generateSchemaDescription(Class<?> entityClass) {
@@ -48,6 +52,13 @@ public class FilterSchemaGenerator {
     if (!functions.isEmpty()) {
       description.append("\n**Functions**\n\n");
       appendFunctionSummary(description);
+    }
+
+    List<PlaceholderDocumentationProvider.PlaceholderDoc> placeholders =
+        placeholderDocumentationProvider.getAllPlaceholderDocs();
+    if (!placeholders.isEmpty()) {
+      description.append("\n**Placeholders**\n\n");
+      appendPlaceholderSummary(description);
     }
 
     return description.toString();
@@ -231,6 +242,39 @@ public class FilterSchemaGenerator {
         sb
             .append(" (`")
             .append(func.getExample())
+            .append("`)");
+      }
+
+      sb.append("\n");
+    }
+
+  }
+
+  private void appendPlaceholderSummary(StringBuilder sb) {
+
+    List<PlaceholderDocumentationProvider.PlaceholderDoc> placeholders =
+        placeholderDocumentationProvider.getAllPlaceholderDocs();
+
+    if (placeholders.isEmpty()) {
+      return;
+    }
+
+    for (PlaceholderDocumentationProvider.PlaceholderDoc placeholder : placeholders) {
+      sb
+          .append("- `$")
+          .append(placeholder.getName())
+          .append("`");
+
+      if (placeholder.getDescription() != null) {
+        sb
+            .append(" - ")
+            .append(placeholder.getDescription());
+      }
+
+      if (placeholder.getExample() != null) {
+        sb
+            .append(" (`")
+            .append(placeholder.getExample())
             .append("`)");
       }
 
