@@ -70,6 +70,7 @@
     <module>predicate-language</module>
     <module>predicate</module>
     <module>openapi</module>
+    <module>page-sort</module>
   </modules>
 
   <dependencyManagement>

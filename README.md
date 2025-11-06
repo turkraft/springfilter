@@ -282,6 +282,97 @@ Just add the dependency. Swagger UI automatically shows:
 
 Works with JPA, MongoDB, and Predicate modules.
 
+## Pagination, Sorting and Field Selection
+
+The `page-sort` module provides annotations for pagination, sorting, and field selection.
+
+```xml
+<dependency>
+  <groupId>com.turkraft.springfilter</groupId>
+  <artifactId>page-sort</artifactId>
+  <version>3.2.2</version>
+</dependency>
+```
+
+### Basic Usage
+
+```java
+@GetMapping("/cars")
+Page<Car> search(@Filter Specification<Car> spec, @Page Pageable page) {
+    return repository.findAll(spec, page);
+}
+```
+
+Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
+
+### Custom Parameter Names
+
+```java
+@GetMapping("/cars")
+Page<Car> search(
+    @Page(pageParameter = "p", sizeParameter = "limit", sortParameter = "order") Pageable page) {
+    return repository.findAll(page);
+}
+```
+
+Now use `?p=0&limit=50&order=-year`
+
+### Sort Parameter
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Sort org.springframework.data.domain.Sort sort) {
+    return repository.findAll(sort);
+}
+```
+
+Use `?sort=-year` or `?sort=-year,name`
+
+### Field Selection
+
+```java
+@Fields
+@GetMapping("/cars")
+List<Car> search() {
+    return repository.findAll();
+}
+```
+
+Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's filtering internally.
+
+```java
+// Include specific fields
+?fields= id,name,email
+
+// Exclude fields
+?fields= *,-password,-ssn
+
+// Nested fields
+?fields= id,brand.name,brand.country
+
+// Wildcards
+?fields= user.*
+```
+
+### Combined Example
+
+```java
+@Fields
+@GetMapping("/cars")
+Page<Car> search(
+    @Filter Specification<Car> spec,
+    @Page Pageable page) {
+    return repository.findAll(spec, page);
+}
+```
+
+Use all features together:
+```
+/cars?filter=year>2020&page=0&size=20&sort=-year&fields=id,brand.name,year
+```
+
+The `openapi` module automatically generates documentation for these parameters when both dependencies are present.
+
 ## Frontend Integration
 
 ### JavaScript

@@ -1,14 +1,15 @@
 package com.turkraft.springfilter.example;
 
 import com.github.javafaker.Faker;
+import com.turkraft.springfilter.boot.Fields;
 import com.turkraft.springfilter.boot.Filter;
+import com.turkraft.springfilter.boot.Page;
 import com.turkraft.springfilter.example.model.Company;
 import com.turkraft.springfilter.example.model.Employee;
 import com.turkraft.springfilter.example.model.Employee.MaritalStatus;
 import com.turkraft.springfilter.example.model.Industry;
 import com.turkraft.springfilter.example.model.Payslip;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -177,27 +180,43 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   }
 
   @GetMapping(value = "industry")
+  @Fields
   public List<Industry> getIndustries(
-      @Parameter(hidden = true) @Filter(entityClass = Industry.class) Document filter) {
-    return mongoTemplate.find(new BasicQuery(filter), Industry.class);
+      @Filter(entityClass = Industry.class) Document filter,
+      @Page Pageable pageable) {
+    Query query = new BasicQuery(filter);
+    query.with(pageable);
+    return mongoTemplate.find(query, Industry.class);
   }
 
   @GetMapping(value = "company")
+  @Fields
   public List<Company> getCompanies(
-      @Parameter(hidden = true) @Filter(entityClass = Company.class) Document filter) {
-    return mongoTemplate.find(new BasicQuery(filter), Company.class);
+      @Filter(entityClass = Company.class) Document filter,
+      @Page Pageable pageable) {
+    Query query = new BasicQuery(filter);
+    query.with(pageable);
+    return mongoTemplate.find(query, Company.class);
   }
 
   @GetMapping(value = "employee")
+  @Fields
   public List<Employee> getEmployees(
-      @Parameter(hidden = true) @Filter(entityClass = Employee.class) Document filter) {
-    return mongoTemplate.find(new BasicQuery(filter), Employee.class);
+      @Filter(entityClass = Employee.class) Document filter,
+      @Page Pageable pageable) {
+    Query query = new BasicQuery(filter);
+    query.with(pageable);
+    return mongoTemplate.find(query, Employee.class);
   }
 
   @GetMapping(value = "payslip")
+  @Fields
   public List<Payslip> getPayslips(
-      @Parameter(hidden = true) @Filter(entityClass = Payslip.class) Document filter) {
-    return mongoTemplate.find(new BasicQuery(filter), Payslip.class);
+      @Filter(entityClass = Payslip.class) Document filter,
+      @Page Pageable pageable) {
+    Query query = new BasicQuery(filter);
+    query.with(pageable);
+    return mongoTemplate.find(query, Payslip.class);
   }
 
 }

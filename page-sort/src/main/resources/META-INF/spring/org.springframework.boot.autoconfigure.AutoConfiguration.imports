@@ -1,0 +1,4 @@
+com.turkraft.springfilter.boot.PageSortAutoConfiguration
+com.turkraft.springfilter.boot.SortArgumentResolverConfigurer
+com.turkraft.springfilter.boot.PageArgumentResolverConfigurer
+com.turkraft.springfilter.boot.FieldsFilterAdvice
