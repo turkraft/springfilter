@@ -30,6 +30,12 @@
 
     <dependency>
       <groupId>com.turkraft.springfilter</groupId>
+      <artifactId>page-sort</artifactId>
+      <version>${revision}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.turkraft.springfilter</groupId>
       <artifactId>openapi</artifactId>
       <version>${revision}</version>
     </dependency>

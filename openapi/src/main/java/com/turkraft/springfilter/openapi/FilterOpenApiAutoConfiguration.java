@@ -7,6 +7,7 @@ import com.turkraft.springfilter.openapi.generator.FilterExampleGenerator;
 import com.turkraft.springfilter.openapi.generator.FilterSchemaGenerator;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
 import com.turkraft.springfilter.openapi.springdoc.FilterParameterCustomizer;
+import com.turkraft.springfilter.openapi.springdoc.PageSortParameterCustomizer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -65,6 +66,18 @@ public class FilterOpenApiAutoConfiguration {
       FilterSchemaGenerator filterSchemaGenerator,
       FilterExampleGenerator filterExampleGenerator) {
     return new FilterParameterCustomizer(filterSchemaGenerator, filterExampleGenerator);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnClass(name = {
+      "com.turkraft.springfilter.boot.Sort",
+      "com.turkraft.springfilter.boot.Page",
+      "com.turkraft.springfilter.boot.Fields"
+  })
+  public PageSortParameterCustomizer pageSortParameterCustomizer(
+      EntityIntrospector entityIntrospector) {
+    return new PageSortParameterCustomizer(entityIntrospector);
   }
 
 }

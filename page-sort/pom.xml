@@ -6,23 +6,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>parent</artifactId>
     <groupId>com.turkraft.springfilter</groupId>
+    <artifactId>parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <artifactId>openapi</artifactId>
+  <artifactId>page-sort</artifactId>
 
   <name>${project.groupId}:${project.artifactId}</name>
-
-  <description>
-    Automatic OpenAPI/Swagger documentation generation for Spring Filter.
-    Provides entity introspection and schema generation.
-  </description>
-
-  <properties>
-    <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
-  </properties>
 
   <dependencies>
 
@@ -30,13 +21,7 @@
       <groupId>com.turkraft.springfilter</groupId>
       <artifactId>core</artifactId>
       <version>${revision}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.turkraft.springfilter</groupId>
-      <artifactId>page-sort</artifactId>
-      <version>${revision}</version>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
@@ -45,16 +30,37 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-      <version>${springdoc-openapi.version}</version>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-commons</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <scope>provided</scope>
       <optional>true</optional>
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-commons</artifactId>
-      <scope>test</scope>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
 
     <dependency>

@@ -13,7 +13,8 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 
-public class FilterParameterCustomizer implements OperationCustomizer {
+public class FilterParameterCustomizer extends BaseParameterCustomizer
+    implements OperationCustomizer {
 
   private final FilterSchemaGenerator filterSchemaGenerator;
   private final FilterExampleGenerator filterExampleGenerator;
@@ -65,28 +66,6 @@ public class FilterParameterCustomizer implements OperationCustomizer {
     }
 
     return operation;
-
-  }
-
-  private void removeAutoDetectedParameter(Operation operation, java.lang.reflect.Parameter parameter) {
-
-    if (operation.getParameters() == null) {
-      return;
-    }
-
-    String paramName = parameter.getName();
-    if (paramName == null) {
-      return;
-    }
-
-    operation
-        .getParameters()
-        .removeIf(param ->
-            paramName.equals(param.getName()) ||
-                (param.getName() != null && param
-                    .getName()
-                    .startsWith("arg"))
-        );
 
   }
 
@@ -217,57 +196,6 @@ public class FilterParameterCustomizer implements OperationCustomizer {
       ensureParameterInOperation(operation, openApiParameter);
 
     } catch (Exception ignored) {
-    }
-
-  }
-
-  private Parameter findOrCreateParameter(Operation operation, String parameterName) {
-
-    if (operation.getParameters() != null) {
-      for (Parameter param : operation.getParameters()) {
-        if (param != null && parameterName.equals(param.getName())) {
-          return param;
-        }
-      }
-    }
-
-    Parameter parameter = new Parameter();
-    parameter.setName(parameterName);
-    return parameter;
-
-  }
-
-  private void ensureParameterInOperation(Operation operation, Parameter parameter) {
-
-    if (operation.getParameters() == null) {
-      operation.setParameters(new java.util.ArrayList<>());
-    }
-
-    String parameterName = parameter.getName();
-    if (parameterName == null) {
-      return;
-    }
-
-    boolean exists = false;
-    for (int i = 0; i < operation
-        .getParameters()
-        .size(); i++) {
-      Parameter existingParam = operation
-          .getParameters()
-          .get(i);
-      if (existingParam != null && parameterName.equals(existingParam.getName())) {
-        operation
-            .getParameters()
-            .set(i, parameter);
-        exists = true;
-        break;
-      }
-    }
-
-    if (!exists) {
-      operation
-          .getParameters()
-          .add(parameter);
     }
 
   }
