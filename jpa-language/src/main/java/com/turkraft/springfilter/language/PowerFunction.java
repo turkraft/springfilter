@@ -10,4 +10,14 @@ public class PowerFunction extends FilterFunction {
     super("power");
   }
 
+  @Override
+  public String getDescription() {
+    return "Raise to power";
+  }
+
+  @Override
+  public String getExample() {
+    return "power(radius, 2) > 100";
+  }
+
 }

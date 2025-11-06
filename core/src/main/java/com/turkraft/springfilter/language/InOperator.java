@@ -10,4 +10,14 @@ public class InOperator extends FilterInfixOperator {
     super("in", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Value in list";
+  }
+
+  @Override
+  public String getExample() {
+    return "status in ('active', 'pending')";
+  }
+
 }

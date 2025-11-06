@@ -11,4 +11,14 @@ public class IsNullOperator extends FilterPostfixOperator {
     super("is null", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Value is null";
+  }
+
+  @Override
+  public String getExample() {
+    return "deletedAt is null";
+  }
+
 }

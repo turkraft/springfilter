@@ -10,4 +10,14 @@ public class ProdFunction extends FilterFunction {
     super("prod");
   }
 
+  @Override
+  public String getDescription() {
+    return "Multiply two numbers";
+  }
+
+  @Override
+  public String getExample() {
+    return "prod(price, quantity) > 1000";
+  }
+
 }

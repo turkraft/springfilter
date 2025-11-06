@@ -10,4 +10,14 @@ public class OrOperator extends FilterInfixOperator {
     super("or", 25);
   }
 
+  @Override
+  public String getDescription() {
+    return "Either condition must be true";
+  }
+
+  @Override
+  public String getExample() {
+    return "status : 'active' or status : 'pending'";
+  }
+
 }

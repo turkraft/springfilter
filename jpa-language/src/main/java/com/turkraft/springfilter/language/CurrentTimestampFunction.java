@@ -10,4 +10,14 @@ public class CurrentTimestampFunction extends FilterFunction {
     super("currentTimestamp");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current database timestamp";
+  }
+
+  @Override
+  public String getExample() {
+    return "updatedAt < currentTimestamp()";
+  }
+
 }

@@ -10,4 +10,14 @@ public class LocateFunction extends FilterFunction {
     super("locate");
   }
 
+  @Override
+  public String getDescription() {
+    return "Position of substring in string";
+  }
+
+  @Override
+  public String getExample() {
+    return "locate(name, 'John') > 0";
+  }
+
 }

@@ -10,4 +10,14 @@ public class NotEqualOperator extends FilterInfixOperator {
     super(new String[]{"!", "<>"}, 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Values are not equal";
+  }
+
+  @Override
+  public String getExample() {
+    return "status ! 'deleted'";
+  }
+
 }

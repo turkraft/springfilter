@@ -10,4 +10,14 @@ public class SignFunction extends FilterFunction {
     super("sign");
   }
 
+  @Override
+  public String getDescription() {
+    return "Sign of number (-1, 0, or 1)";
+  }
+
+  @Override
+  public String getExample() {
+    return "sign(balance) : 1";
+  }
+
 }

@@ -11,4 +11,14 @@ public class GreaterThanOperator extends FilterInfixOperator {
     super(">", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Greater than";
+  }
+
+  @Override
+  public String getExample() {
+    return "age > 18";
+  }
+
 }

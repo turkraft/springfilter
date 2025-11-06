@@ -10,4 +10,14 @@ public class IsNotNullOperator extends FilterPostfixOperator {
     super("is not null", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Value is not null";
+  }
+
+  @Override
+  public String getExample() {
+    return "email is not null";
+  }
+
 }

@@ -10,4 +10,14 @@ public class AbsFunction extends FilterFunction {
     super("abs");
   }
 
+  @Override
+  public String getDescription() {
+    return "Absolute value";
+  }
+
+  @Override
+  public String getExample() {
+    return "abs(balance) > 100";
+  }
+
 }

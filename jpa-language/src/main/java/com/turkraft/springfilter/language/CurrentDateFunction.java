@@ -10,4 +10,14 @@ public class CurrentDateFunction extends FilterFunction {
     super("currentDate");
   }
 
+  @Override
+  public String getDescription() {
+    return "Current database date";
+  }
+
+  @Override
+  public String getExample() {
+    return "orderDate > currentDate()";
+  }
+
 }

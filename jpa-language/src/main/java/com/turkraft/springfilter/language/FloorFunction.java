@@ -10,4 +10,14 @@ public class FloorFunction extends FilterFunction {
     super("floor");
   }
 
+  @Override
+  public String getDescription() {
+    return "Round down to nearest integer";
+  }
+
+  @Override
+  public String getExample() {
+    return "floor(price) : 99";
+  }
+
 }

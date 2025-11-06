@@ -10,4 +10,14 @@ public class ToStringFunction extends FilterFunction {
     super("toString");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to string";
+  }
+
+  @Override
+  public String getExample() {
+    return "toString(id) ~ '123%'";
+  }
+
 }

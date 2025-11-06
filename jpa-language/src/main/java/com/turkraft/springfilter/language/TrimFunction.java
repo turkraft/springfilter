@@ -10,4 +10,14 @@ public class TrimFunction extends FilterFunction {
     super("trim");
   }
 
+  @Override
+  public String getDescription() {
+    return "Remove leading and trailing spaces";
+  }
+
+  @Override
+  public String getExample() {
+    return "trim(name) : 'John'";
+  }
+
 }

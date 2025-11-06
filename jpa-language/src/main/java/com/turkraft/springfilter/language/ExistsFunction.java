@@ -10,4 +10,14 @@ public class ExistsFunction extends FilterFunction {
     super("exists");
   }
 
+  @Override
+  public String getDescription() {
+    return "Subquery filter";
+  }
+
+  @Override
+  public String getExample() {
+    return "exists(orders.total > 100 and orders.status : 'shipped')";
+  }
+
 }

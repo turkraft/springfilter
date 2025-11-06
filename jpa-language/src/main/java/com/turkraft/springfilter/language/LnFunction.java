@@ -10,4 +10,14 @@ public class LnFunction extends FilterFunction {
     super("ln");
   }
 
+  @Override
+  public String getDescription() {
+    return "Natural logarithm";
+  }
+
+  @Override
+  public String getExample() {
+    return "ln(value) > 2";
+  }
+
 }

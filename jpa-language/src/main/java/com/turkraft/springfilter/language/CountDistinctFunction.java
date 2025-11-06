@@ -10,4 +10,14 @@ public class CountDistinctFunction extends FilterFunction {
     super("countDistinct");
   }
 
+  @Override
+  public String getDescription() {
+    return "Count unique values (not implemented)";
+  }
+
+  @Override
+  public String getExample() {
+    return "countDistinct(orders.customerId) > 5";
+  }
+
 }

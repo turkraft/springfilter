@@ -10,4 +10,14 @@ public class NotInOperator extends FilterInfixOperator {
     super("not in", 100);
   }
 
+  @Override
+  public String getDescription() {
+    return "Value not in list";
+  }
+
+  @Override
+  public String getExample() {
+    return "status not in ('deleted', 'archived')";
+  }
+
 }

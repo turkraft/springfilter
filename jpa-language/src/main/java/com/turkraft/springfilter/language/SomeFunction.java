@@ -10,4 +10,14 @@ public class SomeFunction extends FilterFunction {
     super("some");
   }
 
+  @Override
+  public String getDescription() {
+    return "Some value matches (not implemented)";
+  }
+
+  @Override
+  public String getExample() {
+    return "price > some(subquery)";
+  }
+
 }

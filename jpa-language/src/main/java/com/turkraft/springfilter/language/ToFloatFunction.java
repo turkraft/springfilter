@@ -10,4 +10,14 @@ public class ToFloatFunction extends FilterFunction {
     super("toFloat");
   }
 
+  @Override
+  public String getDescription() {
+    return "Convert to float";
+  }
+
+  @Override
+  public String getExample() {
+    return "toFloat(value) > 50.5";
+  }
+
 }
