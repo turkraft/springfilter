@@ -112,14 +112,20 @@ class FilterSchemaGeneratorTest {
     FilterFunctions functions = mock(FilterFunctions.class);
     when(functions.getFunctions()).thenReturn(Collections.emptyList());
 
+    // Mock placeholders
+    FilterPlaceholders placeholders = mock(FilterPlaceholders.class);
+    when(placeholders.getPlaceholders()).thenReturn(Collections.emptyList());
+
     OperatorDocumentationProvider operatorProvider =
         new OperatorDocumentationProvider(operators);
     FunctionDocumentationProvider functionProvider =
         new FunctionDocumentationProvider(functions);
+    PlaceholderDocumentationProvider placeholderProvider =
+        new PlaceholderDocumentationProvider(placeholders);
 
     EntityIntrospector introspector = new EntityIntrospector();
     FilterSchemaGenerator gen = new FilterSchemaGenerator(introspector, operatorProvider,
-        functionProvider);
+        functionProvider, placeholderProvider);
 
     String schema = gen.generateSchemaDescription(TestEntity.class);
 
@@ -142,14 +148,19 @@ class FilterSchemaGeneratorTest {
     FilterFunctions functions = mock(FilterFunctions.class);
     when(functions.getFunctions()).thenReturn(List.of(mockFunction));
 
+    FilterPlaceholders placeholders = mock(FilterPlaceholders.class);
+    when(placeholders.getPlaceholders()).thenReturn(Collections.emptyList());
+
     OperatorDocumentationProvider operatorProvider =
         new OperatorDocumentationProvider(operators);
     FunctionDocumentationProvider functionProvider =
         new FunctionDocumentationProvider(functions);
+    PlaceholderDocumentationProvider placeholderProvider =
+        new PlaceholderDocumentationProvider(placeholders);
 
     EntityIntrospector introspector = new EntityIntrospector();
     FilterSchemaGenerator gen = new FilterSchemaGenerator(introspector, operatorProvider,
-        functionProvider);
+        functionProvider, placeholderProvider);
 
     String schema = gen.generateSchemaDescription(TestEntity.class);
 
