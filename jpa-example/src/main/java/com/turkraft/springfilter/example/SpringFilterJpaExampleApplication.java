@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.example;
 
 import com.github.javafaker.Faker;
+import com.turkraft.springfilter.boot.Filter;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.example.model.Address;
 import com.turkraft.springfilter.example.model.Company;
@@ -13,9 +14,6 @@ import com.turkraft.springfilter.example.repository.EmployeeRepository;
 import com.turkraft.springfilter.example.repository.IndustryRepository;
 import com.turkraft.springfilter.example.repository.PayslipRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -119,34 +117,27 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
     response.sendRedirect("swagger-ui.html");
   }
 
-  @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-      example = "size(companies.employees) > 5"))
+  // With springfilter-openapi module, @Filter parameters are automatically documented!
+  // No need for manual @Operation and @Parameter annotations.
+  // The documentation, examples, and schema are generated automatically from the entity class.
+
   @GetMapping(value = "industry")
-  public List<Industry> getIndustries(
-      @Parameter(hidden = true) FilterSpecification<Industry> filter) {
+  public List<Industry> getIndustries(@Filter FilterSpecification<Industry> filter) {
     return industryRepository.findAll(filter);
   }
 
-  @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-      example = "id < 10 and employees is not empty"))
   @GetMapping(value = "company")
-  public List<Company> getCompanies(@Parameter(hidden = true) FilterSpecification<Company> filter) {
+  public List<Company> getCompanies(@Filter FilterSpecification<Company> filter) {
     return companyRepository.findAll(filter);
   }
 
-  @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY,
-      schema = @Schema(type = "string"),
-      example = "maritalStatus in ['divorced', 'separated'] and (size(staff) > 2 or manager is not null)"))
   @GetMapping(value = "employee")
-  public List<Employee> getEmployees(
-      @Parameter(hidden = true) FilterSpecification<Employee> filter) {
+  public List<Employee> getEmployees(@Filter FilterSpecification<Employee> filter) {
     return employeeRepository.findAll(filter);
   }
 
-  @Operation(parameters = @Parameter(name = "filter", in = ParameterIn.QUERY, schema = @Schema(type = "string"),
-      example = "employee.salary > 3000"))
   @GetMapping(value = "payslip")
-  public List<Payslip> getPayslips(@Parameter(hidden = true) FilterSpecification<Payslip> filter) {
+  public List<Payslip> getPayslips(@Filter FilterSpecification<Payslip> filter) {
     return payslipRepository.findAll(filter);
   }
 
