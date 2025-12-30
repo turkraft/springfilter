@@ -59,7 +59,7 @@ Filter JPA entities directly in database queries. The module converts filter exp
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -114,7 +114,7 @@ Filter MongoDB documents using Spring Data MongoDB queries.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ Filter in-memory collections using Java Predicates. Works with any POJO, no data
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -222,7 +222,7 @@ Build filter expressions programmatically instead of writing filter strings manu
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -268,7 +268,7 @@ Add automatic Swagger documentation for endpoints with `@Filter` parameters.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -290,7 +290,7 @@ The `page-sort` module provides annotations for pagination, sorting, and field s
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>3.2.4</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -298,7 +298,7 @@ The `page-sort` module provides annotations for pagination, sorting, and field s
 
 ```java
 @GetMapping("/cars")
-Page<Car> search(@Filter Specification<Car> spec, @Page Pageable page) {
+Page<Car> search(@Filter Specification<Car> spec, @Pagination Pageable page) {
     return repository.findAll(spec, page);
 }
 ```
@@ -310,7 +310,7 @@ Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
 ```java
 @GetMapping("/cars")
 Page<Car> search(
-    @Page(pageParameter = "p", sizeParameter = "limit", sortParameter = "order") Pageable page) {
+    @Pagination(pageParameter = "p", sizeParameter = "limit", sortParameter = "order") Pageable page) {
     return repository.findAll(page);
 }
 ```
@@ -361,7 +361,7 @@ Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's
 @GetMapping("/cars")
 Page<Car> search(
     @Filter Specification<Car> spec,
-    @Page Pageable page) {
+    @Pagination Pageable page) {
     return repository.findAll(spec, page);
 }
 ```

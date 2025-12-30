@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.turkraft.springfilter.boot.Fields;
-import com.turkraft.springfilter.boot.Page;
+import com.turkraft.springfilter.boot.Pagination;
 import com.turkraft.springfilter.boot.Sort;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
 import com.turkraft.springfilter.openapi.springdoc.PageSortParameterCustomizer;
@@ -357,18 +357,18 @@ class PageSortParameterCustomizerTest {
     }
 
     @GetMapping("/page")
-    public String withPage(@Page Pageable page) {
+    public String withPage(@Pagination Pageable page) {
       return "ok";
     }
 
     @GetMapping("/page-annotation")
     public String withPageAnnotation(
-        @Page(pageParameter = "p", sizeParameter = "s", sortParameter = "order", defaultPage = 1, defaultSize = 50, maxSize = 200) Pageable page) {
+        @Pagination(pageParameter = "p", sizeParameter = "s", sortParameter = "order", defaultPage = 1, defaultSize = 50, maxSize = 200) Pageable page) {
       return "ok";
     }
 
     @GetMapping("/page-no-sort")
-    public String withPageNoSort(@Page(enableSort = false) Pageable page) {
+    public String withPageNoSort(@Pagination(enableSort = false) Pageable page) {
       return "ok";
     }
 
@@ -388,7 +388,7 @@ class PageSortParameterCustomizerTest {
     @GetMapping("/all")
     public String withAllAnnotations(
         @Sort org.springframework.data.domain.Sort sort,
-        @Page Pageable page) {
+        @Pagination Pageable page) {
       return "ok";
     }
 

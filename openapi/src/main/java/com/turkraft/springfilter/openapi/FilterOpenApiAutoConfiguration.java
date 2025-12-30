@@ -72,7 +72,7 @@ public class FilterOpenApiAutoConfiguration {
   @ConditionalOnMissingBean
   @ConditionalOnClass(name = {
       "com.turkraft.springfilter.boot.Sort",
-      "com.turkraft.springfilter.boot.Page",
+      "com.turkraft.springfilter.boot.Pagination",
       "com.turkraft.springfilter.boot.Fields"
   })
   public PageSortParameterCustomizer pageSortParameterCustomizer(

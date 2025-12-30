@@ -17,7 +17,7 @@ public class InOperator extends FilterInfixOperator {
 
   @Override
   public String getExample() {
-    return "status in ('active', 'pending')";
+    return "status in ['active', 'pending']";
   }
 
 }

@@ -21,7 +21,7 @@ public class PageArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.hasParameterAnnotation(Page.class)
+    return parameter.hasParameterAnnotation(Pagination.class)
         && Pageable.class.isAssignableFrom(parameter.getParameterType());
   }
 
@@ -30,9 +30,9 @@ public class PageArgumentResolver implements HandlerMethodArgumentResolver {
       ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory) {
 
-    Page pageAnnotation = parameter.getParameterAnnotation(Page.class);
+    Pagination pageAnnotation = parameter.getParameterAnnotation(Pagination.class);
     if (pageAnnotation == null) {
-      return PageRequest.of(Page.DEFAULT_PAGE, Page.DEFAULT_SIZE);
+      return PageRequest.of(Pagination.DEFAULT_PAGE, Pagination.DEFAULT_SIZE);
     }
 
     String pageParam = webRequest.getParameter(pageAnnotation.pageParameter());
