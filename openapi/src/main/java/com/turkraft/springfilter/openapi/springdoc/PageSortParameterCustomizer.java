@@ -57,7 +57,7 @@ public class PageSortParameterCustomizer extends BaseParameterCustomizer
       try {
 
         Class<?> sortAnnotation = Class.forName("com.turkraft.springfilter.boot.Sort");
-        Class<?> pageAnnotation = Class.forName("com.turkraft.springfilter.boot.Page");
+        Class<?> pageAnnotation = Class.forName("com.turkraft.springfilter.boot.Pagination");
 
         Object sort = parameter.getAnnotation((Class) sortAnnotation);
         Object page = parameter.getAnnotation((Class) pageAnnotation);

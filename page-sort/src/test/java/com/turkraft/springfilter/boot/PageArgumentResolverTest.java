@@ -28,7 +28,7 @@ class PageArgumentResolverTest {
 
   @Test
   void testSupportsParameterWithPageAnnotation() {
-    when(parameter.hasParameterAnnotation(Page.class)).thenReturn(true);
+    when(parameter.hasParameterAnnotation(Pagination.class)).thenReturn(true);
     when(parameter.getParameterType()).thenReturn((Class) Pageable.class);
 
     assertTrue(resolver.supportsParameter(parameter));
@@ -36,14 +36,14 @@ class PageArgumentResolverTest {
 
   @Test
   void testSupportsParameterWithoutPageAnnotation() {
-    when(parameter.hasParameterAnnotation(Page.class)).thenReturn(false);
+    when(parameter.hasParameterAnnotation(Pagination.class)).thenReturn(false);
 
     assertFalse(resolver.supportsParameter(parameter));
   }
 
   @Test
   void testSupportsParameterWithWrongType() {
-    when(parameter.hasParameterAnnotation(Page.class)).thenReturn(true);
+    when(parameter.hasParameterAnnotation(Pagination.class)).thenReturn(true);
     when(parameter.getParameterType()).thenReturn((Class) String.class);
 
     assertFalse(resolver.supportsParameter(parameter));
@@ -51,9 +51,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithDefaults() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn(null);
     when(webRequest.getParameter("size")).thenReturn(null);
     when(webRequest.getParameter("sort")).thenReturn(null);
@@ -68,9 +68,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithCustomPageAndSize() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("2");
     when(webRequest.getParameter("size")).thenReturn("50");
     when(webRequest.getParameter("sort")).thenReturn(null);
@@ -85,9 +85,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithSort() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("20");
     when(webRequest.getParameter("sort")).thenReturn("name");
@@ -106,9 +106,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithDescendingSort() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("1");
     when(webRequest.getParameter("size")).thenReturn("10");
     when(webRequest.getParameter("sort")).thenReturn("-createdAt");
@@ -127,9 +127,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithMultipleSortFields() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("20");
     when(webRequest.getParameter("sort")).thenReturn("-year,name");
@@ -151,9 +151,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithCustomParameterNames() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "p", "s", "order", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("p")).thenReturn("3");
     when(webRequest.getParameter("s")).thenReturn("15");
     when(webRequest.getParameter("order")).thenReturn("name");
@@ -168,9 +168,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnNegativePage() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("-1");
 
     assertThrows(IllegalArgumentException.class,
@@ -179,9 +179,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnZeroSize() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("0");
 
@@ -191,9 +191,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnNegativeSize() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("-10");
 
@@ -203,9 +203,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnSizeExceedingMax() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("200");
 
@@ -215,9 +215,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnInvalidPageNumber() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("invalid");
 
     assertThrows(IllegalArgumentException.class,
@@ -226,9 +226,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentThrowsOnInvalidSize() {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("0");
     when(webRequest.getParameter("size")).thenReturn("invalid");
 
@@ -238,9 +238,9 @@ class PageArgumentResolverTest {
 
   @Test
   void testResolveArgumentWithSortDisabled() throws Exception {
-    Page pageAnnotation = createPageAnnotation(
+    Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10, false);
-    when(parameter.getParameterAnnotation(Page.class)).thenReturn(pageAnnotation);
+    when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
     when(webRequest.getParameter("page")).thenReturn("1");
     when(webRequest.getParameter("size")).thenReturn("10");
     when(webRequest.getParameter("sort")).thenReturn("name");
@@ -253,20 +253,20 @@ class PageArgumentResolverTest {
     assertFalse(result.getSort().isSorted());
   }
 
-  private Page createPageAnnotation(
+  private Pagination createPageAnnotation(
       String pageParam, String sizeParam, String sortParam,
       int defaultPage, int defaultSize, int maxSize, int sortMaxFields) {
     return createPageAnnotation(pageParam, sizeParam, sortParam,
         defaultPage, defaultSize, maxSize, sortMaxFields, true);
   }
 
-  private Page createPageAnnotation(
+  private Pagination createPageAnnotation(
       String pageParam, String sizeParam, String sortParam,
       int defaultPage, int defaultSize, int maxSize, int sortMaxFields, boolean enableSort) {
-    return new Page() {
+    return new Pagination() {
       @Override
-      public Class<Page> annotationType() {
-        return Page.class;
+      public Class<Pagination> annotationType() {
+        return Pagination.class;
       }
 
       @Override

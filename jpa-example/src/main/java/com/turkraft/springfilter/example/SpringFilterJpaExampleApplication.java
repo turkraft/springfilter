@@ -3,7 +3,7 @@ package com.turkraft.springfilter.example;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.boot.Fields;
 import com.turkraft.springfilter.boot.Filter;
-import com.turkraft.springfilter.boot.Page;
+import com.turkraft.springfilter.boot.Pagination;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.example.model.Address;
 import com.turkraft.springfilter.example.model.Company;
@@ -170,7 +170,7 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
   @Fields
   public List<Industry> getIndustries(
       @Filter FilterSpecification<Industry> filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     return industryRepository
         .findAll(filter, pageable)
         .getContent();
@@ -180,7 +180,7 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
   @Fields
   public List<Company> getCompanies(
       @Filter FilterSpecification<Company> filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     return companyRepository
         .findAll(filter, pageable)
         .getContent();
@@ -190,7 +190,7 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
   @Fields
   public List<Employee> getEmployees(
       @Filter FilterSpecification<Employee> filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     return employeeRepository
         .findAll(filter, pageable)
         .getContent();
@@ -200,7 +200,7 @@ public class SpringFilterJpaExampleApplication implements CommandLineRunner {
   @Fields
   public List<Payslip> getPayslips(
       @Filter FilterSpecification<Payslip> filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     return payslipRepository
         .findAll(filter, pageable)
         .getContent();

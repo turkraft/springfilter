@@ -3,7 +3,7 @@ package com.turkraft.springfilter.example;
 import com.github.javafaker.Faker;
 import com.turkraft.springfilter.boot.Fields;
 import com.turkraft.springfilter.boot.Filter;
-import com.turkraft.springfilter.boot.Page;
+import com.turkraft.springfilter.boot.Pagination;
 import com.turkraft.springfilter.example.model.Company;
 import com.turkraft.springfilter.example.model.Employee;
 import com.turkraft.springfilter.example.model.Employee.MaritalStatus;
@@ -183,7 +183,7 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   @Fields
   public List<Industry> getIndustries(
       @Filter(entityClass = Industry.class) Document filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     Query query = new BasicQuery(filter);
     query.with(pageable);
     return mongoTemplate.find(query, Industry.class);
@@ -193,7 +193,7 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   @Fields
   public List<Company> getCompanies(
       @Filter(entityClass = Company.class) Document filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     Query query = new BasicQuery(filter);
     query.with(pageable);
     return mongoTemplate.find(query, Company.class);
@@ -203,7 +203,7 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   @Fields
   public List<Employee> getEmployees(
       @Filter(entityClass = Employee.class) Document filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     Query query = new BasicQuery(filter);
     query.with(pageable);
     return mongoTemplate.find(query, Employee.class);
@@ -213,7 +213,7 @@ public class SpringFilterMongoExampleApplication implements CommandLineRunner {
   @Fields
   public List<Payslip> getPayslips(
       @Filter(entityClass = Payslip.class) Document filter,
-      @Page Pageable pageable) {
+      @Pagination Pageable pageable) {
     Query query = new BasicQuery(filter);
     query.with(pageable);
     return mongoTemplate.find(query, Payslip.class);

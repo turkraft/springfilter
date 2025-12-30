@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Page {
+public @interface Pagination {
 
   String DEFAULT_PAGE_PARAMETER = "page";
 
