@@ -298,7 +298,7 @@ The `page-sort` module provides annotations for pagination, sorting, and field s
 
 ```java
 @GetMapping("/cars")
-Page<Car> search(@Filter Specification<Car> spec, @Page Pageable page) {
+Page<Car> search(@Filter Specification<Car> spec, @Pagination Pageable page) {
     return repository.findAll(spec, page);
 }
 ```
@@ -310,7 +310,7 @@ Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
 ```java
 @GetMapping("/cars")
 Page<Car> search(
-    @Page(pageParameter = "p", sizeParameter = "limit", sortParameter = "order") Pageable page) {
+    @Pagination(pageParameter = "p", sizeParameter = "limit", sortParameter = "order") Pageable page) {
     return repository.findAll(page);
 }
 ```
@@ -361,7 +361,7 @@ Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's
 @GetMapping("/cars")
 Page<Car> search(
     @Filter Specification<Car> spec,
-    @Page Pageable page) {
+    @Pagination Pageable page) {
     return repository.findAll(spec, page);
 }
 ```
