@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,10 @@ class AntPathPropertyFilterTest {
 
   @BeforeEach
   void setUp() {
-    objectMapper = new ObjectMapper();
+    objectMapper = JsonMapper.builder()
+        .addMixIn(TestUser.class, TestFilterMixin.class)
+        .addMixIn(TestOrder.class, TestFilterMixin.class)
+        .build();
   }
 
   @Test
@@ -27,18 +30,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testIncludeSingleField()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("name");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("John"));
@@ -48,18 +49,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testIncludeMultipleFields()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("name,email");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("email"));
@@ -68,18 +67,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testExcludeField()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("email"));
@@ -88,18 +85,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testIncludeAllExcludeOne()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("*,-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("email"));
@@ -108,20 +103,17 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testNestedFieldInclusion()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("user.name");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
-    objectMapper.addMixIn(TestOrder.class, TestFilterMixin.class);
-
+    
     TestUser user = new TestUser("John", "john@example.com", "secret123");
     TestOrder order = new TestOrder(123, user);
-    String json = objectMapper.writeValueAsString(order);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(order);
 
     assertTrue(json.contains("user"));
     assertTrue(json.contains("name"));
@@ -132,20 +124,17 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testNestedFieldWildcard()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("user.*");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
-    objectMapper.addMixIn(TestOrder.class, TestFilterMixin.class);
-
+    
     TestUser user = new TestUser("John", "john@example.com", "secret123");
     TestOrder order = new TestOrder(123, user);
-    String json = objectMapper.writeValueAsString(order);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(order);
 
     assertTrue(json.contains("user"));
     assertTrue(json.contains("name"));
@@ -156,20 +145,17 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testExcludeNestedField()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("*,-user.password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
-    objectMapper.addMixIn(TestOrder.class, TestFilterMixin.class);
-
+    
     TestUser user = new TestUser("John", "john@example.com", "secret123");
     TestOrder order = new TestOrder(123, user);
-    String json = objectMapper.writeValueAsString(order);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(order);
 
     assertTrue(json.contains("id"));
     assertTrue(json.contains("user"));
@@ -180,18 +166,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testEmptyFields()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = FieldsExpression.empty();
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("email"));
@@ -200,18 +184,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testWildcardIncludesAll()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("*");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertTrue(json.contains("email"));
@@ -220,18 +202,16 @@ class AntPathPropertyFilterTest {
 
   @Test
   void testMultipleExclusions()
-      throws JsonProcessingException {
+      throws Exception {
     FieldsExpression fields = new FieldsExpression("-email,-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
     SimpleFilterProvider filterProvider = new SimpleFilterProvider()
         .addFilter("testFilter", filter);
 
-    objectMapper.setFilterProvider(filterProvider);
-    objectMapper.addMixIn(TestUser.class, TestFilterMixin.class);
 
     TestUser user = new TestUser("John", "john@example.com", "secret123");
-    String json = objectMapper.writeValueAsString(user);
+    String json =     objectMapper.writer(filterProvider).writeValueAsString(user);
 
     assertTrue(json.contains("name"));
     assertFalse(json.contains("email"));

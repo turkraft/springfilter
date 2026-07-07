@@ -1,16 +1,16 @@
 package com.turkraft.springfilter.pagesort;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonStreamContext;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.springframework.util.AntPathMatcher;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.TokenStreamContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.BeanPropertyWriter;
+import tools.jackson.databind.ser.PropertyWriter;
+import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
 
 public class AntPathPropertyFilter extends SimpleBeanPropertyFilter {
 
@@ -30,16 +30,16 @@ public class AntPathPropertyFilter extends SimpleBeanPropertyFilter {
   private String getPathToTest(PropertyWriter writer, JsonGenerator generator) {
     StringBuilder nestedPath = new StringBuilder();
     nestedPath.append(writer.getName());
-    JsonStreamContext sc = generator.getOutputContext();
+    TokenStreamContext sc = generator.streamWriteContext();
     if (sc != null) {
       sc = sc.getParent();
     }
     while (sc != null) {
-      if (sc.getCurrentName() != null) {
+      if (sc.currentName() != null) {
         if (nestedPath.length() > 0) {
           nestedPath.insert(0, ".");
         }
-        nestedPath.insert(0, sc.getCurrentName());
+        nestedPath.insert(0, sc.currentName());
       }
       sc = sc.getParent();
     }
@@ -135,14 +135,13 @@ public class AntPathPropertyFilter extends SimpleBeanPropertyFilter {
   }
 
   @Override
-  public void serializeAsField(Object pojo, JsonGenerator jgen,
-      SerializerProvider provider,
-      PropertyWriter writer)
+  public void serializeAsProperty(Object pojo, JsonGenerator gen,
+      SerializationContext ctx, PropertyWriter writer)
       throws Exception {
-    if (include(writer, jgen)) {
-      writer.serializeAsField(pojo, jgen, provider);
-    } else if (!jgen.canOmitFields()) {
-      writer.serializeAsOmittedField(pojo, jgen, provider);
+    if (include(writer, gen)) {
+      writer.serializeAsProperty(pojo, gen, ctx);
+    } else if (!gen.canOmitProperties()) {
+      writer.serializeAsOmittedProperty(pojo, gen, ctx);
     }
   }
 
