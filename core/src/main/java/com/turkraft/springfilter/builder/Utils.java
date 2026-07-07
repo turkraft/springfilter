@@ -20,5 +20,5 @@ class Utils {
     }
     return result;
   }
-  
+
 }

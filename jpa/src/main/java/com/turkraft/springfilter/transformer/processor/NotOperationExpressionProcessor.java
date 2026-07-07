@@ -26,7 +26,8 @@ public class NotOperationExpressionProcessor implements
       PrefixOperationNode source) {
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getRight(), Boolean.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .not((Expression<Boolean>) transformer.transform(source.getRight()));
   }
 

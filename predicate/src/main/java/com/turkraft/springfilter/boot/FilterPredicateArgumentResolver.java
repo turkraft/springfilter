@@ -30,9 +30,13 @@ public class FilterPredicateArgumentResolver implements HandlerMethodArgumentRes
 
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(FilterPredicate.class) || (
+    return methodParameter
+        .getParameterType()
+        .equals(FilterPredicate.class) || (
         methodParameter.hasParameterAnnotation(Filter.class)
-            && methodParameter.getParameterType().equals(Predicate.class))
+            && methodParameter
+            .getParameterType()
+            .equals(Predicate.class))
         || isOptionalParameter(methodParameter);
   }
 
@@ -76,11 +80,17 @@ public class FilterPredicateArgumentResolver implements HandlerMethodArgumentRes
   }
 
   private boolean isOptionalParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(
-        Optional.class) && (methodParameter.getGenericParameterType().getTypeName()
+    return methodParameter
+        .getParameterType()
+        .equals(
+            Optional.class) && (methodParameter
+        .getGenericParameterType()
+        .getTypeName()
         .equals(Optional.class.getName() + "<" + FilterPredicate.class.getName() + ">") || (
         methodParameter.hasParameterAnnotation(Filter.class)
-            && methodParameter.getGenericParameterType().getTypeName()
+            && methodParameter
+            .getGenericParameterType()
+            .getTypeName()
             .equals(Optional.class.getName() + "<" + Predicate.class.getName())));
   }
 

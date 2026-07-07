@@ -25,7 +25,9 @@ public class NotOperationJsonNodeProcessor implements
       PrefixOperationNode prefixOperationNode) {
     transformer.registerTargetType(prefixOperationNode, Boolean.class);
     transformer.registerTargetType(prefixOperationNode.getRight(), Boolean.class);
-    return transformer.getObjectMapper().createObjectNode()
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
         .set("$not", transformer.transform(prefixOperationNode.getRight()));
   }
 

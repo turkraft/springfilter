@@ -50,7 +50,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testEqualWithInput() {
 
-    FilterNode filter = fb.input("hello").equal(fb.input("hello")).get();
+    FilterNode filter = fb
+        .input("hello")
+        .equal(fb.input("hello"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -61,7 +64,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testEqualWithField() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello")).get();
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -73,7 +79,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNotEqual() {
 
-    FilterNode filter = fb.field("string").notEqual(fb.input("hello")).get();
+    FilterNode filter = fb
+        .field("string")
+        .notEqual(fb.input("hello"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -85,7 +94,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testGreaterThan() {
 
-    FilterNode filter = fb.field("integer").greaterThan(fb.input(50)).get();
+    FilterNode filter = fb
+        .field("integer")
+        .greaterThan(fb.input(50))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -97,7 +109,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testGreaterThanOrEqual() {
 
-    FilterNode filter = fb.field("integer").greaterThanOrEqual(fb.input(100)).get();
+    FilterNode filter = fb
+        .field("integer")
+        .greaterThanOrEqual(fb.input(100))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -110,7 +125,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testLessThan() {
 
-    FilterNode filter = fb.field("integer").lessThan(fb.input(100)).get();
+    FilterNode filter = fb
+        .field("integer")
+        .lessThan(fb.input(100))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -123,7 +141,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testLessThanOrEqual() {
 
-    FilterNode filter = fb.field("integer").lessThanOrEqual(fb.input(100)).get();
+    FilterNode filter = fb
+        .field("integer")
+        .lessThanOrEqual(fb.input(100))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -136,8 +157,13 @@ public class FilterPredicateTransformerTest {
   @Test
   void testAnd() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello"))
-        .and(fb.field("integer").greaterThan(fb.input(50))).get();
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
+        .and(fb
+            .field("integer")
+            .greaterThan(fb.input(50)))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -150,8 +176,13 @@ public class FilterPredicateTransformerTest {
   @Test
   void testOr() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello"))
-        .or(fb.field("integer").greaterThan(fb.input(50))).get();
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
+        .or(fb
+            .field("integer")
+            .greaterThan(fb.input(50)))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -164,7 +195,11 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNot() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello")).not().get();
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
+        .not()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -176,7 +211,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsNull() {
 
-    FilterNode filter = fb.field("string").isNull().get();
+    FilterNode filter = fb
+        .field("string")
+        .isNull()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -188,7 +226,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsNotNull() {
 
-    FilterNode filter = fb.field("string").isNotNull().get();
+    FilterNode filter = fb
+        .field("string")
+        .isNotNull()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -200,7 +241,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsEmpty() {
 
-    FilterNode filter = fb.field("integers").isEmpty().get();
+    FilterNode filter = fb
+        .field("integers")
+        .isEmpty()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -212,7 +256,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsNotEmpty() {
 
-    FilterNode filter = fb.field("integers").isNotEmpty().get();
+    FilterNode filter = fb
+        .field("integers")
+        .isNotEmpty()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -224,8 +271,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIn() {
 
-    FilterNode filter = fb.field("string")
-        .in(fb.collection(fb.input("hello"), fb.input("world"))).get();
+    FilterNode filter = fb
+        .field("string")
+        .in(fb.collection(fb.input("hello"), fb.input("world")))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -238,8 +287,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNotIn() {
 
-    FilterNode filter = fb.field("string")
-        .notIn(fb.collection(fb.input("hello"), fb.input("world"))).get();
+    FilterNode filter = fb
+        .field("string")
+        .notIn(fb.collection(fb.input("hello"), fb.input("world")))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -252,7 +303,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testLike() {
 
-    FilterNode filter = fb.field("string").like(fb.input("hel%")).get();
+    FilterNode filter = fb
+        .field("string")
+        .like(fb.input("hel%"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -265,9 +319,16 @@ public class FilterPredicateTransformerTest {
   @Test
   void testComplexQuery() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello"))
-        .and(fb.field("integer").greaterThan(fb.input(50)))
-        .or(fb.field("integers").isNotEmpty()).get();
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
+        .and(fb
+            .field("integer")
+            .greaterThan(fb.input(50)))
+        .or(fb
+            .field("integers")
+            .isNotEmpty())
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -280,8 +341,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testSizeFunction() {
 
-    FilterNode filter = fb.function(sizeFunction, fb.field("integers"))
-        .greaterThan(fb.input(0)).get();
+    FilterNode filter = fb
+        .function(sizeFunction, fb.field("integers"))
+        .greaterThan(fb.input(0))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -293,11 +356,18 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNestedFields() {
 
-    FilterNode filter = fb.field("string").equal(fb.input("hello"))
+    FilterNode filter = fb
+        .field("string")
+        .equal(fb.input("hello"))
         .and(
-            fb.field("integer").greaterThan(fb.input(50))
-                .or(fb.field("integers").isNotEmpty())
-        ).get();
+            fb
+                .field("integer")
+                .greaterThan(fb.input(50))
+                .or(fb
+                    .field("integers")
+                    .isNotEmpty())
+        )
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -311,8 +381,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testSizeFunctionWithString() {
 
-    FilterNode filter = fb.function(sizeFunction, fb.field("string"))
-        .equal(fb.input(5)).get();
+    FilterNode filter = fb
+        .function(sizeFunction, fb.field("string"))
+        .equal(fb.input(5))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -324,7 +396,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testInsensitiveLike() {
 
-    FilterNode filter = fb.field("string").insensitiveLike(fb.input("HEL%")).get();
+    FilterNode filter = fb
+        .field("string")
+        .insensitiveLike(fb.input("HEL%"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -338,7 +413,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNestedFieldAccess() {
 
-    FilterNode filter = fb.field("nested.name").equal(fb.input("test")).get();
+    FilterNode filter = fb
+        .field("nested.name")
+        .equal(fb.input("test"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -352,7 +430,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testNestedFieldWithNull() {
 
-    FilterNode filter = fb.field("nested.name").isNull().get();
+    FilterNode filter = fb
+        .field("nested.name")
+        .isNull()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -365,7 +446,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsEmptyWithString() {
 
-    FilterNode filter = fb.field("string").isEmpty().get();
+    FilterNode filter = fb
+        .field("string")
+        .isEmpty()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -377,7 +461,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsEmptyWithMap() {
 
-    FilterNode filter = fb.field("metadata").isEmpty().get();
+    FilterNode filter = fb
+        .field("metadata")
+        .isEmpty()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -390,7 +477,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testIsNotEmptyWithMap() {
 
-    FilterNode filter = fb.field("metadata").isNotEmpty().get();
+    FilterNode filter = fb
+        .field("metadata")
+        .isNotEmpty()
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -403,8 +493,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testSizeFunctionWithMap() {
 
-    FilterNode filter = fb.function(sizeFunction, fb.field("metadata"))
-        .equal(fb.input(2)).get();
+    FilterNode filter = fb
+        .function(sizeFunction, fb.field("metadata"))
+        .equal(fb.input(2))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -418,8 +510,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testSizeFunctionWithNull() {
 
-    FilterNode filter = fb.function(sizeFunction, fb.field("string"))
-        .equal(fb.input(0)).get();
+    FilterNode filter = fb
+        .function(sizeFunction, fb.field("string"))
+        .equal(fb.input(0))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -430,8 +524,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testInWithFieldReference() {
 
-    FilterNode filter = fb.field("integer")
-        .in(fb.field("integers")).get();
+    FilterNode filter = fb
+        .field("integer")
+        .in(fb.field("integers"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -443,7 +539,10 @@ public class FilterPredicateTransformerTest {
   @Test
   void testLikeWithUnderscore() {
 
-    FilterNode filter = fb.field("string").like(fb.input("hel_o")).get();
+    FilterNode filter = fb
+        .field("string")
+        .like(fb.input("hel_o"))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 
@@ -456,9 +555,16 @@ public class FilterPredicateTransformerTest {
   @Test
   void testComplexNestedQuery() {
 
-    FilterNode filter = fb.field("nested.value").greaterThan(fb.input(50))
-        .and(fb.field("integer").lessThan(fb.input(200)))
-        .or(fb.field("string").like(fb.input("%test%"))).get();
+    FilterNode filter = fb
+        .field("nested.value")
+        .greaterThan(fb.input(50))
+        .and(fb
+            .field("integer")
+            .lessThan(fb.input(200)))
+        .or(fb
+            .field("string")
+            .like(fb.input("%test%")))
+        .get();
 
     Predicate<Object> predicate = transformer.transform(filter);
 

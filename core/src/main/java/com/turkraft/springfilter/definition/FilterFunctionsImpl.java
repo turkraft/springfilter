@@ -25,7 +25,9 @@ class FilterFunctionsImpl implements FilterFunctions {
   @Override
   public FilterFunction getFunction(String name) {
     for (FilterFunction function : functions) {
-      if (function.getName().equals(name)) {
+      if (function
+          .getName()
+          .equals(name)) {
         return function;
       }
     }

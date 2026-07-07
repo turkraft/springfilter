@@ -21,7 +21,7 @@
   </description>
 
   <properties>
-    <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
+    <springdoc-openapi.version>3.0.0</springdoc-openapi.version>
   </properties>
 
   <dependencies>

@@ -57,18 +57,25 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
   public JsonNode transformField(FieldNode node) {
     Field field = fieldTypeResolver.getField(getEntityType(), node.getName());
     if (field.isAnnotationPresent(Id.class)) {
-      return objectMapper.createObjectNode().textNode("$_id");
+      return objectMapper
+          .createObjectNode()
+          .textNode("$_id");
     }
-    return objectMapper.createObjectNode().textNode("$" + node.getName());
+    return objectMapper
+        .createObjectNode()
+        .textNode("$" + node.getName());
   }
 
   @Override
   public JsonNode transformInput(InputNode node) {
     if (targetTypes.containsKey(node)) {
-      return objectMapper.createObjectNode()
+      return objectMapper
+          .createObjectNode()
           .pojoNode(castIfNeeded(node.getValue(), targetTypes.get(node)));
     }
-    return objectMapper.createObjectNode().pojoNode(node.getValue());
+    return objectMapper
+        .createObjectNode()
+        .pojoNode(node.getValue());
   }
 
   @Override
@@ -78,37 +85,54 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
 
   @Override
   public JsonNode transformPlaceholder(PlaceholderNode node) {
-    return filterNodeProcessorFactories.getPlaceholderProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getPlaceholderProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public JsonNode transformFunction(FunctionNode node) {
-    return filterNodeProcessorFactories.getFunctionProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getFunctionProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public JsonNode transformCollection(CollectionNode node) {
     if (targetTypes.containsKey(node)) {
-      node.getItems().forEach(i -> registerTargetType(i, targetTypes.get(node)));
+      node
+          .getItems()
+          .forEach(i -> registerTargetType(i, targetTypes.get(node)));
     }
-    return objectMapper.createArrayNode()
-        .addAll(node.getItems().stream().map(this::transform).collect(
-            Collectors.toList()));
+    return objectMapper
+        .createArrayNode()
+        .addAll(node
+            .getItems()
+            .stream()
+            .map(this::transform)
+            .collect(
+                Collectors.toList()));
   }
 
   @Override
   public JsonNode transformPrefixOperation(PrefixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public JsonNode transformInfixOperation(InfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public JsonNode transformPostfixOperation(PostfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   public FilterJsonNodeTransformer registerTargetType(FilterNode node,

@@ -8,7 +8,9 @@ public class SortField {
   private final SortDirection direction;
 
   public SortField(String fieldPath, SortDirection direction) {
-    if (fieldPath == null || fieldPath.trim().isEmpty()) {
+    if (fieldPath == null || fieldPath
+        .trim()
+        .isEmpty()) {
       throw new IllegalArgumentException("Field path cannot be null or empty");
     }
     this.fieldPath = fieldPath.trim();

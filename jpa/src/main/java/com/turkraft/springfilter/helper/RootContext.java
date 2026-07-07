@@ -14,7 +14,7 @@ public class RootContext {
   public RootContext(Root<?> root) {
     this.root = root;
   }
-  
+
   public Root<?> getRoot() {
     return root;
   }

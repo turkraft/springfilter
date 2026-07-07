@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.SubstringFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -29,15 +28,19 @@ public class SubstringFunctionExpressionProcessor implements
     transformer.registerTargetType(source.getArgument(0), String.class);
     transformer.registerTargetType(source.getArgument(1), Integer.class);
 
-    if (source.getArguments().size() >= 2) {
+    if (source
+        .getArguments()
+        .size() >= 2) {
       transformer.registerTargetType(source.getArgument(2), Integer.class);
-      return transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
           .substring((Expression<String>) transformer.transform(source.getArgument(0)),
               (Expression<Integer>) transformer.transform(source.getArgument(1)),
               (Expression<Integer>) transformer.transform(source.getArgument(2)));
     }
 
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .substring((Expression<String>) transformer.transform(source.getArgument(0)),
             (Expression<Integer>) transformer.transform(source.getArgument(1)));
 

@@ -26,7 +26,8 @@ public class QuotFunctionExpressionProcessor implements
       FunctionNode source) {
     transformer.registerTargetType(source.getArgument(0), Number.class);
     transformer.registerTargetType(source.getArgument(1), Number.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .quot((Expression<Number>) transformer.transform(source.getArgument(0)),
             (Expression<Number>) transformer.transform(source.getArgument(1)));
   }

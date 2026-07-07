@@ -107,12 +107,16 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
 
   @Override
   public Expression<?> transformPlaceholder(PlaceholderNode node) {
-    return filterNodeProcessorFactories.getPlaceholderProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getPlaceholderProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Expression<?> transformFunction(FunctionNode node) {
-    return filterNodeProcessorFactories.getFunctionProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getFunctionProcessorFactory()
+        .process(this, node);
   }
 
   @Override
@@ -127,17 +131,23 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
 
   @Override
   public Expression<?> transformPrefixOperation(PrefixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Expression<?> transformInfixOperation(InfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Expression<?> transformPostfixOperation(PostfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   private Expression<?> castIfNeeded(Expression<?> expression, @Nullable Class<?> targetType) {

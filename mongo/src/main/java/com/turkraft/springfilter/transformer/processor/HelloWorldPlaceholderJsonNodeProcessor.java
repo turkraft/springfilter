@@ -23,7 +23,10 @@ public class HelloWorldPlaceholderJsonNodeProcessor implements
   @Override
   public JsonNode process(FilterJsonNodeTransformer transformer, PlaceholderNode source) {
     transformer.registerTargetType(source, String.class);
-    return transformer.getObjectMapper().createObjectNode().textNode("Hello world!");
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .textNode("Hello world!");
   }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SizeFunctionJsonNodeProcessor implements
     FilterFunctionProcessor<FilterJsonNodeTransformer, JsonNode> {
-  
+
   @Override
   public Class<FilterJsonNodeTransformer> getTransformerType() {
     return FilterJsonNodeTransformer.class;
@@ -24,7 +24,9 @@ public class SizeFunctionJsonNodeProcessor implements
   public JsonNode process(FilterJsonNodeTransformer transformer,
       FunctionNode functionNode) {
     transformer.registerTargetType(functionNode, Number.class);
-    return transformer.getObjectMapper().createObjectNode()
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
         .set("$size", transformer.transform(functionNode.getArgument(0)));
   }
 

@@ -1,5 +1,11 @@
 package com.turkraft.springfilter.openapi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.turkraft.springfilter.openapi.generator.FilterExampleGenerator;
 import com.turkraft.springfilter.openapi.generator.FilterSchemaGenerator;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
@@ -11,20 +17,21 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class EdgeCaseTest {
 
   static class EntityWithRelation {
+
     private Long id;
     private RelatedEntity related;
   }
 
   static class RelatedEntity {
+
     private String name;
   }
 
   static class EmptyEntity {
+
   }
 
   @Test
@@ -33,9 +40,13 @@ public class EdgeCaseTest {
     EntitySchema schema = introspector.introspect(EntityWithRelation.class);
 
     assertNotNull(schema);
-    assertFalse(schema.getFields().isEmpty());
+    assertFalse(schema
+        .getFields()
+        .isEmpty());
 
-    for (FieldInfo field : schema.getFields().values()) {
+    for (FieldInfo field : schema
+        .getFields()
+        .values()) {
       assertNotNull(field.getFieldCategory(),
           "Field " + field.getPath() + " should have a category");
     }

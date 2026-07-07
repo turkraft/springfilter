@@ -16,7 +16,7 @@ import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import com.turkraft.springfilter.transformer.processor.FilterNodeProcessor;
 import com.turkraft.springfilter.transformer.processor.factory.FilterFunctionProcessorFactory;
 import com.turkraft.springfilter.transformer.processor.factory.FilterOperationProcessorFactory;
-import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.JoinType;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpressionHelper {
 
-  protected final EntityManager entityManager;
+  protected final EntityManagerFactory entityManagerFactory;
 
   protected final Set<Class<? extends FilterDefinition>> ignoreExistsForDefinitions;
 
@@ -41,12 +41,14 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
 
   protected final FilterOperationProcessorFactory operationProcessorFactory;
 
-  public ExpressionHelperImpl(EntityManager entityManager,
+  public ExpressionHelperImpl(EntityManagerFactory entityManagerFactory,
       @IgnoreExists Set<FilterNodeProcessor<?, ?, ?, ?>> ignoreExistsForProcessors,
       FilterFunctionProcessorFactory filterFunctionProcessorFactory,
       FilterOperationProcessorFactory operationProcessorFactory) {
-    this.entityManager = entityManager;
-    ignoreExistsForDefinitions = ignoreExistsForProcessors.stream().map(
+    this.entityManagerFactory = entityManagerFactory;
+    ignoreExistsForDefinitions = ignoreExistsForProcessors
+        .stream()
+        .map(
             FilterNodeProcessor::getDefinitionType)
         .collect(
             Collectors.toSet());
@@ -57,8 +59,12 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
   @Override
   public Path<?> getPath(RootContext rootContext, String fieldPath) {
 
-    if (rootContext.getPaths().containsKey(fieldPath)) {
-      return rootContext.getPaths().get(fieldPath);
+    if (rootContext
+        .getPaths()
+        .containsKey(fieldPath)) {
+      return rootContext
+          .getPaths()
+          .get(fieldPath);
     }
 
     Path<?> path = rootContext.getRoot();
@@ -93,19 +99,31 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
           !(path instanceof MapJoin) && path instanceof From && shouldJoin(nextPath);
 
       if (shouldJoin) {
-        if (!rootContext.getPaths().containsKey(chain)) {
-          rootContext.getPaths().put(chain, ((From<?, ?>) path).join(field,
-              nextPath.getModel().getBindableType() == BindableType.SINGULAR_ATTRIBUTE
-                  ? JoinType.LEFT
-                  : JoinType.INNER));
+        if (!rootContext
+            .getPaths()
+            .containsKey(chain)) {
+          rootContext
+              .getPaths()
+              .put(chain, ((From<?, ?>) path).join(field,
+                  nextPath
+                      .getModel()
+                      .getBindableType() == BindableType.SINGULAR_ATTRIBUTE
+                      ? JoinType.LEFT
+                      : JoinType.INNER));
         }
-        nextPath = rootContext.getPaths().get(chain);
+        nextPath = rootContext
+            .getPaths()
+            .get(chain);
       }
 
       path = nextPath;
 
-      if (!rootContext.getPaths().containsKey(chain)) {
-        rootContext.getPaths().put(chain, path);
+      if (!rootContext
+          .getPaths()
+          .containsKey(chain)) {
+        rootContext
+            .getPaths()
+            .put(chain, path);
       }
 
     }
@@ -122,7 +140,9 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
       Path<?> from = transformer.getRoot();
       Path<?> path;
 
-      String[] fields = fieldNode.getName().split("\\.");
+      String[] fields = fieldNode
+          .getName()
+          .split("\\.");
 
       StringBuilder chain = null;
 
@@ -133,10 +153,14 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
         if (chain == null) {
           chain = new StringBuilder(field);
         } else {
-          chain.append(".").append(field);
+          chain
+              .append(".")
+              .append(field);
         }
 
-        boolean requireExists = path.getModel().getBindableType() == BindableType.PLURAL_ATTRIBUTE;
+        boolean requireExists = path
+            .getModel()
+            .getBindableType() == BindableType.PLURAL_ATTRIBUTE;
 
         if (requireExists) {
           return true;
@@ -164,13 +188,16 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
 
     if (node instanceof FunctionNode functionNode) {
 
-      if (ignoreExistsForDefinitions.contains(functionNode.getFunction().getClass())) {
+      if (ignoreExistsForDefinitions.contains(functionNode
+          .getFunction()
+          .getClass())) {
         transformer.registerIgnoreExists(functionNode);
         return false;
       }
 
       if (filterFunctionProcessorFactory.getProcessor(transformer.getClass(),
-          functionNode.getFunction()
+          functionNode
+              .getFunction()
               .getClass()) instanceof PossibleAggregatedExpression processor) {
         if (processor.isAggregated(functionNode)) {
           transformer.registerIgnoreExists(functionNode);
@@ -199,13 +226,16 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
 
     if (node instanceof OperationNode operationNode) {
 
-      if (ignoreExistsForDefinitions.contains(operationNode.getOperator().getClass())) {
+      if (ignoreExistsForDefinitions.contains(operationNode
+          .getOperator()
+          .getClass())) {
         transformer.registerIgnoreExists(operationNode);
         return false;
       }
 
       if (operationProcessorFactory.getProcessor(transformer.getClass(),
-          operationNode.getOperator()
+          operationNode
+              .getOperator()
               .getClass()) instanceof PossibleAggregatedExpression processor) {
         if (processor.isAggregated(operationNode)) {
           transformer.registerIgnoreExists(operationNode);
@@ -234,7 +264,9 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
   }
 
   private boolean isEntityType(Class<?> klass) {
-    for (EntityType<?> entityType : entityManager.getMetamodel().getEntities()) {
+    for (EntityType<?> entityType : entityManagerFactory
+        .getMetamodel()
+        .getEntities()) {
       Class<?> entityClass = entityType.getJavaType();
       if (entityClass.equals(klass)) {
         return true;
@@ -244,16 +276,24 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
   }
 
   private boolean shouldJoin(Path<?> path) {
-    return path.getModel().getBindableType() == BindableType.PLURAL_ATTRIBUTE
-        || (path.getModel().getBindableType() == BindableType.SINGULAR_ATTRIBUTE
-        && isEntityType(path.getModel().getBindableJavaType()));
+    return path
+        .getModel()
+        .getBindableType() == BindableType.PLURAL_ATTRIBUTE
+        || (path
+        .getModel()
+        .getBindableType() == BindableType.SINGULAR_ATTRIBUTE
+        && isEntityType(path
+        .getModel()
+        .getBindableJavaType()));
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public Expression<?> wrapWithExists(FilterExpressionTransformer transformer, FilterNode node) {
 
-    Subquery<Integer> subquery = transformer.getCriteriaQuery().subquery(Integer.class);
+    Subquery<Integer> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Integer.class);
 
     Root<?> subroot = subquery.correlate(transformer.getRoot());
 
@@ -261,13 +301,17 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
 
     Expression<?> expression = transformer.transform(node);
 
-    subquery.select(transformer.getCriteriaBuilder().literal(1));
+    subquery.select(transformer
+        .getCriteriaBuilder()
+        .literal(1));
 
     if (Boolean.class.equals(expression.getJavaType())) {
       subquery.where((Expression<Boolean>) expression);
     }
 
-    return transformer.getCriteriaBuilder().exists(subquery);
+    return transformer
+        .getCriteriaBuilder()
+        .exists(subquery);
 
   }
 

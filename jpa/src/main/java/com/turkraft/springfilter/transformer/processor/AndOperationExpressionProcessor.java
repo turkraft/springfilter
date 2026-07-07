@@ -26,7 +26,8 @@ public class AndOperationExpressionProcessor implements
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getLeft(), Boolean.class);
     transformer.registerTargetType(source.getRight(), Boolean.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .and((Expression<Boolean>) transformer.transform(source.getLeft()),
             (Expression<Boolean>) transformer.transform(source.getRight()));
   }

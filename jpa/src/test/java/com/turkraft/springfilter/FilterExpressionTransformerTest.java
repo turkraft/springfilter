@@ -60,7 +60,9 @@ public class FilterExpressionTransformerTest {
 
   @BeforeEach
   void initEach() {
-    criteriaQuery = entityManager.getCriteriaBuilder().createQuery(TestEntity.class);
+    criteriaQuery = entityManager
+        .getCriteriaBuilder()
+        .createQuery(TestEntity.class);
     root = criteriaQuery.from(TestEntity.class);
     transformer = new FilterExpressionTransformer(conversionService,
         pathExpressionHelper,
@@ -71,11 +73,14 @@ public class FilterExpressionTransformerTest {
 
   private void test(String expectedSql, FilterNode filterNode) {
 
-    criteriaQuery.select(root).where((Expression<Boolean>) transformer.transform(filterNode));
+    criteriaQuery
+        .select(root)
+        .where((Expression<Boolean>) transformer.transform(filterNode));
     TypedQuery<TestEntity> query = entityManager.createQuery(criteriaQuery);
     List<TestEntity> transformerResults = query.getResultList();
 
-    List<TestEntity> expectedResults = entityManager.createQuery(expectedSql, TestEntity.class)
+    List<TestEntity> expectedResults = entityManager
+        .createQuery(expectedSql, TestEntity.class)
         .getResultList();
 
     Assertions.assertFalse(expectedResults.isEmpty(), "Queries should return at least one result");
@@ -83,8 +88,12 @@ public class FilterExpressionTransformerTest {
     Assertions.assertEquals(expectedResults.size(), transformerResults.size());
 
     for (int i = 0; i < expectedResults.size(); i++) {
-      Assertions.assertEquals(expectedResults.get(i).getId(),
-          transformerResults.get(i).getId());
+      Assertions.assertEquals(expectedResults
+              .get(i)
+              .getId(),
+          transformerResults
+              .get(i)
+              .getId());
     }
 
   }
@@ -103,7 +112,10 @@ public class FilterExpressionTransformerTest {
     test("""
             select t from TestEntity t where t.string = 'hello world'
             """,
-        fb.field("string").equal(fb.input("hello world")).get());
+        fb
+            .field("string")
+            .equal(fb.input("hello world"))
+            .get());
 
   }
 
@@ -121,7 +133,10 @@ public class FilterExpressionTransformerTest {
     test("""
             select t from TestEntity t where t.string != 'hello world'
             """,
-        fb.field("string").notEqual(fb.input("hello world")).get());
+        fb
+            .field("string")
+            .notEqual(fb.input("hello world"))
+            .get());
 
   }
 

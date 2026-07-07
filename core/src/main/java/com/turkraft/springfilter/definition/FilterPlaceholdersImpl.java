@@ -25,7 +25,9 @@ class FilterPlaceholdersImpl implements FilterPlaceholders {
   @Override
   public FilterPlaceholder getPlaceholder(String name) {
     for (FilterPlaceholder placeholder : placeholders) {
-      if (placeholder.getName().equals(name)) {
+      if (placeholder
+          .getName()
+          .equals(name)) {
         return placeholder;
       }
     }

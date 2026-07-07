@@ -32,22 +32,29 @@ public class SumFunctionExpressionProcessor implements
 
     transformer.registerTargetType(source.getArgument(0), Number.class);
 
-    if (source.getArguments().size() > 1) {
+    if (source
+        .getArguments()
+        .size() > 1) {
       transformer.registerTargetType(source.getArgument(1), Number.class);
-      return transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
           .sum((Expression<Number>) transformer.transform(source.getArgument(0)),
               (Expression<Number>) transformer.transform(source.getArgument(1)));
     }
 
-    Subquery<Number> subquery = transformer.getCriteriaQuery().subquery(Number.class);
+    Subquery<Number> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Number.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(root));
 
     subquery.select(
-        transformer.getCriteriaBuilder().sum((Expression<Number>) transformer.transform(
-            source.getArgument(0))));
+        transformer
+            .getCriteriaBuilder()
+            .sum((Expression<Number>) transformer.transform(
+                source.getArgument(0))));
 
     return subquery;
 
@@ -55,7 +62,9 @@ public class SumFunctionExpressionProcessor implements
 
   @Override
   public boolean isAggregated(FunctionNode functionNode) {
-    return functionNode.getArguments().size() == 1;
+    return functionNode
+        .getArguments()
+        .size() == 1;
   }
 
 }

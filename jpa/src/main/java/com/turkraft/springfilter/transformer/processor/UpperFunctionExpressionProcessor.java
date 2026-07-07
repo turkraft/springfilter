@@ -25,7 +25,8 @@ public class UpperFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
     transformer.registerTargetType(source.getArgument(0), String.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .upper((Expression<String>) transformer.transform(source.getArgument(0)));
   }
 

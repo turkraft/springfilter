@@ -39,20 +39,27 @@ public class NotInOperationExpressionProcessor implements
 
     transformer.registerTargetType(source, Boolean.class);
 
-    Subquery<Integer> subquery = transformer.getCriteriaQuery().subquery(Integer.class);
+    Subquery<Integer> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Integer.class);
 
     Root<?> subroot = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(subroot));
 
-    subquery.select(transformer.getCriteriaBuilder().literal(1));
+    subquery.select(transformer
+        .getCriteriaBuilder()
+        .literal(1));
 
     Expression<Boolean> expression = (Expression<Boolean>) inOperationExpressionProcessor.process(
         transformer, source);
 
     subquery.where(expression);
 
-    return transformer.getCriteriaBuilder().exists(subquery).not();
+    return transformer
+        .getCriteriaBuilder()
+        .exists(subquery)
+        .not();
 
 //    return transformer.getCriteriaBuilder()
 //        .not((Expression<Boolean>) inOperationExpressionProcessor.process(transformer, source));

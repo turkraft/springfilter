@@ -30,7 +30,10 @@ public class FilterExampleGenerator {
     examples.addAll(generateCollectionExamples(schema));
     examples.addAll(generateComplexExamples(schema));
 
-    return examples.stream().limit(10).collect(Collectors.toList());
+    return examples
+        .stream()
+        .limit(10)
+        .collect(Collectors.toList());
 
   }
 
@@ -82,8 +85,12 @@ public class FilterExampleGenerator {
         return fieldPath + " > '2025-01-01'";
 
       case ENUM:
-        if (field.getEnumValues() != null && !field.getEnumValues().isEmpty()) {
-          String firstValue = field.getEnumValues().get(0);
+        if (field.getEnumValues() != null && !field
+            .getEnumValues()
+            .isEmpty()) {
+          String firstValue = field
+              .getEnumValues()
+              .get(0);
           return fieldPath + " : '" + firstValue + "'";
         }
         break;
@@ -203,7 +210,10 @@ public class FilterExampleGenerator {
     }
 
     if (parts.isEmpty()) {
-      return generateBasicExamples(schema).stream().findFirst().orElse("id > 0");
+      return generateBasicExamples(schema)
+          .stream()
+          .findFirst()
+          .orElse("id > 0");
     }
 
     return String.join(" and ", parts);

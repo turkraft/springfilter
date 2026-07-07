@@ -31,7 +31,8 @@ public class FilterNodeArgumentResolverHelper {
 
     Filter annotation = methodParameter.getParameterAnnotation(Filter.class);
 
-    if (entityClassRequired && (annotation == null || annotation.entityClass()
+    if (entityClassRequired && (annotation == null || annotation
+        .entityClass()
         .equals(Void.class))) {
       throw new IllegalArgumentException(
           "Entity class should be specified with the FilterQuery annotation");
@@ -44,16 +45,23 @@ public class FilterNodeArgumentResolverHelper {
       return Optional.empty();
     }
 
-    List<FilterNode> nodes = Arrays.stream(nativeWebRequest.getParameterValues(parameterName))
+    List<FilterNode> nodes = Arrays
+        .stream(nativeWebRequest.getParameterValues(parameterName))
         .filter(p -> p != null && !p.isBlank())
-        .map(p -> filterStringConverter.convert(p.trim())).toList();
+        .map(p -> filterStringConverter.convert(p.trim()))
+        .toList();
 
     if (nodes.isEmpty()) {
       return Optional.empty();
     }
 
-    FilterNode node = builder.and(
-        nodes.stream().map(builder::from).collect(Collectors.toList())).get();
+    FilterNode node = builder
+        .and(
+            nodes
+                .stream()
+                .map(builder::from)
+                .collect(Collectors.toList()))
+        .get();
 
     return Optional.of(node);
 

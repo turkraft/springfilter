@@ -24,15 +24,32 @@ public class IsNotEmptyOperationJsonNodeProcessor implements
   public JsonNode process(FilterJsonNodeTransformer transformer,
       PostfixOperationNode postfixOperationNode) {
     transformer.registerTargetType(postfixOperationNode, Boolean.class);
-    return transformer.getObjectMapper().createObjectNode().set("$and",
-        transformer.getObjectMapper().createArrayNode()
-            .add(transformer.getObjectMapper().createObjectNode()
-                .set("$isArray", transformer.transform(postfixOperationNode.getLeft())))
-            .add(transformer.getObjectMapper().createObjectNode().set("$gt",
-                transformer.getObjectMapper().createArrayNode()
-                    .add(transformer.getObjectMapper().createObjectNode()
-                        .set("$size", transformer.transform(postfixOperationNode.getLeft())))
-                    .add(transformer.getObjectMapper().createObjectNode().numberNode(0)))));
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .set("$and",
+            transformer
+                .getObjectMapper()
+                .createArrayNode()
+                .add(transformer
+                    .getObjectMapper()
+                    .createObjectNode()
+                    .set("$isArray", transformer.transform(postfixOperationNode.getLeft())))
+                .add(transformer
+                    .getObjectMapper()
+                    .createObjectNode()
+                    .set("$gt",
+                        transformer
+                            .getObjectMapper()
+                            .createArrayNode()
+                            .add(transformer
+                                .getObjectMapper()
+                                .createObjectNode()
+                                .set("$size", transformer.transform(postfixOperationNode.getLeft())))
+                            .add(transformer
+                                .getObjectMapper()
+                                .createObjectNode()
+                                .numberNode(0)))));
   }
 
 }

@@ -50,9 +50,15 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
     return methodParameter.hasParameterAnnotation(Filter.class)
-        && (methodParameter.getParameterType().isAssignableFrom(ObjectNode.class)
-        || methodParameter.getParameterType().isAssignableFrom(Document.class)
-        || methodParameter.getParameterType().isAssignableFrom(Query.class)
+        && (methodParameter
+        .getParameterType()
+        .isAssignableFrom(ObjectNode.class)
+        || methodParameter
+        .getParameterType()
+        .isAssignableFrom(Document.class)
+        || methodParameter
+        .getParameterType()
+        .isAssignableFrom(Query.class)
         || isOptionalParameter(
         methodParameter, ObjectNode.class) || isOptionalParameter(methodParameter, Document.class)
         || isOptionalParameter(methodParameter, Query.class));
@@ -60,18 +66,30 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
 
   private boolean isOptionalParameter(MethodParameter methodParameter,
       Class<?> klass) {
-    if (!methodParameter.getParameterType().equals(
-        Optional.class)) {
+    if (!methodParameter
+        .getParameterType()
+        .equals(
+            Optional.class)) {
       return false;
     }
     try {
-      Class<?> optionalClass = Class.forName(methodParameter.getGenericParameterType().getTypeName()
-          .substring(methodParameter.getGenericParameterType().getTypeName().indexOf('<') + 1,
-              methodParameter.getGenericParameterType().getTypeName().lastIndexOf('>')));
+      Class<?> optionalClass = Class.forName(methodParameter
+          .getGenericParameterType()
+          .getTypeName()
+          .substring(methodParameter
+                  .getGenericParameterType()
+                  .getTypeName()
+                  .indexOf('<') + 1,
+              methodParameter
+                  .getGenericParameterType()
+                  .getTypeName()
+                  .lastIndexOf('>')));
       return optionalClass.isAssignableFrom(klass);
     } catch (ClassNotFoundException e) {
       throw new IllegalArgumentException(
-          "Could not find class " + methodParameter.getParameterType().getTypeName());
+          "Could not find class " + methodParameter
+              .getParameterType()
+              .getTypeName());
     }
   }
 
@@ -86,34 +104,50 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
         true);
 
     if (result.isEmpty()) {
-      if (methodParameter.getParameterType().equals(Optional.class)) {
+      if (methodParameter
+          .getParameterType()
+          .equals(Optional.class)) {
         return Optional.empty();
       }
-      if (methodParameter.getParameterType().isAssignableFrom(ObjectNode.class)) {
+      if (methodParameter
+          .getParameterType()
+          .isAssignableFrom(ObjectNode.class)) {
         return objectMapper.createObjectNode();
-      } else if (methodParameter.getParameterType().isAssignableFrom(Document.class)) {
+      } else if (methodParameter
+          .getParameterType()
+          .isAssignableFrom(Document.class)) {
         return Document.parse("{}");
-      } else if (methodParameter.getParameterType().isAssignableFrom(Query.class)) {
+      } else if (methodParameter
+          .getParameterType()
+          .isAssignableFrom(Query.class)) {
         return new BasicQuery((String) null);
       }
     }
 
     FilterJsonNodeTransformer filterJsonNodeTransformer = new FilterJsonNodeTransformer(
         conversionService, objectMapper, filterNodeProcessorFactories, fieldTypeResolver,
-        methodParameter.getParameterAnnotation(Filter.class).entityClass());
+        methodParameter
+            .getParameterAnnotation(Filter.class)
+            .entityClass());
 
     ObjectNode jsonResult = jsonNodeHelper.wrapWithMongoExpression(
         filterJsonNodeTransformer.transform(result.get()));
 
-    if (methodParameter.getParameterType().isAssignableFrom(ObjectNode.class)) {
+    if (methodParameter
+        .getParameterType()
+        .isAssignableFrom(ObjectNode.class)) {
       return jsonResult;
     } else if (isOptionalParameter(methodParameter, ObjectNode.class)) {
       return Optional.of(jsonResult);
-    } else if (methodParameter.getParameterType().isAssignableFrom(Document.class)) {
+    } else if (methodParameter
+        .getParameterType()
+        .isAssignableFrom(Document.class)) {
       return Document.parse(jsonResult.toString());
     } else if (isOptionalParameter(methodParameter, Document.class)) {
       return Optional.of(Document.parse(jsonResult.toString()));
-    } else if (methodParameter.getParameterType().isAssignableFrom(Query.class)) {
+    } else if (methodParameter
+        .getParameterType()
+        .isAssignableFrom(Query.class)) {
       return new BasicQuery(Document.parse(jsonResult.toString()));
     } else if (isOptionalParameter(methodParameter, Query.class)) {
       return Optional.of(new BasicQuery(Document.parse(jsonResult.toString())));

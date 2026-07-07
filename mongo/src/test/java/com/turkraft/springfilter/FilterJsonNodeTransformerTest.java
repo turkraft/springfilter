@@ -54,7 +54,9 @@ public class FilterJsonNodeTransformerTest {
     try {
       JsonNode expectedOutput = objectMapper.readTree(expectedJson);
       Assertions.assertEquals(expectedOutput.toString(),
-          transformer.transform(filterNode).toString());
+          transformer
+              .transform(filterNode)
+              .toString());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -70,7 +72,10 @@ public class FilterJsonNodeTransformerTest {
               ]
             }
             """,
-        fb.field("string").equal(fb.input("hello")).get());
+        fb
+            .field("string")
+            .equal(fb.input("hello"))
+            .get());
   }
 
   @Test
@@ -83,7 +88,10 @@ public class FilterJsonNodeTransformerTest {
               ]
             }
             """,
-        fb.field("string").notEqual(fb.input("hello")).get());
+        fb
+            .field("string")
+            .notEqual(fb.input("hello"))
+            .get());
   }
 
   @Test
@@ -96,7 +104,10 @@ public class FilterJsonNodeTransformerTest {
               ]
             }
             """,
-        fb.field("nested.field").equal(fb.input("value")).get());
+        fb
+            .field("nested.field")
+            .equal(fb.input("value"))
+            .get());
   }
 
 }

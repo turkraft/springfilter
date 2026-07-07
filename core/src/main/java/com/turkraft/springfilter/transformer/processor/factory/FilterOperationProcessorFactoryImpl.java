@@ -20,18 +20,26 @@ public class FilterOperationProcessorFactoryImpl extends
   @Override
   public <T> T process(FilterNodeTransformer<T> transformer, OperationNode source) {
 
-    if (!getProcessorMap().containsKey(transformer.getClass()) || !getProcessorMap().get(
+    if (!getProcessorMap().containsKey(transformer.getClass()) || !getProcessorMap()
+        .get(
             transformer.getClass())
-        .containsKey(source.getOperator().getClass())) {
+        .containsKey(source
+            .getOperator()
+            .getClass())) {
       throw new UnsupportedOperationException(
-          "No transformer from operator " + source.getOperator().getClass()
+          "No transformer from operator " + source
+              .getOperator()
+              .getClass()
               + " to " + transformer.getTargetType()
               + " found");
     }
 
-    return ((FilterOperationProcessor<FilterNodeTransformer<T>, ?, OperationNode, T>) getProcessorMap().get(
+    return ((FilterOperationProcessor<FilterNodeTransformer<T>, ?, OperationNode, T>) getProcessorMap()
+        .get(
             transformer.getClass())
-        .get(source.getOperator().getClass())).process(transformer,
+        .get(source
+            .getOperator()
+            .getClass())).process(transformer,
         source);
 
   }

@@ -53,7 +53,9 @@ public class LikeOperationJsonNodeProcessor implements
 
       Field field = fieldTypeResolver.getField(transformer.getEntityType(), fieldNode.getName());
 
-      if (field.isAnnotationPresent(Id.class) && field.getType().equals(String.class)) {
+      if (field.isAnnotationPresent(Id.class) && field
+          .getType()
+          .equals(String.class)) {
 
         /*
             $function: {
@@ -63,32 +65,57 @@ public class LikeOperationJsonNodeProcessor implements
             }
          */
 
-        ObjectNode functionBody = transformer.getObjectMapper().createObjectNode();
-        functionBody.set("lang", transformer.getObjectMapper().createObjectNode().textNode("js"));
-        functionBody.set("args", transformer.getObjectMapper().createArrayNode()
-            .add(transformer.getObjectMapper().createObjectNode().textNode("$_id")));
-        functionBody.set("body", transformer.getObjectMapper().createObjectNode()
+        ObjectNode functionBody = transformer
+            .getObjectMapper()
+            .createObjectNode();
+        functionBody.set("lang", transformer
+            .getObjectMapper()
+            .createObjectNode()
+            .textNode("js"));
+        functionBody.set("args", transformer
+            .getObjectMapper()
+            .createArrayNode()
+            .add(transformer
+                .getObjectMapper()
+                .createObjectNode()
+                .textNode("$_id")));
+        functionBody.set("body", transformer
+            .getObjectMapper()
+            .createObjectNode()
             .textNode("function(id) { return new RegExp('" + createRegex(
                 String.valueOf(inputNode.getValue())).replace("'", "\\'") + "', '" + regexOptions
                 + "').test(id) }"));
 
-        return transformer.getObjectMapper().createObjectNode().set("$function", functionBody);
+        return transformer
+            .getObjectMapper()
+            .createObjectNode()
+            .set("$function", functionBody);
 
       }
 
     }
 
-    ObjectNode regexOperation = transformer.getObjectMapper().createObjectNode();
+    ObjectNode regexOperation = transformer
+        .getObjectMapper()
+        .createObjectNode();
     regexOperation.set("input", transformer.transform(infixOperationNode.getLeft()));
     regexOperation.set("regex",
-        infixOperationNode.getRight() instanceof InputNode ? transformer.getObjectMapper()
-            .createObjectNode().textNode(
+        infixOperationNode.getRight() instanceof InputNode ? transformer
+            .getObjectMapper()
+            .createObjectNode()
+            .textNode(
                 createRegex(String.valueOf(((InputNode) infixOperationNode.getRight()).getValue())))
             : transformer.transform(infixOperationNode.getRight()));
     regexOperation.set("options",
-        transformer.getObjectMapper().createObjectNode().textNode(regexOptions));
+        transformer
+            .getObjectMapper()
+            .createObjectNode()
+            .textNode(regexOptions));
 
-    return transformer.getObjectMapper().createObjectNode().set("$regexMatch", regexOperation);
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .set("$regexMatch", regexOperation);
 
   }
 

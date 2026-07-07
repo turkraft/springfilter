@@ -30,19 +30,27 @@ public class SizeFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
 
-    Subquery<Long> subquery = transformer.getCriteriaQuery().subquery(Long.class);
+    Subquery<Long> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Long.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(root));
 
     subquery.select(
-        transformer.getCriteriaBuilder().count(transformer.getCriteriaBuilder().literal(1)));
+        transformer
+            .getCriteriaBuilder()
+            .count(transformer
+                .getCriteriaBuilder()
+                .literal(1)));
 
     Expression<?> expression = transformer.transform(
         source.getArgument(0));
 
-    if (expression.getJavaType().equals(Boolean.class)) {
+    if (expression
+        .getJavaType()
+        .equals(Boolean.class)) {
       subquery.where((Expression<Boolean>) expression);
     }
 

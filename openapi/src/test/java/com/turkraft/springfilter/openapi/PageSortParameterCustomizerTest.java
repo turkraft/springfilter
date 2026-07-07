@@ -4,15 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.turkraft.springfilter.boot.Fields;
 import com.turkraft.springfilter.boot.Pagination;
 import com.turkraft.springfilter.boot.Sort;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
 import com.turkraft.springfilter.openapi.springdoc.PageSortParameterCustomizer;
-import org.springframework.data.domain.Pageable;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import java.lang.reflect.Method;
@@ -20,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
@@ -35,7 +33,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizeSortParameter() throws Exception {
+  void shouldCustomizeSortParameter()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withSort", org.springframework.data.domain.Sort.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -64,7 +63,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizeSortParameterWithAnnotation() throws Exception {
+  void shouldCustomizeSortParameterWithAnnotation()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withSortAnnotation", org.springframework.data.domain.Sort.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -91,7 +91,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizePageParameter() throws Exception {
+  void shouldCustomizePageParameter()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withPage", Pageable.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -165,7 +166,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizePageParameterWithAnnotation() throws Exception {
+  void shouldCustomizePageParameterWithAnnotation()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withPageAnnotation", Pageable.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -213,7 +215,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizeFieldsParameter() throws Exception {
+  void shouldCustomizeFieldsParameter()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withFields");
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -242,7 +245,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizeFieldsParameterWithAnnotation() throws Exception {
+  void shouldCustomizeFieldsParameterWithAnnotation()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withFieldsAnnotation");
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -273,7 +277,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldCustomizeAllParametersTogether() throws Exception {
+  void shouldCustomizeAllParametersTogether()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withAllAnnotations",
         org.springframework.data.domain.Sort.class, Pageable.class);
@@ -307,7 +312,8 @@ class PageSortParameterCustomizerTest {
   }
 
   @Test
-  void shouldNotIncludeSortParameterWhenDisabled() throws Exception {
+  void shouldNotIncludeSortParameterWhenDisabled()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withPageNoSort", Pageable.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);
@@ -317,15 +323,27 @@ class PageSortParameterCustomizerTest {
 
     assertNotNull(result);
     assertNotNull(result.getParameters());
-    assertEquals(2, result.getParameters().size());
+    assertEquals(2, result
+        .getParameters()
+        .size());
 
-    assertTrue(result.getParameters().stream().anyMatch(p -> "page".equals(p.getName())));
-    assertTrue(result.getParameters().stream().anyMatch(p -> "size".equals(p.getName())));
-    assertFalse(result.getParameters().stream().anyMatch(p -> "sort".equals(p.getName())));
+    assertTrue(result
+        .getParameters()
+        .stream()
+        .anyMatch(p -> "page".equals(p.getName())));
+    assertTrue(result
+        .getParameters()
+        .stream()
+        .anyMatch(p -> "size".equals(p.getName())));
+    assertFalse(result
+        .getParameters()
+        .stream()
+        .anyMatch(p -> "sort".equals(p.getName())));
   }
 
   @Test
-  void shouldHandleNullOperation() throws Exception {
+  void shouldHandleNullOperation()
+      throws Exception {
     TestController controller = new TestController();
     Method method = TestController.class.getMethod("withSort", org.springframework.data.domain.Sort.class);
     HandlerMethod handlerMethod = new HandlerMethod(controller, method);

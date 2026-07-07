@@ -23,7 +23,9 @@ public class CurrentTimeFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    return transformer.getCriteriaBuilder().currentTime();
+    return transformer
+        .getCriteriaBuilder()
+        .currentTime();
   }
 
 }

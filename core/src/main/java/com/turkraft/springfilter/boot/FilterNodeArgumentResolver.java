@@ -19,7 +19,9 @@ public class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver
 
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(FilterNode.class)
+    return methodParameter
+        .getParameterType()
+        .equals(FilterNode.class)
         || isOptionalParameter(methodParameter);
   }
 
@@ -45,8 +47,12 @@ public class FilterNodeArgumentResolver implements HandlerMethodArgumentResolver
   }
 
   private boolean isOptionalParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(
-        Optional.class) && methodParameter.getGenericParameterType().getTypeName()
+    return methodParameter
+        .getParameterType()
+        .equals(
+            Optional.class) && methodParameter
+        .getGenericParameterType()
+        .getTypeName()
         .equals(Optional.class.getName() + "<" + FilterNode.class.getName() + ">");
   }
 

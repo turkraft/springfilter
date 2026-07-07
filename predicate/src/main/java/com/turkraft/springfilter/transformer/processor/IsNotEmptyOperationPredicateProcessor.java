@@ -47,7 +47,9 @@ public class IsNotEmptyOperationPredicateProcessor implements
         return !((Map<?, ?>) value).isEmpty();
       }
 
-      if (value.getClass().isArray()) {
+      if (value
+          .getClass()
+          .isArray()) {
         return ((Object[]) value).length > 0;
       }
 

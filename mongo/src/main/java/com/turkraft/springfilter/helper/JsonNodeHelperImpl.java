@@ -23,7 +23,9 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
   @Override
   public ObjectNode wrapWithMongoExpression(JsonNode node) {
-    return objectMapper.createObjectNode().set("$expr", node);
+    return objectMapper
+        .createObjectNode()
+        .set("$expr", node);
   }
 
   @Override
@@ -50,10 +52,15 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
     JsonNode rightResult = transformer.transform(source.getRight());
 
-    return transformer.getObjectMapper().createObjectNode().set(mongoOperator,
-        transformer.getObjectMapper().createArrayNode()
-            .add(leftResult)
-            .add(rightResult));
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .set(mongoOperator,
+            transformer
+                .getObjectMapper()
+                .createArrayNode()
+                .add(leftResult)
+                .add(rightResult));
 
   }
 

@@ -60,9 +60,12 @@ public class FilterSpecificationConverterImpl implements
           CriteriaBuilder criteriaBuilder) {
         Expression<?> expression = new FilterExpressionTransformer(conversionService,
             pathExpressionHelper, existsExpressionHelper, filterNodeProcessorFactories, root, query,
-            criteriaBuilder).registerTargetType(node, Boolean.class)
+            criteriaBuilder)
+            .registerTargetType(node, Boolean.class)
             .transform(node);
-        return query.where((Expression<Boolean>) expression).getRestriction();
+        return query
+            .where((Expression<Boolean>) expression)
+            .getRestriction();
       }
     };
   }

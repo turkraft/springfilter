@@ -35,8 +35,10 @@ public class IsEmptyOperationExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       PostfixOperationNode source) {
     transformer.registerTargetType(source, Boolean.class);
-    return transformer.getCriteriaBuilder().not(
-        (Expression<Boolean>) isNotEmptyOperationExpressionProcessor.process(transformer, source));
+    return transformer
+        .getCriteriaBuilder()
+        .not(
+            (Expression<Boolean>) isNotEmptyOperationExpressionProcessor.process(transformer, source));
   }
 
 }

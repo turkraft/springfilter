@@ -37,7 +37,9 @@ public class PageArgumentResolver implements HandlerMethodArgumentResolver {
 
     String pageParam = webRequest.getParameter(pageAnnotation.pageParameter());
     int page = pageAnnotation.defaultPage();
-    if (pageParam != null && !pageParam.trim().isEmpty()) {
+    if (pageParam != null && !pageParam
+        .trim()
+        .isEmpty()) {
       try {
         page = Integer.parseInt(pageParam);
         if (page < 0) {
@@ -50,7 +52,9 @@ public class PageArgumentResolver implements HandlerMethodArgumentResolver {
 
     String sizeParam = webRequest.getParameter(pageAnnotation.sizeParameter());
     int size = pageAnnotation.defaultSize();
-    if (sizeParam != null && !sizeParam.trim().isEmpty()) {
+    if (sizeParam != null && !sizeParam
+        .trim()
+        .isEmpty()) {
       try {
         size = Integer.parseInt(sizeParam);
         if (size <= 0) {
@@ -72,7 +76,9 @@ public class PageArgumentResolver implements HandlerMethodArgumentResolver {
     if (pageAnnotation.enableSort()) {
       String sortParam = webRequest.getParameter(pageAnnotation.sortParameter());
 
-      if (sortParam != null && !sortParam.trim().isEmpty()) {
+      if (sortParam != null && !sortParam
+          .trim()
+          .isEmpty()) {
         SortExpression sortExpression = sortParser.parse(sortParam,
             pageAnnotation.sortMaxFields());
         sort = sortExpression.toSpringSort();

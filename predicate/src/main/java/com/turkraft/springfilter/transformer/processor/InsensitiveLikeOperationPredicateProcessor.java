@@ -35,8 +35,12 @@ public class InsensitiveLikeOperationPredicateProcessor implements
         return false;
       }
 
-      String leftStr = leftValue.toString().toLowerCase();
-      String pattern = rightValue.toString().toLowerCase();
+      String leftStr = leftValue
+          .toString()
+          .toLowerCase();
+      String pattern = rightValue
+          .toString()
+          .toLowerCase();
 
       String regex = pattern
           .replace("\\", "\\\\")

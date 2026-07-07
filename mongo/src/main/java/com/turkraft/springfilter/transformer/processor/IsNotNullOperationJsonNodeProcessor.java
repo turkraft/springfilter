@@ -24,10 +24,17 @@ public class IsNotNullOperationJsonNodeProcessor implements
   public JsonNode process(FilterJsonNodeTransformer transformer,
       PostfixOperationNode postfixOperationNode) {
     transformer.registerTargetType(postfixOperationNode, Boolean.class);
-    return transformer.getObjectMapper().createObjectNode().set("$gt",
-        transformer.getObjectMapper().createArrayNode()
-            .add(transformer.transform(postfixOperationNode.getLeft()))
-            .add(transformer.getObjectMapper().nullNode()));
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .set("$gt",
+            transformer
+                .getObjectMapper()
+                .createArrayNode()
+                .add(transformer.transform(postfixOperationNode.getLeft()))
+                .add(transformer
+                    .getObjectMapper()
+                    .nullNode()));
   }
 
 }

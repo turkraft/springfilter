@@ -28,7 +28,9 @@ public class GreaterThanOrEqualOperationExpressionProcessor implements
     transformer.registerTargetType(source.getRight(), left.getJavaType());
     Expression<Comparable> right = (Expression<Comparable>) transformer.transform(
         source.getRight());
-    return transformer.getCriteriaBuilder().greaterThanOrEqualTo(left, right);
+    return transformer
+        .getCriteriaBuilder()
+        .greaterThanOrEqualTo(left, right);
   }
 
 }

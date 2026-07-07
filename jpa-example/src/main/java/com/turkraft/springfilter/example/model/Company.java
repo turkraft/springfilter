@@ -72,5 +72,5 @@ public class Company {
   public void setWebsites(Map<String, String> websites) {
     this.websites = websites;
   }
-  
+
 }

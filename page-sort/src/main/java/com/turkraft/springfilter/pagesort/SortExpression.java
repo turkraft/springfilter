@@ -44,7 +44,8 @@ public class SortExpression {
       return org.springframework.data.domain.Sort.unsorted();
     }
 
-    List<org.springframework.data.domain.Sort.Order> orders = fields.stream()
+    List<org.springframework.data.domain.Sort.Order> orders = fields
+        .stream()
         .map(SortField::toSpringOrder)
         .collect(Collectors.toList());
 
@@ -74,7 +75,8 @@ public class SortExpression {
     if (isEmpty()) {
       return "unsorted";
     }
-    return fields.stream()
+    return fields
+        .stream()
         .map(SortField::toString)
         .collect(Collectors.joining(","));
   }

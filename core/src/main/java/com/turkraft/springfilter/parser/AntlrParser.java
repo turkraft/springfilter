@@ -54,40 +54,61 @@ class AntlrParser {
     }
 
     if (antlrCtx instanceof InputContext) {
-      String text = antlrCtx.getText().startsWith("'") && antlrCtx.getText().endsWith("'")
-          ? antlrCtx.getText().substring(1, antlrCtx.getText().length() - 1)
+      String text = antlrCtx
+          .getText()
+          .startsWith("'") && antlrCtx
+          .getText()
+          .endsWith("'")
+          ? antlrCtx
+          .getText()
+          .substring(1, antlrCtx
+              .getText()
+              .length() - 1)
           : antlrCtx.getText();
       return map(ctx, new InputNode(unescapeString(text)));
     }
 
     if (antlrCtx instanceof FieldContext) {
       return map(ctx, new FieldNode(
-          ctx != null ? ctx.getFieldMapper().apply(antlrCtx.getText()) : antlrCtx.getText()));
+          ctx != null ? ctx
+              .getFieldMapper()
+              .apply(antlrCtx.getText()) : antlrCtx.getText()));
     }
 
     if (antlrCtx instanceof PlaceholderContext) {
       return map(ctx, new PlaceholderNode(
           placeholders.getPlaceholder(
-              antlrCtx.getText().substring(1, antlrCtx.getText().length() - 1))));
+              antlrCtx
+                  .getText()
+                  .substring(1, antlrCtx
+                      .getText()
+                      .length() - 1))));
     }
 
     if (antlrCtx instanceof CollectionContext) {
       return map(ctx, new CollectionNode(
-          ((CollectionContext) antlrCtx).items.stream()
+          ((CollectionContext) antlrCtx).items
+              .stream()
               .map(antlrCtx1 -> parse(antlrCtx1, ctx))
               .collect(Collectors.toList())));
     }
 
     if (antlrCtx instanceof FunctionContext) {
       return map(ctx, new FunctionNode(
-          functions.getFunction(((FunctionContext) antlrCtx).ID().getText()),
-          ((FunctionContext) antlrCtx).arguments.stream()
+          functions.getFunction(((FunctionContext) antlrCtx)
+              .ID()
+              .getText()),
+          ((FunctionContext) antlrCtx).arguments
+              .stream()
               .map(antlrCtx1 -> parse(antlrCtx1, ctx))
               .collect(Collectors.toList())));
     }
 
     if (antlrCtx instanceof PrefixExpressionContext) {
-      return map(ctx, operators.getPrefixOperator(antlrCtx.getChild(0).getText())
+      return map(ctx, operators
+          .getPrefixOperator(antlrCtx
+              .getChild(0)
+              .getText())
           .toNode(parse((AntlrBaseContext) antlrCtx.getChild(1), ctx)));
     }
 
@@ -98,11 +119,17 @@ class AntlrParser {
       } else if (antlrCtx.getChildCount() == 2) {
 
         if (antlrCtx.getChild(0) instanceof TerminalNode) {
-          return map(ctx, operators.getPrefixOperator(antlrCtx.getChild(0).getText())
+          return map(ctx, operators
+              .getPrefixOperator(antlrCtx
+                  .getChild(0)
+                  .getText())
               .toNode(parse((AntlrBaseContext) antlrCtx.getChild(1), ctx)));
         }
 
-        return map(ctx, operators.getPostfixOperator(antlrCtx.getChild(1).getText())
+        return map(ctx, operators
+            .getPostfixOperator(antlrCtx
+                .getChild(1)
+                .getText())
             .toNode(parse((AntlrBaseContext) antlrCtx.getChild(0), ctx)));
 
       } else {
@@ -132,7 +159,10 @@ class AntlrParser {
         }
 
         return map(ctx,
-            operators.getInfixOperator(antlrCtx.getChild(lowestPriorityIndex - 1).getText())
+            operators
+                .getInfixOperator(antlrCtx
+                    .getChild(lowestPriorityIndex - 1)
+                    .getText())
                 .toNode(parse(subCtx, ctx),
                     parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx)));
 
@@ -148,11 +178,15 @@ class AntlrParser {
     if (ctx == null) {
       return input;
     }
-    return Objects.requireNonNullElse(ctx.getNodeMapper().apply(input), input);
+    return Objects.requireNonNullElse(ctx
+        .getNodeMapper()
+        .apply(input), input);
   }
 
   private String unescapeString(String input) {
-    return input.replace("\\'", "'").replace("\\\\", "\\");
+    return input
+        .replace("\\'", "'")
+        .replace("\\\\", "\\");
   }
 
 }

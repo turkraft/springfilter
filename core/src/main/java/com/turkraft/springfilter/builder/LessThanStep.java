@@ -1,7 +1,6 @@
 package com.turkraft.springfilter.builder;
 
 import com.turkraft.springfilter.builder.AbstractStep.StepWithResultImpl;
-import com.turkraft.springfilter.converter.FilterStringConverter;
 import com.turkraft.springfilter.definition.FilterOperators;
 import com.turkraft.springfilter.language.LessThanOperator;
 import com.turkraft.springfilter.parser.node.FilterNode;

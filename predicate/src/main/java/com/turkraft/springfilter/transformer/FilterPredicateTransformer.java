@@ -54,12 +54,16 @@ public class FilterPredicateTransformer implements FilterNodeTransformer<Predica
 
   @Override
   public Predicate<Object> transformPlaceholder(PlaceholderNode node) {
-    return filterNodeProcessorFactories.getPlaceholderProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getPlaceholderProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Predicate<Object> transformFunction(FunctionNode node) {
-    return filterNodeProcessorFactories.getFunctionProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getFunctionProcessorFactory()
+        .process(this, node);
   }
 
   @Override
@@ -69,17 +73,23 @@ public class FilterPredicateTransformer implements FilterNodeTransformer<Predica
 
   @Override
   public Predicate<Object> transformPrefixOperation(PrefixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Predicate<Object> transformInfixOperation(InfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
   @Override
   public Predicate<Object> transformPostfixOperation(PostfixOperationNode node) {
-    return filterNodeProcessorFactories.getOperationProcessorFactory().process(this, node);
+    return filterNodeProcessorFactories
+        .getOperationProcessorFactory()
+        .process(this, node);
   }
 
 }

@@ -25,7 +25,9 @@ public class TodayFunctionJsonNodeProcessor implements
   @Override
   public JsonNode process(FilterJsonNodeTransformer transformer, FunctionNode source) {
     transformer.registerTargetType(source, String.class);
-    return transformer.getObjectMapper().createObjectNode()
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
         .textNode(new SimpleDateFormat("EEEE").format(new Date()));
   }
 

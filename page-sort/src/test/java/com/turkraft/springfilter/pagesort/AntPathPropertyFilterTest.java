@@ -1,6 +1,8 @@
 package com.turkraft.springfilter.pagesort;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +26,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testIncludeSingleField() throws JsonProcessingException {
+  void testIncludeSingleField()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("name");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -44,7 +47,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testIncludeMultipleFields() throws JsonProcessingException {
+  void testIncludeMultipleFields()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("name,email");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -63,7 +67,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testExcludeField() throws JsonProcessingException {
+  void testExcludeField()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -82,7 +87,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testIncludeAllExcludeOne() throws JsonProcessingException {
+  void testIncludeAllExcludeOne()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("*,-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -101,7 +107,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testNestedFieldInclusion() throws JsonProcessingException {
+  void testNestedFieldInclusion()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("user.name");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -124,7 +131,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testNestedFieldWildcard() throws JsonProcessingException {
+  void testNestedFieldWildcard()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("user.*");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -147,7 +155,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testExcludeNestedField() throws JsonProcessingException {
+  void testExcludeNestedField()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("*,-user.password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -170,7 +179,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testEmptyFields() throws JsonProcessingException {
+  void testEmptyFields()
+      throws JsonProcessingException {
     FieldsExpression fields = FieldsExpression.empty();
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -189,7 +199,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testWildcardIncludesAll() throws JsonProcessingException {
+  void testWildcardIncludesAll()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("*");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
@@ -208,7 +219,8 @@ class AntPathPropertyFilterTest {
   }
 
   @Test
-  void testMultipleExclusions() throws JsonProcessingException {
+  void testMultipleExclusions()
+      throws JsonProcessingException {
     FieldsExpression fields = new FieldsExpression("-email,-password");
     AntPathPropertyFilter filter = new AntPathPropertyFilter(fields);
 
