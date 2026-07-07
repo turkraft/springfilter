@@ -50,7 +50,7 @@ Filter JPA entities directly in database queries. The module converts filter exp
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -105,7 +105,7 @@ Filter MongoDB documents using Spring Data MongoDB queries.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -141,7 +141,7 @@ Filter in-memory collections using Java Predicates. Works with any POJO, no data
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -213,7 +213,7 @@ Build filter expressions programmatically instead of writing filter strings manu
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -259,7 +259,7 @@ Add automatic Swagger documentation for endpoints with `@Filter` parameters.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
@@ -281,7 +281,7 @@ The `page-sort` module provides annotations for pagination, sorting, and field s
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.5</version>
 </dependency>
 ```
 
