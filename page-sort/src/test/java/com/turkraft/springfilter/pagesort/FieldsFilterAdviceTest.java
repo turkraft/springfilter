@@ -2,23 +2,21 @@ package com.turkraft.springfilter.pagesort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.turkraft.springfilter.boot.Fields;
 import com.turkraft.springfilter.boot.FieldsFilterAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,6 +31,11 @@ class FieldsFilterAdviceTest {
   void setUp() {
     advice = new FieldsFilterAdvice();
     request = mock(HttpServletRequest.class);
+  }
+
+  @AfterEach
+  void tearDown() {
+    FieldsFilterContext.clear();
   }
 
   @Test
@@ -124,7 +127,7 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteWrapsBody()
+  void testBeforeBodyWriteSetsFilterContext()
       throws Exception {
     Method method = TestController.class.getMethod("withFields");
     MethodParameter returnType = new MethodParameter(method, -1);
@@ -138,36 +141,10 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertInstanceOf(MappingJacksonValue.class, result);
-      MappingJacksonValue wrapper = (MappingJacksonValue) result;
-      assertEquals(body, wrapper.getValue());
-      assertNotNull(wrapper.getFilters());
-    } finally {
-      RequestContextHolder.resetRequestAttributes();
-    }
-  }
-
-  @Test
-  void testBeforeBodyWriteWithExistingWrapper()
-      throws Exception {
-    Method method = TestController.class.getMethod("withFields");
-    MethodParameter returnType = new MethodParameter(method, -1);
-
-    when(request.getParameter("fields")).thenReturn("id,name");
-
-    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
-    RequestContextHolder.setRequestAttributes(attributes);
-
-    try {
-      TestObject body = new TestObject();
-      MappingJacksonValue existingWrapper = new MappingJacksonValue(body);
-
-      Object result = advice.beforeBodyWrite(existingWrapper, returnType, null, null, null, null);
-
-      assertInstanceOf(MappingJacksonValue.class, result);
-      MappingJacksonValue wrapper = (MappingJacksonValue) result;
-      assertEquals(body, wrapper.getValue());
-      assertNotNull(wrapper.getFilters());
+      assertEquals(body, result);
+      assertNotNull(FieldsFilterContext.get());
+      assertTrue(FieldsFilterContext.get().getIncludePatterns().contains("id"));
+      assertTrue(FieldsFilterContext.get().getIncludePatterns().contains("name"));
     } finally {
       RequestContextHolder.resetRequestAttributes();
     }
@@ -189,6 +166,7 @@ class FieldsFilterAdviceTest {
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
       assertEquals(body, result);
+      assertNull(FieldsFilterContext.get());
     } finally {
       RequestContextHolder.resetRequestAttributes();
     }
@@ -209,9 +187,8 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertInstanceOf(MappingJacksonValue.class, result);
-      MappingJacksonValue wrapper = (MappingJacksonValue) result;
-      assertNotNull(wrapper.getFilters());
+      assertEquals(body, result);
+      assertNotNull(FieldsFilterContext.get());
     } finally {
       RequestContextHolder.resetRequestAttributes();
     }
@@ -232,31 +209,6 @@ class FieldsFilterAdviceTest {
   }
 
   @Test
-  void testBeforeBodyWriteSetsCorrectFilter()
-      throws Exception {
-    Method method = TestController.class.getMethod("withFields");
-    MethodParameter returnType = new MethodParameter(method, -1);
-
-    when(request.getParameter("fields")).thenReturn("id,name");
-
-    ServletRequestAttributes attributes = new ServletRequestAttributes(request);
-    RequestContextHolder.setRequestAttributes(attributes);
-
-    try {
-      TestObject body = new TestObject();
-      Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
-
-      MappingJacksonValue wrapper = (MappingJacksonValue) result;
-      FilterProvider filterProvider = wrapper.getFilters();
-
-      assertNotNull(filterProvider);
-      assertInstanceOf(SimpleFilterProvider.class, filterProvider);
-    } finally {
-      RequestContextHolder.resetRequestAttributes();
-    }
-  }
-
-  @Test
   void testBeforeBodyWriteWithCustomParameter()
       throws Exception {
     Method method = TestController.class.getMethod("withCustomParameter");
@@ -271,9 +223,8 @@ class FieldsFilterAdviceTest {
       TestObject body = new TestObject();
       Object result = advice.beforeBodyWrite(body, returnType, null, null, null, null);
 
-      assertInstanceOf(MappingJacksonValue.class, result);
-      MappingJacksonValue wrapper = (MappingJacksonValue) result;
-      assertNotNull(wrapper.getFilters());
+      assertEquals(body, result);
+      assertNotNull(FieldsFilterContext.get());
     } finally {
       RequestContextHolder.resetRequestAttributes();
     }

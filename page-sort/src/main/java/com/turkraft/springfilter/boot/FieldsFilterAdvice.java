@@ -1,16 +1,12 @@
 package com.turkraft.springfilter.boot;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.turkraft.springfilter.pagesort.AntPathFilterMixin;
-import com.turkraft.springfilter.pagesort.AntPathPropertyFilter;
 import com.turkraft.springfilter.pagesort.FieldsExpression;
+import com.turkraft.springfilter.pagesort.FieldsFilterContext;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,12 +15,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @RestControllerAdvice
-@ConditionalOnClass(name = "com.fasterxml.jackson.databind.ObjectMapper")
+@ConditionalOnClass(name = "tools.jackson.databind.ObjectMapper")
 public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
 
   @Override
   public boolean supports(MethodParameter returnType,
       Class<? extends HttpMessageConverter<?>> converterType) {
+
+    FieldsFilterContext.clear();
 
     if (returnType.getMethod() == null) {
       return false;
@@ -52,10 +50,7 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
       if (defaultValue != null && !defaultValue.isEmpty()) {
         return true;
       }
-      if (fieldsAnnotation.required()) {
-        return true;
-      }
-      return false;
+      return fieldsAnnotation.required();
     }
 
     return true;
@@ -107,20 +102,8 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
       return body;
     }
 
-    MappingJacksonValue wrapper;
-    if (body instanceof MappingJacksonValue) {
-      wrapper = (MappingJacksonValue) body;
-    } else {
-      wrapper = new MappingJacksonValue(body);
-    }
-
-    FilterProvider filterProvider = new SimpleFilterProvider()
-        .addFilter(AntPathFilterMixin.FILTER, new AntPathPropertyFilter(fields))
-        .setFailOnUnknownId(false);
-
-    wrapper.setFilters(filterProvider);
-    return wrapper;
-
+    FieldsFilterContext.set(fields);
+    return body;
   }
 
 }
