@@ -49,7 +49,7 @@
     <java.version>17</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <revision>${springfilter.version}</revision>
-    <springfilter.version>3.0.0-SNAPSHOT</springfilter.version>
+    <springfilter.version>4.0.0-SNAPSHOT</springfilter.version>
     <springboot.version>4.0.2</springboot.version>
     <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
