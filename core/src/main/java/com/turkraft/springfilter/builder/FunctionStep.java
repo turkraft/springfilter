@@ -2,7 +2,6 @@ package com.turkraft.springfilter.builder;
 
 
 import com.turkraft.springfilter.builder.AbstractStep.StepWithResultImpl;
-import com.turkraft.springfilter.converter.FilterStringConverter;
 import com.turkraft.springfilter.definition.FilterFunction;
 import com.turkraft.springfilter.definition.FilterOperators;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -16,7 +15,10 @@ public interface FunctionStep extends Step {
   default FunctionStepImpl function(FilterFunction function, List<StepWithResult> arguments) {
     return new FunctionStepImpl(getOperators(),
         new FunctionNode(function,
-            arguments.stream().map(StepWithResult::get).collect(Collectors.toList())));
+            arguments
+                .stream()
+                .map(StepWithResult::get)
+                .collect(Collectors.toList())));
   }
 
   default FunctionStepImpl function(FilterFunction function, StepWithResult... arguments) {

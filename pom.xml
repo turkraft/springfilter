@@ -47,16 +47,16 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
     <revision>${springfilter.version}</revision>
     <springfilter.version>3.0.0-SNAPSHOT</springfilter.version>
-    <springboot.version>3.4.5</springboot.version>
+    <springboot.version>4.0.2</springboot.version>
     <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
+    <flatten.skip>false</flatten.skip>
   </properties>
 
   <modules>
@@ -173,6 +173,7 @@
         <artifactId>flatten-maven-plugin</artifactId>
         <version>${flatten-maven-plugin.version}</version>
         <configuration>
+          <skip>${flatten.skip}</skip>
           <updatePomFile>true</updatePomFile>
           <flattenMode>resolveCiFriendliesOnly</flattenMode>
         </configuration>

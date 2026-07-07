@@ -36,17 +36,23 @@ public class InsensitiveLikeOperationExpressionProcessor implements
     transformer.registerTargetType(source.getRight(), String.class);
 
     if (likeOperationExpressionProcessor.getEscapeCharacter() == null) {
-      return transformer.getCriteriaBuilder()
-          .like(transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
+          .like(transformer
+                  .getCriteriaBuilder()
                   .upper((Expression<String>) transformer.transform(source.getLeft())),
-              transformer.getCriteriaBuilder()
+              transformer
+                  .getCriteriaBuilder()
                   .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
                       source.getRight())));
     } else {
-      return transformer.getCriteriaBuilder()
-          .like(transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
+          .like(transformer
+                  .getCriteriaBuilder()
                   .upper((Expression<String>) transformer.transform(source.getLeft())),
-              transformer.getCriteriaBuilder()
+              transformer
+                  .getCriteriaBuilder()
                   .upper(likeOperationExpressionProcessor.getLikePatternExpression(transformer,
                       source.getRight())), likeOperationExpressionProcessor.getEscapeCharacter());
     }

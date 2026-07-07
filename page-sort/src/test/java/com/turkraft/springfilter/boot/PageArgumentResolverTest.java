@@ -1,7 +1,12 @@
 package com.turkraft.springfilter.boot;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.turkraft.springfilter.pagesort.SimpleSortParser;
 import com.turkraft.springfilter.pagesort.SortParser;
@@ -50,7 +55,8 @@ class PageArgumentResolverTest {
   }
 
   @Test
-  void testResolveArgumentWithDefaults() throws Exception {
+  void testResolveArgumentWithDefaults()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -63,11 +69,14 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(0, result.getPageNumber());
     assertEquals(20, result.getPageSize());
-    assertFalse(result.getSort().isSorted());
+    assertFalse(result
+        .getSort()
+        .isSorted());
   }
 
   @Test
-  void testResolveArgumentWithCustomPageAndSize() throws Exception {
+  void testResolveArgumentWithCustomPageAndSize()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -80,11 +89,14 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(2, result.getPageNumber());
     assertEquals(50, result.getPageSize());
-    assertFalse(result.getSort().isSorted());
+    assertFalse(result
+        .getSort()
+        .isSorted());
   }
 
   @Test
-  void testResolveArgumentWithSort() throws Exception {
+  void testResolveArgumentWithSort()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -97,15 +109,21 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(0, result.getPageNumber());
     assertEquals(20, result.getPageSize());
-    assertTrue(result.getSort().isSorted());
+    assertTrue(result
+        .getSort()
+        .isSorted());
 
-    Sort.Order order = result.getSort().iterator().next();
+    Sort.Order order = result
+        .getSort()
+        .iterator()
+        .next();
     assertEquals("name", order.getProperty());
     assertEquals(Sort.Direction.ASC, order.getDirection());
   }
 
   @Test
-  void testResolveArgumentWithDescendingSort() throws Exception {
+  void testResolveArgumentWithDescendingSort()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -118,15 +136,21 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(10, result.getPageSize());
-    assertTrue(result.getSort().isSorted());
+    assertTrue(result
+        .getSort()
+        .isSorted());
 
-    Sort.Order order = result.getSort().iterator().next();
+    Sort.Order order = result
+        .getSort()
+        .iterator()
+        .next();
     assertEquals("createdAt", order.getProperty());
     assertEquals(Sort.Direction.DESC, order.getDirection());
   }
 
   @Test
-  void testResolveArgumentWithMultipleSortFields() throws Exception {
+  void testResolveArgumentWithMultipleSortFields()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -137,20 +161,33 @@ class PageArgumentResolverTest {
     Pageable result = (Pageable) resolver.resolveArgument(parameter, null, webRequest, null);
 
     assertNotNull(result);
-    assertTrue(result.getSort().isSorted());
+    assertTrue(result
+        .getSort()
+        .isSorted());
 
-    var orders = result.getSort().toList();
+    var orders = result
+        .getSort()
+        .toList();
     assertEquals(2, orders.size());
 
-    assertEquals("year", orders.get(0).getProperty());
-    assertEquals(Sort.Direction.DESC, orders.get(0).getDirection());
+    assertEquals("year", orders
+        .get(0)
+        .getProperty());
+    assertEquals(Sort.Direction.DESC, orders
+        .get(0)
+        .getDirection());
 
-    assertEquals("name", orders.get(1).getProperty());
-    assertEquals(Sort.Direction.ASC, orders.get(1).getDirection());
+    assertEquals("name", orders
+        .get(1)
+        .getProperty());
+    assertEquals(Sort.Direction.ASC, orders
+        .get(1)
+        .getDirection());
   }
 
   @Test
-  void testResolveArgumentWithCustomParameterNames() throws Exception {
+  void testResolveArgumentWithCustomParameterNames()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "p", "s", "order", 0, 20, 100, 10);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -163,7 +200,9 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(3, result.getPageNumber());
     assertEquals(15, result.getPageSize());
-    assertTrue(result.getSort().isSorted());
+    assertTrue(result
+        .getSort()
+        .isSorted());
   }
 
   @Test
@@ -237,7 +276,8 @@ class PageArgumentResolverTest {
   }
 
   @Test
-  void testResolveArgumentWithSortDisabled() throws Exception {
+  void testResolveArgumentWithSortDisabled()
+      throws Exception {
     Pagination pageAnnotation = createPageAnnotation(
         "page", "size", "sort", 0, 20, 100, 10, false);
     when(parameter.getParameterAnnotation(Pagination.class)).thenReturn(pageAnnotation);
@@ -250,7 +290,9 @@ class PageArgumentResolverTest {
     assertNotNull(result);
     assertEquals(1, result.getPageNumber());
     assertEquals(10, result.getPageSize());
-    assertFalse(result.getSort().isSorted());
+    assertFalse(result
+        .getSort()
+        .isSorted());
   }
 
   private Pagination createPageAnnotation(

@@ -55,5 +55,5 @@ public class TestEntity {
   public void setNested(NestedTestEntity nested) {
     this.nested = nested;
   }
-  
+
 }

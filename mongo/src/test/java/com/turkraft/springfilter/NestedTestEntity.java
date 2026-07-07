@@ -11,5 +11,5 @@ public class NestedTestEntity {
   public void setField(String field) {
     this.field = field;
   }
-  
+
 }

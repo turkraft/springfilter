@@ -26,7 +26,9 @@ public class EqualOperationExpressionProcessor implements
     Expression<?> left = transformer.transform(source.getLeft());
     transformer.registerTargetType(source.getRight(), left.getJavaType());
     Expression<?> right = transformer.transform(source.getRight());
-    return transformer.getCriteriaBuilder().equal(left, right);
+    return transformer
+        .getCriteriaBuilder()
+        .equal(left, right);
   }
 
 }

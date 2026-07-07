@@ -23,7 +23,9 @@ public class HelloWorldPlaceholderExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, PlaceholderNode source) {
     transformer.registerTargetType(source, String.class);
-    return transformer.getCriteriaBuilder().literal("Hello world!");
+    return transformer
+        .getCriteriaBuilder()
+        .literal("Hello world!");
   }
 
 }

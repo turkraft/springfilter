@@ -30,15 +30,19 @@ public class GreatestFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
 
-    Subquery<Comparable> subquery = transformer.getCriteriaQuery().subquery(Comparable.class);
+    Subquery<Comparable> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Comparable.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(root));
 
     subquery.select(
-        transformer.getCriteriaBuilder().greatest((Expression<Comparable>) transformer.transform(
-            source.getArgument(0))));
+        transformer
+            .getCriteriaBuilder()
+            .greatest((Expression<Comparable>) transformer.transform(
+                source.getArgument(0))));
 
     return subquery;
 

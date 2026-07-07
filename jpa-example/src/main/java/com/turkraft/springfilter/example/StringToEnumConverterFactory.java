@@ -8,25 +8,21 @@ import org.springframework.stereotype.Component;
 public class StringToEnumConverterFactory
     implements ConverterFactory<String, Enum> {
 
-  private static class StringToEnumConverter<T extends Enum>
-      implements Converter<String, T> {
-
-    private final Class<T> enumType;
-
-    public StringToEnumConverter(Class<T> enumType) {
-      this.enumType = enumType;
-    }
+  private record StringToEnumConverter<T extends Enum>(Class<T> enumType)
+        implements Converter<String, T> {
 
     public T convert(String source) {
-      for (T constant : enumType.getEnumConstants()) {
-        if (constant.toString().equalsIgnoreCase(source)) {
-          return constant;
+        for (T constant : enumType.getEnumConstants()) {
+          if (constant
+              .toString()
+              .equalsIgnoreCase(source)) {
+            return constant;
+          }
         }
+        return (T) Enum.valueOf(this.enumType, source.trim());
       }
-      return (T) Enum.valueOf(this.enumType, source.trim());
-    }
 
-  }
+    }
 
   @Override
   public <T extends Enum> Converter<String, T> getConverter(

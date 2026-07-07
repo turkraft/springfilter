@@ -19,5 +19,5 @@ public class PlaceholderNode extends FilterNode {
   public List<FilterNode> getChildren() {
     return List.of();
   }
-  
+
 }

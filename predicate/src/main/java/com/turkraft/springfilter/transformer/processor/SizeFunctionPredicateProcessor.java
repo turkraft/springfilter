@@ -81,7 +81,9 @@ public class SizeFunctionPredicateProcessor implements
       return ((String) value).length();
     }
 
-    if (value.getClass().isArray()) {
+    if (value
+        .getClass()
+        .isArray()) {
       return ((Object[]) value).length;
     }
 

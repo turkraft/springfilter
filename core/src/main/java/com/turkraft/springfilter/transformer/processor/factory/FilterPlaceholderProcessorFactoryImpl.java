@@ -20,18 +20,26 @@ public class FilterPlaceholderProcessorFactoryImpl extends
   @Override
   public <T> T process(FilterNodeTransformer<T> transformer, PlaceholderNode source) {
 
-    if (!getProcessorMap().containsKey(transformer.getClass()) || !getProcessorMap().get(
+    if (!getProcessorMap().containsKey(transformer.getClass()) || !getProcessorMap()
+        .get(
             transformer.getClass())
-        .containsKey(source.getPlaceholder().getClass())) {
+        .containsKey(source
+            .getPlaceholder()
+            .getClass())) {
       throw new UnsupportedOperationException(
-          "No transformer from placeholder " + source.getPlaceholder().getClass()
+          "No transformer from placeholder " + source
+              .getPlaceholder()
+              .getClass()
               + " to " + transformer.getTargetType()
               + " found");
     }
 
-    return ((FilterPlaceholderProcessor<FilterNodeTransformer<T>, T>) getProcessorMap().get(
+    return ((FilterPlaceholderProcessor<FilterNodeTransformer<T>, T>) getProcessorMap()
+        .get(
             transformer.getClass())
-        .get(source.getPlaceholder().getClass())).process(transformer,
+        .get(source
+            .getPlaceholder()
+            .getClass())).process(transformer,
         source);
 
   }

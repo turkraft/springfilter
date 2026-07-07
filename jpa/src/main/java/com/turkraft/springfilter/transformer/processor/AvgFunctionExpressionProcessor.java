@@ -30,15 +30,19 @@ public class AvgFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
 
-    Subquery<Double> subquery = transformer.getCriteriaQuery().subquery(Double.class);
+    Subquery<Double> subquery = transformer
+        .getCriteriaQuery()
+        .subquery(Double.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(root));
 
     subquery.select(
-        transformer.getCriteriaBuilder().avg((Expression<Number>) transformer.transform(
-            source.getArgument(0))));
+        transformer
+            .getCriteriaBuilder()
+            .avg((Expression<Number>) transformer.transform(
+                source.getArgument(0))));
 
     return subquery;
 

@@ -23,11 +23,15 @@ public enum SortDirection {
 
   public static SortDirection parse(String value) {
 
-    if (value == null || value.trim().isEmpty()) {
+    if (value == null || value
+        .trim()
+        .isEmpty()) {
       return ASC;
     }
 
-    String normalized = value.trim().toLowerCase();
+    String normalized = value
+        .trim()
+        .toLowerCase();
 
     return switch (normalized) {
       case "asc", "ascending" -> ASC;

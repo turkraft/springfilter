@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.SqrtFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -26,7 +25,8 @@ public class SqrtFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
     transformer.registerTargetType(source.getArgument(0), Integer.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .sqrt((Expression<Integer>) transformer.transform(source.getArgument(0)));
   }
 

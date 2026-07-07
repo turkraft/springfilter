@@ -22,13 +22,15 @@ abstract class AbstractFilterNodeProcessorFactory<Source extends FilterNode, Pro
       if (!processorMap.containsKey(processor.getTransformerType())) {
         processorMap.put(processor.getTransformerType(), new HashMap<>());
       }
-      if (processorMap.get(processor.getTransformerType())
+      if (processorMap
+          .get(processor.getTransformerType())
           .containsKey(processor.getDefinitionType())) {
         throw new IllegalStateException(
             "A processor for transformer " + processor.getTransformerType() + " and definition "
                 + processor.getDefinitionType() + " is already present");
       }
-      processorMap.get(processor.getTransformerType())
+      processorMap
+          .get(processor.getTransformerType())
           .put(processor.getDefinitionType(), processor);
     }
   }
@@ -41,8 +43,10 @@ abstract class AbstractFilterNodeProcessorFactory<Source extends FilterNode, Pro
   @Override
   public <Transformer extends FilterNodeTransformer<Target>, Definition extends FilterDefinition, Target> FilterNodeProcessor<Transformer, Definition, Source, Target> getProcessor(
       Class<Transformer> transformerType, Class<Definition> definitionType) {
-    return (FilterNodeProcessor<Transformer, Definition, Source, Target>) getProcessorMap().get(
-        transformerType).get(definitionType);
+    return (FilterNodeProcessor<Transformer, Definition, Source, Target>) getProcessorMap()
+        .get(
+            transformerType)
+        .get(definitionType);
   }
-  
+
 }

@@ -1,8 +1,7 @@
 package com.turkraft.springfilter.language;
 
-import org.springframework.stereotype.Component;
-
 import com.turkraft.springfilter.definition.FilterPostfixOperator;
+import org.springframework.stereotype.Component;
 
 @Component
 public class IsNotEmptyOperator extends FilterPostfixOperator {

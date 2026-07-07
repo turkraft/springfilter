@@ -25,7 +25,8 @@ public class TodayFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, FunctionNode source) {
     transformer.registerTargetType(source, String.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .literal(new SimpleDateFormat("EEEE").format(new Date()));
   }
 

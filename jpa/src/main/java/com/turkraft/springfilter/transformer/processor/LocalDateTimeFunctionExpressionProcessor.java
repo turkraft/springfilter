@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.LocalDateTimeFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -24,7 +23,9 @@ public class LocalDateTimeFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    return transformer.getCriteriaBuilder().localDateTime();
+    return transformer
+        .getCriteriaBuilder()
+        .localDateTime();
   }
 
 }

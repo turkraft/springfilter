@@ -33,9 +33,11 @@ public class FilterStringTransformer implements FilterNodeTransformer<String> {
 
   @Override
   public String transformInput(InputNode node) {
-    return "'" + Objects.requireNonNull(
-        conversionService.convert(node.getValue(), String.class),
-        "Could not convert `" + node.getValue() + "` to string").replace("'", "\\'") + "'";
+    return "'" + Objects
+        .requireNonNull(
+            conversionService.convert(node.getValue(), String.class),
+            "Could not convert `" + node.getValue() + "` to string")
+        .replace("'", "\\'") + "'";
   }
 
   @Override
@@ -45,35 +47,53 @@ public class FilterStringTransformer implements FilterNodeTransformer<String> {
 
   @Override
   public String transformPlaceholder(PlaceholderNode node) {
-    return "`" + node.getPlaceholder().getName() + "`";
+    return "`" + node
+        .getPlaceholder()
+        .getName() + "`";
   }
 
   @Override
   public String transformFunction(FunctionNode node) {
-    return node.getFunction().getName() + "("
-        + node.getArguments().stream().map(this::transform).collect(Collectors.joining(", ")) + ")";
+    return node
+        .getFunction()
+        .getName() + "("
+        + node
+        .getArguments()
+        .stream()
+        .map(this::transform)
+        .collect(Collectors.joining(", ")) + ")";
   }
 
   @Override
   public String transformCollection(CollectionNode node) {
-    return "[" + node.getItems().stream().map(this::transform).collect(Collectors.joining(", "))
+    return "[" + node
+        .getItems()
+        .stream()
+        .map(this::transform)
+        .collect(Collectors.joining(", "))
         + "]";
   }
 
   @Override
   public String transformPrefixOperation(PrefixOperationNode node) {
-    return node.getOperator().getToken() + " " + transform(node.getRight());
+    return node
+        .getOperator()
+        .getToken() + " " + transform(node.getRight());
   }
 
   @Override
   public String transformInfixOperation(InfixOperationNode node) {
-    return transform(node.getLeft()) + " " + node.getOperator().getToken() + " " + transform(
+    return transform(node.getLeft()) + " " + node
+        .getOperator()
+        .getToken() + " " + transform(
         node.getRight());
   }
 
   @Override
   public String transformPostfixOperation(PostfixOperationNode node) {
-    return transform(node.getLeft()) + " " + node.getOperator().getToken();
+    return transform(node.getLeft()) + " " + node
+        .getOperator()
+        .getToken();
   }
 
 }

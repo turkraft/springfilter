@@ -36,7 +36,9 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
     String parameterName = sortAnnotation.parameter();
     String sortExpression = webRequest.getParameter(parameterName);
 
-    if (sortExpression == null || sortExpression.trim().isEmpty()) {
+    if (sortExpression == null || sortExpression
+        .trim()
+        .isEmpty()) {
       if (sortAnnotation.required()) {
         throw new IllegalArgumentException(
             "Required sort parameter '" + parameterName + "' is missing");

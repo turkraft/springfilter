@@ -24,7 +24,9 @@ public interface FilterOperators {
 
   @SuppressWarnings("unchecked")
   default <T extends FilterPrefixOperator> T getPrefixOperator(Class<T> type) {
-    return (T) getPrefixOperators().stream().filter(o -> type.isAssignableFrom(o.getClass()))
+    return (T) getPrefixOperators()
+        .stream()
+        .filter(o -> type.isAssignableFrom(o.getClass()))
         .findFirst()
         .orElseThrow(() ->
             new UnsupportedOperationException(
@@ -44,7 +46,9 @@ public interface FilterOperators {
 
   @SuppressWarnings("unchecked")
   default <T extends FilterInfixOperator> T getInfixOperator(Class<T> type) {
-    return (T) getInfixOperators().stream().filter(o -> type.isAssignableFrom(o.getClass()))
+    return (T) getInfixOperators()
+        .stream()
+        .filter(o -> type.isAssignableFrom(o.getClass()))
         .findFirst()
         .orElseThrow(() ->
             new UnsupportedOperationException(
@@ -64,7 +68,9 @@ public interface FilterOperators {
 
   @SuppressWarnings("unchecked")
   default <T extends FilterPostfixOperator> T getPostfixOperator(Class<T> type) {
-    return (T) getPostfixOperators().stream().filter(o -> type.isAssignableFrom(o.getClass()))
+    return (T) getPostfixOperators()
+        .stream()
+        .filter(o -> type.isAssignableFrom(o.getClass()))
         .findFirst()
         .orElseThrow(() ->
             new UnsupportedOperationException(

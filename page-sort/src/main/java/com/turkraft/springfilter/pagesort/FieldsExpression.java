@@ -18,7 +18,9 @@ public class FieldsExpression {
   private final Set<String> excludePatterns;
 
   public FieldsExpression(String expression) {
-    if (expression == null || expression.trim().isEmpty()) {
+    if (expression == null || expression
+        .trim()
+        .isEmpty()) {
       this.patterns = new String[0];
       this.includePatterns = Collections.emptySet();
       this.excludePatterns = Collections.emptySet();
@@ -52,8 +54,11 @@ public class FieldsExpression {
 
   public FieldsExpression(String... patterns) {
     Objects.requireNonNull(patterns, "patterns must not be null");
-    this.patterns = Arrays.stream(patterns)
-        .filter(p -> p != null && !p.trim().isEmpty())
+    this.patterns = Arrays
+        .stream(patterns)
+        .filter(p -> p != null && !p
+            .trim()
+            .isEmpty())
         .map(String::trim)
         .toArray(String[]::new);
 
@@ -92,7 +97,9 @@ public class FieldsExpression {
       throw new FieldsParseException("Pattern cannot be null or empty");
     }
 
-    if (!FIELD_PATTERN.matcher(pattern).matches()) {
+    if (!FIELD_PATTERN
+        .matcher(pattern)
+        .matches()) {
       throw new FieldsParseException("Invalid field pattern: " + pattern);
     }
   }
@@ -151,7 +158,9 @@ public class FieldsExpression {
     if (isEmpty()) {
       return "empty";
     }
-    return Arrays.stream(patterns).collect(Collectors.joining(", "));
+    return Arrays
+        .stream(patterns)
+        .collect(Collectors.joining(", "));
   }
 
 }

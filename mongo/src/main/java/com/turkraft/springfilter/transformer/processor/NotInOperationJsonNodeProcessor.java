@@ -43,15 +43,29 @@ public class NotInOperationJsonNodeProcessor implements
           fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
     }
 
-    return transformer.getObjectMapper().createObjectNode().set("$and",
-        transformer.getObjectMapper().createArrayNode()
-            .add(transformer.getObjectMapper().createObjectNode()
-                .set("$isArray", transformer.transform(source.getRight())))
-            .add(transformer.getObjectMapper().createObjectNode()
-                .set("$not", transformer.getObjectMapper().createObjectNode().set("$in",
-                    transformer.getObjectMapper().createArrayNode()
-                        .add(transformer.transform(source.getLeft()))
-                        .add(transformer.transform(source.getRight()))))));
+    return transformer
+        .getObjectMapper()
+        .createObjectNode()
+        .set("$and",
+            transformer
+                .getObjectMapper()
+                .createArrayNode()
+                .add(transformer
+                    .getObjectMapper()
+                    .createObjectNode()
+                    .set("$isArray", transformer.transform(source.getRight())))
+                .add(transformer
+                    .getObjectMapper()
+                    .createObjectNode()
+                    .set("$not", transformer
+                        .getObjectMapper()
+                        .createObjectNode()
+                        .set("$in",
+                            transformer
+                                .getObjectMapper()
+                                .createArrayNode()
+                                .add(transformer.transform(source.getLeft()))
+                                .add(transformer.transform(source.getRight()))))));
 
   }
 

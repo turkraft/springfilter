@@ -25,7 +25,8 @@ public class AbsFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
     transformer.registerTargetType(source.getArgument(0), Number.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .abs((Expression<Number>) transformer.transform(source.getArgument(0)));
   }
 

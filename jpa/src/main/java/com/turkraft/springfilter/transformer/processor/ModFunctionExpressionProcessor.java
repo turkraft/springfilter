@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.ModFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -27,7 +26,8 @@ public class ModFunctionExpressionProcessor implements
       FunctionNode source) {
     transformer.registerTargetType(source.getArgument(0), Integer.class);
     transformer.registerTargetType(source.getArgument(1), Integer.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .mod((Expression<Integer>) transformer.transform(source.getArgument(0)),
             (Expression<Integer>) transformer.transform(source.getArgument(1)));
   }

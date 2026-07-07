@@ -1,6 +1,10 @@
 package com.turkraft.springfilter.pagesort;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +23,14 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("year");
 
     assertEquals(1, result.size());
-    assertEquals("year", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
+    assertEquals("year", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -28,8 +38,14 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("year");
 
     assertEquals(1, result.size());
-    assertEquals("year", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
+    assertEquals("year", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -37,8 +53,14 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("-year");
 
     assertEquals(1, result.size());
-    assertEquals("year", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
+    assertEquals("year", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -46,8 +68,14 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("brand.name");
 
     assertEquals(1, result.size());
-    assertEquals("brand.name", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
+    assertEquals("brand.name", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -55,8 +83,14 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("-owner.company.address.city");
 
     assertEquals(1, result.size());
-    assertEquals("owner.company.address.city", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
+    assertEquals("owner.company.address.city", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -65,11 +99,23 @@ class SimpleSortParserTest {
 
     assertEquals(2, result.size());
 
-    assertEquals("year", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
+    assertEquals("year", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
 
-    assertEquals("brand.name", result.getFields().get(1).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(1).getDirection());
+    assertEquals("brand.name", result
+        .getFields()
+        .get(1)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(1)
+        .getDirection());
   }
 
   @Test
@@ -78,14 +124,32 @@ class SimpleSortParserTest {
 
     assertEquals(3, result.size());
 
-    assertEquals("price", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
+    assertEquals("price", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
 
-    assertEquals("createdAt", result.getFields().get(1).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(1).getDirection());
+    assertEquals("createdAt", result
+        .getFields()
+        .get(1)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(1)
+        .getDirection());
 
-    assertEquals("id", result.getFields().get(2).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(2).getDirection());
+    assertEquals("id", result
+        .getFields()
+        .get(2)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(2)
+        .getDirection());
   }
 
   @Test
@@ -93,10 +157,22 @@ class SimpleSortParserTest {
     SortExpression result = parser.parse("  -year  ,  name  ");
 
     assertEquals(2, result.size());
-    assertEquals("year", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
-    assertEquals("name", result.getFields().get(1).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(1).getDirection());
+    assertEquals("year", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
+    assertEquals("name", result
+        .getFields()
+        .get(1)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(1)
+        .getDirection());
   }
 
   @Test
@@ -114,8 +190,14 @@ class SimpleSortParserTest {
   @Test
   void testParseWithUnderscore() {
     SortExpression result = parser.parse("-created_at");
-    assertEquals("created_at", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
+    assertEquals("created_at", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -155,11 +237,19 @@ class SimpleSortParserTest {
     var orders = springSort.toList();
     assertEquals(2, orders.size());
 
-    assertEquals("year", orders.get(0).getProperty());
-    assertEquals(org.springframework.data.domain.Sort.Direction.DESC, orders.get(0).getDirection());
+    assertEquals("year", orders
+        .get(0)
+        .getProperty());
+    assertEquals(org.springframework.data.domain.Sort.Direction.DESC, orders
+        .get(0)
+        .getDirection());
 
-    assertEquals("name", orders.get(1).getProperty());
-    assertEquals(org.springframework.data.domain.Sort.Direction.ASC, orders.get(1).getDirection());
+    assertEquals("name", orders
+        .get(1)
+        .getProperty());
+    assertEquals(org.springframework.data.domain.Sort.Direction.ASC, orders
+        .get(1)
+        .getDirection());
   }
 
   @Test
@@ -175,8 +265,14 @@ class SimpleSortParserTest {
   void testParseVeryLongFieldPath() {
     String longPath = "a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p";
     SortExpression result = parser.parse(longPath);
-    assertEquals(longPath, result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
+    assertEquals(longPath, result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
@@ -219,26 +315,50 @@ class SimpleSortParserTest {
   @Test
   void testParseDescendingNestedField() {
     SortExpression result = parser.parse("-user.name");
-    assertEquals("user.name", result.getFields().get(0).getFieldPath());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
+    assertEquals("user.name", result
+        .getFields()
+        .get(0)
+        .getFieldPath());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
   }
 
   @Test
   void testParseAllDescending() {
     SortExpression result = parser.parse("-year,-name,-id");
     assertEquals(3, result.size());
-    assertEquals(SortDirection.DESC, result.getFields().get(0).getDirection());
-    assertEquals(SortDirection.DESC, result.getFields().get(1).getDirection());
-    assertEquals(SortDirection.DESC, result.getFields().get(2).getDirection());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(0)
+        .getDirection());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(1)
+        .getDirection());
+    assertEquals(SortDirection.DESC, result
+        .getFields()
+        .get(2)
+        .getDirection());
   }
 
   @Test
   void testParseAllAscending() {
     SortExpression result = parser.parse("year,name,id");
     assertEquals(3, result.size());
-    assertEquals(SortDirection.ASC, result.getFields().get(0).getDirection());
-    assertEquals(SortDirection.ASC, result.getFields().get(1).getDirection());
-    assertEquals(SortDirection.ASC, result.getFields().get(2).getDirection());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(0)
+        .getDirection());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(1)
+        .getDirection());
+    assertEquals(SortDirection.ASC, result
+        .getFields()
+        .get(2)
+        .getDirection());
   }
 
   @Test

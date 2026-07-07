@@ -16,9 +16,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <de.flapdoodle.embed.mongo.spring30x.version>4.11.0
-    </de.flapdoodle.embed.mongo.spring30x.version>
-    <springdoc-openapi-starter-webmvc-ui.version>2.7.0</springdoc-openapi-starter-webmvc-ui.version>
+    <springdoc-openapi-starter-webmvc-ui.version>3.0.0</springdoc-openapi-starter-webmvc-ui.version>
     <docker.name>torshid/springfilter-mongo-example</docker.name>
   </properties>
 
@@ -44,7 +42,12 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-classic</artifactId>
     </dependency>
 
     <dependency>
@@ -64,12 +67,6 @@
     </dependency>
 
     <dependency>
-      <groupId>de.flapdoodle.embed</groupId>
-      <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
-      <version>${de.flapdoodle.embed.mongo.spring30x.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
       <version>1.0.2</version>
@@ -84,7 +81,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.4.5</version>
+        <version>${springboot.version}</version>
       </plugin>
 
     </plugins>
@@ -110,7 +107,7 @@
           <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>3.4.5</version>
+            <version>${springboot.version}</version>
           </plugin>
 
           <plugin>

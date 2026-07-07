@@ -37,13 +37,20 @@ public class FilterBuilderTest {
   @Test
   void test1() {
     test("`hello` : 'some string'",
-        fb.placeholder(helloWorldPlaceholder).equal(fb.input("some string")));
+        fb
+            .placeholder(helloWorldPlaceholder)
+            .equal(fb.input("some string")));
   }
 
   @Test
   void test2() {
     test("x : '1' and y >: '2'",
-        fb.field("x").equal(fb.input(1)).and(fb.field("y").greaterThanOrEqual(fb.input(2))));
+        fb
+            .field("x")
+            .equal(fb.input(1))
+            .and(fb
+                .field("y")
+                .greaterThanOrEqual(fb.input(2))));
   }
 
 }

@@ -49,7 +49,9 @@ public class NotInOperationPredicateProcessor implements
           values.add(PredicateValueExtractor.extractValue(itemPredicate, entity));
         }
 
-        return values.stream().noneMatch(v -> Objects.equals(leftValue, v));
+        return values
+            .stream()
+            .noneMatch(v -> Objects.equals(leftValue, v));
       };
 
     }
@@ -61,11 +63,14 @@ public class NotInOperationPredicateProcessor implements
       Object rightValue = PredicateValueExtractor.extractValue(right, entity);
 
       if (rightValue instanceof Collection) {
-        return ((Collection<?>) rightValue).stream()
+        return ((Collection<?>) rightValue)
+            .stream()
             .noneMatch(v -> Objects.equals(leftValue, v));
       }
 
-      if (rightValue != null && rightValue.getClass().isArray()) {
+      if (rightValue != null && rightValue
+          .getClass()
+          .isArray()) {
         for (Object item : (Object[]) rightValue) {
           if (Objects.equals(leftValue, item)) {
             return false;

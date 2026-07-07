@@ -26,7 +26,9 @@ public class NotEqualOperationExpressionProcessor implements
     Expression<?> left = transformer.transform(source.getLeft());
     transformer.registerTargetType(source.getRight(), left.getJavaType());
     Expression<?> right = transformer.transform(source.getRight());
-    return transformer.getCriteriaBuilder().notEqual(left, right);
+    return transformer
+        .getCriteriaBuilder()
+        .notEqual(left, right);
   }
 
 }

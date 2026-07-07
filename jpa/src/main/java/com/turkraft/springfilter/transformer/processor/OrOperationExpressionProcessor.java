@@ -27,7 +27,8 @@ public class OrOperationExpressionProcessor implements
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getLeft(), Boolean.class);
     transformer.registerTargetType(source.getRight(), Boolean.class);
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .or((Expression<Boolean>) transformer.transform(source.getLeft()),
             (Expression<Boolean>) transformer.transform(source.getRight()));
   }

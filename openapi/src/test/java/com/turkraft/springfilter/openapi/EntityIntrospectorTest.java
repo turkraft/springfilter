@@ -1,5 +1,12 @@
 package com.turkraft.springfilter.openapi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector.EntitySchema;
 import com.turkraft.springfilter.openapi.introspection.EntityIntrospector.FieldCategory;
@@ -8,8 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class EntityIntrospectorTest {
 
@@ -26,14 +31,18 @@ class EntityIntrospectorTest {
 
     assertNotNull(schema);
     assertEquals(TestEntity.class, schema.getEntityClass());
-    assertFalse(schema.getFields().isEmpty());
+    assertFalse(schema
+        .getFields()
+        .isEmpty());
   }
 
   @Test
   void shouldDetectPrimitiveFields() {
     EntitySchema schema = introspector.introspect(TestEntity.class);
 
-    FieldInfo idField = schema.getFields().get("id");
+    FieldInfo idField = schema
+        .getFields()
+        .get("id");
     assertNotNull(idField);
     assertEquals(FieldCategory.PRIMITIVE, idField.getFieldCategory());
     assertEquals(Long.class, idField.getType());
@@ -43,7 +52,9 @@ class EntityIntrospectorTest {
   void shouldDetectStringFields() {
     EntitySchema schema = introspector.introspect(TestEntity.class);
 
-    FieldInfo nameField = schema.getFields().get("name");
+    FieldInfo nameField = schema
+        .getFields()
+        .get("name");
     assertNotNull(nameField);
     assertEquals(FieldCategory.STRING, nameField.getFieldCategory());
   }
@@ -52,7 +63,9 @@ class EntityIntrospectorTest {
   void shouldDetectDateFields() {
     EntitySchema schema = introspector.introspect(TestEntity.class);
 
-    FieldInfo dateField = schema.getFields().get("createdAt");
+    FieldInfo dateField = schema
+        .getFields()
+        .get("createdAt");
     assertNotNull(dateField);
     assertEquals(FieldCategory.DATE, dateField.getFieldCategory());
   }
@@ -61,19 +74,27 @@ class EntityIntrospectorTest {
   void shouldDetectEnumFields() {
     EntitySchema schema = introspector.introspect(TestEntity.class);
 
-    FieldInfo statusField = schema.getFields().get("status");
+    FieldInfo statusField = schema
+        .getFields()
+        .get("status");
     assertNotNull(statusField);
     assertEquals(FieldCategory.ENUM, statusField.getFieldCategory());
     assertNotNull(statusField.getEnumValues());
-    assertTrue(statusField.getEnumValues().contains("ACTIVE"));
-    assertTrue(statusField.getEnumValues().contains("INACTIVE"));
+    assertTrue(statusField
+        .getEnumValues()
+        .contains("ACTIVE"));
+    assertTrue(statusField
+        .getEnumValues()
+        .contains("INACTIVE"));
   }
 
   @Test
   void shouldDetectCollectionFields() {
     EntitySchema schema = introspector.introspect(TestEntity.class);
 
-    FieldInfo tagsField = schema.getFields().get("tags");
+    FieldInfo tagsField = schema
+        .getFields()
+        .get("tags");
     assertNotNull(tagsField);
     assertTrue(tagsField.isCollection());
     assertEquals(String.class, tagsField.getTargetType());

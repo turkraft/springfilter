@@ -34,7 +34,7 @@ public class FieldMapperTest {
     ctx.setFieldMapper(
         (String field) -> field.equalsIgnoreCase("x") ? "a"
             : field.equalsIgnoreCase("y") ? "b" : field);
-    
+
     FilterNode node = filterParser.parse("x : y : z", ctx);
 
     Assertions.assertEquals("a : b : z", filterStringConverter.convert(node));

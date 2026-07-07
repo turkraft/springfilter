@@ -24,7 +24,9 @@ public class IsNotNullOperationExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       PostfixOperationNode source) {
     transformer.registerTargetType(source, Boolean.class);
-    return transformer.getCriteriaBuilder().isNotNull(transformer.transform(source.getLeft()));
+    return transformer
+        .getCriteriaBuilder()
+        .isNotNull(transformer.transform(source.getLeft()));
   }
 
 }

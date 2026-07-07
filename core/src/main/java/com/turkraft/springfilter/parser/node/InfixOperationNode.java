@@ -32,5 +32,5 @@ public class InfixOperationNode extends OperationNode {
   public List<FilterNode> getChildren() {
     return List.of(left, right);
   }
-  
+
 }

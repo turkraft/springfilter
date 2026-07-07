@@ -1,6 +1,10 @@
 package com.turkraft.springfilter.pagesort;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,11 +70,19 @@ class SortExpressionTest {
     List<Sort.Order> orders = springSort.toList();
     assertEquals(2, orders.size());
 
-    assertEquals("name", orders.get(0).getProperty());
-    assertEquals(Sort.Direction.ASC, orders.get(0).getDirection());
+    assertEquals("name", orders
+        .get(0)
+        .getProperty());
+    assertEquals(Sort.Direction.ASC, orders
+        .get(0)
+        .getDirection());
 
-    assertEquals("price", orders.get(1).getProperty());
-    assertEquals(Sort.Direction.DESC, orders.get(1).getDirection());
+    assertEquals("price", orders
+        .get(1)
+        .getProperty());
+    assertEquals(Sort.Direction.DESC, orders
+        .get(1)
+        .getDirection());
   }
 
   @Test
@@ -117,7 +129,9 @@ class SortExpressionTest {
     List<SortField> fields = List.of(new SortField("name", SortDirection.ASC));
     SortExpression expression = new SortExpression(fields);
 
-    assertThrows(UnsupportedOperationException.class, () -> expression.getFields().clear());
+    assertThrows(UnsupportedOperationException.class, () -> expression
+        .getFields()
+        .clear());
   }
 
 }

@@ -43,18 +43,26 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
 
   private Class<?> normalize(Field field) {
 
-    if (field.isAnnotationPresent(Id.class) && field.getType().equals(String.class)) {
+    if (field.isAnnotationPresent(Id.class) && field
+        .getType()
+        .equals(String.class)) {
       return CustomObjectId.class;
     }
 
-    if (field.getType().equals(UUID.class)) {
+    if (field
+        .getType()
+        .equals(UUID.class)) {
       return CustomUUID.class;
     }
 
     if (Collection.class.isAssignableFrom(field.getType())) {
       return getFirstTypeParameterOf(field);
-    } else if (field.getType().isArray()) {
-      return field.getType().getComponentType();
+    } else if (field
+        .getType()
+        .isArray()) {
+      return field
+          .getType()
+          .getComponentType();
     } else {
       return field.getType();
     }

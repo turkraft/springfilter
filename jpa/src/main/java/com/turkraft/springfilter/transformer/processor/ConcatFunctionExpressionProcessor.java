@@ -26,8 +26,12 @@ public class ConcatFunctionExpressionProcessor implements
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
 
-    if (source.getArguments().isEmpty()) {
-      return transformer.getCriteriaBuilder().literal("");
+    if (source
+        .getArguments()
+        .isEmpty()) {
+      return transformer
+          .getCriteriaBuilder()
+          .literal("");
     }
 
     for (FilterNode argument : source.getArguments()) {
@@ -36,8 +40,11 @@ public class ConcatFunctionExpressionProcessor implements
 
     Expression<String> result = (Expression<String>) transformer.transform(source.getArgument(0));
 
-    for (int i = 1; i < source.getArguments().size(); i++) {
-      result = transformer.getCriteriaBuilder()
+    for (int i = 1; i < source
+        .getArguments()
+        .size(); i++) {
+      result = transformer
+          .getCriteriaBuilder()
           .concat(result, (Expression<String>) transformer.transform(source.getArgument(i)));
     }
 

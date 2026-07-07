@@ -19,5 +19,5 @@ public class InputNode extends FilterNode {
   public List<FilterNode> getChildren() {
     return List.of();
   }
-  
+
 }

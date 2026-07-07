@@ -33,17 +33,19 @@ public class LikeOperationExpressionProcessor implements
   @SuppressWarnings("unchecked")
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, InfixOperationNode source) {
-    
+
     transformer.registerTargetType(source, Boolean.class);
     transformer.registerTargetType(source.getLeft(), String.class);
     transformer.registerTargetType(source.getRight(), String.class);
 
     if (getEscapeCharacter() == null) {
-      return transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
           .like((Expression<String>) transformer.transform(source.getLeft()),
               getLikePatternExpression(transformer, source.getRight()));
     } else {
-      return transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
           .like((Expression<String>) transformer.transform(source.getLeft()),
               getLikePatternExpression(transformer, source.getRight()), escapeCharacter);
     }
@@ -58,7 +60,9 @@ public class LikeOperationExpressionProcessor implements
       return (Expression<String>) transformer.transform(node);
     }
 
-    String pattern = ((InputNode) node).getValue().toString();
+    String pattern = ((InputNode) node)
+        .getValue()
+        .toString();
 
     pattern = pattern.replace("\\\\%", "\\%");
 
@@ -72,7 +76,9 @@ public class LikeOperationExpressionProcessor implements
       pattern = "%" + pattern + "%";
     }
 
-    return transformer.getCriteriaBuilder().literal(pattern);
+    return transformer
+        .getCriteriaBuilder()
+        .literal(pattern);
 
   }
 

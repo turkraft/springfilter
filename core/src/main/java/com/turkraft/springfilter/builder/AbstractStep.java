@@ -7,7 +7,7 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 public abstract class AbstractStep implements Step {
 
   private final FilterOperators operators;
-  
+
   public AbstractStep(FilterOperators operators) {
     this.operators = operators;
   }

@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.language.LocateFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
@@ -29,15 +28,19 @@ public class LocateFunctionExpressionProcessor implements
     transformer.registerTargetType(source.getArgument(0), String.class);
     transformer.registerTargetType(source.getArgument(1), String.class);
 
-    if (source.getArguments().size() >= 2) {
+    if (source
+        .getArguments()
+        .size() >= 2) {
       transformer.registerTargetType(source.getArgument(2), Integer.class);
-      return transformer.getCriteriaBuilder()
+      return transformer
+          .getCriteriaBuilder()
           .locate((Expression<String>) transformer.transform(source.getArgument(0)),
               (Expression<String>) transformer.transform(source.getArgument(1)),
               (Expression<Integer>) transformer.transform(source.getArgument(2)));
     }
 
-    return transformer.getCriteriaBuilder()
+    return transformer
+        .getCriteriaBuilder()
         .locate((Expression<String>) transformer.transform(source.getArgument(0)),
             (Expression<String>) transformer.transform(source.getArgument(1)));
   }

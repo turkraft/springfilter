@@ -18,5 +18,5 @@ public class CollectionNode extends FilterNode {
   public List<FilterNode> getChildren() {
     return getItems();
   }
-  
+
 }

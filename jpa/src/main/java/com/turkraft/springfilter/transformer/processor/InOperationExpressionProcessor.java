@@ -35,7 +35,9 @@ public class InOperationExpressionProcessor implements
 
     if (source.getRight() instanceof CollectionNode collectionNode) {
 
-      In<Object> in = transformer.getCriteriaBuilder().in(left);
+      In<Object> in = transformer
+          .getCriteriaBuilder()
+          .in(left);
 
       for (FilterNode item : collectionNode.getItems()) {
         transformer.registerTargetType(item, left.getJavaType());
@@ -52,7 +54,9 @@ public class InOperationExpressionProcessor implements
 
     if (right instanceof ListExpression<?> listExpression) {
 
-      In<Object> in = transformer.getCriteriaBuilder().in(left);
+      In<Object> in = transformer
+          .getCriteriaBuilder()
+          .in(left);
 
       for (Expression<?> value : listExpression.getValues()) {
         in.value(value);
@@ -62,7 +66,9 @@ public class InOperationExpressionProcessor implements
 
     }
 
-    return transformer.getCriteriaBuilder().in(left)
+    return transformer
+        .getCriteriaBuilder()
+        .in(left)
         .value((Expression) right);
 
   }

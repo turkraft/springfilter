@@ -28,7 +28,9 @@ public class LessThanOperationExpressionProcessor implements
     transformer.registerTargetType(source.getRight(), left.getJavaType());
     Expression<Comparable> right = (Expression<Comparable>) transformer.transform(
         source.getRight());
-    return transformer.getCriteriaBuilder().lessThan(left, right);
+    return transformer
+        .getCriteriaBuilder()
+        .lessThan(left, right);
   }
 
 }

@@ -45,7 +45,9 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
     String parameterName = fieldsAnnotation.parameter();
     String fieldsValue = request.getParameter(parameterName);
 
-    if (fieldsValue == null || fieldsValue.trim().isEmpty()) {
+    if (fieldsValue == null || fieldsValue
+        .trim()
+        .isEmpty()) {
       String defaultValue = fieldsAnnotation.defaultValue();
       if (defaultValue != null && !defaultValue.isEmpty()) {
         return true;
@@ -84,7 +86,9 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
     String parameterName = fieldsAnnotation.parameter();
     String fieldsValue = servletRequest.getParameter(parameterName);
 
-    if (fieldsValue == null || fieldsValue.trim().isEmpty()) {
+    if (fieldsValue == null || fieldsValue
+        .trim()
+        .isEmpty()) {
       if (fieldsAnnotation.required()) {
         throw new IllegalArgumentException(
             "Required fields parameter '" + parameterName + "' is missing");

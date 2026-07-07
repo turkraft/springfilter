@@ -17,7 +17,9 @@ public class EntityManagerConfiguration {
 
   @Bean
   public DataSource dataSource() {
-    return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
+    return new EmbeddedDatabaseBuilder()
+        .setType(EmbeddedDatabaseType.H2)
+        .build();
   }
 
   @Bean

@@ -25,5 +25,5 @@ public class PostfixOperationNode extends OperationNode {
   public List<FilterNode> getChildren() {
     return List.of(left);
   }
-  
+
 }

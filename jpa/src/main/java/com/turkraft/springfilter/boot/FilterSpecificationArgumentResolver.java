@@ -32,9 +32,13 @@ public class FilterSpecificationArgumentResolver implements HandlerMethodArgumen
 
   @Override
   public boolean supportsParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(FilterSpecification.class) || (
+    return methodParameter
+        .getParameterType()
+        .equals(FilterSpecification.class) || (
         methodParameter.hasParameterAnnotation(Filter.class)
-            && methodParameter.getParameterType().equals(Specification.class))
+            && methodParameter
+            .getParameterType()
+            .equals(Specification.class))
         || isOptionalParameter(methodParameter);
   }
 
@@ -77,11 +81,17 @@ public class FilterSpecificationArgumentResolver implements HandlerMethodArgumen
   }
 
   private boolean isOptionalParameter(MethodParameter methodParameter) {
-    return methodParameter.getParameterType().equals(
-        Optional.class) && (methodParameter.getGenericParameterType().getTypeName()
+    return methodParameter
+        .getParameterType()
+        .equals(
+            Optional.class) && (methodParameter
+        .getGenericParameterType()
+        .getTypeName()
         .equals(Optional.class.getName() + "<" + FilterSpecification.class.getName() + ">") || (
         methodParameter.hasParameterAnnotation(Filter.class)
-            && methodParameter.getGenericParameterType().getTypeName()
+            && methodParameter
+            .getGenericParameterType()
+            .getTypeName()
             .equals(Optional.class.getName() + "<" + Specification.class.getName())));
   }
 
