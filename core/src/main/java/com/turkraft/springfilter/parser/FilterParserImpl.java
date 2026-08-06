@@ -35,7 +35,12 @@ class FilterParserImpl implements FilterParser {
     parser.removeErrorListeners();
     parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
-    return antlrParser.parse(parser.filter(), ctx);
+    try {
+      return antlrParser.parse(parser.filter(), ctx);
+    } catch (InvalidSyntaxException e) {
+      e.setInput(input);
+      throw e;
+    }
 
   }
 
