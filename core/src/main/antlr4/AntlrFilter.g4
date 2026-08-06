@@ -48,6 +48,8 @@ grammar AntlrFilter;
       if (next.getType() != SYMBOL) {
         return previousToken = next;
       }
+      int symbolLine = next.getLine();
+      int symbolCharPositionInLine = next.getCharPositionInLine();
       StringBuilder builder = new StringBuilder();
       if (next.getType() == SYMBOL) {
         builder.append(next.getText());
@@ -57,11 +59,16 @@ grammar AntlrFilter;
       List<Token> tokens = findOperatorCombination(builder.toString(), getOperatorType());
       if (tokens != null) {
         for (int i = tokens.size() - 1; i >= 0; i--) {
-          deque.addFirst(tokens.get(i));
+          CommonToken t = (CommonToken) tokens.get(i);
+          t.setLine(symbolLine);
+          t.setCharPositionInLine(symbolCharPositionInLine);
+          deque.addFirst(t);
         }
-        return deque.pollFirst();
+        return previousToken = deque.pollFirst();
       } else {
-        Token result = new CommonToken(SYMBOL, builder.toString());
+        CommonToken result = new CommonToken(SYMBOL, builder.toString());
+        result.setLine(symbolLine);
+        result.setCharPositionInLine(symbolCharPositionInLine);
         return previousToken = result;
       }
     }

@@ -41,14 +41,55 @@ public class FilterNodeArgumentResolverHelper {
     String parameterName =
         annotation != null ? annotation.parameter() : Filter.DEFAULT_PARAMETER_NAME;
 
-    if (nativeWebRequest.getParameterValues(parameterName) == null) {
-      return Optional.empty();
+    String[] parameterValues = nativeWebRequest.getParameterValues(parameterName);
+
+    List<String> values = extractValues(parameterValues);
+
+    if (values.isEmpty()) {
+      return handleMissingParameter(annotation, parameterName);
     }
 
-    List<FilterNode> nodes = Arrays
-        .stream(nativeWebRequest.getParameterValues(parameterName))
+    if (annotation != null && annotation.maxLength() > 0) {
+      for (String value : values) {
+        if (value.length() > annotation.maxLength()) {
+          throw new IllegalArgumentException(
+              "Filter parameter '" + parameterName + "' exceeds maximum length of "
+                  + annotation.maxLength());
+        }
+      }
+    }
+
+    return parseAndCombine(values);
+
+  }
+
+  private List<String> extractValues(String[] parameterValues) {
+    if (parameterValues == null || parameterValues.length == 0) {
+      return List.of();
+    }
+    return Arrays
+        .stream(parameterValues)
         .filter(p -> p != null && !p.isBlank())
-        .map(p -> filterStringConverter.convert(p.trim()))
+        .map(String::trim)
+        .toList();
+  }
+
+  private Optional<FilterNode> handleMissingParameter(Filter annotation,
+      String parameterName) {
+    if (annotation != null && !annotation.defaultValue().isEmpty()) {
+      return parseAndCombine(List.of(annotation.defaultValue()));
+    }
+    if (annotation != null && annotation.required()) {
+      throw new IllegalArgumentException(
+          "Filter parameter '" + parameterName + "' is required but was not provided");
+    }
+    return Optional.empty();
+  }
+
+  private Optional<FilterNode> parseAndCombine(List<String> values) {
+    List<FilterNode> nodes = values
+        .stream()
+        .map(filterStringConverter::convert)
         .toList();
 
     if (nodes.isEmpty()) {
@@ -64,7 +105,6 @@ public class FilterNodeArgumentResolverHelper {
         .get();
 
     return Optional.of(node);
-
   }
 
 }

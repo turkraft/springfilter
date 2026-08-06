@@ -15,4 +15,10 @@ public @interface Filter {
 
   Class<?> entityClass() default Void.class;
 
+  boolean required() default false;
+
+  String defaultValue() default "";
+
+  int maxLength() default 0;
+
 }

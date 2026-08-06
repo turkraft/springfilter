@@ -14,7 +14,7 @@ class ThrowingErrorListener extends BaseErrorListener {
       int charPositionInLine,
       String msg, RecognitionException e)
       throws ParseCancellationException {
-    throw new InvalidSyntaxException(msg);
+    throw new InvalidSyntaxException(msg, line, charPositionInLine, offendingSymbol, e);
   }
 
 }
