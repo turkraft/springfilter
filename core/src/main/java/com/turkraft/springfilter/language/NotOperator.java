@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class NotOperator extends FilterPrefixOperator {
 
   public NotOperator() {
-    super("not", 150);
+    super("not", 75);
   }
 
   @Override
