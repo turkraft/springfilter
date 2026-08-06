@@ -1,6 +1,7 @@
 package com.turkraft.springfilter;
 
 import com.turkraft.springfilter.builder.FilterBuilder;
+import com.turkraft.springfilter.definition.FilterFunction;
 import com.turkraft.springfilter.helper.ExistsExpressionHelper;
 import com.turkraft.springfilter.helper.PathExpressionHelper;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -12,12 +13,15 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -51,6 +55,18 @@ public class FilterExpressionTransformerTest {
 
   @Autowired
   private FilterNodeProcessorFactories filterNodeProcessorFactories;
+
+  @Autowired
+  @Qualifier("anyFunction")
+  private FilterFunction anyFunction;
+
+  @Autowired
+  @Qualifier("allFunction")
+  private FilterFunction allFunction;
+
+  @Autowired
+  @Qualifier("someFunction")
+  private FilterFunction someFunction;
 
   private CriteriaQuery<TestEntity> criteriaQuery;
 
@@ -98,6 +114,14 @@ public class FilterExpressionTransformerTest {
 
   }
 
+  private TestEntity createEntity(int integerValue, List<Integer> integersList) {
+    TestEntity e = new TestEntity();
+    e.setInteger(integerValue);
+    e.setIntegers(integersList);
+    entityManager.persist(e);
+    return e;
+  }
+
   @Test
   void equalTest() {
 
@@ -138,6 +162,138 @@ public class FilterExpressionTransformerTest {
             .notEqual(fb.input("hello world"))
             .get());
 
+  }
+
+  @Test
+  void anyGreaterThanTest() {
+    createEntity(10, Arrays.asList(5, 10, 20));
+    createEntity(3, Arrays.asList(5, 10, 15));
+    createEntity(25, Arrays.asList(5, 10, 15));
+
+    test("""
+            select t from TestEntity t where t.integer > any (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .greaterThan(fb.function(anyFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void anyEqualToTest() {
+    createEntity(10, Arrays.asList(5, 10, 20));
+    createEntity(3, Arrays.asList(5, 10, 15));
+    createEntity(25, Arrays.asList(5, 10, 15));
+
+    test("""
+            select t from TestEntity t where t.integer = any (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .equal(fb.function(anyFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void someGreaterThanTest() {
+    createEntity(10, Arrays.asList(5, 10, 20));
+    createEntity(3, Arrays.asList(5, 10, 15));
+    createEntity(25, Arrays.asList(5, 10, 15));
+
+    test("""
+            select t from TestEntity t where t.integer > some (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .greaterThan(fb.function(someFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void allGreaterThanTest() {
+    createEntity(10, Arrays.asList(15, 20, 25));
+    createEntity(30, Arrays.asList(15, 20, 25));
+    createEntity(5, Arrays.asList(1, 2, 3));
+
+    test("""
+            select t from TestEntity t where t.integer > all (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .greaterThan(fb.function(allFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void allLessThanOrEqualToTest() {
+    createEntity(10, Arrays.asList(15, 20, 25));
+    createEntity(30, Arrays.asList(15, 20, 25));
+    createEntity(5, Arrays.asList(1, 2, 3));
+
+    test("""
+            select t from TestEntity t where t.integer <= all (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .lessThanOrEqual(fb.function(allFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void anyWithEmptyCollectionTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(3, Arrays.asList(5, 10, 15));
+    createEntity(25, Arrays.asList(5, 10, 15));
+
+    test("""
+            select t from TestEntity t where t.integer > any (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .greaterThan(fb.function(anyFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void allWithEmptyCollectionTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(3, Arrays.asList(5, 10, 15));
+    createEntity(25, Arrays.asList(5, 10, 15));
+
+    test("""
+            select t from TestEntity t where t.integer > all (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .greaterThan(fb.function(allFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void allNotEqualToTest() {
+    createEntity(10, Arrays.asList(10, 20, 30));
+    createEntity(15, Arrays.asList(10, 20, 30));
+    createEntity(25, Arrays.asList(10, 20, 30));
+
+    test("""
+            select t from TestEntity t where t.integer != all (select i from t.integers i)
+            """,
+        fb
+            .field("integer")
+            .notEqual(fb.function(allFunction, fb.field("integers")))
+            .get());
+  }
+
+  @Test
+  void parseRoundTripAnyTest() {
+    FilterNode node = fb
+        .field("integer")
+        .greaterThan(fb.function(anyFunction, fb.field("integers")))
+        .get();
+    Assertions.assertNotNull(node);
+    String converted = conversionService.convert(node, String.class);
+    Assertions.assertNotNull(converted);
+    Assertions.assertTrue(converted.contains("any(integers)"));
   }
 
 }
