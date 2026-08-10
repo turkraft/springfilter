@@ -120,4 +120,76 @@ public class FilterBuilderTest {
             .contains("100%"));
   }
 
+  @Test
+  void testBetweenIntegers() {
+    test("age between '18' and '65'",
+        fb
+            .field("age")
+            .between(fb.input(18), fb.input(65)));
+  }
+
+  @Test
+  void testBetweenDecimals() {
+    test("price between '9.99' and '99.99'",
+        fb
+            .field("price")
+            .between(fb.input(9.99), fb.input(99.99)));
+  }
+
+  @Test
+  void testBetweenStrings() {
+    test("name between 'A' and 'M'",
+        fb
+            .field("name")
+            .between(fb.input("A"), fb.input("M")));
+  }
+
+  @Test
+  void testBetweenNestedField() {
+    test("address.zip between '10000' and '99999'",
+        fb
+            .field("address.zip")
+            .between(fb.input(10000), fb.input(99999)));
+  }
+
+  @Test
+  void testBetweenWithFieldReferences() {
+    test("a between b and c",
+        fb
+            .field("a")
+            .between(fb.field("b"), fb.field("c")));
+  }
+
+  @Test
+  void testBetweenChainedWithAnd() {
+    test("age between '18' and '65' and name : 'John'",
+        fb
+            .field("age")
+            .between(fb.input(18), fb.input(65))
+            .and(fb
+                .field("name")
+                .equal(fb.input("John"))));
+  }
+
+  @Test
+  void testBetweenChainedWithOr() {
+    test("age between '18' and '65' or name : 'John'",
+        fb
+            .field("age")
+            .between(fb.input(18), fb.input(65))
+            .or(fb
+                .field("name")
+                .equal(fb.input("John"))));
+  }
+
+  @Test
+  void testBetweenWithPlaceholder() {
+    test("age between `hello` and `hello`",
+        fb
+            .field("age")
+            .between(
+                fb.placeholder(helloWorldPlaceholder),
+                fb.placeholder(helloWorldPlaceholder)));
+  }
+
 }

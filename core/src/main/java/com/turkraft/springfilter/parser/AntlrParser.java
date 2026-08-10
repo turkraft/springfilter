@@ -1,7 +1,9 @@
 package com.turkraft.springfilter.parser;
 
 import com.turkraft.springfilter.definition.FilterFunctions;
+import com.turkraft.springfilter.definition.FilterInfixOperator;
 import com.turkraft.springfilter.definition.FilterOperators;
+import com.turkraft.springfilter.definition.FilterPostfixOperator;
 import com.turkraft.springfilter.definition.FilterPlaceholders;
 import com.turkraft.springfilter.parser.AntlrFilterParser.CollectionContext;
 import com.turkraft.springfilter.parser.AntlrFilterParser.ExpressionContext;
@@ -22,6 +24,7 @@ import com.turkraft.springfilter.parser.node.PriorityNode;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -116,7 +119,9 @@ class AntlrParser {
 
       if (antlrCtx.getChildCount() == 1) {
         return map(ctx, parse((AntlrBaseContext) antlrCtx.getChild(0), ctx));
-      } else if (antlrCtx.getChildCount() == 2) {
+      }
+
+      if (antlrCtx.getChildCount() == 2) {
 
         if (antlrCtx.getChild(0) instanceof TerminalNode) {
           return map(ctx, operators
@@ -132,46 +137,106 @@ class AntlrParser {
                 .getText())
             .toNode(parse((AntlrBaseContext) antlrCtx.getChild(0), ctx)));
 
-      } else {
+      }
 
-        int lowestPriorityIndex = -1;
-        int lowestPriorityValue = Integer.MAX_VALUE;
+      if (hasBetween((ExpressionContext) antlrCtx)) {
+        return map(ctx, expandBetween((ExpressionContext) antlrCtx, ctx));
+      }
 
-        for (int i = 0; i < antlrCtx.getChildCount(); i++) {
-          if (antlrCtx.getChild(i) instanceof ExpressionContext) {
-            if (((ExpressionContext) antlrCtx.getChild(i))._p <= lowestPriorityValue) {
-              lowestPriorityValue = ((ExpressionContext) antlrCtx.getChild(i))._p;
-              lowestPriorityIndex = i;
-            }
+      int lowestPriorityIndex = -1;
+      int lowestPriorityValue = Integer.MAX_VALUE;
+
+      for (int i = 0; i < antlrCtx.getChildCount(); i++) {
+        if (antlrCtx.getChild(i) instanceof ExpressionContext) {
+          if (((ExpressionContext) antlrCtx.getChild(i))._p <= lowestPriorityValue) {
+            lowestPriorityValue = ((ExpressionContext) antlrCtx.getChild(i))._p;
+            lowestPriorityIndex = i;
           }
         }
+      }
 
-        ExpressionContext subCtx = new ExpressionContext(antlrCtx, 0);
+      ExpressionContext subCtx = new ExpressionContext(antlrCtx, 0);
 
-        for (int i = 0; i < lowestPriorityIndex - 1; i++) {
+      for (int i = 0; i < lowestPriorityIndex - 1; i++) {
 
-          if (antlrCtx.getChild(i) instanceof TerminalNode) {
-            subCtx.addChild((TerminalNode) antlrCtx.getChild(i));
-          } else if (antlrCtx.getChild(i) instanceof ParserRuleContext) {
-            subCtx.addChild((ParserRuleContext) antlrCtx.getChild(i));
-          }
-
+        if (antlrCtx.getChild(i) instanceof TerminalNode) {
+          subCtx.addChild((TerminalNode) antlrCtx.getChild(i));
+        } else if (antlrCtx.getChild(i) instanceof ParserRuleContext) {
+          subCtx.addChild((ParserRuleContext) antlrCtx.getChild(i));
         }
-
-        return map(ctx,
-            operators
-                .getInfixOperator(antlrCtx
-                    .getChild(lowestPriorityIndex - 1)
-                    .getText())
-                .toNode(parse(subCtx, ctx),
-                    parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx)));
 
       }
+
+      return map(ctx,
+          operators
+              .getInfixOperator(antlrCtx
+                  .getChild(lowestPriorityIndex - 1)
+                  .getText())
+              .toNode(parse(subCtx, ctx),
+                  parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx)));
 
     }
 
     throw new UnsupportedOperationException("Unsupported context " + antlrCtx);
 
+  }
+
+  private static boolean hasBetween(ExpressionContext ctx) {
+    for (int i = 0; i < ctx.getChildCount(); i++) {
+      ParseTree child = ctx.getChild(i);
+      if (child instanceof TerminalNode
+          && ((TerminalNode) child).getSymbol().getType() == AntlrFilterParser.BETWEEN) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private FilterNode expandBetween(ExpressionContext antlrCtx, @Nullable ParseContext ctx) {
+    FilterNode result = parse((AntlrBaseContext) antlrCtx.getChild(0), ctx);
+
+    int i = 1;
+    while (i < antlrCtx.getChildCount()) {
+      ParseTree child = antlrCtx.getChild(i);
+
+      if (child instanceof TerminalNode) {
+        TerminalNode token = (TerminalNode) child;
+        int tokenType = token.getSymbol().getType();
+
+        if (tokenType == AntlrFilterParser.BETWEEN) {
+          FilterNode lower = parse((AntlrBaseContext) antlrCtx.getChild(i + 1), ctx);
+          FilterNode upper = parse((AntlrBaseContext) antlrCtx.getChild(i + 3), ctx);
+
+          FilterInfixOperator gte = operators.getInfixOperator(">:");
+          FilterInfixOperator lte = operators.getInfixOperator("<:");
+          FilterInfixOperator andOp = operators.getInfixOperator("and");
+
+          result = andOp.toNode(
+              gte.toNode(result, lower),
+              lte.toNode(result, upper));
+          i += 4;
+          continue;
+        }
+
+        if (tokenType == AntlrFilterParser.INFIX_OPERATOR) {
+          FilterNode right = parse((AntlrBaseContext) antlrCtx.getChild(i + 1), ctx);
+          result = operators.getInfixOperator(token.getText()).toNode(result, right);
+          i += 2;
+          continue;
+        }
+
+        if (tokenType == AntlrFilterParser.POSTFIX_OPERATOR) {
+          FilterPostfixOperator op = operators.getPostfixOperator(token.getText());
+          result = op.toNode(result);
+          i += 1;
+          continue;
+        }
+      }
+
+      i++;
+    }
+
+    return result;
   }
 
   private FilterNode map(@Nullable ParseContext ctx, FilterNode input) {

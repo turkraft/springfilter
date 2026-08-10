@@ -29,6 +29,14 @@ public class OperatorDocumentationProvider {
     for (FilterPostfixOperator operator : filterOperators.getPostfixOperators()) {
       docs.add(createPostfixOperatorDoc(operator));
     }
+    if (!docs.isEmpty()) {
+      docs.add(new OperatorDoc(
+          new String[]{"between"},
+          "Value is between two bounds (inclusive)",
+          "age between 18 and 65",
+          100,
+          OperatorType.INFIX));
+    }
     return docs;
   }
 

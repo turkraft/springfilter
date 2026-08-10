@@ -1,5 +1,8 @@
 package com.turkraft.springfilter.transformer;
 
+import com.turkraft.springfilter.language.AndOperator;
+import com.turkraft.springfilter.language.GreaterThanOrEqualOperator;
+import com.turkraft.springfilter.language.LessThanOrEqualOperator;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FunctionNode;
@@ -83,10 +86,38 @@ public class FilterStringTransformer implements FilterNodeTransformer<String> {
 
   @Override
   public String transformInfixOperation(InfixOperationNode node) {
+    if (isBetweenPattern(node)) {
+      InfixOperationNode gteNode = (InfixOperationNode) node.getLeft();
+      InfixOperationNode lteNode = (InfixOperationNode) node.getRight();
+      return transform(gteNode.getLeft()) + " between "
+          + transform(gteNode.getRight()) + " and "
+          + transform(lteNode.getRight());
+    }
     return transform(node.getLeft()) + " " + node
         .getOperator()
         .getToken() + " " + transform(
         node.getRight());
+  }
+
+  private boolean isBetweenPattern(InfixOperationNode node) {
+    if (!(node.getOperator() instanceof AndOperator)) {
+      return false;
+    }
+    if (!(node.getLeft() instanceof InfixOperationNode)) {
+      return false;
+    }
+    if (!(node.getRight() instanceof InfixOperationNode)) {
+      return false;
+    }
+    InfixOperationNode leftOp = (InfixOperationNode) node.getLeft();
+    InfixOperationNode rightOp = (InfixOperationNode) node.getRight();
+    if (!(leftOp.getOperator() instanceof GreaterThanOrEqualOperator)
+        || !(rightOp.getOperator() instanceof LessThanOrEqualOperator)) {
+      return false;
+    }
+    String leftField = transform(leftOp.getLeft());
+    String rightField = transform(rightOp.getLeft());
+    return leftField.equals(rightField);
   }
 
   @Override

@@ -445,6 +445,7 @@ a > b                // greater than
 a >: b               // greater than or equal
 a < b                // less than
 a <: b               // less than or equal
+a between x and y    // between (inclusive range)
 a ~ 'pattern'        // like (% and _ wildcards)
 a ~~ 'pattern'       // case-insensitive like
 a in [x, y]          // in collection
@@ -474,6 +475,9 @@ a and (b or c)
 
 // Multiple conditions
 ?filter= year > 2020 and km < 50000
+
+// Range (inclusive)
+?filter= year between 2020 and 2025
 
 // OR conditions
 ?filter= color : 'red' or color : 'blue'
@@ -538,6 +542,9 @@ a and (b or c)
 
 // Date range
 ?filter= createdAt > '2023-01-01' and createdAt < '2023-12-31'
+
+// Date range (between)
+?filter= createdAt between '2023-01-01' and '2023-12-31'
 
 // Relative dates with today() function
 ?filter= createdAt > today()
