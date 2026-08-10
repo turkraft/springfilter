@@ -192,4 +192,36 @@ public class FilterBuilderTest {
                 fb.placeholder(helloWorldPlaceholder)));
   }
 
+  @Test
+  void testLikeCollection() {
+    test("name ~ ['A%', 'B%', 'C%']",
+        fb
+            .field("name")
+            .likeCollection(fb.input("A%"), fb.input("B%"), fb.input("C%")));
+  }
+
+  @Test
+  void testLikeCollectionSingle() {
+    test("name ~ ['%test%']",
+        fb
+            .field("name")
+            .likeCollection(fb.input("%test%")));
+  }
+
+  @Test
+  void testLikeCollectionWithFieldRefs() {
+    test("a ~ [b, c]",
+        fb
+            .field("a")
+            .likeCollection(fb.field("b"), fb.field("c")));
+  }
+
+  @Test
+  void testInsensitiveLikeCollection() {
+    test("name ~~ ['A%', 'B%']",
+        fb
+            .field("name")
+            .insensitiveLikeCollection(fb.input("A%"), fb.input("B%")));
+  }
+
 }
