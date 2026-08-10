@@ -296,4 +296,37 @@ public class FilterExpressionTransformerTest {
     Assertions.assertTrue(converted.contains("any(integers)"));
   }
 
+  @Test
+  void betweenTest() {
+    createEntity(5, Collections.emptyList());
+    createEntity(10, Collections.emptyList());
+    createEntity(15, Collections.emptyList());
+    createEntity(20, Collections.emptyList());
+    createEntity(25, Collections.emptyList());
+
+    test("""
+            select t from TestEntity t where t.integer >= 10 and t.integer <= 20
+            """,
+        fb
+            .field("integer")
+            .between(fb.input(10), fb.input(20))
+            .get());
+  }
+
+  @Test
+  void betweenParseTest() {
+    createEntity(5, Collections.emptyList());
+    createEntity(10, Collections.emptyList());
+    createEntity(15, Collections.emptyList());
+    createEntity(20, Collections.emptyList());
+    createEntity(25, Collections.emptyList());
+
+    FilterNode node = conversionService.convert("integer between 10 and 20", FilterNode.class);
+
+    test("""
+            select t from TestEntity t where t.integer >= 10 and t.integer <= 20
+            """,
+        node);
+  }
+
 }

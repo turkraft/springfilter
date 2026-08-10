@@ -110,4 +110,20 @@ public class FilterJsonNodeTransformerTest {
             .get());
   }
 
+  @Test
+  void betweenTest() {
+    test("""
+            {
+              "$and": [
+                { "$gte": ["$integer", 10] },
+                { "$lte": ["$integer", 20] }
+              ]
+            }
+            """,
+        fb
+            .field("integer")
+            .between(fb.input(10), fb.input(20))
+            .get());
+  }
+
 }

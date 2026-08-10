@@ -576,4 +576,41 @@ public class FilterPredicateTransformerTest {
 
   }
 
+  @Test
+  void testBetween() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .between(fb.input(10), fb.input(100))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 50)));
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 10)));
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 100)));
+    Assertions.assertFalse(predicate.test(new TestPojo("test", List.of(), 5)));
+    Assertions.assertFalse(predicate.test(new TestPojo("test", List.of(), 150)));
+
+  }
+
+  @Test
+  void testBetweenWithNestedField() {
+
+    FilterNode filter = fb
+        .field("nested.value")
+        .between(fb.input(10), fb.input(100))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(
+        new TestPojo("test", List.of(), 0, null, new TestPojo.NestedPojo("name", 50))));
+    Assertions.assertFalse(predicate.test(
+        new TestPojo("test", List.of(), 0, null, new TestPojo.NestedPojo("name", 5))));
+    Assertions.assertFalse(predicate.test(
+        new TestPojo("test", List.of(), 0, null, new TestPojo.NestedPojo("name", 150))));
+
+  }
+
 }

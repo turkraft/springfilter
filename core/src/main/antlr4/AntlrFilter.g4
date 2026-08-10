@@ -232,16 +232,36 @@ grammar AntlrFilter;
         return operators.getInfixOperator(op.getText()).getPriority();
       } else if (op.getType() == POSTFIX_OPERATOR) {
         return operators.getPostfixOperator(op.getText()).getPriority();
+      } else if (op.getType() == BETWEEN) {
+        return 100;
       }
       throw new IllegalStateException("Unexpected token `" + op.getText() + "`");
     }
 
     public Integer getNextPrecedence(Token op) {
+      if (op.getType() == BETWEEN) return 101;
       Integer p = getPrecedence(op);
       if (op.getType() == PREFIX_OPERATOR) return p;
       else if (op.getType() == POSTFIX_OPERATOR) return p;
       else if (op.getType() == INFIX_OPERATOR) return p + 1;
       throw new IllegalStateException("Unexpected token `" + op.getText() + "`");
+    }
+
+    private boolean isBetween(Token t, int minPrec) {
+      return t.getType() == BETWEEN && 100 >= minPrec;
+    }
+
+    private boolean isAndSeparator(Token t) {
+      if (t.getType() == INFIX_OPERATOR && "and".equalsIgnoreCase(t.getText())) {
+        return true;
+      }
+      if (t.getType() == INFIX_OPERATOR) {
+        throw new com.turkraft.springfilter.parser.InvalidSyntaxException(
+            "Expected 'and' after between lower bound, but found '"
+                + t.getText() + "'",
+            t.getLine(), t.getCharPositionInLine(), t, null);
+      }
+      return false;
     }
 }
 
@@ -253,7 +273,8 @@ filter: expression[0] EOF;
 
 expression [int _p]
     :   atom
-        (   {getPrecedence(_input.LT(1)) >= $_p}? op=INFIX_OPERATOR expression[getNextPrecedence($op)]
+        (   {isBetween(_input.LT(1), $_p)}? BETWEEN lower=expression[101] {isAndSeparator(_input.LT(1))}? . upper=expression[101]
+        |   {getPrecedence(_input.LT(1)) >= $_p}? op=INFIX_OPERATOR expression[getNextPrecedence($op)]
         |   {getPrecedence(_input.LT(1)) >= $_p}? POSTFIX_OPERATOR
         )*
     ;
@@ -282,6 +303,8 @@ RPAREN: ')';
 LBRACK: '[';
 RBRACK: ']';
 BTICK: '`';
+
+BETWEEN: 'between' | 'BETWEEN';
 
 ID: [a-zA-Z_$][a-zA-Z_$0-9]*;
 NUMBER: '-'? [0-9]+ ('.' [0-9]+)?;
