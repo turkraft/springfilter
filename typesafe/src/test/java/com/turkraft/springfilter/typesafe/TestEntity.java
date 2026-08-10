@@ -8,9 +8,6 @@ public class TestEntity {
   private double price;
   private boolean active;
 
-  public TestEntity() {
-  }
-
   public int getYear() { return year; }
   public String getModel() { return model; }
   public double getPrice() { return price; }
