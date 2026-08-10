@@ -19,6 +19,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes("com.turkraft.springfilter.typesafe.Filterable")
@@ -35,7 +36,7 @@ public class FilterableProcessor extends AbstractProcessor {
       try {
         generateFilterClass(typeElement);
       } catch (IOException e) {
-        processingEnv.getMessager().printError(
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
             "Failed to generate filter for " + typeElement.getQualifiedName() + ": " + e.getMessage());
       }
     }
@@ -82,7 +83,7 @@ public class FilterableProcessor extends AbstractProcessor {
           continue;
         }
         if (isConflictingName(fieldName)) {
-          processingEnv.getMessager().printWarning(
+          processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING,
               "Skipping field '" + fieldName + "' in " + typeElement.getSimpleName()
                   + " — name conflicts with generated method");
           continue;

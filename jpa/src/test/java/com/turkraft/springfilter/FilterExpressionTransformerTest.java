@@ -329,4 +329,49 @@ public class FilterExpressionTransformerTest {
         node);
   }
 
+  @Test
+  void likeCollectionTest() {
+    TestEntity e1 = new TestEntity();
+    e1.setString("hello world");
+    entityManager.persist(e1);
+
+    TestEntity e2 = new TestEntity();
+    e2.setString("foo bar");
+    entityManager.persist(e2);
+
+    TestEntity e3 = new TestEntity();
+    e3.setString("xyz");
+    entityManager.persist(e3);
+
+    test("""
+            select t from TestEntity t where t.string like 'hello%' or t.string like '%bar'
+            """,
+        fb
+            .field("string")
+            .likeCollection(fb.input("hello%"), fb.input("%bar"))
+            .get());
+  }
+
+  @Test
+  void likeCollectionParseTest() {
+    TestEntity e1 = new TestEntity();
+    e1.setString("hello world");
+    entityManager.persist(e1);
+
+    TestEntity e2 = new TestEntity();
+    e2.setString("foo bar");
+    entityManager.persist(e2);
+
+    TestEntity e3 = new TestEntity();
+    e3.setString("xyz");
+    entityManager.persist(e3);
+
+    FilterNode node = conversionService.convert("string ~ ['hello%', '%bar']", FilterNode.class);
+
+    test("""
+            select t from TestEntity t where t.string like 'hello%' or t.string like '%bar'
+            """,
+        node);
+  }
+
 }

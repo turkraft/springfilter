@@ -1,6 +1,7 @@
 package com.turkraft.springfilter.helper;
 
 import com.turkraft.springfilter.definition.FilterDefinition;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -218,6 +219,18 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
     if (node instanceof CollectionNode collectionNode) {
       for (FilterNode items : collectionNode.getItems()) {
         if (requiresExists(transformer, items)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (node instanceof CollectionLikeNode collectionLikeNode) {
+      if (requiresExists(transformer, collectionLikeNode.getLeft())) {
+        return true;
+      }
+      for (FilterNode pattern : collectionLikeNode.getPatterns()) {
+        if (requiresExists(transformer, pattern)) {
           return true;
         }
       }

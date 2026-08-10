@@ -126,4 +126,20 @@ public class FilterJsonNodeTransformerTest {
             .get());
   }
 
+  @Test
+  void likeCollectionTest() {
+    test("""
+            {
+              "$or": [
+                { "$string": { "$regex": "hello%" } },
+                { "$string": { "$regex": "%world" } }
+              ]
+            }
+            """,
+        fb
+            .field("string")
+            .likeCollection(fb.input("hello%"), fb.input("%world"))
+            .get());
+  }
+
 }

@@ -3,6 +3,8 @@ package com.turkraft.springfilter.transformer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
+import com.turkraft.springfilter.language.InsensitiveLikeOperator;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -95,6 +97,27 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
     return filterNodeProcessorFactories
         .getFunctionProcessorFactory()
         .process(this, node);
+  }
+
+  @Override
+  public JsonNode transformCollectionLike(CollectionLikeNode node) {
+    JsonNode field = transform(node.getLeft());
+    com.fasterxml.jackson.databind.node.ArrayNode orArray = objectMapper.createArrayNode();
+    boolean caseInsensitive = node.getOperator() instanceof InsensitiveLikeOperator;
+    for (FilterNode pattern : node.getPatterns()) {
+      JsonNode patternNode = transform(pattern);
+      com.fasterxml.jackson.databind.node.ObjectNode regex = objectMapper.createObjectNode();
+      regex.set("$regex", patternNode);
+      if (caseInsensitive) {
+        regex.put("$options", "i");
+      }
+      com.fasterxml.jackson.databind.node.ObjectNode condition = objectMapper.createObjectNode();
+      condition.set(field.asText(), regex);
+      orArray.add(condition);
+    }
+    return orArray.size() == 1 ? orArray.get(0)
+        : new com.fasterxml.jackson.databind.node.ObjectNode(
+            objectMapper.getNodeFactory()).set("$or", orArray);
   }
 
   @Override

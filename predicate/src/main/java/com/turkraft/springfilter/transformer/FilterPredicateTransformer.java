@@ -1,7 +1,10 @@
 package com.turkraft.springfilter.transformer;
 
+import com.turkraft.springfilter.language.InsensitiveLikeOperator;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
+import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.parser.node.InputNode;
@@ -11,6 +14,8 @@ import com.turkraft.springfilter.parser.node.PrefixOperationNode;
 import com.turkraft.springfilter.parser.node.PriorityNode;
 import com.turkraft.springfilter.transformer.processor.ContainerPredicate;
 import com.turkraft.springfilter.transformer.processor.FieldAccessPredicate;
+import com.turkraft.springfilter.transformer.processor.LikeOperationPredicateProcessor;
+import com.turkraft.springfilter.transformer.processor.PredicateValueExtractor;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import java.util.function.Predicate;
 import org.springframework.core.convert.ConversionService;
@@ -64,6 +69,29 @@ public class FilterPredicateTransformer implements FilterNodeTransformer<Predica
     return filterNodeProcessorFactories
         .getFunctionProcessorFactory()
         .process(this, node);
+  }
+
+  @Override
+  public Predicate<Object> transformCollectionLike(CollectionLikeNode node) {
+    Predicate<?> left = transform(node.getLeft());
+    boolean caseInsensitive = node.getOperator() instanceof InsensitiveLikeOperator;
+    return entity -> {
+      Object leftValue = PredicateValueExtractor.extractValue(left, entity);
+      if (leftValue == null) return false;
+      String str = leftValue.toString();
+      for (FilterNode pattern : node.getPatterns()) {
+        Predicate<?> right = transform(pattern);
+        Object rightValue = PredicateValueExtractor.extractValue(right, entity);
+        if (rightValue == null) continue;
+        String patStr = rightValue.toString();
+        String regex = LikeOperationPredicateProcessor.likePatternToRegex(patStr);
+        boolean matches = caseInsensitive
+            ? str.toLowerCase().matches(regex.toLowerCase())
+            : str.matches(regex);
+        if (matches) return true;
+      }
+      return false;
+    };
   }
 
   @Override
