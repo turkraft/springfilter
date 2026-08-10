@@ -613,4 +613,20 @@ public class FilterPredicateTransformerTest {
 
   }
 
+  @Test
+  void testLikeCollection() {
+
+    FilterNode filter = fb
+        .field("string")
+        .likeCollection(fb.input("%hello%"), fb.input("%world%"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(new TestPojo("hello world", List.of(), 0)));
+    Assertions.assertTrue(predicate.test(new TestPojo("world hello", List.of(), 0)));
+    Assertions.assertFalse(predicate.test(new TestPojo("foo bar", List.of(), 0)));
+
+  }
+
 }

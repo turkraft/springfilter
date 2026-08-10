@@ -3,8 +3,10 @@ package com.turkraft.springfilter.transformer;
 import com.turkraft.springfilter.language.AndOperator;
 import com.turkraft.springfilter.language.GreaterThanOrEqualOperator;
 import com.turkraft.springfilter.language.LessThanOrEqualOperator;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
+import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.parser.node.InputNode;
@@ -75,6 +77,14 @@ public class FilterStringTransformer implements FilterNodeTransformer<String> {
         .map(this::transform)
         .collect(Collectors.joining(", "))
         + "]";
+  }
+
+  @Override
+  public String transformCollectionLike(CollectionLikeNode node) {
+    return transform(node.getLeft()) + " " + node.getOperator().getToken()
+        + " [" + node.getPatterns().stream()
+        .map(this::transform)
+        .collect(Collectors.joining(", ")) + "]";
   }
 
   @Override

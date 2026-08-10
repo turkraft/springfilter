@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.transformer;
 
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -35,6 +36,9 @@ public interface FilterNodeTransformer<Target> {
     if (node instanceof CollectionNode) {
       return transformCollection((CollectionNode) node);
     }
+    if (node instanceof CollectionLikeNode) {
+      return transformCollectionLike((CollectionLikeNode) node);
+    }
     if (node instanceof OperationNode) {
       return transformOperation((OperationNode) node);
     }
@@ -52,6 +56,11 @@ public interface FilterNodeTransformer<Target> {
   Target transformFunction(FunctionNode node);
 
   Target transformCollection(CollectionNode node);
+
+  default Target transformCollectionLike(CollectionLikeNode node) {
+    throw new UnsupportedOperationException(
+        "CollectionLikeNode not supported by " + getClass().getSimpleName());
+  }
 
   default Target transformOperation(OperationNode node) {
     if (node instanceof PrefixOperationNode) {

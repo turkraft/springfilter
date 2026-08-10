@@ -8,6 +8,10 @@ import com.turkraft.springfilter.definition.FilterPlaceholders;
 import com.turkraft.springfilter.language.AndOperator;
 import com.turkraft.springfilter.language.GreaterThanOrEqualOperator;
 import com.turkraft.springfilter.language.LessThanOrEqualOperator;
+import com.turkraft.springfilter.language.InsensitiveLikeOperator;
+import com.turkraft.springfilter.language.LikeOperator;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
+import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.AntlrFilterParser.CollectionContext;
 import com.turkraft.springfilter.parser.AntlrFilterParser.ExpressionContext;
 import com.turkraft.springfilter.parser.AntlrFilterParser.FieldContext;
@@ -21,6 +25,7 @@ import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.FunctionNode;
+import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.parser.node.InputNode;
 import com.turkraft.springfilter.parser.node.PlaceholderNode;
 import com.turkraft.springfilter.parser.node.PriorityNode;
@@ -171,12 +176,13 @@ class AntlrParser {
       }
 
       return map(ctx,
-          operators
-              .getInfixOperator(antlrCtx
-                  .getChild(lowestPriorityIndex - 1)
-                  .getText())
-              .toNode(parse(subCtx, ctx),
-                  parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx)));
+          expandLikeCollection(
+              operators
+                  .getInfixOperator(antlrCtx
+                      .getChild(lowestPriorityIndex - 1)
+                      .getText())
+                  .toNode(parse(subCtx, ctx),
+                      parse((AntlrBaseContext) antlrCtx.getChild(lowestPriorityIndex), ctx))));
 
     }
 
@@ -244,6 +250,26 @@ class AntlrParser {
     }
 
     return result;
+  }
+
+  private FilterNode expandLikeCollection(FilterNode node) {
+    if (!(node instanceof InfixOperationNode)) {
+      return node;
+    }
+    InfixOperationNode infix = (InfixOperationNode) node;
+    if (!(infix.getOperator() instanceof LikeOperator)
+        && !(infix.getOperator() instanceof InsensitiveLikeOperator)) {
+      return node;
+    }
+    if (!(infix.getRight() instanceof CollectionNode)) {
+      return node;
+    }
+    CollectionNode coll = (CollectionNode) infix.getRight();
+    if (coll.getItems().isEmpty()) {
+      return node;
+    }
+    return new CollectionLikeNode(infix.getLeft(),
+        (FilterInfixOperator) infix.getOperator(), coll.getItems());
   }
 
   private FilterNode map(@Nullable ParseContext ctx, FilterNode input) {

@@ -3,6 +3,8 @@ package com.turkraft.springfilter.transformer;
 import com.turkraft.springfilter.helper.ExistsExpressionHelper;
 import com.turkraft.springfilter.helper.PathExpressionHelper;
 import com.turkraft.springfilter.helper.RootContext;
+import com.turkraft.springfilter.language.InsensitiveLikeOperator;
+import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -117,6 +119,28 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
     return filterNodeProcessorFactories
         .getFunctionProcessorFactory()
         .process(this, node);
+  }
+
+  @Override
+  public Expression<?> transformCollectionLike(CollectionLikeNode node) {
+    registerTargetType(node, Boolean.class);
+    Expression<?> left = transform(node.getLeft());
+    jakarta.persistence.criteria.Predicate[] predicates =
+        new jakarta.persistence.criteria.Predicate[node.getPatterns().size()];
+    boolean caseInsensitive = node.getOperator() instanceof InsensitiveLikeOperator;
+    for (int i = 0; i < node.getPatterns().size(); i++) {
+      registerTargetType(node.getPatterns().get(i), left.getJavaType());
+      Expression<?> right = transform(node.getPatterns().get(i));
+      if (caseInsensitive) {
+        predicates[i] = criteriaBuilder.like(
+            criteriaBuilder.upper((Expression<String>) left),
+            criteriaBuilder.upper((Expression<String>) right));
+      } else {
+        predicates[i] = criteriaBuilder.like(
+            (Expression<String>) left, (Expression<String>) right);
+      }
+    }
+    return criteriaBuilder.or(predicates);
   }
 
   @Override

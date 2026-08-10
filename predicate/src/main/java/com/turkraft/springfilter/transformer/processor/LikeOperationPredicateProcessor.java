@@ -38,27 +38,30 @@ public class LikeOperationPredicateProcessor implements
       String leftStr = leftValue.toString();
       String pattern = rightValue.toString();
 
-      String regex = pattern
-          .replace("\\", "\\\\")
-          .replace(".", "\\.")
-          .replace("*", "\\*")
-          .replace("+", "\\+")
-          .replace("?", "\\?")
-          .replace("(", "\\(")
-          .replace(")", "\\)")
-          .replace("[", "\\[")
-          .replace("]", "\\]")
-          .replace("{", "\\{")
-          .replace("}", "\\}")
-          .replace("^", "\\^")
-          .replace("$", "\\$")
-          .replace("|", "\\|")
-          .replace("%", ".*")
-          .replace("_", ".");
-
+      String regex = likePatternToRegex(pattern);
       return leftStr.matches(regex);
     };
 
+  }
+
+  public static String likePatternToRegex(String pattern) {
+    return pattern
+        .replace("\\", "\\\\")
+        .replace(".", "\\.")
+        .replace("*", "\\*")
+        .replace("+", "\\+")
+        .replace("?", "\\?")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("{", "\\{")
+        .replace("}", "\\}")
+        .replace("^", "\\^")
+        .replace("$", "\\$")
+        .replace("|", "\\|")
+        .replace("%", ".*")
+        .replace("_", ".");
   }
 
 }
