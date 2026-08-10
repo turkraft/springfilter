@@ -5,6 +5,13 @@ import org.antlr.v4.runtime.misc.Pair;
 
 public interface FilterOperators {
 
+  static FilterOperators of(
+      List<FilterPrefixOperator> prefix,
+      List<FilterInfixOperator> infix,
+      List<FilterPostfixOperator> postfix) {
+    return new FilterOperatorsImpl(prefix, infix, postfix);
+  }
+
   List<FilterPrefixOperator> getPrefixOperators();
 
   List<FilterInfixOperator> getInfixOperators();
