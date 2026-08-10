@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SizeFunction extends FilterFunction {
 
-  protected SizeFunction() {
+  public SizeFunction() {
     super("size");
   }
 

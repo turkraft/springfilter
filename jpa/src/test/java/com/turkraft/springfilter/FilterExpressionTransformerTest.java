@@ -374,4 +374,17 @@ public class FilterExpressionTransformerTest {
         node);
   }
 
+  @Test
+  void xorTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(20, Collections.emptyList());
+    createEntity(30, Collections.emptyList());
+
+    test("""
+            select t from TestEntity t where (t.integer > 15 and not (t.integer <= 25)) or (not (t.integer > 15) and t.integer <= 25)
+            """,
+        fb.field("integer").greaterThan(fb.input(15))
+            .xor(fb.field("integer").lessThanOrEqual(fb.input(25))).get());
+  }
+
 }

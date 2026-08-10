@@ -503,6 +503,7 @@ Placeholders are resolved by custom placeholder processors you implement.
 ```
 a and b              // logical and
 a or b               // logical or
+a xor b               // logical xor
 not a                // logical not
 a : b                // equals
 a ! b                // not equals
@@ -597,6 +598,12 @@ a and (b or c)
 
 // Pattern matching
 ?filter= code ~ 'PRD-____-2023'
+
+// Multiple patterns
+?filter= name ~ ['%john%', '%doe%']
+
+// Case-insensitive multi-pattern
+?filter= name ~~ ['%JOHN%', '%DOE%']
 ```
 
 ### Date Filtering

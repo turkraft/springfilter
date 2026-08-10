@@ -629,4 +629,20 @@ public class FilterPredicateTransformerTest {
 
   }
 
+  @Test
+  void testXor() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .greaterThan(fb.input(15))
+        .xor(fb.field("integer").lessThan(fb.input(25))).get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 10)));
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 30)));
+    Assertions.assertFalse(predicate.test(new TestPojo("test", List.of(), 20)));
+
+  }
+
 }

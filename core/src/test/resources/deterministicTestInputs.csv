@@ -41,3 +41,7 @@
 "name ~ ['100%%']"
 "name ~~ ['TE%', 'ST%']"
 "x ~~ ['a%']"
+"a : 1 xor b : 2"
+"a xor b or c"
+"a and b xor c"
+"(a or b) xor c"

@@ -142,4 +142,18 @@ public class FilterJsonNodeTransformerTest {
             .get());
   }
 
+  @Test
+  void xorTest() {
+    test("""
+            {
+              "$xor": [
+                { "$gt": ["$integer", 15] },
+                { "$lte": ["$integer", 25] }
+              ]
+            }
+            """,
+        fb.field("integer").greaterThan(fb.input(15))
+            .xor(fb.field("integer").lessThanOrEqual(fb.input(25))).get());
+  }
+
 }

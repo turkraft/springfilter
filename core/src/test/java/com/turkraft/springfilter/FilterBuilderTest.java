@@ -224,4 +224,11 @@ public class FilterBuilderTest {
             .insensitiveLikeCollection(fb.input("A%"), fb.input("B%")));
   }
 
+  @Test
+  void testXor() {
+    test("a : '1' xor b : '2'",
+        fb.field("a").equal(fb.input(1))
+            .xor(fb.field("b").equal(fb.input(2))));
+  }
+
 }
