@@ -20,13 +20,13 @@
     <dependency>
       <groupId>com.turkraft.springfilter</groupId>
       <artifactId>core</artifactId>
-      <version>${project.version}</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
       <groupId>com.turkraft.springfilter</groupId>
       <artifactId>typesafe-processor</artifactId>
-      <version>${project.version}</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
@@ -54,7 +54,7 @@
             <path>
               <groupId>com.turkraft.springfilter</groupId>
               <artifactId>typesafe-processor</artifactId>
-              <version>${project.version}</version>
+              <version>${revision}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
