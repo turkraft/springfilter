@@ -71,6 +71,9 @@
     <module>predicate</module>
     <module>openapi</module>
     <module>page-sort</module>
+    <module>typesafe-processor</module>
+    <module>typesafe</module>
+    <module>typesafe-example</module>
   </modules>
 
   <dependencyManagement>

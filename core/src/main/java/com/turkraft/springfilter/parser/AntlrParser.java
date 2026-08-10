@@ -5,6 +5,9 @@ import com.turkraft.springfilter.definition.FilterInfixOperator;
 import com.turkraft.springfilter.definition.FilterOperators;
 import com.turkraft.springfilter.definition.FilterPostfixOperator;
 import com.turkraft.springfilter.definition.FilterPlaceholders;
+import com.turkraft.springfilter.language.AndOperator;
+import com.turkraft.springfilter.language.GreaterThanOrEqualOperator;
+import com.turkraft.springfilter.language.LessThanOrEqualOperator;
 import com.turkraft.springfilter.parser.AntlrFilterParser.CollectionContext;
 import com.turkraft.springfilter.parser.AntlrFilterParser.ExpressionContext;
 import com.turkraft.springfilter.parser.AntlrFilterParser.FieldContext;
@@ -204,12 +207,16 @@ class AntlrParser {
         int tokenType = token.getSymbol().getType();
 
         if (tokenType == AntlrFilterParser.BETWEEN) {
+          if (i + 3 >= antlrCtx.getChildCount()) {
+            throw new IllegalStateException(
+                "Malformed between expression: expected 4 children after BETWEEN token");
+          }
           FilterNode lower = parse((AntlrBaseContext) antlrCtx.getChild(i + 1), ctx);
           FilterNode upper = parse((AntlrBaseContext) antlrCtx.getChild(i + 3), ctx);
 
-          FilterInfixOperator gte = operators.getInfixOperator(">:");
-          FilterInfixOperator lte = operators.getInfixOperator("<:");
-          FilterInfixOperator andOp = operators.getInfixOperator("and");
+          FilterInfixOperator gte = operators.getInfixOperator(GreaterThanOrEqualOperator.class);
+          FilterInfixOperator lte = operators.getInfixOperator(LessThanOrEqualOperator.class);
+          FilterInfixOperator andOp = operators.getInfixOperator(AndOperator.class);
 
           result = andOp.toNode(
               gte.toNode(result, lower),

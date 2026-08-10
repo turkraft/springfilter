@@ -252,6 +252,71 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
     .get();
 ```
 
+### Type-Safe Filter Builder
+
+Generate compile-time type-safe filter builders from your JPA entities. IDE autocomplete on every field, type-safe comparisons, and refactoring safety.
+
+```xml
+<dependency>
+  <groupId>com.turkraft.springfilter</groupId>
+  <artifactId>typesafe</artifactId>
+  <version>4.0.1</version>
+</dependency>
+```
+
+Add the annotation processor to your compiler plugin:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>3.11.0</version>
+  <configuration>
+    <annotationProcessorPaths>
+      <path>
+        <groupId>com.turkraft.springfilter</groupId>
+        <artifactId>typesafe-processor</artifactId>
+        <version>4.0.1</version>
+      </path>
+    </annotationProcessorPaths>
+  </configuration>
+</plugin>
+```
+
+Annotate your entity:
+
+```java
+@Entity
+@Filterable
+public class Car {
+    private int year;
+    private String model;
+    private double price;
+    private boolean active;
+    @ManyToOne private Brand brand;
+}
+```
+
+At compile time, `CarFilter` is generated. Use it:
+
+```java
+@Autowired FilterBuilder fb;
+
+FilterNode f = CarFilter.where(fb)
+    .year().between(2020, 2025)
+    .and()
+    .model().startsWith("Audi")
+    .and()
+    .price().greaterThan(100.0)
+    .and()
+    .active().isTrue()
+    .build();
+
+// Produces: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
+```
+
+Supported field types: `int`, `long`, `double`, `boolean`, `String`, `Date`, `LocalDate`, `LocalDateTime`, enums, collections. Supports `and()` / `or()` chaining with correct operator precedence. Fields annotated with `@Transient` or `@JsonIgnore` are skipped. Inherited fields from superclasses are included.
+
 ## OpenAPI/Swagger
 
 Add automatic Swagger documentation for endpoints with `@Filter` parameters.
