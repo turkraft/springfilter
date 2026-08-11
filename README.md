@@ -16,16 +16,15 @@ The library parses filter expressions into abstract syntax trees, then converts 
 
 ## Ecosystem
 
-The Spring Filter expression language is available across your entire stack:
+Also available for JavaScript and TypeScript:
 
-| Package | Platform | Description |
-|---|---|---|
-| [Spring Filter](https://github.com/turkraft/springfilter) | Java / Spring Boot | Core library — filter JPA, MongoDB, in-memory |
-| [FilterKit](https://github.com/turkraft/filterkit) | JavaScript / TypeScript | Core library — filter arrays, build queries, parse expressions |
-| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | React | TanStack Table column filters → Spring Filter |
-| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | React | react-querybuilder queries → Spring Filter |
-| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Node.js | Filter expressions → Prisma where clauses |
-| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Node.js | Filter expressions → Drizzle where clauses |
+| Package | Description |
+|---|---|
+| [FilterKit](https://github.com/turkraft/filterkit) | Core library — filter arrays, build queries, parse expressions |
+| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table column filters → Spring Filter |
+| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder queries → Spring Filter |
+| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Filter expressions → Prisma where clauses |
+| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Filter expressions → Drizzle where clauses |
 
 ## Example ([try it live](https://springfilter-jpa.onrender.com/))
 
