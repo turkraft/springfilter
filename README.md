@@ -14,6 +14,18 @@ The library parses filter expressions into abstract syntax trees, then converts 
 
 > Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/spring-filter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/spring-filter/tree/3.x.x) branches.
 
+## Ecosystem
+
+Also available for JavaScript and TypeScript:
+
+| Package | Description |
+|---|---|
+| [FilterKit](https://github.com/turkraft/filterkit) | Core library — filter arrays, build queries, parse expressions |
+| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table column filters → Spring Filter |
+| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder queries → Spring Filter |
+| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Filter expressions → Prisma where clauses |
+| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Filter expressions → Drizzle where clauses |
+
 ## Example ([try it live](https://springfilter-jpa.onrender.com/))
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
@@ -434,8 +446,6 @@ The `openapi` module automatically generates documentation for these parameters 
 
 ## Frontend Integration
 
-### FilterKit (recommended)
-
 Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions in JavaScript/TypeScript. It shares the exact same expression syntax and AST as Spring Filter.
 
 ```ts
@@ -449,7 +459,7 @@ const query = build()
 fetch(`/api/cars?filter=${encodeURIComponent(stringify(query))}`);
 ```
 
-FilterKit also supports filtering arrays in-memory and parsing expressions on the client.
+FilterKit also provides React integrations for [TanStack Table](https://github.com/turkraft/filterkit-tanstack) and [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder).
 
 ### Community projects
 
