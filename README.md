@@ -10,6 +10,8 @@ Dynamic query filtering for Spring applications. Pass filter expressions as URL 
 
 The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
 
+> Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions on your JavaScript frontend. Same syntax, same operators. Send the query string to your Spring Boot backend and Spring Filter handles the rest.
+
 > Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/spring-filter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/spring-filter/tree/3.x.x) branches.
 
 ## Example ([try it live](https://springfilter-jpa.onrender.com/))
@@ -432,25 +434,27 @@ The `openapi` module automatically generates documentation for these parameters 
 
 ## Frontend Integration
 
-### JavaScript
+### FilterKit (recommended)
 
-Use [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) to build queries in JavaScript/TypeScript.
+Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions in JavaScript/TypeScript. It shares the exact same expression syntax and AST as Spring Filter.
 
-```javascript
-import { sfAnd, sfEqual, sfGt, sfIsNull, sfLike, sfNot, sfOr } from 'spring-filter-query-builder';
+```ts
+import { build, stringify } from '@turkraft/filterkit';
 
-const filter = sfAnd([
-  sfAnd([sfEqual('status', 'active'), sfGt('createdAt', '1-1-2000')]),
-  sfOr([sfLike('value', '*hello*'), sfLike('name', '*world*')]),
-  sfNot(sfOr([sfGt('id', 100), sfIsNull('category.order')])),
-]);
+const query = build()
+  .field('year').between(2020, 2025)
+  .and(build().field('brand.name').in(['audi', 'bmw']))
+  .get();
 
-fetch('http://api/person?filter=' + filter.toString());
+fetch(`/api/cars?filter=${encodeURIComponent(stringify(query))}`);
 ```
 
-### Angular
+FilterKit also supports filtering arrays in-memory and parsing expressions on the client.
 
-See [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) documentation.
+### Community projects
+
+- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript query builder
+- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular integration
 
 ## Language Syntax
 
