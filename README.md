@@ -10,8 +10,6 @@ Dynamic query filtering for Spring applications. Pass filter expressions as URL 
 
 The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
 
-> Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions on your JavaScript frontend. Same syntax, same operators. Send the query string to your Spring Boot backend and Spring Filter handles the rest.
-
 > Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/spring-filter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/spring-filter/tree/3.x.x) branches.
 
 ## Ecosystem
