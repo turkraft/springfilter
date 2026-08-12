@@ -65,3 +65,4 @@ com.turkraft.springfilter.transformer.processor.NegFunctionExpressionProcessor
 com.turkraft.springfilter.transformer.processor.OrOperationExpressionProcessor
 com.turkraft.springfilter.transformer.processor.HelloWorldPlaceholderExpressionProcessor
 com.turkraft.springfilter.transformer.processor.UpperFunctionExpressionProcessor
+com.turkraft.springfilter.transformer.processor.XorOperationExpressionProcessor
