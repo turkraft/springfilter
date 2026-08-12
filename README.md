@@ -6,11 +6,18 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://central.sonatype.com/artifact/com.turkraft.springfilter/core"><img src="https://img.shields.io/maven-central/v/com.turkraft.springfilter/core?label=Maven%20Central" alt="Maven Central"></a>
+  <a href="https://github.com/turkraft/springfilter/actions/workflows/maven.yml"><img src="https://github.com/turkraft/springfilter/actions/workflows/maven.yml/badge.svg" alt="Build"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/turkraft/springfilter" alt="License"></a>
+  <a href="https://github.com/turkraft/springfilter"><img src="https://img.shields.io/badge/Java-17+-blue" alt="Java 17+"></a>
+</p>
+
 Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, or in-memory Java objects.
 
 The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
 
-> Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/spring-filter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/spring-filter/tree/3.x.x) branches.
+> Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) branches.
 
 ## Ecosystem
 

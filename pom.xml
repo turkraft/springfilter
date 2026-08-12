@@ -19,12 +19,12 @@
     integrates with Spring APIs.
   </description>
 
-  <url>https://github.com/turkraft/spring-filter</url>
+  <url>https://github.com/turkraft/springfilter</url>
 
   <scm>
-    <connection>scm:git:git://github.com/turkraft/spring-filter.git</connection>
-    <developerConnection>scm:git:ssh://github.com:turkraft/spring-filter.git</developerConnection>
-    <url>https://github.com/turkraft/spring-filter/tree/main</url>
+    <connection>scm:git:git://github.com/turkraft/springfilter.git</connection>
+    <developerConnection>scm:git:ssh://github.com:turkraft/springfilter.git</developerConnection>
+    <url>https://github.com/turkraft/springfilter/tree/main</url>
   </scm>
 
   <developers>
