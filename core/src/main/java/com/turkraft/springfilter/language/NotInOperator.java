@@ -17,7 +17,7 @@ public class NotInOperator extends FilterInfixOperator {
 
   @Override
   public String getExample() {
-    return "status not in ('deleted', 'archived')";
+    return "status not in ['deleted', 'archived']";
   }
 
 }

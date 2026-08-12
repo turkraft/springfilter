@@ -68,6 +68,12 @@ public class FilterExpressionTransformerTest {
   @Qualifier("someFunction")
   private FilterFunction someFunction;
 
+  @Autowired
+  private com.turkraft.springfilter.language.JsonTextFunction jsonTextFunction;
+
+  @Autowired
+  private com.turkraft.springfilter.language.ToIntegerFunction toIntegerFunction;
+
   private CriteriaQuery<TestEntity> criteriaQuery;
 
   private Root<TestEntity> root;
@@ -76,6 +82,10 @@ public class FilterExpressionTransformerTest {
 
   @BeforeEach
   void initEach() {
+    entityManager
+        .createNativeQuery(
+            "CREATE ALIAS IF NOT EXISTS jsonb_extract_path_text FOR \"com.turkraft.springfilter.H2JsonHelper.jsonbExtractPathText\"")
+        .executeUpdate();
     criteriaQuery = entityManager
         .getCriteriaBuilder()
         .createQuery(TestEntity.class);
@@ -385,6 +395,110 @@ public class FilterExpressionTransformerTest {
             """,
         fb.field("integer").greaterThan(fb.input(15))
             .xor(fb.field("integer").lessThanOrEqual(fb.input(25))).get());
+  }
+
+  @Test
+  void isEmptyOrCollectionEqualTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Arrays.asList(1, 2, 3));
+    createEntity(5, Collections.emptyList());
+    createEntity(5, Collections.singletonList(5));
+
+    test("""
+            select t from TestEntity t where t.integer = 10 and (t.integers is empty or 5 member of t.integers)
+            """,
+        fb.field("integer").equal(fb.input(10))
+            .and(
+                fb.field("integers").isEmpty()
+                    .or(fb.field("integers").equal(fb.input(5)))
+            ).get());
+  }
+
+  @Test
+  void collectionEqualTest() {
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Arrays.asList(1, 2, 3));
+    createEntity(10, Arrays.asList(4, 5, 6));
+
+    test("""
+            select t from TestEntity t where 5 member of t.integers
+            """,
+        fb.field("integers").equal(fb.input(5)).get());
+  }
+
+  @Test
+  void isNotEmptyAndCollectionNotEqualTest() {
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Collections.singletonList(7));
+    createEntity(10, Collections.emptyList());
+    createEntity(10, Arrays.asList(1, 2));
+    createEntity(10, Arrays.asList(5, 7));
+
+    test("""
+            select t from TestEntity t where t.integers is not empty and exists(select 1 from t.integers i where i <> 5)
+            """,
+        fb.field("integers").isNotEmpty()
+            .and(fb.field("integers").notEqual(fb.input(5))).get());
+  }
+
+  private TestEntity createEntityWithJson(String jsonData) {
+    TestEntity e = new TestEntity();
+    e.setJsonData(jsonData);
+    entityManager.persist(e);
+    return e;
+  }
+
+  @Test
+  void jsonTextEqualTest() {
+    createEntityWithJson("{\"name\": \"John\", \"age\": 30}");
+    createEntityWithJson("{\"name\": \"Jane\", \"age\": 25}");
+    createEntityWithJson("{\"city\": \"Paris\"}");
+
+    test("""
+            select t from TestEntity t where function('jsonb_extract_path_text', t.jsonData, 'name') = 'John'
+            """,
+        fb.function(jsonTextFunction, fb.field("jsonData"), fb.input("name"))
+            .equal(fb.input("John")).get());
+  }
+
+  @Test
+  void jsonTextIsNullTest() {
+    createEntityWithJson("{\"name\": \"John\"}");
+    createEntityWithJson("{\"age\": 30}");
+
+    test("""
+            select t from TestEntity t where function('jsonb_extract_path_text', t.jsonData, 'name') is null
+            """,
+        fb.function(jsonTextFunction, fb.field("jsonData"), fb.input("name"))
+            .isNull().get());
+  }
+
+  @Test
+  void jsonTextWithToIntegerTest() {
+    createEntityWithJson("{\"name\": \"John\", \"age\": 30}");
+    createEntityWithJson("{\"name\": \"Jane\", \"age\": 15}");
+    createEntityWithJson("{\"name\": \"Bob\"}");
+
+    test("""
+            select t from TestEntity t where cast(function('jsonb_extract_path_text', t.jsonData, 'age') as integer) > 18
+            """,
+        fb.function(toIntegerFunction,
+                fb.function(jsonTextFunction, fb.field("jsonData"), fb.input("age")))
+            .greaterThan(fb.input(18)).get());
+  }
+
+  @Test
+  void jsonTextNestedPathTest() {
+    createEntityWithJson("{\"address\": {\"city\": \"Paris\"}}");
+    createEntityWithJson("{\"address\": {\"city\": \"London\"}}");
+    createEntityWithJson("{\"name\": \"John\"}");
+
+    test("""
+            select t from TestEntity t where function('jsonb_extract_path_text', t.jsonData, 'address', 'city') = 'Paris'
+            """,
+        fb.function(jsonTextFunction, fb.field("jsonData"), fb.input("address"), fb.input("city"))
+            .equal(fb.input("Paris")).get());
   }
 
 }

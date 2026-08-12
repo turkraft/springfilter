@@ -13,27 +13,27 @@
   <a href="https://github.com/turkraft/springfilter"><img src="https://img.shields.io/badge/Java-17+-blue" alt="Java 17+"></a>
 </p>
 
-Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, or in-memory Java objects.
+> [English](README.md)
 
-The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
+Spring 应用程序的动态查询过滤库。将过滤表达式作为 URL 参数传递，并将其应用到 JPA 仓库、MongoDB 集合或内存 Java 对象中。
 
-> :cn: [中文文档](README.zh-CN.md)
+该库将过滤表达式解析为抽象语法树，然后根据您使用的模块将其转换为 JPA Criteria 查询、MongoDB 查询或 Java Predicate。您还可以使用过滤器构建器以编程方式构造查询。
 
-> Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) branches.
+> 现已兼容 Spring Boot 4！需要旧版本？请查看 [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x) / [3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) 分支。
 
-## Ecosystem
+## 生态系统
 
-Also available for JavaScript and TypeScript:
+也适用于 JavaScript 和 TypeScript：
 
-| Package | Description |
+| 包 | 描述 |
 |---|---|
-| [FilterKit](https://github.com/turkraft/filterkit) | Core library — filter arrays, build queries, parse expressions |
-| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table column filters → Spring Filter |
-| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder queries → Spring Filter |
-| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Filter expressions → Prisma where clauses |
-| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Filter expressions → Drizzle where clauses |
+| [FilterKit](https://github.com/turkraft/filterkit) | 核心库 — 过滤数组、构建查询、解析表达式 |
+| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table 列过滤器 → Spring Filter |
+| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder 查询 → Spring Filter |
+| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | 过滤表达式 → Prisma where 子句 |
+| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | 过滤表达式 → Drizzle where 子句 |
 
-## Example ([try it live](https://springfilter-jpa.onrender.com/))
+## 示例（[在线试用](https://springfilter-jpa.onrender.com/)）
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
@@ -49,11 +49,11 @@ Also available for JavaScript and TypeScript:
 }
 ```
 
-The library handles booleans, dates, enums, functions, and entity relations. JPA module generates criteria queries, MongoDB module generates aggregation pipelines, and predicate module filters in-memory objects.
+该库支持布尔值、日期、枚举、函数以及实体关联。JPA 模块生成 Criteria 查询，MongoDB 模块生成聚合管道，Predicate 模块过滤内存对象。
 
-## [Sponsors](https://github.com/sponsors/torshid)
+## [赞助者](https://github.com/sponsors/torshid)
 
-Sponsor our project and have your issues prioritized.
+赞助我们的项目，让您的 issue 获得优先处理。
 
 <table>
 <tr>
@@ -62,11 +62,11 @@ Sponsor our project and have your issues prioritized.
 </tr>
 </table>
 
-## Modules
+## 模块
 
 ### JPA
 
-Filter JPA entities directly in database queries. The module converts filter expressions to JPA Criteria API specifications.
+直接在数据库查询中过滤 JPA 实体。该模块将过滤表达式转换为 JPA Criteria API 的 Specification。
 
 ```xml
 <dependency>
@@ -83,9 +83,9 @@ Page<Car> search(@Filter Specification<Car> spec, Pageable page) {
 }
 ```
 
-The repository must implement `JpaSpecificationExecutor`. `SimpleJpaRepository` is a standard implementation. Remove the `Pageable` argument if you don't need pagination.
+仓库必须实现 `JpaSpecificationExecutor`。`SimpleJpaRepository` 是标准实现。如果不需要分页，可以移除 `Pageable` 参数。
 
-#### JPA with Native Queries
+#### JPA 原生查询
 
 ```java
 @GetMapping("/cars/native")
@@ -100,7 +100,7 @@ List<Car> searchNative(@Filter Specification<Car> spec) {
 }
 ```
 
-#### JPA with Projections
+#### JPA 投影查询
 
 ```java
 @GetMapping("/cars/summary")
@@ -121,7 +121,7 @@ List<CarSummary> searchProjection(@Filter Specification<Car> spec) {
 
 ### MongoDB
 
-Filter MongoDB documents using Spring Data MongoDB queries.
+使用 Spring Data MongoDB 查询过滤 MongoDB 文档。
 
 ```xml
 <dependency>
@@ -138,7 +138,7 @@ Page<Car> search(@Filter(entityClass = Car.class) Query query, Pageable page) {
 }
 ```
 
-#### With MongoRepository
+#### 结合 MongoRepository
 
 ```java
 public interface CarRepository extends MongoRepository<Car, String> {
@@ -157,7 +157,7 @@ Page<Car> search(@Filter(entityClass = Car.class) Document document, Pageable pa
 
 ### Predicate
 
-Filter in-memory collections using Java Predicates. Works with any POJO, no database required.
+使用 Java Predicate 过滤内存中的集合。适用于任何 POJO，无需数据库。
 
 ```xml
 <dependency>
@@ -177,7 +177,7 @@ List<Car> search(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Manual Conversion
+#### 手动转换
 
 ```java
 @Autowired FilterPredicateConverter converter;
@@ -191,14 +191,14 @@ public List<Car> filterCars(List<Car> cars, String filterExpression) {
 }
 ```
 
-#### Use Cases
+#### 使用场景
 
-The predicate module is useful when:
-- Filtering cached data in memory
-- Filtering API responses before returning to client
-- Testing filter logic without database
-- Filtering configuration objects or enums
-- Processing batch data in memory
+Predicate 模块适用于以下场景：
+- 过滤内存中的缓存数据
+- 在返回给客户端之前过滤 API 响应
+- 无需数据库即可测试过滤逻辑
+- 过滤配置对象或枚举
+- 在内存中处理批量数据
 
 ```java
 @GetMapping("/cars/cached")
@@ -217,19 +217,19 @@ List<Car> filterAfterFetch(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Size Function Support
+#### size 函数支持
 
 ```java
-// Filter by collection size
+// 按集合大小过滤
 GET /cars?filter=size(accidents) > 2
 GET /owners?filter=size(cars) : 0
 ```
 
-The predicate module supports all standard operators and the `size()` function for collections, arrays, maps, and strings.
+Predicate 模块支持所有标准操作符以及用于集合、数组、Map 和字符串的 `size()` 函数。
 
-### Filter Builder
+### Filter Builder（过滤器构建器）
 
-Build filter expressions programmatically instead of writing filter strings manually.
+以编程方式构建过滤表达式，无需手动编写过滤字符串。
 
 ```xml
 <dependency>
@@ -251,7 +251,7 @@ String query = cs.convert(filter, String.class);
 // year : 2025 and category is null
 ```
 
-#### Complex Queries
+#### 复杂查询
 
 ```java
 FilterNode filter = fb.field("brand.name").in(
@@ -262,7 +262,7 @@ FilterNode filter = fb.field("brand.name").in(
 ).get();
 ```
 
-#### With Functions
+#### 使用函数
 
 ```java
 @Autowired SizeFunction sizeFunction;
@@ -273,9 +273,9 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
     .get();
 ```
 
-### Type-Safe Filter Builder
+### 类型安全过滤器构建器
 
-Generate compile-time type-safe filter builders from your JPA entities. IDE autocomplete on every field, type-safe comparisons, and refactoring safety.
+从您的 JPA 实体生成编译期类型安全的过滤器构建器。每个字段均有 IDE 自动补全、类型安全比较，且重构安全。
 
 ```xml
 <dependency>
@@ -285,7 +285,7 @@ Generate compile-time type-safe filter builders from your JPA entities. IDE auto
 </dependency>
 ```
 
-Add the annotation processor to your compiler plugin:
+在编译插件中加入注解处理器：
 
 ```xml
 <plugin>
@@ -304,7 +304,7 @@ Add the annotation processor to your compiler plugin:
 </plugin>
 ```
 
-Annotate your entity:
+在实体上添加注解：
 
 ```java
 @Entity
@@ -318,7 +318,7 @@ public class Car {
 }
 ```
 
-At compile time, `CarFilter` is generated. Use it:
+编译时自动生成 `CarFilter`。使用方式：
 
 ```java
 @Autowired FilterBuilder fb;
@@ -333,14 +333,14 @@ FilterNode f = CarFilter.where(fb)
     .active().isTrue()
     .build();
 
-// Produces: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
+// 生成: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
 ```
 
-Supported field types: `int`, `long`, `double`, `boolean`, `String`, `Date`, `LocalDate`, `LocalDateTime`, enums, collections. Supports `and()` / `or()` chaining with correct operator precedence. Fields annotated with `@Transient` or `@JsonIgnore` are skipped. Inherited fields from superclasses are included.
+支持的字段类型：`int`、`long`、`double`、`boolean`、`String`、`Date`、`LocalDate`、`LocalDateTime`、枚举、集合。支持 `and()` / `or()` 链式调用并保持正确的运算符优先级。带有 `@Transient` 或 `@JsonIgnore` 注解的字段将被跳过。来自父类的继承字段会被包含。
 
 ## OpenAPI/Swagger
 
-Add automatic Swagger documentation for endpoints with `@Filter` parameters.
+为带有 `@Filter` 参数的端点自动添加 Swagger 文档。
 
 ```xml
 <dependency>
@@ -350,19 +350,19 @@ Add automatic Swagger documentation for endpoints with `@Filter` parameters.
 </dependency>
 ```
 
-Just add the dependency. Swagger UI automatically shows:
-- All filterable fields with types
-- Nested relations
-- Enum values
-- Example queries
-- Operator reference
-- Available functions
+只需添加依赖，Swagger UI 会自动显示：
+- 所有可过滤字段及其类型
+- 嵌套关联
+- 枚举值
+- 示例查询
+- 操作符参考
+- 可用函数
 
-Works with JPA, MongoDB, and Predicate modules.
+兼容 JPA、MongoDB 和 Predicate 模块。
 
-## Pagination, Sorting and Field Selection
+## 分页、排序和字段选择
 
-The `page-sort` module provides annotations for pagination, sorting, and field selection.
+`page-sort` 模块提供分页、排序和字段选择的注解。
 
 ```xml
 <dependency>
@@ -372,7 +372,7 @@ The `page-sort` module provides annotations for pagination, sorting, and field s
 </dependency>
 ```
 
-### Basic Usage
+### 基本用法
 
 ```java
 @GetMapping("/cars")
@@ -381,9 +381,9 @@ Page<Car> search(@Filter Specification<Car> spec, @Pagination Pageable page) {
 }
 ```
 
-Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
+使用方式：`?page=0&size=20&sort=-year`（前缀 `-` 表示降序）
 
-### Custom Parameter Names
+### 自定义参数名
 
 ```java
 @GetMapping("/cars")
@@ -393,9 +393,9 @@ Page<Car> search(
 }
 ```
 
-Now use `?p=0&limit=50&order=-year`
+现在使用 `?p=0&limit=50&order=-year`
 
-### Sort Parameter
+### Sort 参数
 
 ```java
 @GetMapping("/cars")
@@ -404,9 +404,9 @@ List<Car> search(@Sort org.springframework.data.domain.Sort sort) {
 }
 ```
 
-Use `?sort=-year` or `?sort=-year,name`
+使用 `?sort=-year` 或 `?sort=-year,name`
 
-### Field Selection
+### 字段选择
 
 ```java
 @Fields
@@ -416,25 +416,25 @@ List<Car> search() {
 }
 ```
 
-Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's filtering internally.
+使用 `?fields=id,brand.name,year` 仅返回指定字段。内部使用 Jackson 过滤机制。
 
 ```java
-// Include specific fields
+// 包含特定字段
 ?fields= id,name,email
 
-// Exclude fields
+// 排除字段
 ?fields= *,-password,-ssn
 
-// Nested fields
+// 嵌套字段
 ?fields= id,brand.name,brand.country
 
-// Wildcards
+// 通配符
 ?fields= user.*
 ```
 
-#### Root Scoping
+#### 根路径限定
 
-Use `root` to scope field selection within a wrapper path. This is useful for paginated responses where you want to filter fields inside `content` while always including pagination metadata (`totalElements`, `totalPages`):
+使用 `root` 将字段选择限制在包装路径内。这对于分页响应特别有用，您可能只想过滤 `content` 内的字段，同时始终包含分页元数据（`totalElements`、`totalPages`）：
 
 ```java
 @Fields(root = "content")
@@ -444,9 +444,9 @@ Page<Car> search() {
 }
 ```
 
-Now `?fields=id,brand.name,year` matches only properties inside `content` — metadata fields outside `content` are always included in the response.
+现在 `?fields=id,brand.name,year` 仅匹配 `content` 内的属性 — `content` 外部的元数据字段始终包含在响应中。
 
-### Combined Example
+### 组合示例
 
 ```java
 @Fields
@@ -458,16 +458,16 @@ Page<Car> search(
 }
 ```
 
-Use all features together:
+同时使用所有功能：
 ```
 /cars?filter=year>2020&page=0&size=20&sort=-year&fields=id,brand.name,year
 ```
 
-The `openapi` module automatically generates documentation for these parameters when both dependencies are present.
+当两个依赖都存在时，`openapi` 模块会自动为这些参数生成文档。
 
-## Frontend Integration
+## 前端集成
 
-Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions in JavaScript/TypeScript. It shares the exact same expression syntax and AST as Spring Filter.
+使用 [FilterKit](https://github.com/turkraft/filterkit) 在 JavaScript/TypeScript 中构建过滤表达式。它与 Spring Filter 共享完全相同的表达式语法和 AST。
 
 ```ts
 import { build, stringify } from '@turkraft/filterkit';
@@ -480,16 +480,16 @@ const query = build()
 fetch(`/api/cars?filter=${encodeURIComponent(stringify(query))}`);
 ```
 
-FilterKit also provides React integrations for [TanStack Table](https://github.com/turkraft/filterkit-tanstack) and [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder).
+FilterKit 还提供了 [TanStack Table](https://github.com/turkraft/filterkit-tanstack) 和 [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder) 的 React 集成。
 
-### Community projects
+### 社区项目
 
-- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript query builder
-- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular integration
+- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript 查询构建器
+- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular 集成
 
-## Language Syntax
+## 语言语法
 
-### Field Access
+### 字段访问
 
 ```
 field
@@ -497,18 +497,18 @@ field.nested
 field.nested.deep
 ```
 
-### Literals
+### 字面量
 
 ```
-123                 // integer
--321.123            // decimal
-true, false         // boolean
-'text'              // string
-'1-01-2023'         // date (format depends on Spring ConversionService)
-'escape \' quote'   // escaped string
+123                 // 整数
+-321.123            // 小数
+true, false         // 布尔值
+'text'              // 字符串
+'1-01-2023'         // 日期（格式取决于 Spring ConversionService）
+'escape \' quote'   // 转义字符串
 ```
 
-### Collections
+### 集合
 
 ```
 [1, 2, 3]
@@ -517,7 +517,7 @@ true, false         // boolean
 [field, ['nested', 'array'], 99]
 ```
 
-### Functions
+### 函数
 
 ```
 size(collection)
@@ -527,199 +527,199 @@ jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
 ```
 
-### Placeholders
+### 占位符
 
 ```
 `placeholder_name`
 ```
 
-Placeholders are resolved by custom placeholder processors you implement.
+占位符由您实现的自定义占位符处理器解析。
 
-### Operators
+### 操作符
 
 ```
-a and b              // logical and
-a or b               // logical or
-a xor b               // logical xor
-not a                // logical not
-a : b                // equals
-a ! b                // not equals
-a > b                // greater than
-a >: b               // greater than or equal
-a < b                // less than
-a <: b               // less than or equal
-a between x and y    // between (inclusive range)
-a ~ 'pattern'        // like (% and _ wildcards)
-a ~~ 'pattern'       // case-insensitive like
-a in [x, y]          // in collection
-a not in [x, y]      // not in collection
-a is null            // null check
-a is not null        // not null check
-a is empty           // empty check (collections/strings)
-a is not empty       // not empty check
+a and b              // 逻辑与
+a or b               // 逻辑或
+a xor b              // 逻辑异或
+not a                // 逻辑非
+a : b                // 等于
+a ! b                // 不等于
+a > b                // 大于
+a >: b               // 大于等于
+a < b                // 小于
+a <: b               // 小于等于
+a between x and y    // 范围（包含边界）
+a ~ 'pattern'        // 模糊匹配（% 和 _ 通配符）
+a ~~ 'pattern'       // 不区分大小写的模糊匹配
+a in [x, y]          // 属于集合
+a not in [x, y]      // 不属于集合
+a is null            // 空值判断
+a is not null        // 非空判断
+a is empty           // 空判断（集合/字符串）
+a is not empty       // 非空判断
 ```
 
-### Precedence
+### 优先级
 
-Use parentheses to control evaluation order:
+使用括号控制求值顺序：
 
 ```
 a and (b or c)
 (status : 'active' or status : 'pending') and year > 2020
 ```
 
-## Query Examples
+## 查询示例
 
-### Basic Filtering
+### 基本过滤
 
 ```
-// Simple equality
+// 简单相等
 ?filter= status : 'active'
 
-// Multiple conditions
+// 多个条件
 ?filter= year > 2020 and km < 50000
 
-// Range (inclusive)
+// 范围（包含边界）
 ?filter= year between 2020 and 2025
 
-// OR conditions
+// OR 条件
 ?filter= color : 'red' or color : 'blue'
 ```
 
-### Working with Relations
+### 关联操作
 
 ```
-// Filter by related entity field
+// 按关联实体字段过滤
 ?filter= brand.name : 'audi'
 
-// Nested relations
+// 嵌套关联
 ?filter= brand.manufacturer.country : 'germany'
 
-// Check if relation exists
+// 判断关联是否存在
 ?filter= brand is not null
 
-// Multiple relation conditions
+// 多关联条件
 ?filter= brand.name : 'audi' and dealer.city : 'berlin'
 ```
 
-### Collection Operations
+### 集合操作
 
 ```
-// Check if value is in list
+// 判断值是否在列表中
 ?filter= status in ['active', 'pending', 'review']
 
-// Check collection size
+// 判断集合大小
 ?filter= size(accidents) > 2
 
-// Check if collection is empty
+// 判断集合是否为空
 ?filter= accidents is empty
 
-// Check if collection is not empty
+// 判断集合是否非空
 ?filter= ratings is not empty
 ```
 
-### String Matching
+### 字符串匹配
 
 ```
-// Like with wildcards (% = any chars, _ = single char)
+// 模糊匹配（% = 任意字符, _ = 单个字符）
 ?filter= name ~ '%john%'
 
-// Case-insensitive like
+// 不区分大小写的模糊匹配
 ?filter= name ~~ 'JOHN'
 
-// Starts with
+// 开头匹配
 ?filter= email ~ 'admin%'
 
-// Ends with
+// 结尾匹配
 ?filter= filename ~ '%.pdf'
 
-// Pattern matching
+// 模式匹配
 ?filter= code ~ 'PRD-____-2023'
 
-// Multiple patterns
+// 多模式匹配
 ?filter= name ~ ['%john%', '%doe%']
 
-// Case-insensitive multi-pattern
+// 不区分大小写的多模式匹配
 ?filter= name ~~ ['%JOHN%', '%DOE%']
 ```
 
-### Date Filtering
+### 日期过滤
 
 ```
-// Date comparison (format depends on your Spring configuration)
+// 日期比较（格式取决于 Spring 配置）
 ?filter= createdAt > '2023-01-01'
 
-// Date range
+// 日期范围
 ?filter= createdAt > '2023-01-01' and createdAt < '2023-12-31'
 
-// Date range (between)
+// 日期范围（between）
 ?filter= createdAt between '2023-01-01' and '2023-12-31'
 
-// Relative dates with today() function
+// 使用 today() 函数的相对日期
 ?filter= createdAt > today()
 ```
 
-### Complex Queries
+### 复杂查询
 
 ```
-// Nested conditions with precedence
+// 带优先级的嵌套条件
 ?filter= (year > 2020 and km < 30000) or (year > 2018 and km < 10000)
 
-// Mix of different operators
+// 混合多种操作符
 ?filter= brand.name in ['audi', 'bmw'] and year > 2020 and accidents is empty and color ! 'white'
 
-// Collection size with relations
+// 集合大小与关联结合
 ?filter= size(owner.vehicles) > 3 and status : 'active'
 ```
 
-### Null and Empty Checks
+### Null 和空判断
 
 ```
-// Check for null
+// 判断 null
 ?filter= deletedAt is null
 
-// Check for not null
+// 判断非 null
 ?filter= description is not null
 
-// Empty collection
+// 空集合
 ?filter= tags is empty
 
-// Non-empty collection
+// 非空集合
 ?filter= children is not empty
 ```
 
-### JSON/JSONB Filtering
+### JSON/JSONB 过滤
 
 ```
-// Extract string value by key path
+// 通过键路径提取字符串值
 ?filter= jsonText(metadata, 'address', 'city') : 'New York'
 
-// Check if value exists
+// 判断值是否存在
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
-// Combine with type casting
+// 结合类型转换
 ?filter= jsonText(data, 'age') > 18
 
-// Nested keys with pattern matching
+// 嵌套键与模糊匹配
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
 ```
 
-## Supported Types
+## 支持的类型
 
-All modules handle:
-- Primitives (int, long, double, boolean, etc.)
-- Strings
-- Enums
-- Dates (LocalDate, LocalDateTime, Date, Instant, etc.)
-- Collections (List, Set)
-- Arrays
-- Entity relations (@ManyToOne, @OneToMany, @ManyToMany)
+所有模块均支持：
+- 基本类型（int、long、double、boolean 等）
+- 字符串
+- 枚举
+- 日期（LocalDate、LocalDateTime、Date、Instant 等）
+- 集合（List、Set）
+- 数组
+- 实体关联（@ManyToOne、@OneToMany、@ManyToMany）
 
-Date parsing uses Spring's `ConversionService`. Configure it to change date formats.
+日期解析使用 Spring 的 `ConversionService`，可通过配置更改日期格式。
 
-## Custom Operators
+## 自定义操作符
 
-Define custom operators by extending `FilterInfixOperator`, `FilterPrefixOperator`, or `FilterPostfixOperator`:
+通过继承 `FilterInfixOperator`、`FilterPrefixOperator` 或 `FilterPostfixOperator` 定义自定义操作符：
 
 ```java
 @Component
@@ -730,7 +730,7 @@ public class ContainsOperator extends FilterInfixOperator {
 }
 ```
 
-Then implement processors for each module you use:
+然后为每个使用的模块实现处理器：
 
 ```java
 @Component
@@ -750,16 +750,16 @@ public class ContainsOperationExpressionProcessor implements
     @Override
     public Expression<?> process(FilterExpressionTransformer transformer,
                                   InfixOperationNode source) {
-        // Implementation
+        // 实现逻辑
     }
 }
 ```
 
-Register the operator with autoconfiguration or manual configuration.
+通过自动配置或手动配置注册该操作符。
 
-## Custom Functions
+## 自定义函数
 
-Define custom functions by extending `FilterFunction`:
+通过继承 `FilterFunction` 定义自定义函数：
 
 ```java
 @Component
@@ -770,7 +770,7 @@ public class LowerFunction extends FilterFunction {
 }
 ```
 
-Implement processors for each module:
+为每个模块实现处理器：
 
 ```java
 @Component
@@ -796,11 +796,11 @@ public class LowerFunctionExpressionProcessor implements
 }
 ```
 
-## Configuration
+## 配置
 
-### Default Parameter Name
+### 默认参数名
 
-By default, filters are read from the `filter` query parameter. Override this:
+默认情况下，过滤器从 `filter` 查询参数中读取。可以覆盖：
 
 ```java
 @GetMapping("/cars")
@@ -809,11 +809,11 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 }
 ```
 
-Now use `?q=year > 2020` instead of `?filter=year > 2020`.
+现在使用 `?q=year > 2020` 代替 `?filter=year > 2020`。
 
-### Entity Class for MongoDB
+### MongoDB 的实体类
 
-MongoDB requires explicit entity class specification:
+MongoDB 需要显式指定实体类：
 
 ```java
 @GetMapping("/cars")
@@ -822,9 +822,9 @@ List<Car> search(@Filter(entityClass = Car.class) Query query) {
 }
 ```
 
-### Optional Filters
+### 可选过滤器
 
-Use `Optional` to handle missing filter parameters:
+使用 `Optional` 处理缺失的过滤参数：
 
 ```java
 @GetMapping("/cars")
@@ -833,9 +833,9 @@ List<Car> search(@Filter Optional<Specification<Car>> spec) {
 }
 ```
 
-### Programmatic Filter Application
+### 编程式过滤器应用
 
-Apply filters without Spring MVC annotations:
+无需 Spring MVC 注解即可应用过滤器：
 
 ```java
 @Autowired FilterSpecificationConverter jpaConverter;
@@ -857,9 +857,9 @@ public void manualFiltering() {
 }
 ```
 
-## Spring Configuration
+## Spring 配置
 
-Spring Filter uses Spring's `ConversionService` for type conversions. Configure it to customize date formats, enum handling, etc:
+Spring Filter 使用 Spring 的 `ConversionService` 进行类型转换。通过配置自定义日期格式、枚举处理等：
 
 ```java
 @Configuration
@@ -874,13 +874,13 @@ public class ConversionConfig {
 }
 ```
 
-## Advanced: ParseContext
+## 高级：ParseContext
 
-`ParseContext` allows you to intercept and modify filter expressions during parsing. It provides two hooks: field mapping and node mapping.
+`ParseContext` 允许您在解析过程中拦截和修改过滤表达式。它提供两个钩子：字段映射和节点映射。
 
-### Field Aliasing
+### 字段别名
 
-Map API field names to database field names:
+将 API 字段名映射到数据库字段名：
 
 ```java
 @Service
@@ -906,11 +906,11 @@ public class ProductService {
 }
 ```
 
-Now queries like `?filter=price > 100` automatically become `unitPrice > 100` at the database level.
+现在 `?filter=price > 100` 这类查询会自动在数据库层面转换为 `unitPrice > 100`。
 
-### Multi-Tenancy
+### 多租户
 
-Automatically inject tenant filters into all queries:
+自动向所有查询注入租户过滤器：
 
 ```java
 @Service
@@ -940,11 +940,11 @@ Page<Product> search(@Filter String filter, @AuthenticationPrincipal User user) 
 }
 ```
 
-User queries `status : 'active'` but the actual query becomes `tenantId : 123 and status : 'active'`.
+用户查询 `status : 'active'`，但实际执行的查询变为 `tenantId : 123 and status : 'active'`。
 
-### Security Filters
+### 安全过滤器
 
-Inject row-level security filters based on user permissions:
+根据用户权限注入行级安全过滤器：
 
 ```java
 @Service
@@ -973,11 +973,11 @@ public class SecureFilterService {
 }
 ```
 
-Regular users automatically get filtered to their own documents or department documents. Admins see everything.
+普通用户自动被限制只能查看自己的文档或部门文档。管理员可以查看所有内容。
 
-### Dynamic Field Access Control
+### 动态字段访问控制
 
-Restrict which fields users can filter on:
+限制用户可以过滤的字段：
 
 ```java
 public class FieldAccessControlContext implements ParseContext {
@@ -1012,11 +1012,11 @@ List<Employee> search(@Filter String filter, @AuthenticationPrincipal User user)
 }
 ```
 
-Non-admin users trying `?filter=salary > 50000` will get a `SecurityException`.
+非管理员用户尝试 `?filter=salary > 50000` 将抛出 `SecurityException`。
 
-### Query Rewriting for Soft Deletes
+### 软删除的查询重写
 
-Automatically filter out soft-deleted records:
+自动过滤已软删除的记录：
 
 ```java
 @Service
@@ -1038,11 +1038,11 @@ public class SoftDeleteFilterService {
 }
 ```
 
-All queries automatically include `deletedAt is null`.
+所有查询自动包含 `deletedAt is null`。
 
-### Audit Logging
+### 审计日志
 
-Log all filter queries with user context:
+记录所有过滤查询及其用户上下文：
 
 ```java
 @Service
@@ -1064,9 +1064,9 @@ public class AuditingFilterService {
 }
 ```
 
-### Field Name Normalization
+### 字段名规范化
 
-Handle different naming conventions:
+处理不同的命名约定：
 
 ```java
 public class NormalizingParseContext implements ParseContext {
@@ -1091,11 +1091,11 @@ ParseContext ctx = new NormalizingParseContext();
 FilterNode node = parser.parse("userId : 123 and userName ~ 'john%'", ctx);
 ```
 
-Converts `userId` to `user` and `userName` to `user_name` automatically.
+自动将 `userId` 转换为 `user`，将 `userName` 转换为 `user_name`。
 
-### Combining Multiple Contexts
+### 组合多个上下文
 
-Chain multiple parse contexts for complex scenarios:
+为复杂场景串联多个解析上下文：
 
 ```java
 public class CompositeParseContext implements ParseContext {
@@ -1138,11 +1138,11 @@ ParseContext ctx = new CompositeParseContext(
 );
 ```
 
-Apply multiple transformations in a single pass.
+在单次处理中应用多个转换。
 
-### Request-Scoped Context
+### 请求作用域上下文
 
-Use Spring's request scope for context-aware parsing:
+使用 Spring 的请求作用域进行上下文感知解析：
 
 ```java
 @Component
@@ -1174,11 +1174,11 @@ Page<Product> search(@Filter String filter) {
 }
 ```
 
-Context automatically uses current request's user information.
+上下文自动使用当前请求的用户信息。
 
-## Testing
+## 测试
 
-### Unit Testing with Filter Builder
+### 使用 Filter Builder 的单元测试
 
 ```java
 @Test
@@ -1192,7 +1192,7 @@ void testFilterBuilder() {
 }
 ```
 
-### Integration Testing
+### 集成测试
 
 ```java
 @SpringBootTest
@@ -1210,7 +1210,7 @@ class FilterIntegrationTest {
 }
 ```
 
-### Testing Predicates
+### 测试 Predicate
 
 ```java
 @Test
@@ -1228,40 +1228,40 @@ void testPredicateFiltering() {
 }
 ```
 
-## Performance
+## 性能
 
 ### JPA
 
-JPA module generates optimized Criteria queries. The database executes filtering, so performance matches native SQL queries. Use appropriate indexes on filtered fields.
+JPA 模块生成优化的 Criteria 查询。数据库执行过滤，因此性能与原生 SQL 查询相当。建议在过滤字段上建立适当的索引。
 
 ### MongoDB
 
-MongoDB module generates aggregation pipelines. Performance depends on indexes. Profile queries with MongoDB's explain plan.
+MongoDB 模块生成聚合管道。性能取决于索引。可使用 MongoDB 的 explain plan 分析查询。
 
 ### Predicate
 
-Predicate module filters in memory. Performance is O(n) where n is collection size. Suitable for:
-- Small collections
-- Cached data
-- Already loaded collections
-- Testing
+Predicate 模块在内存中过滤。性能为 O(n)，其中 n 为集合大小。适用于：
+- 小集合
+- 缓存数据
+- 已经加载的集合
+- 测试
 
-For large datasets, prefer JPA or MongoDB modules to filter at database level.
+对于大数据集，建议使用 JPA 或 MongoDB 模块在数据库层面过滤。
 
-## Contributing
+## 贡献
 
-Pull requests welcome. Use [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) for formatting.
+欢迎提交 Pull Request。请使用 [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) 进行代码格式化。
 
-### Contributors
+### 贡献者
 
-* [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) - MongoDB support
-* [@sisimomo](https://github.com/sisimomo) - [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder)
-* [@68ociredef](https://github.com/68ociredef) - [Angular query builder](https://github.com/68ociredef/spring-filter-ng)
+* [@marcopag90](https://github.com/marcopag90) 和 [@glodepa](https://github.com/glodepa) - MongoDB 支持
+* [@sisimomo](https://github.com/sisimomo) - [JavaScript 查询构建器](https://github.com/sisimomo/Spring-Filter-Query-Builder)
+* [@68ociredef](https://github.com/68ociredef) - [Angular 查询构建器](https://github.com/68ociredef/spring-filter-ng)
 
-## Articles
+## 文章
 
-* [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+* [轻松过滤 Spring API 中的实体](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
 
-## License
+## 许可证
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - 详见 [LICENSE](LICENSE) 文件。

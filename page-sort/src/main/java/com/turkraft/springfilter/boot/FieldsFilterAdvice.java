@@ -97,7 +97,7 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
       }
     }
 
-    FieldsExpression fields = new FieldsExpression(fieldsValue);
+    FieldsExpression fields = new FieldsExpression(fieldsAnnotation.root(), fieldsValue);
     if (fields.isEmpty()) {
       return body;
     }

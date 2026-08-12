@@ -16,7 +16,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-
+    <automatic.module.name>com.turkraft.springfilter.mongo</automatic.module.name>
   </properties>
 
   <dependencies>

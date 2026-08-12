@@ -24,7 +24,6 @@ public class ToFloatFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
-    transformer.registerTargetType(source.getArgument(0), Number.class);
     return transformer
         .getCriteriaBuilder()
         .toFloat((Expression<Number>) transformer.transform(source.getArgument(0)));

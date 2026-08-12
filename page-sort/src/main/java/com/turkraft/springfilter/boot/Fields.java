@@ -17,4 +17,6 @@ public @interface Fields {
 
   String defaultValue() default "";
 
+  String root() default "";
+
 }

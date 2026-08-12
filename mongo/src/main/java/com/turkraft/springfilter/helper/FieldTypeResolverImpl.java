@@ -32,7 +32,7 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
       if (lastField != null) {
         klass = normalize(lastField);
       } else {
-        throw new IllegalArgumentException("Could not find field '" + fieldName + "' in " + klass);
+        return null;
       }
 
     }
@@ -42,6 +42,10 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
   }
 
   private Class<?> normalize(Field field) {
+
+    if (field == null) {
+      return Object.class;
+    }
 
     if (field.isAnnotationPresent(Id.class) && field
         .getType()

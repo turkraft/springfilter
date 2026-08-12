@@ -15,6 +15,10 @@
 
   <name>${project.groupId}:${project.artifactId}</name>
 
+  <properties>
+    <automatic.module.name>com.turkraft.springfilter.typesafe</automatic.module.name>
+  </properties>
+
   <dependencies>
 
     <dependency>

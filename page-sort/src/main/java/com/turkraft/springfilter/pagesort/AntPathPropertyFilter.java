@@ -19,12 +19,14 @@ public class AntPathPropertyFilter extends SimpleBeanPropertyFilter {
   protected final Set<String> propertiesToInclude;
   protected final Set<String> propertiesToExclude;
   private final Map<String, Boolean> matchCache;
+  private final String root;
 
   public AntPathPropertyFilter(FieldsExpression fields) {
     Objects.requireNonNull(fields, "fields must not be null");
     this.propertiesToInclude = fields.getIncludePatterns();
     this.propertiesToExclude = fields.getExcludePatterns();
     this.matchCache = new HashMap<>();
+    this.root = fields.getRoot();
   }
 
   private String getPathToTest(PropertyWriter writer, JsonGenerator generator) {
@@ -59,6 +61,16 @@ public class AntPathPropertyFilter extends SimpleBeanPropertyFilter {
   protected boolean include(PropertyWriter writer, JsonGenerator generator) {
 
     String pathToTest = getPathToTest(writer, generator);
+
+    if (root != null && !root.isEmpty()) {
+      if (pathToTest.equals(root)) {
+        return true;
+      }
+      if (!pathToTest.startsWith(root + ".")) {
+        return true;
+      }
+      pathToTest = pathToTest.substring(root.length() + 1);
+    }
 
     if (matchCache.containsKey(pathToTest)) {
       return matchCache.get(pathToTest);

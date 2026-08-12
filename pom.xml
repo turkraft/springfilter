@@ -19,12 +19,12 @@
     integrates with Spring APIs.
   </description>
 
-  <url>https://github.com/turkraft/spring-filter</url>
+  <url>https://github.com/turkraft/springfilter</url>
 
   <scm>
-    <connection>scm:git:git://github.com/turkraft/spring-filter.git</connection>
-    <developerConnection>scm:git:ssh://github.com:turkraft/spring-filter.git</developerConnection>
-    <url>https://github.com/turkraft/spring-filter/tree/main</url>
+    <connection>scm:git:git://github.com/turkraft/springfilter.git</connection>
+    <developerConnection>scm:git:ssh://github.com:turkraft/springfilter.git</developerConnection>
+    <url>https://github.com/turkraft/springfilter/tree/main</url>
   </scm>
 
   <developers>
@@ -57,6 +57,7 @@
     <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <flatten.skip>false</flatten.skip>
+    <automatic.module.name>com.turkraft.springfilter</automatic.module.name>
   </properties>
 
   <modules>
@@ -136,6 +137,18 @@
   <build>
 
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>${automatic.module.name}</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

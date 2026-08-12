@@ -16,8 +16,20 @@ public class FieldsExpression {
   private final String[] patterns;
   private final Set<String> includePatterns;
   private final Set<String> excludePatterns;
+  private final String root;
 
   public FieldsExpression(String expression) {
+    this(null, expression);
+  }
+
+  public FieldsExpression(String root, String expression) {
+    if (root != null) {
+      root = root.trim();
+      while (root.endsWith(".")) {
+        root = root.substring(0, root.length() - 1);
+      }
+    }
+    this.root = (root != null && !root.isEmpty()) ? root : null;
     if (expression == null || expression
         .trim()
         .isEmpty()) {
@@ -54,6 +66,7 @@ public class FieldsExpression {
 
   public FieldsExpression(String... patterns) {
     Objects.requireNonNull(patterns, "patterns must not be null");
+    this.root = null;
     this.patterns = Arrays
         .stream(patterns)
         .filter(p -> p != null && !p
@@ -116,6 +129,10 @@ public class FieldsExpression {
     return excludePatterns;
   }
 
+  public String getRoot() {
+    return root;
+  }
+
   public boolean isEmpty() {
     return patterns.length == 0;
   }
@@ -145,12 +162,13 @@ public class FieldsExpression {
       return false;
     }
     FieldsExpression that = (FieldsExpression) o;
-    return Arrays.equals(patterns, that.patterns);
+    return Arrays.equals(patterns, that.patterns)
+        && Objects.equals(root, that.root);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(patterns);
+    return 31 * Arrays.hashCode(patterns) + Objects.hashCode(root);
   }
 
   @Override

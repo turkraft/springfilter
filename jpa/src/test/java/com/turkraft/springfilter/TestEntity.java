@@ -4,6 +4,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,9 @@ public class TestEntity {
   private List<Integer> integers;
 
   private int integer;
+
+  @Lob
+  private String jsonData;
 
   public Long getId() {
     return id;
@@ -50,6 +54,14 @@ public class TestEntity {
 
   public void setInteger(int integer) {
     this.integer = integer;
+  }
+
+  public String getJsonData() {
+    return jsonData;
+  }
+
+  public void setJsonData(String jsonData) {
+    this.jsonData = jsonData;
   }
 
 }
