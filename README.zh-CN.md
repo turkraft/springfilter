@@ -13,7 +13,7 @@
   <a href="https://github.com/turkraft/springfilter"><img src="https://img.shields.io/badge/Java-17+-blue" alt="Java 17+"></a>
 </p>
 
-> [English](README.md)
+> :us: [English](README.md) | :es: [Español](README.es.md) | :jp: [日本語](README.ja.md) | :tr: [Türkçe](README.tr.md)
 
 Spring 应用程序的动态查询过滤库。将过滤表达式作为 URL 参数传递，并将其应用到 JPA 仓库、MongoDB 集合或内存 Java 对象中。
 

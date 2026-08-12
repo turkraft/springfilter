@@ -13,27 +13,27 @@
   <a href="https://github.com/turkraft/springfilter"><img src="https://img.shields.io/badge/Java-17+-blue" alt="Java 17+"></a>
 </p>
 
-> :cn: [中文](README.zh-CN.md) | :es: [Español](README.es.md) | :jp: [日本語](README.ja.md) | :tr: [Türkçe](README.tr.md)
+> :us: [English](README.md) | :cn: [中文](README.zh-CN.md) | :es: [Español](README.es.md) | :tr: [Türkçe](README.tr.md)
 
-Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, or in-memory Java objects.
+Spring アプリケーション向けの動的クエリフィルタリング。フィルタ式を URL パラメータとして渡し、JPA リポジトリ、MongoDB コレクション、またはメモリ内の Java オブジェクトに適用します。
 
-The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
+このライブラリはフィルタ式を抽象構文木にパースし、使用するモジュールに応じて JPA Criteria クエリ、MongoDB クエリ、または Java Predicate に変換します。フィルタビルダーを使ってプログラム的にクエリを構築することもできます。
 
-> Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) branches.
+> Spring Boot 4 に対応！以前のバージョンは [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x) / [3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) ブランチをご覧ください。
 
-## Ecosystem
+## エコシステム
 
-Also available for JavaScript and TypeScript:
+JavaScript と TypeScript でも利用可能です：
 
-| Package | Description |
+| パッケージ | 説明 |
 |---|---|
-| [FilterKit](https://github.com/turkraft/filterkit) | Core library — filter arrays, build queries, parse expressions |
-| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table column filters → Spring Filter |
-| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder queries → Spring Filter |
-| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Filter expressions → Prisma where clauses |
-| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Filter expressions → Drizzle where clauses |
+| [FilterKit](https://github.com/turkraft/filterkit) | コアライブラリ — 配列のフィルタリング、クエリ構築、式の解析 |
+| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table カラムフィルタ → Spring Filter |
+| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder クエリ → Spring Filter |
+| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | フィルタ式 → Prisma where 句 |
+| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | フィルタ式 → Drizzle where 句 |
 
-## Example ([try it live](https://springfilter-jpa.onrender.com/))
+## 例（[ライブデモ](https://springfilter-jpa.onrender.com/)）
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
@@ -49,11 +49,11 @@ Also available for JavaScript and TypeScript:
 }
 ```
 
-The library handles booleans, dates, enums, functions, and entity relations. JPA module generates criteria queries, MongoDB module generates aggregation pipelines, and predicate module filters in-memory objects.
+ブーリアン、日付、列挙型、関数、エンティティリレーションを処理します。JPA モジュールは Criteria クエリを生成し、MongoDB モジュールは集計パイプラインを生成し、Predicate モジュールはメモリ内オブジェクトをフィルタリングします。
 
-## [Sponsors](https://github.com/sponsors/torshid)
+## [スポンサー](https://github.com/sponsors/torshid)
 
-Sponsor our project and have your issues prioritized.
+プロジェクトをスポンサーしていただくと、Issue が優先されます。
 
 <table>
 <tr>
@@ -62,17 +62,17 @@ Sponsor our project and have your issues prioritized.
 </tr>
 </table>
 
-## Modules
+## モジュール
 
 ### JPA
 
-Filter JPA entities directly in database queries. The module converts filter expressions to JPA Criteria API specifications.
+データベースクエリで直接 JPA エンティティをフィルタリングします。フィルタ式を JPA Criteria API の Specification に変換します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -83,9 +83,9 @@ Page<Car> search(@Filter Specification<Car> spec, Pageable page) {
 }
 ```
 
-The repository must implement `JpaSpecificationExecutor`. `SimpleJpaRepository` is a standard implementation. Remove the `Pageable` argument if you don't need pagination.
+リポジトリは `JpaSpecificationExecutor` を実装する必要があります。`SimpleJpaRepository` が標準実装です。ページネーションが不要な場合は `Pageable` 引数を削除してください。
 
-#### JPA with Native Queries
+#### JPA ネイティブクエリ
 
 ```java
 @GetMapping("/cars/native")
@@ -100,7 +100,7 @@ List<Car> searchNative(@Filter Specification<Car> spec) {
 }
 ```
 
-#### JPA with Projections
+#### JPA プロジェクション
 
 ```java
 @GetMapping("/cars/summary")
@@ -121,13 +121,13 @@ List<CarSummary> searchProjection(@Filter Specification<Car> spec) {
 
 ### MongoDB
 
-Filter MongoDB documents using Spring Data MongoDB queries.
+Spring Data MongoDB クエリを使用して MongoDB ドキュメントをフィルタリングします。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -138,7 +138,7 @@ Page<Car> search(@Filter(entityClass = Car.class) Query query, Pageable page) {
 }
 ```
 
-#### With MongoRepository
+#### MongoRepository との統合
 
 ```java
 public interface CarRepository extends MongoRepository<Car, String> {
@@ -157,13 +157,13 @@ Page<Car> search(@Filter(entityClass = Car.class) Document document, Pageable pa
 
 ### Predicate
 
-Filter in-memory collections using Java Predicates. Works with any POJO, no database required.
+Java Predicate を使用してメモリ内コレクションをフィルタリングします。データベース不要で、任意の POJO で動作します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -177,7 +177,7 @@ List<Car> search(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Manual Conversion
+#### 手動変換
 
 ```java
 @Autowired FilterPredicateConverter converter;
@@ -191,14 +191,14 @@ public List<Car> filterCars(List<Car> cars, String filterExpression) {
 }
 ```
 
-#### Use Cases
+#### ユースケース
 
-The predicate module is useful when:
-- Filtering cached data in memory
-- Filtering API responses before returning to client
-- Testing filter logic without database
-- Filtering configuration objects or enums
-- Processing batch data in memory
+Predicate モジュールは以下の場合に便利です：
+- メモリ内のキャッシュデータのフィルタリング
+- クライアントに返す前の API レスポンスのフィルタリング
+- データベースなしでのフィルタロジックのテスト
+- 設定オブジェクトや列挙型のフィルタリング
+- メモリ内でのバッチデータ処理
 
 ```java
 @GetMapping("/cars/cached")
@@ -217,25 +217,25 @@ List<Car> filterAfterFetch(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Size Function Support
+#### size 関数のサポート
 
 ```java
-// Filter by collection size
+// コレクションのサイズでフィルタ
 GET /cars?filter=size(accidents) > 2
 GET /owners?filter=size(cars) : 0
 ```
 
-The predicate module supports all standard operators and the `size()` function for collections, arrays, maps, and strings.
+Predicate モジュールは全ての標準演算子と、コレクション、配列、Map、文字列の `size()` 関数をサポートします。
 
 ### Filter Builder
 
-Build filter expressions programmatically instead of writing filter strings manually.
+フィルタ文字列を手動で書く代わりに、プログラム的にフィルタ式を構築します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -251,7 +251,7 @@ String query = cs.convert(filter, String.class);
 // year : 2025 and category is null
 ```
 
-#### Complex Queries
+#### 複雑なクエリ
 
 ```java
 FilterNode filter = fb.field("brand.name").in(
@@ -262,7 +262,7 @@ FilterNode filter = fb.field("brand.name").in(
 ).get();
 ```
 
-#### With Functions
+#### 関数の使用
 
 ```java
 @Autowired SizeFunction sizeFunction;
@@ -273,19 +273,19 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
     .get();
 ```
 
-### Type-Safe Filter Builder
+### 型安全フィルタビルダー
 
-Generate compile-time type-safe filter builders from your JPA entities. IDE autocomplete on every field, type-safe comparisons, and refactoring safety.
+JPA エンティティからコンパイル時に型安全なフィルタビルダーを生成します。各フィールドでの IDE オートコンプリート、型安全な比較、リファクタリング安全性を提供します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-Add the annotation processor to your compiler plugin:
+コンパイラプラグインにアノテーションプロセッサを追加：
 
 ```xml
 <plugin>
@@ -297,14 +297,14 @@ Add the annotation processor to your compiler plugin:
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.4</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
 </plugin>
 ```
 
-Annotate your entity:
+エンティティにアノテーションを付与：
 
 ```java
 @Entity
@@ -318,7 +318,7 @@ public class Car {
 }
 ```
 
-At compile time, `CarFilter` is generated. Use it:
+コンパイル時に `CarFilter` が生成されます。使用方法：
 
 ```java
 @Autowired FilterBuilder fb;
@@ -333,46 +333,46 @@ FilterNode f = CarFilter.where(fb)
     .active().isTrue()
     .build();
 
-// Produces: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
+// 生成結果: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
 ```
 
-Supported field types: `int`, `long`, `double`, `boolean`, `String`, `Date`, `LocalDate`, `LocalDateTime`, enums, collections. Supports `and()` / `or()` chaining with correct operator precedence. Fields annotated with `@Transient` or `@JsonIgnore` are skipped. Inherited fields from superclasses are included.
+サポートされるフィールド型：`int`、`long`、`double`、`boolean`、`String`、`Date`、`LocalDate`、`LocalDateTime`、列挙型、コレクション。正しい演算子優先順位で `and()` / `or()` チェーンをサポート。`@Transient` または `@JsonIgnore` が付与されたフィールドはスキップされます。スーパークラスから継承されたフィールドは含まれます。
 
 ## OpenAPI/Swagger
 
-Add automatic Swagger documentation for endpoints with `@Filter` parameters.
+`@Filter` パラメータを持つエンドポイントに Swagger ドキュメントを自動追加します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-Just add the dependency. Swagger UI automatically shows:
-- All filterable fields with types
-- Nested relations
-- Enum values
-- Example queries
-- Operator reference
-- Available functions
+依存関係を追加するだけです。Swagger UI が自動的に以下を表示します：
+- すべてのフィルタ可能フィールドとその型
+- ネストされたリレーション
+- 列挙値
+- サンプルクエリ
+- 演算子リファレンス
+- 利用可能な関数
 
-Works with JPA, MongoDB, and Predicate modules.
+JPA、MongoDB、Predicate モジュールに対応。
 
-## Pagination, Sorting and Field Selection
+## ページネーション、ソート、フィールド選択
 
-The `page-sort` module provides annotations for pagination, sorting, and field selection.
+`page-sort` モジュールはページネーション、ソート、フィールド選択のアノテーションを提供します。
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-### Basic Usage
+### 基本的な使い方
 
 ```java
 @GetMapping("/cars")
@@ -381,9 +381,9 @@ Page<Car> search(@Filter Specification<Car> spec, @Pagination Pageable page) {
 }
 ```
 
-Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
+使用例：`?page=0&size=20&sort=-year`（降順の場合は接頭辞 `-`）
 
-### Custom Parameter Names
+### カスタムパラメータ名
 
 ```java
 @GetMapping("/cars")
@@ -393,9 +393,9 @@ Page<Car> search(
 }
 ```
 
-Now use `?p=0&limit=50&order=-year`
+これで `?p=0&limit=50&order=-year` が使用できます。
 
-### Sort Parameter
+### Sort パラメータ
 
 ```java
 @GetMapping("/cars")
@@ -404,9 +404,9 @@ List<Car> search(@Sort org.springframework.data.domain.Sort sort) {
 }
 ```
 
-Use `?sort=-year` or `?sort=-year,name`
+`?sort=-year` または `?sort=-year,name` を使用。
 
-### Field Selection
+### フィールド選択
 
 ```java
 @Fields
@@ -416,25 +416,25 @@ List<Car> search() {
 }
 ```
 
-Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's filtering internally.
+`?fields=id,brand.name,year` で指定されたフィールドのみを返します。内部で Jackson のフィルタリングを使用します。
 
 ```java
-// Include specific fields
+// 特定のフィールドを含める
 ?fields= id,name,email
 
-// Exclude fields
+// フィールドを除外
 ?fields= *,-password,-ssn
 
-// Nested fields
+// ネストされたフィールド
 ?fields= id,brand.name,brand.country
 
-// Wildcards
+// ワイルドカード
 ?fields= user.*
 ```
 
-#### Root Scoping
+#### ルートスコープ
 
-Use `root` to scope field selection within a wrapper path. This is useful for paginated responses where you want to filter fields inside `content` while always including pagination metadata (`totalElements`, `totalPages`):
+`root` を使用して、ラッパーパス内でフィールド選択をスコープします。ページネーションメタデータ（`totalElements`、`totalPages`）を常に含めつつ、`content` 内のフィールドのみをフィルタしたいページネーション付きレスポンスに便利です：
 
 ```java
 @Fields(root = "content")
@@ -444,9 +444,9 @@ Page<Car> search() {
 }
 ```
 
-Now `?fields=id,brand.name,year` matches only properties inside `content` — metadata fields outside `content` are always included in the response.
+これで `?fields=id,brand.name,year` は `content` 内のプロパティのみにマッチし、`content` 外のメタデータフィールドは常にレスポンスに含まれます。
 
-### Combined Example
+### 組み合わせ例
 
 ```java
 @Fields
@@ -458,16 +458,16 @@ Page<Car> search(
 }
 ```
 
-Use all features together:
+すべての機能を同時に使用：
 ```
 /cars?filter=year>2020&page=0&size=20&sort=-year&fields=id,brand.name,year
 ```
 
-The `openapi` module automatically generates documentation for these parameters when both dependencies are present.
+両方の依存関係がある場合、`openapi` モジュールがこれらのパラメータのドキュメントを自動生成します。
 
-## Frontend Integration
+## フロントエンド統合
 
-Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions in JavaScript/TypeScript. It shares the exact same expression syntax and AST as Spring Filter.
+JavaScript/TypeScript でフィルタ式を構築するには [FilterKit](https://github.com/turkraft/filterkit) を使用します。Spring Filter と全く同じ式構文と AST を共有します。
 
 ```ts
 import { build, stringify } from '@turkraft/filterkit';
@@ -480,16 +480,16 @@ const query = build()
 fetch(`/api/cars?filter=${encodeURIComponent(stringify(query))}`);
 ```
 
-FilterKit also provides React integrations for [TanStack Table](https://github.com/turkraft/filterkit-tanstack) and [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder).
+FilterKit は [TanStack Table](https://github.com/turkraft/filterkit-tanstack) と [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder) 向けの React 統合も提供しています。
 
-### Community projects
+### コミュニティプロジェクト
 
-- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript query builder
-- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular integration
+- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript クエリビルダー
+- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular 統合
 
-## Language Syntax
+## 言語構文
 
-### Field Access
+### フィールドアクセス
 
 ```
 field
@@ -497,18 +497,18 @@ field.nested
 field.nested.deep
 ```
 
-### Literals
+### リテラル
 
 ```
-123                 // integer
--321.123            // decimal
-true, false         // boolean
-'text'              // string
-'1-01-2023'         // date (format depends on Spring ConversionService)
-'escape \' quote'   // escaped string
+123                 // 整数
+-321.123            // 小数
+true, false         // 真偽値
+'text'              // 文字列
+'1-01-2023'         // 日付（形式は Spring ConversionService に依存）
+'escape \' quote'   // エスケープ文字列
 ```
 
-### Collections
+### コレクション
 
 ```
 [1, 2, 3]
@@ -517,7 +517,7 @@ true, false         // boolean
 [field, ['nested', 'array'], 99]
 ```
 
-### Functions
+### 関数
 
 ```
 size(collection)
@@ -527,199 +527,199 @@ jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
 ```
 
-### Placeholders
+### プレースホルダー
 
 ```
 `placeholder_name`
 ```
 
-Placeholders are resolved by custom placeholder processors you implement.
+プレースホルダーは、実装したカスタムプレースホルダープロセッサによって解決されます。
 
-### Operators
+### 演算子
 
 ```
-a and b              // logical and
-a or b               // logical or
-a xor b               // logical xor
-not a                // logical not
-a : b                // equals
-a ! b                // not equals
-a > b                // greater than
-a >: b               // greater than or equal
-a < b                // less than
-a <: b               // less than or equal
-a between x and y    // between (inclusive range)
-a ~ 'pattern'        // like (% and _ wildcards)
-a ~~ 'pattern'       // case-insensitive like
-a in [x, y]          // in collection
-a not in [x, y]      // not in collection
-a is null            // null check
-a is not null        // not null check
-a is empty           // empty check (collections/strings)
-a is not empty       // not empty check
+a and b              // 論理積
+a or b               // 論理和
+a xor b              // 排他的論理和
+not a                // 否定
+a : b                // 等しい
+a ! b                // 等しくない
+a > b                // より大きい
+a >: b               // 以上
+a < b                // より小さい
+a <: b               // 以下
+a between x and y    // 範囲（両端を含む）
+a ~ 'pattern'        // パターンマッチ（% と _ のワイルドカード）
+a ~~ 'pattern'       // 大文字小文字を区別しないパターンマッチ
+a in [x, y]          // コレクションに含まれる
+a not in [x, y]      // コレクションに含まれない
+a is null            // null チェック
+a is not null        // 非 null チェック
+a is empty           // 空チェック（コレクション/文字列）
+a is not empty       // 非空チェック
 ```
 
-### Precedence
+### 優先順位
 
-Use parentheses to control evaluation order:
+括弧を使用して評価順序を制御します：
 
 ```
 a and (b or c)
 (status : 'active' or status : 'pending') and year > 2020
 ```
 
-## Query Examples
+## クエリ例
 
-### Basic Filtering
+### 基本的なフィルタリング
 
 ```
-// Simple equality
+// 単純な等価
 ?filter= status : 'active'
 
-// Multiple conditions
+// 複数条件
 ?filter= year > 2020 and km < 50000
 
-// Range (inclusive)
+// 範囲（両端を含む）
 ?filter= year between 2020 and 2025
 
-// OR conditions
+// OR 条件
 ?filter= color : 'red' or color : 'blue'
 ```
 
-### Working with Relations
+### リレーションの操作
 
 ```
-// Filter by related entity field
+// 関連エンティティのフィールドでフィルタ
 ?filter= brand.name : 'audi'
 
-// Nested relations
+// ネストされたリレーション
 ?filter= brand.manufacturer.country : 'germany'
 
-// Check if relation exists
+// リレーションの存在確認
 ?filter= brand is not null
 
-// Multiple relation conditions
+// 複数のリレーション条件
 ?filter= brand.name : 'audi' and dealer.city : 'berlin'
 ```
 
-### Collection Operations
+### コレクション操作
 
 ```
-// Check if value is in list
+// 値がリストに含まれるか確認
 ?filter= status in ['active', 'pending', 'review']
 
-// Check collection size
+// コレクションのサイズ確認
 ?filter= size(accidents) > 2
 
-// Check if collection is empty
+// コレクションが空か確認
 ?filter= accidents is empty
 
-// Check if collection is not empty
+// コレクションが空でないか確認
 ?filter= ratings is not empty
 ```
 
-### String Matching
+### 文字列マッチング
 
 ```
-// Like with wildcards (% = any chars, _ = single char)
+// ワイルドカード付きパターンマッチ（% = 任意の文字, _ = 1文字）
 ?filter= name ~ '%john%'
 
-// Case-insensitive like
+// 大文字小文字を区別しないパターンマッチ
 ?filter= name ~~ 'JOHN'
 
-// Starts with
+// 前方一致
 ?filter= email ~ 'admin%'
 
-// Ends with
+// 後方一致
 ?filter= filename ~ '%.pdf'
 
-// Pattern matching
+// パターンマッチング
 ?filter= code ~ 'PRD-____-2023'
 
-// Multiple patterns
+// 複数パターン
 ?filter= name ~ ['%john%', '%doe%']
 
-// Case-insensitive multi-pattern
+// 大文字小文字を区別しない複数パターン
 ?filter= name ~~ ['%JOHN%', '%DOE%']
 ```
 
-### Date Filtering
+### 日付フィルタリング
 
 ```
-// Date comparison (format depends on your Spring configuration)
+// 日付比較（形式は Spring の設定に依存）
 ?filter= createdAt > '2023-01-01'
 
-// Date range
+// 日付範囲
 ?filter= createdAt > '2023-01-01' and createdAt < '2023-12-31'
 
-// Date range (between)
+// 日付範囲（between）
 ?filter= createdAt between '2023-01-01' and '2023-12-31'
 
-// Relative dates with today() function
+// today() 関数を使用した相対日付
 ?filter= createdAt > today()
 ```
 
-### Complex Queries
+### 複雑なクエリ
 
 ```
-// Nested conditions with precedence
+// 優先順位付きのネストされた条件
 ?filter= (year > 2020 and km < 30000) or (year > 2018 and km < 10000)
 
-// Mix of different operators
+// 異なる演算子の組み合わせ
 ?filter= brand.name in ['audi', 'bmw'] and year > 2020 and accidents is empty and color ! 'white'
 
-// Collection size with relations
+// リレーション付きコレクションサイズ
 ?filter= size(owner.vehicles) > 3 and status : 'active'
 ```
 
-### Null and Empty Checks
+### Null と空のチェック
 
 ```
-// Check for null
+// null チェック
 ?filter= deletedAt is null
 
-// Check for not null
+// 非 null チェック
 ?filter= description is not null
 
-// Empty collection
+// 空コレクション
 ?filter= tags is empty
 
-// Non-empty collection
+// 非空コレクション
 ?filter= children is not empty
 ```
 
-### JSON/JSONB Filtering
+### JSON/JSONB フィルタリング
 
 ```
-// Extract string value by key path
+// キーパスで文字列値を抽出
 ?filter= jsonText(metadata, 'address', 'city') : 'New York'
 
-// Check if value exists
+// 値が存在するか確認
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
-// Combine with type casting
+// 型キャストと組み合わせ
 ?filter= jsonText(data, 'age') > 18
 
-// Nested keys with pattern matching
+// パターンマッチング付きのネストされたキー
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
 ```
 
-## Supported Types
+## サポートされる型
 
-All modules handle:
-- Primitives (int, long, double, boolean, etc.)
-- Strings
-- Enums
-- Dates (LocalDate, LocalDateTime, Date, Instant, etc.)
-- Collections (List, Set)
-- Arrays
-- Entity relations (@ManyToOne, @OneToMany, @ManyToMany)
+すべてのモジュールで以下を処理します：
+- プリミティブ型（int、long、double、boolean など）
+- 文字列
+- 列挙型
+- 日付（LocalDate、LocalDateTime、Date、Instant など）
+- コレクション（List、Set）
+- 配列
+- エンティティリレーション（@ManyToOne、@OneToMany、@ManyToMany）
 
-Date parsing uses Spring's `ConversionService`. Configure it to change date formats.
+日付の解析は Spring の `ConversionService` を使用します。設定で日付形式を変更できます。
 
-## Custom Operators
+## カスタム演算子
 
-Define custom operators by extending `FilterInfixOperator`, `FilterPrefixOperator`, or `FilterPostfixOperator`:
+`FilterInfixOperator`、`FilterPrefixOperator`、`FilterPostfixOperator` を継承してカスタム演算子を定義します：
 
 ```java
 @Component
@@ -730,7 +730,7 @@ public class ContainsOperator extends FilterInfixOperator {
 }
 ```
 
-Then implement processors for each module you use:
+次に、各モジュールのプロセッサを実装します：
 
 ```java
 @Component
@@ -750,16 +750,16 @@ public class ContainsOperationExpressionProcessor implements
     @Override
     public Expression<?> process(FilterExpressionTransformer transformer,
                                   InfixOperationNode source) {
-        // Implementation
+        // 実装
     }
 }
 ```
 
-Register the operator with autoconfiguration or manual configuration.
+自動設定または手動設定で演算子を登録します。
 
-## Custom Functions
+## カスタム関数
 
-Define custom functions by extending `FilterFunction`:
+`FilterFunction` を継承してカスタム関数を定義します：
 
 ```java
 @Component
@@ -770,7 +770,7 @@ public class LowerFunction extends FilterFunction {
 }
 ```
 
-Implement processors for each module:
+各モジュールのプロセッサを実装します：
 
 ```java
 @Component
@@ -796,11 +796,11 @@ public class LowerFunctionExpressionProcessor implements
 }
 ```
 
-## Configuration
+## 設定
 
-### Default Parameter Name
+### デフォルトパラメータ名
 
-By default, filters are read from the `filter` query parameter. Override this:
+デフォルトでは、フィルタは `filter` クエリパラメータから読み取られます。上書きするには：
 
 ```java
 @GetMapping("/cars")
@@ -809,11 +809,11 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 }
 ```
 
-Now use `?q=year > 2020` instead of `?filter=year > 2020`.
+これで `?filter=year > 2020` の代わりに `?q=year > 2020` が使用できます。
 
-### Entity Class for MongoDB
+### MongoDB のエンティティクラス
 
-MongoDB requires explicit entity class specification:
+MongoDB ではエンティティクラスの明示的な指定が必要です：
 
 ```java
 @GetMapping("/cars")
@@ -822,9 +822,9 @@ List<Car> search(@Filter(entityClass = Car.class) Query query) {
 }
 ```
 
-### Optional Filters
+### オプショナルフィルタ
 
-Use `Optional` to handle missing filter parameters:
+`Optional` を使用してフィルタパラメータの欠落を処理します：
 
 ```java
 @GetMapping("/cars")
@@ -833,9 +833,9 @@ List<Car> search(@Filter Optional<Specification<Car>> spec) {
 }
 ```
 
-### Programmatic Filter Application
+### プログラム的フィルタ適用
 
-Apply filters without Spring MVC annotations:
+Spring MVC アノテーションなしでフィルタを適用します：
 
 ```java
 @Autowired FilterSpecificationConverter jpaConverter;
@@ -857,9 +857,9 @@ public void manualFiltering() {
 }
 ```
 
-## Spring Configuration
+## Spring 設定
 
-Spring Filter uses Spring's `ConversionService` for type conversions. Configure it to customize date formats, enum handling, etc:
+Spring Filter は型変換に Spring の `ConversionService` を使用します。日付形式や列挙型の処理をカスタマイズするには：
 
 ```java
 @Configuration
@@ -874,13 +874,13 @@ public class ConversionConfig {
 }
 ```
 
-## Advanced: ParseContext
+## 高度な機能：ParseContext
 
-`ParseContext` allows you to intercept and modify filter expressions during parsing. It provides two hooks: field mapping and node mapping.
+`ParseContext` を使用すると、解析中にフィルタ式をインターセプトして変更できます。フィールドマッピングとノードマッピングの2つのフックを提供します。
 
-### Field Aliasing
+### フィールドエイリアス
 
-Map API field names to database field names:
+API のフィールド名をデータベースのフィールド名にマッピングします：
 
 ```java
 @Service
@@ -906,11 +906,11 @@ public class ProductService {
 }
 ```
 
-Now queries like `?filter=price > 100` automatically become `unitPrice > 100` at the database level.
+これで `?filter=price > 100` のようなクエリがデータベースレベルで自動的に `unitPrice > 100` になります。
 
-### Multi-Tenancy
+### マルチテナンシー
 
-Automatically inject tenant filters into all queries:
+すべてのクエリにテナントフィルタを自動注入します：
 
 ```java
 @Service
@@ -940,11 +940,11 @@ Page<Product> search(@Filter String filter, @AuthenticationPrincipal User user) 
 }
 ```
 
-User queries `status : 'active'` but the actual query becomes `tenantId : 123 and status : 'active'`.
+ユーザーは `status : 'active'` とクエリしますが、実際のクエリは `tenantId : 123 and status : 'active'` になります。
 
-### Security Filters
+### セキュリティフィルタ
 
-Inject row-level security filters based on user permissions:
+ユーザー権限に基づいて行レベルのセキュリティフィルタを注入します：
 
 ```java
 @Service
@@ -973,11 +973,11 @@ public class SecureFilterService {
 }
 ```
 
-Regular users automatically get filtered to their own documents or department documents. Admins see everything.
+一般ユーザーは自動的に自分のドキュメントまたは部門のドキュメントに制限されます。管理者はすべてを見ることができます。
 
-### Dynamic Field Access Control
+### 動的フィールドアクセス制御
 
-Restrict which fields users can filter on:
+ユーザーがフィルタできるフィールドを制限します：
 
 ```java
 public class FieldAccessControlContext implements ParseContext {
@@ -1012,11 +1012,11 @@ List<Employee> search(@Filter String filter, @AuthenticationPrincipal User user)
 }
 ```
 
-Non-admin users trying `?filter=salary > 50000` will get a `SecurityException`.
+管理者以外のユーザーが `?filter=salary > 50000` を試みると `SecurityException` が発生します。
 
-### Query Rewriting for Soft Deletes
+### 論理削除のクエリ書き換え
 
-Automatically filter out soft-deleted records:
+論理削除されたレコードを自動的に除外します：
 
 ```java
 @Service
@@ -1038,11 +1038,11 @@ public class SoftDeleteFilterService {
 }
 ```
 
-All queries automatically include `deletedAt is null`.
+すべてのクエリに自動的に `deletedAt is null` が含まれます。
 
-### Audit Logging
+### 監査ログ
 
-Log all filter queries with user context:
+ユーザーコンテキスト付きですべてのフィルタクエリをログに記録します：
 
 ```java
 @Service
@@ -1064,9 +1064,9 @@ public class AuditingFilterService {
 }
 ```
 
-### Field Name Normalization
+### フィールド名の正規化
 
-Handle different naming conventions:
+異なる命名規則を処理します：
 
 ```java
 public class NormalizingParseContext implements ParseContext {
@@ -1091,11 +1091,11 @@ ParseContext ctx = new NormalizingParseContext();
 FilterNode node = parser.parse("userId : 123 and userName ~ 'john%'", ctx);
 ```
 
-Converts `userId` to `user` and `userName` to `user_name` automatically.
+`userId` を `user` に、`userName` を `user_name` に自動変換します。
 
-### Combining Multiple Contexts
+### 複数コンテキストの組み合わせ
 
-Chain multiple parse contexts for complex scenarios:
+複雑なシナリオのために複数の解析コンテキストを連結します：
 
 ```java
 public class CompositeParseContext implements ParseContext {
@@ -1138,11 +1138,11 @@ ParseContext ctx = new CompositeParseContext(
 );
 ```
 
-Apply multiple transformations in a single pass.
+1回のパスで複数の変換を適用します。
 
-### Request-Scoped Context
+### リクエストスコープのコンテキスト
 
-Use Spring's request scope for context-aware parsing:
+Spring のリクエストスコープを使用してコンテキスト認識の解析を行います：
 
 ```java
 @Component
@@ -1174,11 +1174,11 @@ Page<Product> search(@Filter String filter) {
 }
 ```
 
-Context automatically uses current request's user information.
+コンテキストは自動的に現在のリクエストのユーザー情報を使用します。
 
-## Testing
+## テスト
 
-### Unit Testing with Filter Builder
+### Filter Builder を使用したユニットテスト
 
 ```java
 @Test
@@ -1192,7 +1192,7 @@ void testFilterBuilder() {
 }
 ```
 
-### Integration Testing
+### 統合テスト
 
 ```java
 @SpringBootTest
@@ -1210,7 +1210,7 @@ class FilterIntegrationTest {
 }
 ```
 
-### Testing Predicates
+### Predicate のテスト
 
 ```java
 @Test
@@ -1228,40 +1228,40 @@ void testPredicateFiltering() {
 }
 ```
 
-## Performance
+## パフォーマンス
 
 ### JPA
 
-JPA module generates optimized Criteria queries. The database executes filtering, so performance matches native SQL queries. Use appropriate indexes on filtered fields.
+JPA モジュールは最適化された Criteria クエリを生成します。データベースがフィルタリングを実行するため、パフォーマンスはネイティブ SQL クエリと同等です。フィルタ対象のフィールドに適切なインデックスを作成してください。
 
 ### MongoDB
 
-MongoDB module generates aggregation pipelines. Performance depends on indexes. Profile queries with MongoDB's explain plan.
+MongoDB モジュールは集計パイプラインを生成します。パフォーマンスはインデックスに依存します。MongoDB の explain plan でクエリをプロファイリングしてください。
 
 ### Predicate
 
-Predicate module filters in memory. Performance is O(n) where n is collection size. Suitable for:
-- Small collections
-- Cached data
-- Already loaded collections
-- Testing
+Predicate モジュールはメモリ内でフィルタリングします。パフォーマンスは O(n) で、n はコレクションのサイズです。以下に適しています：
+- 小規模なコレクション
+- キャッシュデータ
+- 既に読み込まれているコレクション
+- テスト
 
-For large datasets, prefer JPA or MongoDB modules to filter at database level.
+大規模なデータセットの場合は、JPA または MongoDB モジュールを使用してデータベースレベルでフィルタリングしてください。
 
-## Contributing
+## コントリビューション
 
-Pull requests welcome. Use [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) for formatting.
+プルリクエスト歓迎。フォーマットには [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) を使用してください。
 
-### Contributors
+### コントリビューター
 
-* [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) - MongoDB support
-* [@sisimomo](https://github.com/sisimomo) - [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder)
-* [@68ociredef](https://github.com/68ociredef) - [Angular query builder](https://github.com/68ociredef/spring-filter-ng)
+* [@marcopag90](https://github.com/marcopag90) と [@glodepa](https://github.com/glodepa) - MongoDB サポート
+* [@sisimomo](https://github.com/sisimomo) - [JavaScript クエリビルダー](https://github.com/sisimomo/Spring-Filter-Query-Builder)
+* [@68ociredef](https://github.com/68ociredef) - [Angular クエリビルダー](https://github.com/68ociredef/spring-filter-ng)
 
-## Articles
+## 記事
 
-* [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+* [Spring API でエンティティを簡単にフィルタする](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
 
-## License
+## ライセンス
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - [LICENSE](LICENSE) ファイルを参照してください。
