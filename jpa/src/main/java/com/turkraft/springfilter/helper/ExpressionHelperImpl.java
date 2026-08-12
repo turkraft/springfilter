@@ -316,6 +316,10 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
         && ignoreExistsForDefinitions.contains(operationNode.getOperator().getClass())) {
       return true;
     }
+    if (node instanceof FunctionNode functionNode
+        && ignoreExistsForDefinitions.contains(functionNode.getFunction().getClass())) {
+      return true;
+    }
     for (FilterNode child : node.getChildren()) {
       if (containsIgnoreExistsNode(child)) {
         return true;
