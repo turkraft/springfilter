@@ -72,7 +72,7 @@ JavaScript と TypeScript でも利用可能です：
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ Spring Data MongoDB クエリを使用して MongoDB ドキュメントをフィ
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -163,7 +163,7 @@ Java Predicate を使用してメモリ内コレクションをフィルタリ�
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -235,7 +235,7 @@ Predicate モジュールは全ての標準演算子と、コレクション、�
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -281,7 +281,7 @@ JPA エンティティからコンパイル時に型安全なフィルタビル�
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -297,7 +297,7 @@ JPA エンティティからコンパイル時に型安全なフィルタビル�
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
@@ -346,7 +346,7 @@ FilterNode f = CarFilter.where(fb)
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -368,7 +368,7 @@ JPA、MongoDB、Predicate モジュールに対応。
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 

@@ -72,7 +72,7 @@ JPA entity'lerini doğrudan veritabanı sorgularında filtreleyin. Modül, filtr
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ Spring Data MongoDB sorguları kullanarak MongoDB dokümanlarını filtreleyin.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -163,7 +163,7 @@ Java Predicate'leri kullanarak bellek içi koleksiyonları filtreleyin. Herhangi
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -235,7 +235,7 @@ Filtre string'lerini elle yazmak yerine, filtre ifadelerini programatik olarak o
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -281,7 +281,7 @@ JPA entity'lerinizden derleme zamanında tip-güvenli filtre oluşturucular üre
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -297,7 +297,7 @@ Derleyici eklentinize annotation processor'ı ekleyin:
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
@@ -346,7 +346,7 @@ Desteklenen alan tipleri: `int`, `long`, `double`, `boolean`, `String`, `Date`, 
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -368,7 +368,7 @@ JPA, MongoDB ve Predicate modülleriyle çalışır.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 

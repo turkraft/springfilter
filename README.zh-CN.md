@@ -72,7 +72,7 @@ Spring 应用程序的动态查询过滤库。将过滤表达式作为 URL 参�
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ List<CarSummary> searchProjection(@Filter Specification<Car> spec) {
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -163,7 +163,7 @@ Page<Car> search(@Filter(entityClass = Car.class) Document document, Pageable pa
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -235,7 +235,7 @@ Predicate 模块支持所有标准操作符以及用于集合、数组、Map 和
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -281,7 +281,7 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -297,7 +297,7 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
@@ -346,7 +346,7 @@ FilterNode f = CarFilter.where(fb)
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -368,7 +368,7 @@ FilterNode f = CarFilter.where(fb)
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
