@@ -13,27 +13,27 @@
   <a href="https://github.com/turkraft/springfilter"><img src="https://img.shields.io/badge/Java-17+-blue" alt="Java 17+"></a>
 </p>
 
-> :cn: [中文](README.zh-CN.md) | :es: [Español](README.es.md) | :jp: [日本語](README.ja.md) | :tr: [Türkçe](README.tr.md)
+> :us: [English](README.md) | :cn: [中文](README.zh-CN.md) | :jp: [日本語](README.ja.md) | :tr: [Türkçe](README.tr.md)
 
-Dynamic query filtering for Spring applications. Pass filter expressions as URL parameters and apply them to JPA repositories, MongoDB collections, or in-memory Java objects.
+Filtrado dinámico de consultas para aplicaciones Spring. Pasa expresiones de filtro como parámetros URL y aplícalas a repositorios JPA, colecciones MongoDB u objetos Java en memoria.
 
-The library parses filter expressions into abstract syntax trees, then converts them to JPA Criteria queries, MongoDB queries, or Java Predicates depending on your module. You can also use the filter builder to construct queries programmatically.
+La librería analiza las expresiones de filtro en árboles de sintaxis abstracta y luego los convierte en consultas JPA Criteria, consultas MongoDB o Predicates de Java según el módulo que uses. También puedes usar el filtro programático para construir consultas mediante código.
 
-> Now compatible with Spring Boot 4! Looking for older versions? See [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x)/[3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x) branches.
+> ¡Ahora compatible con Spring Boot 4! ¿Buscas versiones anteriores? Consulta las ramas [2.x.x](https://github.com/turkraft/springfilter/tree/2.x.x) / [3.x.x](https://github.com/turkraft/springfilter/tree/3.x.x).
 
-## Ecosystem
+## Ecosistema
 
-Also available for JavaScript and TypeScript:
+También disponible para JavaScript y TypeScript:
 
-| Package | Description |
+| Paquete | Descripción |
 |---|---|
-| [FilterKit](https://github.com/turkraft/filterkit) | Core library — filter arrays, build queries, parse expressions |
-| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | TanStack Table column filters → Spring Filter |
-| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | react-querybuilder queries → Spring Filter |
-| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Filter expressions → Prisma where clauses |
-| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Filter expressions → Drizzle where clauses |
+| [FilterKit](https://github.com/turkraft/filterkit) | Librería principal — filtra arrays, construye consultas, analiza expresiones |
+| [FilterKit TanStack](https://github.com/turkraft/filterkit-tanstack) | Filtros de columna TanStack Table → Spring Filter |
+| [FilterKit QueryBuilder](https://github.com/turkraft/filterkit-querybuilder) | Consultas react-querybuilder → Spring Filter |
+| [FilterKit Prisma](https://github.com/turkraft/filterkit-prisma) | Expresiones de filtro → cláusulas where de Prisma |
+| [FilterKit Drizzle](https://github.com/turkraft/filterkit-drizzle) | Expresiones de filtro → cláusulas where de Drizzle |
 
-## Example ([try it live](https://springfilter-jpa.onrender.com/))
+## Ejemplo ([pruébalo en vivo](https://springfilter-jpa.onrender.com/))
 
 */search?filter=* **average**(ratings) **>** 4.5 **and** brand.name **in** ['audi', 'land rover'] **and** (year **>** 2018 **or** km **<** 50000) and color **:** 'white' **and** accidents **is empty**
 
@@ -49,11 +49,11 @@ Also available for JavaScript and TypeScript:
 }
 ```
 
-The library handles booleans, dates, enums, functions, and entity relations. JPA module generates criteria queries, MongoDB module generates aggregation pipelines, and predicate module filters in-memory objects.
+La librería maneja booleanos, fechas, enumerados, funciones y relaciones entre entidades. El módulo JPA genera consultas Criteria, el módulo MongoDB genera pipelines de agregación y el módulo Predicate filtra objetos en memoria.
 
-## [Sponsors](https://github.com/sponsors/torshid)
+## [Patrocinadores](https://github.com/sponsors/torshid)
 
-Sponsor our project and have your issues prioritized.
+Patrocina nuestro proyecto y recibe prioridad en tus issues.
 
 <table>
 <tr>
@@ -62,17 +62,17 @@ Sponsor our project and have your issues prioritized.
 </tr>
 </table>
 
-## Modules
+## Módulos
 
 ### JPA
 
-Filter JPA entities directly in database queries. The module converts filter expressions to JPA Criteria API specifications.
+Filtra entidades JPA directamente en consultas de base de datos. El módulo convierte expresiones de filtro en Specifications de JPA Criteria API.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -83,9 +83,9 @@ Page<Car> search(@Filter Specification<Car> spec, Pageable page) {
 }
 ```
 
-The repository must implement `JpaSpecificationExecutor`. `SimpleJpaRepository` is a standard implementation. Remove the `Pageable` argument if you don't need pagination.
+El repositorio debe implementar `JpaSpecificationExecutor`. `SimpleJpaRepository` es una implementación estándar. Elimina el argumento `Pageable` si no necesitas paginación.
 
-#### JPA with Native Queries
+#### JPA con consultas nativas
 
 ```java
 @GetMapping("/cars/native")
@@ -100,7 +100,7 @@ List<Car> searchNative(@Filter Specification<Car> spec) {
 }
 ```
 
-#### JPA with Projections
+#### JPA con proyecciones
 
 ```java
 @GetMapping("/cars/summary")
@@ -121,13 +121,13 @@ List<CarSummary> searchProjection(@Filter Specification<Car> spec) {
 
 ### MongoDB
 
-Filter MongoDB documents using Spring Data MongoDB queries.
+Filtra documentos MongoDB usando consultas de Spring Data MongoDB.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -138,7 +138,7 @@ Page<Car> search(@Filter(entityClass = Car.class) Query query, Pageable page) {
 }
 ```
 
-#### With MongoRepository
+#### Con MongoRepository
 
 ```java
 public interface CarRepository extends MongoRepository<Car, String> {
@@ -157,13 +157,13 @@ Page<Car> search(@Filter(entityClass = Car.class) Document document, Pageable pa
 
 ### Predicate
 
-Filter in-memory collections using Java Predicates. Works with any POJO, no database required.
+Filtra colecciones en memoria usando Predicates de Java. Funciona con cualquier POJO, sin necesidad de base de datos.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -177,7 +177,7 @@ List<Car> search(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Manual Conversion
+#### Conversión manual
 
 ```java
 @Autowired FilterPredicateConverter converter;
@@ -191,14 +191,14 @@ public List<Car> filterCars(List<Car> cars, String filterExpression) {
 }
 ```
 
-#### Use Cases
+#### Casos de uso
 
-The predicate module is useful when:
-- Filtering cached data in memory
-- Filtering API responses before returning to client
-- Testing filter logic without database
-- Filtering configuration objects or enums
-- Processing batch data in memory
+El módulo Predicate es útil cuando:
+- Filtros de datos en caché en memoria
+- Filtros de respuestas API antes de devolver al cliente
+- Pruebas de lógica de filtro sin base de datos
+- Filtros de objetos de configuración o enumerados
+- Procesamiento de datos por lotes en memoria
 
 ```java
 @GetMapping("/cars/cached")
@@ -217,25 +217,25 @@ List<Car> filterAfterFetch(@Filter Predicate<Car> predicate) {
 }
 ```
 
-#### Size Function Support
+#### Soporte para la función size
 
 ```java
-// Filter by collection size
+// Filtrar por tamaño de colección
 GET /cars?filter=size(accidents) > 2
 GET /owners?filter=size(cars) : 0
 ```
 
-The predicate module supports all standard operators and the `size()` function for collections, arrays, maps, and strings.
+El módulo Predicate soporta todos los operadores estándar y la función `size()` para colecciones, arrays, mapas y strings.
 
-### Filter Builder
+### Filter Builder (Constructor de filtros)
 
-Build filter expressions programmatically instead of writing filter strings manually.
+Construye expresiones de filtro programáticamente en lugar de escribir manualmente cadenas de filtro.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
@@ -251,7 +251,7 @@ String query = cs.convert(filter, String.class);
 // year : 2025 and category is null
 ```
 
-#### Complex Queries
+#### Consultas complejas
 
 ```java
 FilterNode filter = fb.field("brand.name").in(
@@ -262,7 +262,7 @@ FilterNode filter = fb.field("brand.name").in(
 ).get();
 ```
 
-#### With Functions
+#### Con funciones
 
 ```java
 @Autowired SizeFunction sizeFunction;
@@ -273,19 +273,19 @@ FilterNode filter = fb.function(sizeFunction, fb.field("accidents"))
     .get();
 ```
 
-### Type-Safe Filter Builder
+### Constructor tipado de filtros
 
-Generate compile-time type-safe filter builders from your JPA entities. IDE autocomplete on every field, type-safe comparisons, and refactoring safety.
+Genera constructores de filtros tipados en tiempo de compilación a partir de tus entidades JPA. Autocompletado del IDE en cada campo, comparaciones con seguridad de tipos y protección ante refactorizaciones.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-Add the annotation processor to your compiler plugin:
+Añade el procesador de anotaciones a tu plugin de compilador:
 
 ```xml
 <plugin>
@@ -297,14 +297,14 @@ Add the annotation processor to your compiler plugin:
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.4</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
 </plugin>
 ```
 
-Annotate your entity:
+Anota tu entidad:
 
 ```java
 @Entity
@@ -318,7 +318,7 @@ public class Car {
 }
 ```
 
-At compile time, `CarFilter` is generated. Use it:
+En tiempo de compilación, se genera `CarFilter`. Úsalo:
 
 ```java
 @Autowired FilterBuilder fb;
@@ -333,46 +333,46 @@ FilterNode f = CarFilter.where(fb)
     .active().isTrue()
     .build();
 
-// Produces: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
+// Produce: year between 2020 and 2025 and model ~ 'Audi%' and price > 100.0 and active : true
 ```
 
-Supported field types: `int`, `long`, `double`, `boolean`, `String`, `Date`, `LocalDate`, `LocalDateTime`, enums, collections. Supports `and()` / `or()` chaining with correct operator precedence. Fields annotated with `@Transient` or `@JsonIgnore` are skipped. Inherited fields from superclasses are included.
+Tipos de campo soportados: `int`, `long`, `double`, `boolean`, `String`, `Date`, `LocalDate`, `LocalDateTime`, enumerados, colecciones. Soporta encadenamiento `and()` / `or()` con precedencia correcta de operadores. Los campos anotados con `@Transient` o `@JsonIgnore` se omiten. Los campos heredados de superclases se incluyen.
 
 ## OpenAPI/Swagger
 
-Add automatic Swagger documentation for endpoints with `@Filter` parameters.
+Añade documentación Swagger automática para endpoints con parámetros `@Filter`.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-Just add the dependency. Swagger UI automatically shows:
-- All filterable fields with types
-- Nested relations
-- Enum values
-- Example queries
-- Operator reference
-- Available functions
+Solo añade la dependencia. Swagger UI muestra automáticamente:
+- Todos los campos filtrables con sus tipos
+- Relaciones anidadas
+- Valores de enumerados
+- Ejemplos de consultas
+- Referencia de operadores
+- Funciones disponibles
 
-Works with JPA, MongoDB, and Predicate modules.
+Compatible con los módulos JPA, MongoDB y Predicate.
 
-## Pagination, Sorting and Field Selection
+## Paginación, ordenación y selección de campos
 
-The `page-sort` module provides annotations for pagination, sorting, and field selection.
+El módulo `page-sort` proporciona anotaciones para paginación, ordenación y selección de campos.
 
 ```xml
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.4</version>
 </dependency>
 ```
 
-### Basic Usage
+### Uso básico
 
 ```java
 @GetMapping("/cars")
@@ -381,9 +381,9 @@ Page<Car> search(@Filter Specification<Car> spec, @Pagination Pageable page) {
 }
 ```
 
-Usage: `?page=0&size=20&sort=-year` (prefix `-` for descending)
+Uso: `?page=0&size=20&sort=-year` (prefijo `-` para descendente)
 
-### Custom Parameter Names
+### Nombres de parámetros personalizados
 
 ```java
 @GetMapping("/cars")
@@ -393,9 +393,9 @@ Page<Car> search(
 }
 ```
 
-Now use `?p=0&limit=50&order=-year`
+Ahora usa `?p=0&limit=50&order=-year`
 
-### Sort Parameter
+### Parámetro Sort
 
 ```java
 @GetMapping("/cars")
@@ -404,9 +404,9 @@ List<Car> search(@Sort org.springframework.data.domain.Sort sort) {
 }
 ```
 
-Use `?sort=-year` or `?sort=-year,name`
+Usa `?sort=-year` o `?sort=-year,name`
 
-### Field Selection
+### Selección de campos
 
 ```java
 @Fields
@@ -416,25 +416,25 @@ List<Car> search() {
 }
 ```
 
-Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's filtering internally.
+Usa `?fields=id,brand.name,year` para devolver solo los campos especificados. Utiliza el filtrado de Jackson internamente.
 
 ```java
-// Include specific fields
+// Incluir campos específicos
 ?fields= id,name,email
 
-// Exclude fields
+// Excluir campos
 ?fields= *,-password,-ssn
 
-// Nested fields
+// Campos anidados
 ?fields= id,brand.name,brand.country
 
-// Wildcards
+// Comodines
 ?fields= user.*
 ```
 
-#### Root Scoping
+#### Ámbito raíz
 
-Use `root` to scope field selection within a wrapper path. This is useful for paginated responses where you want to filter fields inside `content` while always including pagination metadata (`totalElements`, `totalPages`):
+Usa `root` para delimitar la selección de campos dentro de una ruta contenedora. Útil para respuestas paginadas donde quieres filtrar campos dentro de `content` mientras siempre incluyes los metadatos de paginación (`totalElements`, `totalPages`):
 
 ```java
 @Fields(root = "content")
@@ -444,9 +444,9 @@ Page<Car> search() {
 }
 ```
 
-Now `?fields=id,brand.name,year` matches only properties inside `content` — metadata fields outside `content` are always included in the response.
+Ahora `?fields=id,brand.name,year` solo afecta a las propiedades dentro de `content`. Los campos de metadatos fuera de `content` siempre se incluyen en la respuesta.
 
-### Combined Example
+### Ejemplo combinado
 
 ```java
 @Fields
@@ -458,16 +458,16 @@ Page<Car> search(
 }
 ```
 
-Use all features together:
+Usa todas las funcionalidades juntas:
 ```
 /cars?filter=year>2020&page=0&size=20&sort=-year&fields=id,brand.name,year
 ```
 
-The `openapi` module automatically generates documentation for these parameters when both dependencies are present.
+El módulo `openapi` genera automáticamente documentación para estos parámetros cuando ambas dependencias están presentes.
 
-## Frontend Integration
+## Integración frontend
 
-Use [FilterKit](https://github.com/turkraft/filterkit) to build filter expressions in JavaScript/TypeScript. It shares the exact same expression syntax and AST as Spring Filter.
+Usa [FilterKit](https://github.com/turkraft/filterkit) para construir expresiones de filtro en JavaScript/TypeScript. Comparte exactamente la misma sintaxis de expresión y AST que Spring Filter.
 
 ```ts
 import { build, stringify } from '@turkraft/filterkit';
@@ -480,16 +480,16 @@ const query = build()
 fetch(`/api/cars?filter=${encodeURIComponent(stringify(query))}`);
 ```
 
-FilterKit also provides React integrations for [TanStack Table](https://github.com/turkraft/filterkit-tanstack) and [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder).
+FilterKit también ofrece integraciones React para [TanStack Table](https://github.com/turkraft/filterkit-tanstack) y [react-querybuilder](https://github.com/turkraft/filterkit-querybuilder).
 
-### Community projects
+### Proyectos de la comunidad
 
-- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — JavaScript query builder
-- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Angular integration
+- [spring-filter-query-builder](https://github.com/sisimomo/Spring-Filter-Query-Builder) — Constructor de consultas JavaScript
+- [spring-filter-ng](https://github.com/68ociredef/spring-filter-ng) — Integración Angular
 
-## Language Syntax
+## Sintaxis del lenguaje
 
-### Field Access
+### Acceso a campos
 
 ```
 field
@@ -497,18 +497,18 @@ field.nested
 field.nested.deep
 ```
 
-### Literals
+### Literales
 
 ```
-123                 // integer
+123                 // entero
 -321.123            // decimal
-true, false         // boolean
+true, false         // booleano
 'text'              // string
-'1-01-2023'         // date (format depends on Spring ConversionService)
-'escape \' quote'   // escaped string
+'1-01-2023'         // fecha (formato depende de Spring ConversionService)
+'escape \' quote'   // string escapado
 ```
 
-### Collections
+### Colecciones
 
 ```
 [1, 2, 3]
@@ -517,7 +517,7 @@ true, false         // boolean
 [field, ['nested', 'array'], 99]
 ```
 
-### Functions
+### Funciones
 
 ```
 size(collection)
@@ -533,193 +533,193 @@ jsonText(field, 'key1', 'key2', ...)
 `placeholder_name`
 ```
 
-Placeholders are resolved by custom placeholder processors you implement.
+Los placeholders son resueltos por procesadores de placeholder personalizados que implementes.
 
-### Operators
+### Operadores
 
 ```
-a and b              // logical and
-a or b               // logical or
-a xor b               // logical xor
-not a                // logical not
-a : b                // equals
-a ! b                // not equals
-a > b                // greater than
-a >: b               // greater than or equal
-a < b                // less than
-a <: b               // less than or equal
-a between x and y    // between (inclusive range)
-a ~ 'pattern'        // like (% and _ wildcards)
-a ~~ 'pattern'       // case-insensitive like
-a in [x, y]          // in collection
-a not in [x, y]      // not in collection
-a is null            // null check
-a is not null        // not null check
-a is empty           // empty check (collections/strings)
-a is not empty       // not empty check
+a and b              // and lógico
+a or b               // or lógico
+a xor b              // xor lógico
+not a                // not lógico
+a : b                // igual
+a ! b                // distinto
+a > b                // mayor que
+a >: b               // mayor o igual
+a < b                // menor que
+a <: b               // menor o igual
+a between x and y    // entre (rango inclusivo)
+a ~ 'pattern'        // like (comodines % y _)
+a ~~ 'pattern'       // like sin distinción de mayúsculas
+a in [x, y]          // en colección
+a not in [x, y]      // no en colección
+a is null            // comprobación de nulo
+a is not null        // comprobación de no nulo
+a is empty           // comprobación de vacío (colecciones/strings)
+a is not empty       // comprobación de no vacío
 ```
 
-### Precedence
+### Precedencia
 
-Use parentheses to control evaluation order:
+Usa paréntesis para controlar el orden de evaluación:
 
 ```
 a and (b or c)
 (status : 'active' or status : 'pending') and year > 2020
 ```
 
-## Query Examples
+## Ejemplos de consultas
 
-### Basic Filtering
+### Filtrado básico
 
 ```
-// Simple equality
+// Igualdad simple
 ?filter= status : 'active'
 
-// Multiple conditions
+// Múltiples condiciones
 ?filter= year > 2020 and km < 50000
 
-// Range (inclusive)
+// Rango (inclusivo)
 ?filter= year between 2020 and 2025
 
-// OR conditions
+// Condiciones OR
 ?filter= color : 'red' or color : 'blue'
 ```
 
-### Working with Relations
+### Trabajo con relaciones
 
 ```
-// Filter by related entity field
+// Filtrar por campo de entidad relacionada
 ?filter= brand.name : 'audi'
 
-// Nested relations
+// Relaciones anidadas
 ?filter= brand.manufacturer.country : 'germany'
 
-// Check if relation exists
+// Comprobar si la relación existe
 ?filter= brand is not null
 
-// Multiple relation conditions
+// Múltiples condiciones de relación
 ?filter= brand.name : 'audi' and dealer.city : 'berlin'
 ```
 
-### Collection Operations
+### Operaciones con colecciones
 
 ```
-// Check if value is in list
+// Comprobar si el valor está en una lista
 ?filter= status in ['active', 'pending', 'review']
 
-// Check collection size
+// Comprobar tamaño de colección
 ?filter= size(accidents) > 2
 
-// Check if collection is empty
+// Comprobar si la colección está vacía
 ?filter= accidents is empty
 
-// Check if collection is not empty
+// Comprobar si la colección no está vacía
 ?filter= ratings is not empty
 ```
 
-### String Matching
+### Coincidencia de strings
 
 ```
-// Like with wildcards (% = any chars, _ = single char)
+// Like con comodines (% = cualquier carácter, _ = un carácter)
 ?filter= name ~ '%john%'
 
-// Case-insensitive like
+// Like sin distinción de mayúsculas
 ?filter= name ~~ 'JOHN'
 
-// Starts with
+// Empieza por
 ?filter= email ~ 'admin%'
 
-// Ends with
+// Termina por
 ?filter= filename ~ '%.pdf'
 
-// Pattern matching
+// Coincidencia de patrones
 ?filter= code ~ 'PRD-____-2023'
 
-// Multiple patterns
+// Múltiples patrones
 ?filter= name ~ ['%john%', '%doe%']
 
-// Case-insensitive multi-pattern
+// Múltiples patrones sin distinción de mayúsculas
 ?filter= name ~~ ['%JOHN%', '%DOE%']
 ```
 
-### Date Filtering
+### Filtrado por fecha
 
 ```
-// Date comparison (format depends on your Spring configuration)
+// Comparación de fechas (formato depende de la configuración de Spring)
 ?filter= createdAt > '2023-01-01'
 
-// Date range
+// Rango de fechas
 ?filter= createdAt > '2023-01-01' and createdAt < '2023-12-31'
 
-// Date range (between)
+// Rango de fechas (between)
 ?filter= createdAt between '2023-01-01' and '2023-12-31'
 
-// Relative dates with today() function
+// Fechas relativas con la función today()
 ?filter= createdAt > today()
 ```
 
-### Complex Queries
+### Consultas complejas
 
 ```
-// Nested conditions with precedence
+// Condiciones anidadas con precedencia
 ?filter= (year > 2020 and km < 30000) or (year > 2018 and km < 10000)
 
-// Mix of different operators
+// Mezcla de diferentes operadores
 ?filter= brand.name in ['audi', 'bmw'] and year > 2020 and accidents is empty and color ! 'white'
 
-// Collection size with relations
+// Tamaño de colección con relaciones
 ?filter= size(owner.vehicles) > 3 and status : 'active'
 ```
 
-### Null and Empty Checks
+### Comprobaciones de nulo y vacío
 
 ```
-// Check for null
+// Comprobar nulo
 ?filter= deletedAt is null
 
-// Check for not null
+// Comprobar no nulo
 ?filter= description is not null
 
-// Empty collection
+// Colección vacía
 ?filter= tags is empty
 
-// Non-empty collection
+// Colección no vacía
 ?filter= children is not empty
 ```
 
-### JSON/JSONB Filtering
+### Filtrado JSON/JSONB
 
 ```
-// Extract string value by key path
+// Extraer valor string por ruta de claves
 ?filter= jsonText(metadata, 'address', 'city') : 'New York'
 
-// Check if value exists
+// Verificar si el valor existe
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
-// Combine with type casting
+// Combinar con conversión de tipo
 ?filter= jsonText(data, 'age') > 18
 
-// Nested keys with pattern matching
+// Claves anidadas con coincidencia de patrones
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
 ```
 
-## Supported Types
+## Tipos soportados
 
-All modules handle:
-- Primitives (int, long, double, boolean, etc.)
+Todos los módulos manejan:
+- Primitivos (int, long, double, boolean, etc.)
 - Strings
-- Enums
-- Dates (LocalDate, LocalDateTime, Date, Instant, etc.)
-- Collections (List, Set)
+- Enumerados
+- Fechas (LocalDate, LocalDateTime, Date, Instant, etc.)
+- Colecciones (List, Set)
 - Arrays
-- Entity relations (@ManyToOne, @OneToMany, @ManyToMany)
+- Relaciones de entidad (@ManyToOne, @OneToMany, @ManyToMany)
 
-Date parsing uses Spring's `ConversionService`. Configure it to change date formats.
+El análisis de fechas usa `ConversionService` de Spring. Configúralo para cambiar los formatos de fecha.
 
-## Custom Operators
+## Operadores personalizados
 
-Define custom operators by extending `FilterInfixOperator`, `FilterPrefixOperator`, or `FilterPostfixOperator`:
+Define operadores personalizados extendiendo `FilterInfixOperator`, `FilterPrefixOperator` o `FilterPostfixOperator`:
 
 ```java
 @Component
@@ -730,7 +730,7 @@ public class ContainsOperator extends FilterInfixOperator {
 }
 ```
 
-Then implement processors for each module you use:
+Luego implementa procesadores para cada módulo que uses:
 
 ```java
 @Component
@@ -750,16 +750,16 @@ public class ContainsOperationExpressionProcessor implements
     @Override
     public Expression<?> process(FilterExpressionTransformer transformer,
                                   InfixOperationNode source) {
-        // Implementation
+        // Implementación
     }
 }
 ```
 
-Register the operator with autoconfiguration or manual configuration.
+Registra el operador con autoconfiguración o configuración manual.
 
-## Custom Functions
+## Funciones personalizadas
 
-Define custom functions by extending `FilterFunction`:
+Define funciones personalizadas extendiendo `FilterFunction`:
 
 ```java
 @Component
@@ -770,7 +770,7 @@ public class LowerFunction extends FilterFunction {
 }
 ```
 
-Implement processors for each module:
+Implementa procesadores para cada módulo:
 
 ```java
 @Component
@@ -796,11 +796,11 @@ public class LowerFunctionExpressionProcessor implements
 }
 ```
 
-## Configuration
+## Configuración
 
-### Default Parameter Name
+### Nombre de parámetro por defecto
 
-By default, filters are read from the `filter` query parameter. Override this:
+Por defecto, los filtros se leen del parámetro de consulta `filter`. Sobrescríbelo:
 
 ```java
 @GetMapping("/cars")
@@ -809,11 +809,11 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 }
 ```
 
-Now use `?q=year > 2020` instead of `?filter=year > 2020`.
+Ahora usa `?q=year > 2020` en lugar de `?filter=year > 2020`.
 
-### Entity Class for MongoDB
+### Clase de entidad para MongoDB
 
-MongoDB requires explicit entity class specification:
+MongoDB requiere especificación explícita de la clase de entidad:
 
 ```java
 @GetMapping("/cars")
@@ -822,9 +822,9 @@ List<Car> search(@Filter(entityClass = Car.class) Query query) {
 }
 ```
 
-### Optional Filters
+### Filtros opcionales
 
-Use `Optional` to handle missing filter parameters:
+Usa `Optional` para manejar parámetros de filtro faltantes:
 
 ```java
 @GetMapping("/cars")
@@ -833,9 +833,9 @@ List<Car> search(@Filter Optional<Specification<Car>> spec) {
 }
 ```
 
-### Programmatic Filter Application
+### Aplicación programática de filtros
 
-Apply filters without Spring MVC annotations:
+Aplica filtros sin anotaciones Spring MVC:
 
 ```java
 @Autowired FilterSpecificationConverter jpaConverter;
@@ -857,9 +857,9 @@ public void manualFiltering() {
 }
 ```
 
-## Spring Configuration
+## Configuración de Spring
 
-Spring Filter uses Spring's `ConversionService` for type conversions. Configure it to customize date formats, enum handling, etc:
+Spring Filter usa `ConversionService` de Spring para conversiones de tipo. Configúralo para personalizar formatos de fecha, manejo de enumerados, etc.:
 
 ```java
 @Configuration
@@ -874,13 +874,13 @@ public class ConversionConfig {
 }
 ```
 
-## Advanced: ParseContext
+## Avanzado: ParseContext
 
-`ParseContext` allows you to intercept and modify filter expressions during parsing. It provides two hooks: field mapping and node mapping.
+`ParseContext` te permite interceptar y modificar expresiones de filtro durante el análisis. Proporciona dos hooks: mapeo de campos y mapeo de nodos.
 
-### Field Aliasing
+### Alias de campos
 
-Map API field names to database field names:
+Mapea nombres de campo de la API a nombres de campo de la base de datos:
 
 ```java
 @Service
@@ -906,11 +906,11 @@ public class ProductService {
 }
 ```
 
-Now queries like `?filter=price > 100` automatically become `unitPrice > 100` at the database level.
+Ahora consultas como `?filter=price > 100` se convierten automáticamente en `unitPrice > 100` a nivel de base de datos.
 
-### Multi-Tenancy
+### Multi-tenancy
 
-Automatically inject tenant filters into all queries:
+Inyecta automáticamente filtros de tenant en todas las consultas:
 
 ```java
 @Service
@@ -940,11 +940,11 @@ Page<Product> search(@Filter String filter, @AuthenticationPrincipal User user) 
 }
 ```
 
-User queries `status : 'active'` but the actual query becomes `tenantId : 123 and status : 'active'`.
+El usuario consulta `status : 'active'` pero la consulta real se convierte en `tenantId : 123 and status : 'active'`.
 
-### Security Filters
+### Filtros de seguridad
 
-Inject row-level security filters based on user permissions:
+Inyecta filtros de seguridad a nivel de fila basados en permisos del usuario:
 
 ```java
 @Service
@@ -973,11 +973,11 @@ public class SecureFilterService {
 }
 ```
 
-Regular users automatically get filtered to their own documents or department documents. Admins see everything.
+Los usuarios regulares se filtran automáticamente a sus propios documentos o documentos de su departamento. Los administradores ven todo.
 
-### Dynamic Field Access Control
+### Control dinámico de acceso a campos
 
-Restrict which fields users can filter on:
+Restringe qué campos puede filtrar cada usuario:
 
 ```java
 public class FieldAccessControlContext implements ParseContext {
@@ -1012,11 +1012,11 @@ List<Employee> search(@Filter String filter, @AuthenticationPrincipal User user)
 }
 ```
 
-Non-admin users trying `?filter=salary > 50000` will get a `SecurityException`.
+Usuarios no administradores que intenten `?filter=salary > 50000` recibirán una `SecurityException`.
 
-### Query Rewriting for Soft Deletes
+### Reescritura de consultas para borrado lógico
 
-Automatically filter out soft-deleted records:
+Filtra automáticamente los registros eliminados lógicamente:
 
 ```java
 @Service
@@ -1038,11 +1038,11 @@ public class SoftDeleteFilterService {
 }
 ```
 
-All queries automatically include `deletedAt is null`.
+Todas las consultas incluyen automáticamente `deletedAt is null`.
 
-### Audit Logging
+### Registro de auditoría
 
-Log all filter queries with user context:
+Registra todas las consultas de filtro con contexto de usuario:
 
 ```java
 @Service
@@ -1064,9 +1064,9 @@ public class AuditingFilterService {
 }
 ```
 
-### Field Name Normalization
+### Normalización de nombres de campo
 
-Handle different naming conventions:
+Maneja diferentes convenciones de nomenclatura:
 
 ```java
 public class NormalizingParseContext implements ParseContext {
@@ -1091,11 +1091,11 @@ ParseContext ctx = new NormalizingParseContext();
 FilterNode node = parser.parse("userId : 123 and userName ~ 'john%'", ctx);
 ```
 
-Converts `userId` to `user` and `userName` to `user_name` automatically.
+Convierte `userId` a `user` y `userName` a `user_name` automáticamente.
 
-### Combining Multiple Contexts
+### Combinando múltiples contextos
 
-Chain multiple parse contexts for complex scenarios:
+Encadena múltiples contextos de parseo para escenarios complejos:
 
 ```java
 public class CompositeParseContext implements ParseContext {
@@ -1138,11 +1138,11 @@ ParseContext ctx = new CompositeParseContext(
 );
 ```
 
-Apply multiple transformations in a single pass.
+Aplica múltiples transformaciones en una sola pasada.
 
-### Request-Scoped Context
+### Contexto con ámbito de petición
 
-Use Spring's request scope for context-aware parsing:
+Usa el ámbito de petición de Spring para análisis contextual:
 
 ```java
 @Component
@@ -1174,11 +1174,11 @@ Page<Product> search(@Filter String filter) {
 }
 ```
 
-Context automatically uses current request's user information.
+El contexto automáticamente usa la información del usuario de la petición actual.
 
-## Testing
+## Pruebas
 
-### Unit Testing with Filter Builder
+### Pruebas unitarias con Filter Builder
 
 ```java
 @Test
@@ -1192,7 +1192,7 @@ void testFilterBuilder() {
 }
 ```
 
-### Integration Testing
+### Pruebas de integración
 
 ```java
 @SpringBootTest
@@ -1210,7 +1210,7 @@ class FilterIntegrationTest {
 }
 ```
 
-### Testing Predicates
+### Pruebas de Predicates
 
 ```java
 @Test
@@ -1228,40 +1228,40 @@ void testPredicateFiltering() {
 }
 ```
 
-## Performance
+## Rendimiento
 
 ### JPA
 
-JPA module generates optimized Criteria queries. The database executes filtering, so performance matches native SQL queries. Use appropriate indexes on filtered fields.
+El módulo JPA genera consultas Criteria optimizadas. La base de datos ejecuta el filtrado, por lo que el rendimiento es equivalente a consultas SQL nativas. Usa índices apropiados en los campos filtrados.
 
 ### MongoDB
 
-MongoDB module generates aggregation pipelines. Performance depends on indexes. Profile queries with MongoDB's explain plan.
+El módulo MongoDB genera pipelines de agregación. El rendimiento depende de los índices. Analiza las consultas con el explain plan de MongoDB.
 
 ### Predicate
 
-Predicate module filters in memory. Performance is O(n) where n is collection size. Suitable for:
-- Small collections
-- Cached data
-- Already loaded collections
-- Testing
+El módulo Predicate filtra en memoria. El rendimiento es O(n) donde n es el tamaño de la colección. Adecuado para:
+- Colecciones pequeñas
+- Datos en caché
+- Colecciones ya cargadas
+- Pruebas
 
-For large datasets, prefer JPA or MongoDB modules to filter at database level.
+Para conjuntos de datos grandes, prefiere los módulos JPA o MongoDB para filtrar a nivel de base de datos.
 
-## Contributing
+## Contribuir
 
-Pull requests welcome. Use [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) for formatting.
+Pull requests bienvenidos. Usa [Google Java Style](https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml) para el formato.
 
-### Contributors
+### Contribuidores
 
-* [@marcopag90](https://github.com/marcopag90) and [@glodepa](https://github.com/glodepa) - MongoDB support
-* [@sisimomo](https://github.com/sisimomo) - [JavaScript query builder](https://github.com/sisimomo/Spring-Filter-Query-Builder)
-* [@68ociredef](https://github.com/68ociredef) - [Angular query builder](https://github.com/68ociredef/spring-filter-ng)
+* [@marcopag90](https://github.com/marcopag90) y [@glodepa](https://github.com/glodepa) - Soporte MongoDB
+* [@sisimomo](https://github.com/sisimomo) - [Constructor de consultas JavaScript](https://github.com/sisimomo/Spring-Filter-Query-Builder)
+* [@68ociredef](https://github.com/68ociredef) - [Constructor de consultas Angular](https://github.com/68ociredef/spring-filter-ng)
 
-## Articles
+## Artículos
 
-* [Easily filter entities in your Spring API](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
+* [Filtra entidades fácilmente en tu API Spring](https://torshid.medium.com/easily-filter-entities-in-your-spring-api-f433537cfd41)
 
-## License
+## Licencia
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - consulta el archivo [LICENSE](LICENSE).
