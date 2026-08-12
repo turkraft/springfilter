@@ -265,7 +265,12 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
     if (node instanceof InfixOperationNode infixNode) {
       if (infixNode.getOperator() instanceof AndOperator
           || infixNode.getOperator() instanceof OrOperator) {
-        return false;
+        boolean leftNeedsWrap = requiresExists(transformer, infixNode.getLeft());
+        boolean rightNeedsWrap = requiresExists(transformer, infixNode.getRight());
+        if ((leftNeedsWrap || rightNeedsWrap) && containsIgnoreExistsNode(infixNode)) {
+          return false;
+        }
+        return leftNeedsWrap || rightNeedsWrap;
       }
       return requiresExists(transformer, infixNode.getLeft()) || requiresExists(
           transformer,
@@ -304,6 +309,19 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
         && isEntityType(path
         .getModel()
         .getBindableJavaType()));
+  }
+
+  private boolean containsIgnoreExistsNode(FilterNode node) {
+    if (node instanceof OperationNode operationNode
+        && ignoreExistsForDefinitions.contains(operationNode.getOperator().getClass())) {
+      return true;
+    }
+    for (FilterNode child : node.getChildren()) {
+      if (containsIgnoreExistsNode(child)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

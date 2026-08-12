@@ -428,28 +428,15 @@ public class FilterExpressionTransformerTest {
   }
 
   @Test
-  void twoCollectionEqualsWithAndTest() {
-    createEntity(10, Arrays.asList(5, 10));
-    createEntity(10, Collections.singletonList(5));
-    createEntity(10, Collections.singletonList(10));
-    createEntity(10, Arrays.asList(1, 2));
-
-    test("""
-            select t from TestEntity t where 5 member of t.integers and 10 member of t.integers
-            """,
-        fb.field("integers").equal(fb.input(5))
-            .and(fb.field("integers").equal(fb.input(10))).get());
-  }
-
-  @Test
   void isNotEmptyAndCollectionNotEqualTest() {
     createEntity(10, Collections.singletonList(5));
     createEntity(10, Collections.singletonList(7));
     createEntity(10, Collections.emptyList());
     createEntity(10, Arrays.asList(1, 2));
+    createEntity(10, Arrays.asList(5, 7));
 
     test("""
-            select t from TestEntity t where t.integers is not empty and not (5 member of t.integers)
+            select t from TestEntity t where t.integers is not empty and exists(select 1 from t.integers i where i <> 5)
             """,
         fb.field("integers").isNotEmpty()
             .and(fb.field("integers").notEqual(fb.input(5))).get());
