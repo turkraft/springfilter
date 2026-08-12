@@ -177,7 +177,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${maven-javadoc-plugin.version}</version>
         <configuration>
-          <failOnError>false</failOnError>
+          <excludePackageNames>com.turkraft.springfilter</excludePackageNames>
         </configuration>
         <executions>
           <execution>
