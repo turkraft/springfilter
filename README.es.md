@@ -72,7 +72,7 @@ Filtra entidades JPA directamente en consultas de base de datos. El módulo conv
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>jpa</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ Filtra documentos MongoDB usando consultas de Spring Data MongoDB.
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>mongo</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -163,7 +163,7 @@ Filtra colecciones en memoria usando Predicates de Java. Funciona con cualquier 
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>predicate</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -235,7 +235,7 @@ Construye expresiones de filtro programáticamente en lugar de escribir manualme
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>core</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -281,7 +281,7 @@ Genera constructores de filtros tipados en tiempo de compilación a partir de tu
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>typesafe</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -297,7 +297,7 @@ Añade el procesador de anotaciones a tu plugin de compilador:
       <path>
         <groupId>com.turkraft.springfilter</groupId>
         <artifactId>typesafe-processor</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
       </path>
     </annotationProcessorPaths>
   </configuration>
@@ -346,7 +346,7 @@ Añade documentación Swagger automática para endpoints con parámetros `@Filte
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>openapi</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -368,7 +368,7 @@ El módulo `page-sort` proporciona anotaciones para paginación, ordenación y s
 <dependency>
   <groupId>com.turkraft.springfilter</groupId>
   <artifactId>page-sort</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
