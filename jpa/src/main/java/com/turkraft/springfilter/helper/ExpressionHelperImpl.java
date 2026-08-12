@@ -1,6 +1,8 @@
 package com.turkraft.springfilter.helper;
 
 import com.turkraft.springfilter.definition.FilterDefinition;
+import com.turkraft.springfilter.language.AndOperator;
+import com.turkraft.springfilter.language.OrOperator;
 import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
@@ -260,11 +262,15 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
         return requiresExists(transformer, ((PrefixOperationNode) node).getRight());
       }
 
-      if (node instanceof InfixOperationNode) {
-        return requiresExists(transformer, ((InfixOperationNode) node).getLeft()) || requiresExists(
-            transformer,
-            ((InfixOperationNode) node).getRight());
+    if (node instanceof InfixOperationNode infixNode) {
+      if (infixNode.getOperator() instanceof AndOperator
+          || infixNode.getOperator() instanceof OrOperator) {
+        return false;
       }
+      return requiresExists(transformer, infixNode.getLeft()) || requiresExists(
+          transformer,
+          infixNode.getRight());
+    }
 
       if (node instanceof PostfixOperationNode) {
         return requiresExists(transformer, ((PostfixOperationNode) node).getLeft());

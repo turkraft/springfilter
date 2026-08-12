@@ -387,4 +387,62 @@ public class FilterExpressionTransformerTest {
             .xor(fb.field("integer").lessThanOrEqual(fb.input(25))).get());
   }
 
+  @Test
+  void isEmptyOrCollectionEqualTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Arrays.asList(1, 2, 3));
+    createEntity(5, Collections.emptyList());
+    createEntity(5, Collections.singletonList(5));
+
+    test("""
+            select t from TestEntity t where t.integer = 10 and (t.integers is empty or 5 member of t.integers)
+            """,
+        fb.field("integer").equal(fb.input(10))
+            .and(
+                fb.field("integers").isEmpty()
+                    .or(fb.field("integers").equal(fb.input(5)))
+            ).get());
+  }
+
+  @Test
+  void collectionEqualTest() {
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Arrays.asList(1, 2, 3));
+    createEntity(10, Arrays.asList(4, 5, 6));
+
+    test("""
+            select t from TestEntity t where 5 member of t.integers
+            """,
+        fb.field("integers").equal(fb.input(5)).get());
+  }
+
+  @Test
+  void twoCollectionEqualsWithAndTest() {
+    createEntity(10, Arrays.asList(5, 10));
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Collections.singletonList(10));
+    createEntity(10, Arrays.asList(1, 2));
+
+    test("""
+            select t from TestEntity t where 5 member of t.integers and 10 member of t.integers
+            """,
+        fb.field("integers").equal(fb.input(5))
+            .and(fb.field("integers").equal(fb.input(10))).get());
+  }
+
+  @Test
+  void isNotEmptyAndCollectionNotEqualTest() {
+    createEntity(10, Collections.singletonList(5));
+    createEntity(10, Collections.singletonList(7));
+    createEntity(10, Collections.emptyList());
+    createEntity(10, Arrays.asList(1, 2));
+
+    test("""
+            select t from TestEntity t where t.integers is not empty and not (5 member of t.integers)
+            """,
+        fb.field("integers").isNotEmpty()
+            .and(fb.field("integers").notEqual(fb.input(5))).get());
+  }
+
 }
