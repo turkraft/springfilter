@@ -432,6 +432,20 @@ List<Car> search() {
 ?fields= user.*
 ```
 
+#### 根路径限定
+
+使用 `root` 将字段选择限制在包装路径内。这对于分页响应特别有用，您可能只想过滤 `content` 内的字段，同时始终包含分页元数据（`totalElements`、`totalPages`）：
+
+```java
+@Fields(root = "content")
+@GetMapping("/cars")
+Page<Car> search() {
+    return repository.findAll(pageable);
+}
+```
+
+现在 `?fields=id,brand.name,year` 仅匹配 `content` 内的属性 — `content` 外部的元数据字段始终包含在响应中。
+
 ### 组合示例
 
 ```java
@@ -509,6 +523,8 @@ true, false         // 布尔值
 size(collection)
 size(field.collection)
 today()
+jsonText(field, 'key')
+jsonText(field, 'key1', 'key2', ...)
 ```
 
 ### 占位符
@@ -670,6 +686,22 @@ a and (b or c)
 
 // 非空集合
 ?filter= children is not empty
+```
+
+### JSON/JSONB 过滤
+
+```
+// 通过键路径提取字符串值
+?filter= jsonText(metadata, 'address', 'city') : 'New York'
+
+// 判断值是否存在
+?filter= jsonText(data, 'status') in ['active', 'pending']
+
+// 结合类型转换
+?filter= jsonText(data, 'age') > 18
+
+// 嵌套键与模糊匹配
+?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
 ```
 
 ## 支持的类型

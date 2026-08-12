@@ -432,6 +432,20 @@ Use `?fields=id,brand.name,year` to return only specified fields. Uses Jackson's
 ?fields= user.*
 ```
 
+#### Root Scoping
+
+Use `root` to scope field selection within a wrapper path. This is useful for paginated responses where you want to filter fields inside `content` while always including pagination metadata (`totalElements`, `totalPages`):
+
+```java
+@Fields(root = "content")
+@GetMapping("/cars")
+Page<Car> search() {
+    return repository.findAll(pageable);
+}
+```
+
+Now `?fields=id,brand.name,year` matches only properties inside `content` — metadata fields outside `content` are always included in the response.
+
 ### Combined Example
 
 ```java
@@ -509,6 +523,8 @@ true, false         // boolean
 size(collection)
 size(field.collection)
 today()
+jsonText(field, 'key')
+jsonText(field, 'key1', 'key2', ...)
 ```
 
 ### Placeholders
@@ -670,6 +686,22 @@ a and (b or c)
 
 // Non-empty collection
 ?filter= children is not empty
+```
+
+### JSON/JSONB Filtering
+
+```
+// Extract string value by key path
+?filter= jsonText(metadata, 'address', 'city') : 'New York'
+
+// Check if value exists
+?filter= jsonText(data, 'status') in ['active', 'pending']
+
+// Combine with type casting
+?filter= jsonText(data, 'age') > 18
+
+// Nested keys with pattern matching
+?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
 ```
 
 ## Supported Types
