@@ -30,6 +30,8 @@ public class AnyFunctionExpressionProcessor implements
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer, FunctionNode source) {
 
+    QuantifierSupport.requireBasicCollection(transformer, source);
+
     Subquery<Comparable> subquery = transformer
         .getCriteriaQuery()
         .subquery(Comparable.class);
