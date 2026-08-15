@@ -12,12 +12,12 @@ public class AllFunction extends FilterFunction {
 
   @Override
   public String getDescription() {
-    return "All values match (not implemented)";
+    return "True when the comparison holds for every element of the collection";
   }
 
   @Override
   public String getExample() {
-    return "price > all(subquery)";
+    return "integer > all(integers)";
   }
 
 }

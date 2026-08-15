@@ -12,12 +12,12 @@ public class SomeFunction extends FilterFunction {
 
   @Override
   public String getDescription() {
-    return "Some value matches (not implemented)";
+    return "True when the comparison holds for at least one element of the collection";
   }
 
   @Override
   public String getExample() {
-    return "price > some(subquery)";
+    return "integer > some(integers)";
   }
 
 }
