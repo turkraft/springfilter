@@ -295,6 +295,28 @@ public class FilterExpressionTransformerTest {
   }
 
   @Test
+  void anyFunctionOnNonCollectionFieldTest() {
+    createEntity(5, Arrays.asList(1, 2, 3));
+    FilterNode node = fb
+        .field("integer")
+        .greaterThan(fb.function(anyFunction, fb.field("string")))
+        .get();
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () -> transformer.transform(node));
+  }
+
+  @Test
+  void allFunctionOnunknownFieldTest() {
+    createEntity(5, Arrays.asList(1, 2, 3));
+    FilterNode node = fb
+        .field("integer")
+        .greaterThan(fb.function(allFunction, fb.field("unknownField")))
+        .get();
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () -> transformer.transform(node));
+  }
+
+  @Test
   void parseRoundTripAnyTest() {
     FilterNode node = fb
         .field("integer")

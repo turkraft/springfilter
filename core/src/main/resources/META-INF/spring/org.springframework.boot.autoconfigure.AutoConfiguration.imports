@@ -35,8 +35,8 @@ com.turkraft.springfilter.language.LikeOperator
 com.turkraft.springfilter.language.NotEqualOperator
 com.turkraft.springfilter.language.NotInOperator
 com.turkraft.springfilter.language.NotOperator
-com.turkraft.springfilter.language.NotOperator
 com.turkraft.springfilter.language.OrOperator
+com.turkraft.springfilter.language.XorOperator
 
 com.turkraft.springfilter.language.TodayFunction
 com.turkraft.springfilter.language.SizeFunction

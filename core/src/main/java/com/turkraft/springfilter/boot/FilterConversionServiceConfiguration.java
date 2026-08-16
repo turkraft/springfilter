@@ -1,8 +1,8 @@
 package com.turkraft.springfilter.boot;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -18,15 +18,18 @@ public class FilterConversionServiceConfiguration {
   @Nullable
   protected final ConversionService defaultConversionService;
 
-  protected final List<ConversionService> conversionServices;
+  protected final ApplicationContext applicationContext;
+
+  @Nullable
+  private ConversionService fallbackConversionService;
 
   public FilterConversionServiceConfiguration(
       @Nullable @Autowired(required = false) @Qualifier("mvcConversionService") ConversionService mvcConversionService,
       @Nullable @Autowired(required = false) @Qualifier("defaultConversionService") ConversionService defaultConversionService,
-      @Nullable @Autowired(required = false) List<ConversionService> conversionServices) {
+      ApplicationContext applicationContext) {
     this.mvcConversionService = mvcConversionService;
     this.defaultConversionService = defaultConversionService;
-    this.conversionServices = conversionServices;
+    this.applicationContext = applicationContext;
   }
 
   @Bean
@@ -37,10 +40,15 @@ public class FilterConversionServiceConfiguration {
     if (mvcConversionService != null) {
       return mvcConversionService;
     }
-    if (conversionServices != null && !conversionServices.isEmpty()) {
-      return conversionServices.get(0);
+    if (applicationContext.containsBean("conversionService")) {
+      return applicationContext.getBean("conversionService", ConversionService.class);
     }
-    throw new IllegalArgumentException("Could not find any ConversionService bean!");
+
+    if (fallbackConversionService == null) {
+      fallbackConversionService =
+          new org.springframework.core.convert.support.DefaultConversionService();
+    }
+    return fallbackConversionService;
   }
 
   @Bean
