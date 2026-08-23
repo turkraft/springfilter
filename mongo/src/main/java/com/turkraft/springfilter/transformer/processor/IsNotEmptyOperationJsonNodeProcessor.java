@@ -1,10 +1,10 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.language.IsNotEmptyOperator;
 import com.turkraft.springfilter.parser.node.PostfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 @Component
 public class IsNotEmptyOperationJsonNodeProcessor implements
@@ -48,7 +48,7 @@ public class IsNotEmptyOperationJsonNodeProcessor implements
                                 .set("$size", transformer.transform(postfixOperationNode.getLeft())))
                             .add(transformer
                                 .getObjectMapper()
-                                .createObjectNode()
+                                .getNodeFactory()
                                 .numberNode(0)))));
   }
 

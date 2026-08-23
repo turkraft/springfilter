@@ -1,11 +1,11 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.language.LessThanOrEqualOperator;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 @Component
 public class LessThanOrEqualOperationJsonNodeProcessor extends InfixOperationJsonNodeProcessor {

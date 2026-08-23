@@ -1,12 +1,12 @@
 package com.turkraft.springfilter.helper;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class JsonNodeHelperImpl implements JsonNodeHelper {

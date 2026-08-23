@@ -1,10 +1,10 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.language.HelloWorldPlaceholder;
 import com.turkraft.springfilter.parser.node.PlaceholderNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 @Component
 public class HelloWorldPlaceholderJsonNodeProcessor implements
@@ -25,8 +25,8 @@ public class HelloWorldPlaceholderJsonNodeProcessor implements
     transformer.registerTargetType(source, String.class);
     return transformer
         .getObjectMapper()
-        .createObjectNode()
-        .textNode("Hello world!");
+        .getNodeFactory()
+        .stringNode("Hello world!");
   }
 
 }
