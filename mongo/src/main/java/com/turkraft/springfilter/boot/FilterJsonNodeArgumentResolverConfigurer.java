@@ -1,6 +1,5 @@
 package com.turkraft.springfilter.boot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
@@ -12,6 +11,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @Conditional(WebMvcConfigurerCondition.class)

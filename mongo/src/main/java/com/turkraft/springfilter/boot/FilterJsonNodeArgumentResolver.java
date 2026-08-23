@@ -1,7 +1,5 @@
 package com.turkraft.springfilter.boot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.parser.node.FilterNode;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
 

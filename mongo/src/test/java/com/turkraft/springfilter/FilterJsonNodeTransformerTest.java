@@ -1,13 +1,10 @@
 package com.turkraft.springfilter;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 public class FilterJsonNodeTransformerTest {
@@ -51,15 +50,11 @@ public class FilterJsonNodeTransformerTest {
   }
 
   private void test(String expectedJson, FilterNode filterNode) {
-    try {
-      JsonNode expectedOutput = objectMapper.readTree(expectedJson);
-      Assertions.assertEquals(expectedOutput.toString(),
-          transformer
-              .transform(filterNode)
-              .toString());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    JsonNode expectedOutput = objectMapper.readTree(expectedJson);
+    Assertions.assertEquals(expectedOutput.toString(),
+        transformer
+            .transform(filterNode)
+            .toString());
   }
 
   @Test

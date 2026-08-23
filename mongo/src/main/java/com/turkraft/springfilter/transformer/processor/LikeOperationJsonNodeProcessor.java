@@ -1,7 +1,5 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.language.LikeOperator;
 import com.turkraft.springfilter.parser.node.FieldNode;
@@ -11,6 +9,8 @@ import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import java.lang.reflect.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Component
 public class LikeOperationJsonNodeProcessor implements
@@ -70,19 +70,19 @@ public class LikeOperationJsonNodeProcessor implements
             .createObjectNode();
         functionBody.set("lang", transformer
             .getObjectMapper()
-            .createObjectNode()
-            .textNode("js"));
+            .getNodeFactory()
+            .stringNode("js"));
         functionBody.set("args", transformer
             .getObjectMapper()
             .createArrayNode()
             .add(transformer
                 .getObjectMapper()
-                .createObjectNode()
-                .textNode("$_id")));
+                .getNodeFactory()
+                .stringNode("$_id")));
         functionBody.set("body", transformer
             .getObjectMapper()
-            .createObjectNode()
-            .textNode("function(id) { return new RegExp('" + createRegex(
+            .getNodeFactory()
+            .stringNode("function(id) { return new RegExp('" + createRegex(
                 String.valueOf(inputNode.getValue())).replace("'", "\\'") + "', '" + regexOptions
                 + "').test(id) }"));
 
@@ -102,15 +102,15 @@ public class LikeOperationJsonNodeProcessor implements
     regexOperation.set("regex",
         infixOperationNode.getRight() instanceof InputNode ? transformer
             .getObjectMapper()
-            .createObjectNode()
-            .textNode(
+            .getNodeFactory()
+            .stringNode(
                 createRegex(String.valueOf(((InputNode) infixOperationNode.getRight()).getValue())))
             : transformer.transform(infixOperationNode.getRight()));
     regexOperation.set("options",
         transformer
             .getObjectMapper()
-            .createObjectNode()
-            .textNode(regexOptions));
+            .getNodeFactory()
+            .stringNode(regexOptions));
 
     return transformer
         .getObjectMapper()

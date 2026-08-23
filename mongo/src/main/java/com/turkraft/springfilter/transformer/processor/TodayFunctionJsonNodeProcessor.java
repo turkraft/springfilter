@@ -1,12 +1,12 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.language.TodayFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 @Component
 public class TodayFunctionJsonNodeProcessor implements
@@ -27,8 +27,8 @@ public class TodayFunctionJsonNodeProcessor implements
     transformer.registerTargetType(source, String.class);
     return transformer
         .getObjectMapper()
-        .createObjectNode()
-        .textNode(new SimpleDateFormat("EEEE").format(new Date()));
+        .getNodeFactory()
+        .stringNode(new SimpleDateFormat("EEEE").format(new Date()));
   }
 
 }

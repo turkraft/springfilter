@@ -1,10 +1,10 @@
 package com.turkraft.springfilter.transformer.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.turkraft.springfilter.language.IsNotNullOperator;
 import com.turkraft.springfilter.parser.node.PostfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 @Component
 public class IsNotNullOperationJsonNodeProcessor implements
@@ -34,6 +34,7 @@ public class IsNotNullOperationJsonNodeProcessor implements
                 .add(transformer.transform(postfixOperationNode.getLeft()))
                 .add(transformer
                     .getObjectMapper()
+                    .getNodeFactory()
                     .nullNode()));
   }
 
