@@ -22,8 +22,6 @@ public class FieldsFilterAdvice implements ResponseBodyAdvice<Object> {
   public boolean supports(MethodParameter returnType,
       Class<? extends HttpMessageConverter<?>> converterType) {
 
-    FieldsFilterContext.clear();
-
     if (returnType.getMethod() == null) {
       return false;
     }
