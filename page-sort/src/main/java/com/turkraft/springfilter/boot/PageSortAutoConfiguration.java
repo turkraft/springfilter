@@ -9,11 +9,12 @@ import com.turkraft.springfilter.pagesort.SortParser;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.FilterProvider;
 import tools.jackson.databind.ser.PropertyFilter;
-import tools.jackson.databind.ser.std.SimpleFilterProvider;
 
 @AutoConfiguration
 public class PageSortAutoConfiguration {
@@ -22,6 +23,13 @@ public class PageSortAutoConfiguration {
   @ConditionalOnMissingBean
   public SortParser sortParser() {
     return new SimpleSortParser();
+  }
+
+  @Bean
+  @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+  @ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
+  public FieldsFilterCleanupFilter fieldsFilterCleanupFilter() {
+    return new FieldsFilterCleanupFilter();
   }
 
   @Configuration(proxyBeanMethods = false)
@@ -34,14 +42,18 @@ public class PageSortAutoConfiguration {
     @Bean
     org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer fieldFilterCustomizer() {
       return builder -> {
-        builder.defaultMergeable(true);
         builder.addMixIn(Object.class, AntPathFilterMixin.class);
-        builder.filterProvider(new DynamicFilterProvider().setFailOnUnknownId(false));
+        builder.filterProvider(new DynamicFilterProvider());
       };
     }
   }
 
-  static class DynamicFilterProvider extends SimpleFilterProvider {
+  static class DynamicFilterProvider extends FilterProvider {
+
+    @Override
+    public FilterProvider snapshot() {
+      return this;
+    }
 
     @Override
     public PropertyFilter findPropertyFilter(SerializationContext ctxt,
@@ -50,7 +62,7 @@ public class PageSortAutoConfiguration {
       if (fields != null && AntPathFilterMixin.FILTER.equals(filterId)) {
         return new AntPathPropertyFilter(fields);
       }
-      return super.findPropertyFilter(ctxt, filterId, value);
+      return null;
     }
 
   }
