@@ -34,15 +34,7 @@ public class MapFieldSupport {
     return transformer
         .getObjectMapper()
         .createObjectNode()
-        .set("$ifNull",
-            transformer
-                .getObjectMapper()
-                .createArrayNode()
-                .add(transformer
-                    .getObjectMapper()
-                    .createObjectNode()
-                    .set("$objectToArray", transformed))
-                .add(transformer.getObjectMapper().createArrayNode()));
+        .set("$objectToArray", transformed);
   }
 
 }

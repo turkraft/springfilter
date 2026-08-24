@@ -397,7 +397,7 @@ public class FilterJsonNodeTransformerTest {
   void sizeOnMapFieldUsesObjectToArrayTest() {
     test("""
             {
-              "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] }
+              "$size": { "$objectToArray": "$metadata" }
             }
             """,
         fb
@@ -438,11 +438,8 @@ public class FilterJsonNodeTransformerTest {
     test("""
             {
               "$and": [
-                { "$isArray": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
-                { "$eq": [
-                    { "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
-                    0
-                ] }
+                { "$isArray": { "$objectToArray": "$metadata" } },
+                { "$eq": [ { "$size": { "$objectToArray": "$metadata" } }, 0 ] }
               ]
             }
             """,
@@ -457,11 +454,8 @@ public class FilterJsonNodeTransformerTest {
     test("""
             {
               "$and": [
-                { "$isArray": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
-                { "$gt": [
-                    { "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
-                    0
-                ] }
+                { "$isArray": { "$objectToArray": "$metadata" } },
+                { "$gt": [ { "$size": { "$objectToArray": "$metadata" } }, 0 ] }
               ]
             }
             """,
