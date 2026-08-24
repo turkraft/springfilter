@@ -4,7 +4,10 @@ import com.turkraft.springfilter.converter.StringCustomObjectIdConverter.CustomO
 import com.turkraft.springfilter.converter.StringCustomUUIDConverter.CustomUUID;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
@@ -15,7 +18,35 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
 
   @Override
   public Class<?> resolve(Class<?> klass, String path) {
-    return normalize(getField(klass, path));
+
+    Class<?> currentClass = klass;
+    Type currentType = klass;
+    boolean mapKeyExpected = false;
+
+    for (String fieldName : path.split("\\.")) {
+
+      if (mapKeyExpected) {
+        Type valueType = getValueTypeOf(currentType);
+        currentType = valueType;
+        currentClass = normalizeMapValueType(valueType);
+        mapKeyExpected = Map.class.isAssignableFrom(currentClass);
+        continue;
+      }
+
+      Field field = ReflectionUtils.findField(currentClass, fieldName);
+
+      if (field == null) {
+        return Object.class;
+      }
+
+      currentType = field.getGenericType();
+      currentClass = normalize(field);
+      mapKeyExpected = Map.class.isAssignableFrom(field.getType());
+
+    }
+
+    return currentClass;
+
   }
 
   @Override
@@ -25,11 +56,16 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
 
     Field lastField = null;
 
-    for (String fieldName : fieldNames) {
+    for (int i = 0; i < fieldNames.length; i++) {
 
-      lastField = ReflectionUtils.findField(klass, fieldName);
+      lastField = ReflectionUtils.findField(klass, fieldNames[i]);
 
       if (lastField != null) {
+
+        if (Map.class.isAssignableFrom(lastField.getType()) && i < fieldNames.length - 1) {
+          return null;
+        }
+
         klass = normalize(lastField);
       } else {
         return null;
@@ -60,7 +96,7 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
     }
 
     if (Collection.class.isAssignableFrom(field.getType())) {
-      return getFirstTypeParameterOf(field);
+      return getRawClass(getTypeArgumentOf(field.getGenericType(), 0));
     } else if (field
         .getType()
         .isArray()) {
@@ -73,8 +109,47 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
 
   }
 
-  private Class<?> getFirstTypeParameterOf(Field field) {
-    return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+  private static Class<?> normalizeMapValueType(Type valueType) {
+    Class<?> raw = getRawClass(valueType);
+    if (UUID.class.equals(raw)) {
+      return CustomUUID.class;
+    }
+    if (Collection.class.isAssignableFrom(raw)) {
+      return getRawClass(getTypeArgumentOf(valueType, 0));
+    }
+    if (raw.isArray()) {
+      return raw.getComponentType();
+    }
+    return raw;
+  }
+
+  private static Type getValueTypeOf(Type mapType) {
+    return getTypeArgumentOf(mapType, 1);
+  }
+
+  private static Type getTypeArgumentOf(Type type, int index) {
+    if (type instanceof ParameterizedType parameterizedType
+        && parameterizedType
+        .getActualTypeArguments().length > index) {
+      return parameterizedType
+          .getActualTypeArguments()[index];
+    }
+    return Object.class;
+  }
+
+  private static Class<?> getRawClass(Type type) {
+    if (type instanceof Class<?> klass) {
+      return klass;
+    }
+    if (type instanceof ParameterizedType parameterizedType) {
+      return getRawClass(parameterizedType.getRawType());
+    }
+    if (type instanceof WildcardType wildcardType
+        && wildcardType
+        .getUpperBounds().length > 0) {
+      return getRawClass(wildcardType.getUpperBounds()[0]);
+    }
+    return Object.class;
   }
 
 }

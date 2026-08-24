@@ -10,6 +10,12 @@ import tools.jackson.databind.JsonNode;
 public class SizeFunctionJsonNodeProcessor implements
     FilterFunctionProcessor<FilterJsonNodeTransformer, JsonNode> {
 
+  protected final MapFieldSupport mapFieldSupport;
+
+  public SizeFunctionJsonNodeProcessor(MapFieldSupport mapFieldSupport) {
+    this.mapFieldSupport = mapFieldSupport;
+  }
+
   @Override
   public Class<FilterJsonNodeTransformer> getTransformerType() {
     return FilterJsonNodeTransformer.class;
@@ -27,7 +33,9 @@ public class SizeFunctionJsonNodeProcessor implements
     return transformer
         .getObjectMapper()
         .createObjectNode()
-        .set("$size", transformer.transform(functionNode.getArgument(0)));
+        .set("$size",
+            mapFieldSupport.wrapMapField(transformer, functionNode.getArgument(0),
+                transformer.transform(functionNode.getArgument(0))));
   }
 
 }
