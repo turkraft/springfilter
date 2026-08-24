@@ -2,6 +2,7 @@ package com.turkraft.springfilter;
 
 import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
+import com.turkraft.springfilter.language.SizeFunction;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
@@ -40,6 +41,9 @@ public class FilterJsonNodeTransformerTest {
 
   @Autowired
   private FieldTypeResolver fieldTypeResolver;
+
+  @Autowired
+  private SizeFunction sizeFunction;
 
   private FilterJsonNodeTransformer transformer;
 
@@ -149,6 +153,354 @@ public class FilterJsonNodeTransformerTest {
             """,
         fb.field("integer").greaterThan(fb.input(15))
             .xor(fb.field("integer").lessThanOrEqual(fb.input(25))).get());
+  }
+
+  @Test
+  void mapKeyEqualityTest() {
+    test("""
+            {
+              "$eq": [
+                "$metadata.someKey",
+                "someValue"
+              ]
+            }
+            """,
+        fb
+            .field("metadata.someKey")
+            .equal(fb.input("someValue"))
+            .get());
+  }
+
+  @Test
+  void mapValueCoercionTest() {
+    test("""
+            {
+              "$eq": [
+                "$counters.views",
+                5
+              ]
+            }
+            """,
+        fb
+            .field("counters.views")
+            .equal(fb.input("5"))
+            .get());
+  }
+
+  @Test
+  void mapValueObjectTest() {
+    test("""
+            {
+              "$eq": [
+                "$nestedByName.alice.field",
+                "value"
+              ]
+            }
+            """,
+        fb
+            .field("nestedByName.alice.field")
+            .equal(fb.input("value"))
+            .get());
+  }
+
+  @Test
+  void nestedMapTest() {
+    test("""
+            {
+              "$eq": [
+                "$nestedMaps.outer.inner",
+                "x"
+              ]
+            }
+            """,
+        fb
+            .field("nestedMaps.outer.inner")
+            .equal(fb.input("x"))
+            .get());
+  }
+
+  @Test
+  void mapKeyLikeTest() {
+    test("""
+            {
+              "$regexMatch": {
+                "input": "$metadata.someKey",
+                "regex": ".*some.*",
+                "options": ""
+              }
+            }
+            """,
+        fb
+            .field("metadata.someKey")
+            .like(fb.input("*some*"))
+            .get());
+  }
+
+  @Test
+  void mapKeyCollidingWithValueFieldNameTest() {
+    test("""
+            {
+              "$eq": [
+                "$nestedByName.field.field",
+                "value"
+              ]
+            }
+            """,
+        fb
+            .field("nestedByName.field.field")
+            .equal(fb.input("value"))
+            .get());
+  }
+
+  @Test
+  void mapFieldItselfIsNullTest() {
+    test("""
+            {
+              "$lte": [
+                "$metadata",
+                null
+              ]
+            }
+            """,
+        fb
+            .field("metadata")
+            .isNull()
+            .get());
+  }
+
+  @Test
+  void mapKeyInTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": [[5, 7]] },
+                { "$in": ["$counters.views", [5, 7]] }
+              ]
+            }
+            """,
+        fb
+            .field("counters.views")
+            .in(fb.collection(fb.input("5"), fb.input(7)))
+            .get());
+  }
+
+  @Test
+  void mapOfListInDoesNotNestArraysTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": [["a", "b"]] },
+                { "$in": ["$tags.someKey", ["a", "b"]] }
+              ]
+            }
+            """,
+        fb
+            .field("tags.someKey")
+            .in(fb.collection(fb.input("a"), fb.input("b")))
+            .get());
+  }
+
+  @Test
+  void mapOfListEqualityKeepsScalarInputTest() {
+    test("""
+            {
+              "$eq": [
+                "$tags.someKey",
+                "red"
+              ]
+            }
+            """,
+        fb
+            .field("tags.someKey")
+            .equal(fb.input("red"))
+            .get());
+  }
+
+  @Test
+  void enumMapValueCoercionTest() {
+    test("""
+            {
+              "$eq": [
+                "$statuses.someKey",
+                "ACTIVE"
+              ]
+            }
+            """,
+        fb
+            .field("statuses.someKey")
+            .equal(fb.input("ACTIVE"))
+            .get());
+  }
+
+  @Test
+  void booleanMapValueCoercionTest() {
+    test("""
+            {
+              "$eq": [
+                "$flags.someKey",
+                true
+              ]
+            }
+            """,
+        fb
+            .field("flags.someKey")
+            .equal(fb.input("true"))
+            .get());
+  }
+
+  @Test
+  void mapValueBetweenCoercesBoundsTest() {
+    test("""
+            {
+              "$and": [
+                { "$gte": ["$counters.views", 5] },
+                { "$lte": ["$counters.views", 10] }
+              ]
+            }
+            """,
+        fb
+            .field("counters.views")
+            .between(fb.input("5"), fb.input("10"))
+            .get());
+  }
+
+  @Test
+  void insensitiveLikeOnMapKeyTest() {
+    test("""
+            {
+              "$regexMatch": {
+                "input": "$metadata.someKey",
+                "regex": ".*some.*",
+                "options": "i"
+              }
+            }
+            """,
+        fb
+            .field("metadata.someKey")
+            .insensitiveLike(fb.input("*some*"))
+            .get());
+  }
+
+  @Test
+  void sizeOnArrayFieldUnchangedTest() {
+    test("""
+            {
+              "$size": "$integers"
+            }
+            """,
+        fb
+            .function(sizeFunction, fb.field("integers"))
+            .get());
+  }
+
+  @Test
+  void sizeOnMapFieldUsesObjectToArrayTest() {
+    test("""
+            {
+              "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] }
+            }
+            """,
+        fb
+            .function(sizeFunction, fb.field("metadata"))
+            .get());
+  }
+
+  @Test
+  void sizeOnMapValuePathUnchangedTest() {
+    test("""
+            {
+              "$size": "$metadata.someKey"
+            }
+            """,
+        fb
+            .function(sizeFunction, fb.field("metadata.someKey"))
+            .get());
+  }
+
+  @Test
+  void isEmptyOnArrayFieldUnchangedTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": "$integers" },
+                { "$eq": [ { "$size": "$integers" }, 0 ] }
+              ]
+            }
+            """,
+        fb
+            .field("integers")
+            .isEmpty()
+            .get());
+  }
+
+  @Test
+  void isEmptyOnMapFieldUsesObjectToArrayTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
+                { "$eq": [
+                    { "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
+                    0
+                ] }
+              ]
+            }
+            """,
+        fb
+            .field("metadata")
+            .isEmpty()
+            .get());
+  }
+
+  @Test
+  void isNotEmptyOnMapFieldUsesObjectToArrayTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
+                { "$gt": [
+                    { "$size": { "$ifNull": [ { "$objectToArray": "$metadata" }, [] ] } },
+                    0
+                ] }
+              ]
+            }
+            """,
+        fb
+            .field("metadata")
+            .isNotEmpty()
+            .get());
+  }
+
+  @Test
+  void hashMapKeyNamedSizeStaysStringTest() {
+    test("""
+            {
+              "$eq": [
+                "$hashMapWebsites.size",
+                "5"
+              ]
+            }
+            """,
+        fb
+            .field("hashMapWebsites.size")
+            .equal(fb.input("5"))
+            .get());
+  }
+
+  @Test
+  void mapKeyNotInTest() {
+    test("""
+            {
+              "$and": [
+                { "$isArray": [5, 7] },
+                { "$not": { "$in": ["$counters.views", [5, 7]] } }
+              ]
+            }
+            """,
+        fb
+            .field("counters.views")
+            .notIn(fb.collection(fb.input("5"), fb.input(7)))
+            .get());
   }
 
 }

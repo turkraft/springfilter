@@ -1,7 +1,9 @@
 package com.turkraft.springfilter.example.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Company {
 
@@ -12,6 +14,16 @@ public class Company {
   private List<Employee> employees;
 
   private Map<String, String> websites;
+
+  private Map<String, Integer> employeeCounts;
+
+  private UUID refId;
+
+  private Map<String, UUID> links;
+
+  private Map<String, List<String>> tags;
+
+  private HashMap<String, String> socialMedia;
 
   public String getName() {
     return name;
@@ -43,6 +55,46 @@ public class Company {
 
   public void setWebsites(Map<String, String> websites) {
     this.websites = websites;
+  }
+
+  public Map<String, Integer> getEmployeeCounts() {
+    return employeeCounts;
+  }
+
+  public void setEmployeeCounts(Map<String, Integer> employeeCounts) {
+    this.employeeCounts = employeeCounts;
+  }
+
+  public UUID getRefId() {
+    return refId;
+  }
+
+  public void setRefId(UUID refId) {
+    this.refId = refId;
+  }
+
+  public Map<String, UUID> getLinks() {
+    return links;
+  }
+
+  public void setLinks(Map<String, UUID> links) {
+    this.links = links;
+  }
+
+  public Map<String, List<String>> getTags() {
+    return tags;
+  }
+
+  public void setTags(Map<String, List<String>> tags) {
+    this.tags = tags;
+  }
+
+  public HashMap<String, String> getSocialMedia() {
+    return socialMedia;
+  }
+
+  public void setSocialMedia(HashMap<String, String> socialMedia) {
+    this.socialMedia = socialMedia;
   }
 
 }

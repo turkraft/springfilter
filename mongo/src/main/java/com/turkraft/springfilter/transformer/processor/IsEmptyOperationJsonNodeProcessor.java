@@ -10,6 +10,12 @@ import tools.jackson.databind.JsonNode;
 public class IsEmptyOperationJsonNodeProcessor implements
     FilterPostfixOperationProcessor<FilterJsonNodeTransformer, JsonNode> {
 
+  protected final MapFieldSupport mapFieldSupport;
+
+  public IsEmptyOperationJsonNodeProcessor(MapFieldSupport mapFieldSupport) {
+    this.mapFieldSupport = mapFieldSupport;
+  }
+
   @Override
   public Class<FilterJsonNodeTransformer> getTransformerType() {
     return FilterJsonNodeTransformer.class;
@@ -24,6 +30,8 @@ public class IsEmptyOperationJsonNodeProcessor implements
   public JsonNode process(FilterJsonNodeTransformer transformer,
       PostfixOperationNode postfixOperationNode) {
     transformer.registerTargetType(postfixOperationNode, Boolean.class);
+    JsonNode leftResult = mapFieldSupport.wrapMapField(transformer,
+        postfixOperationNode.getLeft(), transformer.transform(postfixOperationNode.getLeft()));
     return transformer
         .getObjectMapper()
         .createObjectNode()
@@ -34,7 +42,7 @@ public class IsEmptyOperationJsonNodeProcessor implements
                 .add(transformer
                     .getObjectMapper()
                     .createObjectNode()
-                    .set("$isArray", transformer.transform(postfixOperationNode.getLeft())))
+                    .set("$isArray", leftResult))
                 .add(transformer
                     .getObjectMapper()
                     .createObjectNode()
@@ -45,7 +53,7 @@ public class IsEmptyOperationJsonNodeProcessor implements
                             .add(transformer
                                 .getObjectMapper()
                                 .createObjectNode()
-                                .set("$size", transformer.transform(postfixOperationNode.getLeft())))
+                                .set("$size", leftResult))
                             .add(transformer
                                 .getObjectMapper()
                                 .getNodeFactory()

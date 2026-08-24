@@ -6,6 +6,7 @@ com.turkraft.springfilter.helper.FieldTypeResolverImpl
 com.turkraft.springfilter.converter.StringCustomObjectIdConverter
 com.turkraft.springfilter.converter.StringCustomUUIDConverter
 
+com.turkraft.springfilter.transformer.processor.MapFieldSupport
 com.turkraft.springfilter.transformer.processor.TodayFunctionJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.OrOperationJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.NotOperationJsonNodeProcessor
