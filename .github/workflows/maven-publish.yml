@@ -6,13 +6,17 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+
       - name: Install libssl1.1 for MongoDB 5.0 compatibility
         run: |
           echo "deb http://archive.ubuntu.com/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/focal.list
           sudo apt-get update
           sudo apt-get install -y libssl1.1
+
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
         with:
@@ -21,17 +25,26 @@ jobs:
           server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+
       - id: install-secret-key
         name: Install GPG key
         run: |
           export GPG_TTY=$(tty)
           cat <(echo -e "${{ secrets.GPG_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
+
       - if: github.event.release
         name: Update version in pom.xml (Release only)
         run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
+
       - name: Publish package
         run: mvn -Dgpg.passphrase=${{ secrets.GPG_PASSWORD }} -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }} --batch-mode --no-transfer-progress clean deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+
+      - name: Promote release to full release
+        if: github.event.release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit ${{ github.event.release.tag_name }} --prerelease=false
