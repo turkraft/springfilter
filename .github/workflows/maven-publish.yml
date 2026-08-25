@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install libssl1.1 for MongoDB 5.0 compatibility
+        run: |
+          echo "deb http://archive.ubuntu.com/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/focal.list
+          sudo apt-get update
+          sudo apt-get install -y libssl1.1
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
         with:
