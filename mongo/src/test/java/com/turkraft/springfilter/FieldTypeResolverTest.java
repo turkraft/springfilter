@@ -340,4 +340,16 @@ public class FieldTypeResolverTest {
 
   }
 
+  @Test
+  void resolvesObjectIdFieldsToCustomObjectId() {
+    assertEquals(CustomObjectId.class, resolve("objectId"));
+    assertEquals(CustomObjectId.class,
+        fieldTypeResolver.resolve(ObjectIdMapHolder.class, "refs.someKey"));
+  }
+
+  static class ObjectIdMapHolder {
+
+    private Map<String, org.bson.types.ObjectId> refs;
+  }
+
 }
