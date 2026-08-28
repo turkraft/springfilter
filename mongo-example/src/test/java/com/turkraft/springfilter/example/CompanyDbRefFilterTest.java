@@ -144,6 +144,14 @@ class CompanyDbRefFilterTest {
   }
 
   @Test
+  void xorOnRegularFieldsProducesValidAggregation() throws Exception {
+    mockMvc
+        .perform(get("/company").param("filter", "name : 'Apple' xor name : 'Microsoft'"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)));
+  }
+
+  @Test
   void filterByCollectionDbRefIdGreaterThan() throws Exception {
     mockMvc
         .perform(get("/company").param("filter", "categories.$id > '" + BETA_ID + "'"))

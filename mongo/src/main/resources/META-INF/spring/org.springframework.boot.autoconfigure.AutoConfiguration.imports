@@ -27,4 +27,5 @@ com.turkraft.springfilter.transformer.processor.IsEmptyOperationJsonNodeProcesso
 com.turkraft.springfilter.transformer.processor.LessThanOperationJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.NotEqualOperationJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.AndOperationJsonNodeProcessor
+com.turkraft.springfilter.transformer.processor.XorOperationJsonNodeProcessor
 com.turkraft.springfilter.transformer.processor.HelloWorldPlaceholderJsonNodeProcessor

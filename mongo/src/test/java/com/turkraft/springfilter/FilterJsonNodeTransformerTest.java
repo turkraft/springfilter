@@ -145,7 +145,7 @@ public class FilterJsonNodeTransformerTest {
   void xorTest() {
     test("""
             {
-              "$xor": [
+              "$ne": [
                 { "$gt": ["$integer", 15] },
                 { "$lte": ["$integer", 25] }
               ]
