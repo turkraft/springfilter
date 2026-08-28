@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.transformer.processor;
 
+import com.turkraft.springfilter.helper.DbRefFieldSupport;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.language.NotInOperator;
 import com.turkraft.springfilter.parser.node.FieldNode;
@@ -14,9 +15,13 @@ public class NotInOperationJsonNodeProcessor implements
 
   protected final FieldTypeResolver fieldTypeResolver;
 
+  protected final DbRefFieldSupport dbRefFieldSupport;
+
   public NotInOperationJsonNodeProcessor(
-      FieldTypeResolver fieldTypeResolver) {
+      FieldTypeResolver fieldTypeResolver,
+      DbRefFieldSupport dbRefFieldSupport) {
     this.fieldTypeResolver = fieldTypeResolver;
+    this.dbRefFieldSupport = dbRefFieldSupport;
   }
 
   @Override
@@ -43,6 +48,19 @@ public class NotInOperationJsonNodeProcessor implements
           fieldTypeResolver.resolve(transformer.getEntityType(), fieldNode.getName()));
     }
 
+    JsonNode leftResult = transformer.transform(source.getLeft());
+    JsonNode rightResult = transformer.transform(source.getRight());
+
+    if (dbRefFieldSupport.isCollectionDbRefDollarField(transformer, source.getLeft())) {
+      return dbRefFieldSupport
+          .anyElementIn(transformer, leftResult, rightResult, true);
+    }
+
+    if (dbRefFieldSupport.isCollectionDbRefDollarField(transformer, source.getRight())) {
+      return dbRefFieldSupport
+          .anyElementIn(transformer, rightResult, leftResult, true);
+    }
+
     return transformer
         .getObjectMapper()
         .createObjectNode()
@@ -53,7 +71,10 @@ public class NotInOperationJsonNodeProcessor implements
                 .add(transformer
                     .getObjectMapper()
                     .createObjectNode()
-                    .set("$isArray", transformer.transform(source.getRight())))
+                    .set("$isArray", transformer
+                        .getObjectMapper()
+                        .createArrayNode()
+                        .add(rightResult)))
                 .add(transformer
                     .getObjectMapper()
                     .createObjectNode()
@@ -64,8 +85,8 @@ public class NotInOperationJsonNodeProcessor implements
                             transformer
                                 .getObjectMapper()
                                 .createArrayNode()
-                                .add(transformer.transform(source.getLeft()))
-                                .add(transformer.transform(source.getRight()))))));
+                                .add(leftResult)
+                                .add(rightResult)))));
 
   }
 

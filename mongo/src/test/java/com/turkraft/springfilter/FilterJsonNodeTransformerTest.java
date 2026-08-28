@@ -486,7 +486,7 @@ public class FilterJsonNodeTransformerTest {
     test("""
             {
               "$and": [
-                { "$isArray": [5, 7] },
+                { "$isArray": [[5, 7]] },
                 { "$not": { "$in": ["$counters.views", [5, 7]] } }
               ]
             }
@@ -494,6 +494,371 @@ public class FilterJsonNodeTransformerTest {
         fb
             .field("counters.views")
             .notIn(fb.collection(fb.input("5"), fb.input(7)))
+            .get());
+  }
+
+  @Test
+  void dbrefIdEqualityOnSingleReferenceTest() {
+    test("""
+            {
+              "$eq": [
+                "$manager.$id",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("manager.$id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefRefEqualityOnSingleReferenceTest() {
+    test("""
+            {
+              "$eq": [
+                "$manager.$ref",
+                "referencedTestEntity"
+              ]
+            }
+            """,
+        fb
+            .field("manager.$ref")
+            .equal(fb.input("referencedTestEntity"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdNotEqualOnSingleReferenceTest() {
+    test("""
+            {
+              "$ne": [
+                "$manager.$id",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("manager.$id")
+            .notEqual(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdEqualityOnCollectionUsesMembershipTest() {
+    test("""
+            {
+              "$in": [
+                { "$oid": "642ebb0e91ac8f778f5654b7" },
+                { "$ifNull": [ "$roles.$id", [] ] }
+              ]
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdNotEqualOnCollectionUsesNegatedMembershipTest() {
+    test("""
+            {
+              "$not": {
+                "$in": [
+                  { "$oid": "642ebb0e91ac8f778f5654b7" },
+                  { "$ifNull": [ "$roles.$id", [] ] }
+                ]
+              }
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .notEqual(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdInOnCollectionUsesAnyElementTrueTest() {
+    test("""
+            {
+              "$anyElementTrue": [
+                { "$map": {
+                  "input": { "$ifNull": [ "$roles.$id", [] ] },
+                  "in": { "$in": [ "$$this", [ { "$oid": "642ebb0e91ac8f778f5654b7" }, { "$oid": "642ebb0e91ac8f778f5654b8" } ] ] }
+                } }
+              ]
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .in(fb.collection(fb.input("642ebb0e91ac8f778f5654b7"),
+                fb.input("642ebb0e91ac8f778f5654b8")))
+            .get());
+  }
+
+  @Test
+  void dbrefIdNotInOnCollectionUsesNegatedAnyElementTrueTest() {
+    test("""
+            {
+              "$not": {
+                "$anyElementTrue": [
+                  { "$map": {
+                    "input": { "$ifNull": [ "$roles.$id", [] ] },
+                    "in": { "$in": [ "$$this", [ { "$oid": "642ebb0e91ac8f778f5654b7" } ] ] }
+                  } }
+                ]
+              }
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .notIn(fb.collection(fb.input("642ebb0e91ac8f778f5654b7")))
+            .get());
+  }
+
+  @Test
+  void dbrefIdIsNullOnSingleReferenceTest() {
+    test("""
+            {
+              "$lte": [
+                "$manager.$id",
+                null
+              ]
+            }
+            """,
+        fb
+            .field("manager.$id")
+            .isNull()
+            .get());
+  }
+
+  @Test
+  void dollarSegmentAsMapKeyUsesPlainPathTest() {
+    test("""
+            {
+              "$eq": [
+                "$metadata.$id",
+                "someValue"
+              ]
+            }
+            """,
+        fb
+            .field("metadata.$id")
+            .equal(fb.input("someValue"))
+            .get());
+  }
+
+  @Test
+  void leadingDollarSegmentUsesGetFieldTest() {
+    test("""
+            {
+              "$eq": [
+                { "$getField": { "field": { "$literal": "$id" }, "input": "$$ROOT" } },
+                "someValue"
+              ]
+            }
+            """,
+        fb
+            .field("$id")
+            .equal(fb.input("someValue"))
+            .get());
+  }
+
+  @Test
+  void leadingDollarSegmentWithSubPathChainsGetFieldTest() {
+    test("""
+            {
+              "$eq": [
+                { "$getField": {
+                  "field": "name",
+                  "input": { "$getField": { "field": { "$literal": "$id" }, "input": "$$ROOT" } }
+                } },
+                "someValue"
+              ]
+            }
+            """,
+        fb
+            .field("$id.name")
+            .equal(fb.input("someValue"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdGreaterThanOnCollectionUsesAnyElementTrueTest() {
+    test("""
+            {
+              "$anyElementTrue": [
+                { "$map": {
+                  "input": { "$ifNull": [ "$roles.$id", [] ] },
+                  "in": { "$gt": [ "$$this", { "$oid": "642ebb0e91ac8f778f5654b7" } ] }
+                } }
+              ]
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .greaterThan(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdLessThanOrEqualOnCollectionUsesAnyElementTrueTest() {
+    test("""
+            {
+              "$anyElementTrue": [
+                { "$map": {
+                  "input": { "$ifNull": [ "$roles.$id", [] ] },
+                  "in": { "$lte": [ "$$this", { "$oid": "642ebb0e91ac8f778f5654b7" } ] }
+                } }
+              ]
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .lessThanOrEqual(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdGreaterThanOnSingleReferenceUsesPlainComparisonTest() {
+    test("""
+            {
+              "$gt": [
+                "$manager.$id",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("manager.$id")
+            .greaterThan(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdLikeOnCollectionUsesAnyElementTrueTest() {
+    test("""
+            {
+              "$anyElementTrue": [
+                { "$map": {
+                  "input": { "$ifNull": [ "$roles.$id", [] ] },
+                  "in": { "$regexMatch": {
+                    "input": { "$convert": {
+                      "input": "$$this", "to": "string", "onError": "", "onNull": ""
+                    } },
+                    "regex": ".*abc.*",
+                    "options": ""
+                  } }
+                } }
+              ]
+            }
+            """,
+        fb
+            .field("roles.$id")
+            .like(fb.input("abc"))
+            .get());
+  }
+
+  @Test
+  void dbrefIdLikeOnSingleReferenceStringifiesInputTest() {
+    test("""
+            {
+              "$regexMatch": {
+                "input": { "$convert": {
+                  "input": "$manager.$id", "to": "string", "onError": "", "onNull": ""
+                } },
+                "regex": ".*abc.*",
+                "options": ""
+              }
+            }
+            """,
+        fb
+            .field("manager.$id")
+            .like(fb.input("abc"))
+            .get());
+  }
+
+  @Test
+  void rootIdFieldMapsToUnderscoreIdTest() {
+    test("""
+            {
+              "$eq": [
+                "$_id",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void nestedReferenceIdFieldDoesNotMapToRootUnderscoreIdTest() {
+    test("""
+            {
+              "$eq": [
+                "$manager.id",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("manager.id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void documentReferenceIdEqualityOnSingleReferenceDropsIdSegmentTest() {
+    test("""
+            {
+              "$eq": [
+                "$advisor",
+                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              ]
+            }
+            """,
+        fb
+            .field("advisor.$id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void documentReferenceIdEqualityOnCollectionUsesMembershipTest() {
+    test("""
+            {
+              "$in": [
+                { "$oid": "642ebb0e91ac8f778f5654b7" },
+                { "$ifNull": [ "$teams", [] ] }
+              ]
+            }
+            """,
+        fb
+            .field("teams.$id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void documentReferenceIdInOnCollectionUsesAnyElementTrueTest() {
+    test("""
+            {
+              "$anyElementTrue": [
+                { "$map": {
+                  "input": { "$ifNull": [ "$teams", [] ] },
+                  "in": { "$in": [ "$$this", [ { "$oid": "642ebb0e91ac8f778f5654b7" } ] ] }
+                } }
+              ]
+            }
+            """,
+        fb
+            .field("teams.$id")
+            .in(fb.collection(fb.input("642ebb0e91ac8f778f5654b7")))
             .get());
   }
 

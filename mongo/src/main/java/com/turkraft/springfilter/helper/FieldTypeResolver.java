@@ -8,4 +8,28 @@ public interface FieldTypeResolver {
 
   Field getField(Class<?> klass, String path);
 
+  default boolean isCollectionDbRefField(Class<?> klass, String path) {
+    return false;
+  }
+
+  default boolean isReferenceDollarField(Class<?> klass, String path) {
+    return false;
+  }
+
+  default String storedFieldPath(Class<?> klass, String path) {
+    return path;
+  }
+
+  default boolean hasDollarSegment(String path) {
+    if (path.indexOf('$') < 0) {
+      return false;
+    }
+    for (String segment : path.split("\\.")) {
+      if (!segment.isEmpty() && segment.charAt(0) == '$') {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
