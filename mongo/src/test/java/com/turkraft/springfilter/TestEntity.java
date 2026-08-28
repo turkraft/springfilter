@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 public class TestEntity {
 
@@ -18,6 +20,18 @@ public class TestEntity {
   private int integer;
 
   private NestedTestEntity nested;
+
+  @DBRef
+  private ReferencedTestEntity manager;
+
+  @DBRef
+  private List<ReferencedTestEntity> roles;
+
+  @DocumentReference
+  private ReferencedTestEntity advisor;
+
+  @DocumentReference
+  private List<ReferencedTestEntity> teams;
 
   private Map<String, String> metadata;
 
@@ -91,6 +105,38 @@ public class TestEntity {
 
   public void setNested(NestedTestEntity nested) {
     this.nested = nested;
+  }
+
+  public ReferencedTestEntity getManager() {
+    return manager;
+  }
+
+  public void setManager(ReferencedTestEntity manager) {
+    this.manager = manager;
+  }
+
+  public List<ReferencedTestEntity> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<ReferencedTestEntity> roles) {
+    this.roles = roles;
+  }
+
+  public ReferencedTestEntity getAdvisor() {
+    return advisor;
+  }
+
+  public void setAdvisor(ReferencedTestEntity advisor) {
+    this.advisor = advisor;
+  }
+
+  public List<ReferencedTestEntity> getTeams() {
+    return teams;
+  }
+
+  public void setTeams(List<ReferencedTestEntity> teams) {
+    this.teams = teams;
   }
 
   public Map<String, String> getMetadata() {

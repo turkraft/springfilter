@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 public class Company {
 
@@ -12,6 +14,18 @@ public class Company {
   private Industry industry;
 
   private List<Employee> employees;
+
+  @DBRef
+  private Tag primaryTag;
+
+  @DBRef
+  private List<Tag> categories;
+
+  @DocumentReference
+  private Tag featuredTag;
+
+  @DocumentReference
+  private List<Tag> labels;
 
   private Map<String, String> websites;
 
@@ -47,6 +61,38 @@ public class Company {
 
   public void setEmployees(List<Employee> employees) {
     this.employees = employees;
+  }
+
+  public Tag getPrimaryTag() {
+    return primaryTag;
+  }
+
+  public void setPrimaryTag(Tag primaryTag) {
+    this.primaryTag = primaryTag;
+  }
+
+  public List<Tag> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<Tag> categories) {
+    this.categories = categories;
+  }
+
+  public Tag getFeaturedTag() {
+    return featuredTag;
+  }
+
+  public void setFeaturedTag(Tag featuredTag) {
+    this.featuredTag = featuredTag;
+  }
+
+  public List<Tag> getLabels() {
+    return labels;
+  }
+
+  public void setLabels(List<Tag> labels) {
+    this.labels = labels;
   }
 
   public Map<String, String> getWebsites() {

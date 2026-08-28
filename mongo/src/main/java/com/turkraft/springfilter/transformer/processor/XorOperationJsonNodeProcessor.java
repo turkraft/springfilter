@@ -26,7 +26,7 @@ public class XorOperationJsonNodeProcessor extends InfixOperationJsonNodeProcess
 
   @Override
   public String getMongoOperator() {
-    return "$xor";
+    return "$ne";
   }
 
   @Override

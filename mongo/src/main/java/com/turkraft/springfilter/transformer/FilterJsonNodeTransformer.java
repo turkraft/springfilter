@@ -60,14 +60,58 @@ public class FilterJsonNodeTransformer implements FilterNodeTransformer<JsonNode
   @Override
   public JsonNode transformField(FieldNode node) {
     Field field = fieldTypeResolver.getField(getEntityType(), node.getName());
-    if (field != null && field.isAnnotationPresent(Id.class)) {
+    if (field != null && field.isAnnotationPresent(Id.class) && !node.getName().contains(".")) {
       return objectMapper
           .getNodeFactory()
           .stringNode("$_id");
     }
+    String name = fieldTypeResolver.storedFieldPath(getEntityType(), node.getName());
+    if (fieldTypeResolver.hasDollarSegment(name)) {
+      return transformFieldWithDollarSegments(name);
+    }
     return objectMapper
         .getNodeFactory()
-        .stringNode("$" + node.getName());
+        .stringNode("$" + name);
+  }
+
+  private JsonNode transformFieldWithDollarSegments(String name) {
+
+    if (!name.startsWith("$")) {
+      return objectMapper
+          .getNodeFactory()
+          .stringNode("$" + name);
+    }
+
+    JsonNode expression = objectMapper
+        .getNodeFactory()
+        .stringNode("$$ROOT");
+
+    for (String segment : name.split("\\.", -1)) {
+
+      ObjectNode getField = objectMapper.createObjectNode();
+
+      if (segment.startsWith("$")) {
+        getField.set("field", objectMapper
+            .createObjectNode()
+            .set("$literal", objectMapper
+                .getNodeFactory()
+                .stringNode(segment)));
+      } else {
+        getField.set("field", objectMapper
+            .getNodeFactory()
+            .stringNode(segment));
+      }
+
+      getField.set("input", expression);
+
+      expression = objectMapper
+          .createObjectNode()
+          .set("$getField", getField);
+
+    }
+
+    return expression;
+
   }
 
   @Override

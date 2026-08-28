@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.transformer.processor;
 
+import com.turkraft.springfilter.helper.DbRefFieldSupport;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.language.LikeOperator;
 import com.turkraft.springfilter.parser.node.FieldNode;
@@ -18,8 +19,12 @@ public class LikeOperationJsonNodeProcessor implements
 
   protected final FieldTypeResolver fieldTypeResolver;
 
-  public LikeOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver) {
+  protected final DbRefFieldSupport dbRefFieldSupport;
+
+  public LikeOperationJsonNodeProcessor(FieldTypeResolver fieldTypeResolver,
+      DbRefFieldSupport dbRefFieldSupport) {
     this.fieldTypeResolver = fieldTypeResolver;
+    this.dbRefFieldSupport = dbRefFieldSupport;
   }
 
   @Override
@@ -95,22 +100,49 @@ public class LikeOperationJsonNodeProcessor implements
 
     }
 
+    JsonNode leftResult = transformer.transform(infixOperationNode.getLeft());
+
+    JsonNode regexValue = infixOperationNode.getRight() instanceof InputNode ? transformer
+        .getObjectMapper()
+        .getNodeFactory()
+        .stringNode(
+            createRegex(String.valueOf(((InputNode) infixOperationNode.getRight()).getValue())))
+        : transformer.transform(infixOperationNode.getRight());
+
+    JsonNode optionsValue = transformer
+        .getObjectMapper()
+        .getNodeFactory()
+        .stringNode(regexOptions);
+
+    if (dbRefFieldSupport.isCollectionDbRefDollarField(transformer,
+        infixOperationNode.getLeft())) {
+
+      ObjectNode elementRegex = transformer
+          .getObjectMapper()
+          .createObjectNode();
+      elementRegex.set("input", dbRefFieldSupport.regexInput(transformer, transformer
+          .getObjectMapper()
+          .getNodeFactory()
+          .stringNode("$$this")));
+      elementRegex.set("regex", regexValue);
+      elementRegex.set("options", optionsValue);
+
+      return dbRefFieldSupport.anyElement(transformer, leftResult, transformer
+          .getObjectMapper()
+          .createObjectNode()
+          .set("$regexMatch", elementRegex), false);
+
+    }
+
     ObjectNode regexOperation = transformer
         .getObjectMapper()
         .createObjectNode();
-    regexOperation.set("input", transformer.transform(infixOperationNode.getLeft()));
-    regexOperation.set("regex",
-        infixOperationNode.getRight() instanceof InputNode ? transformer
-            .getObjectMapper()
-            .getNodeFactory()
-            .stringNode(
-                createRegex(String.valueOf(((InputNode) infixOperationNode.getRight()).getValue())))
-            : transformer.transform(infixOperationNode.getRight()));
-    regexOperation.set("options",
-        transformer
-            .getObjectMapper()
-            .getNodeFactory()
-            .stringNode(regexOptions));
+    regexOperation.set("input",
+        dbRefFieldSupport.isReferenceDollarField(transformer, infixOperationNode.getLeft())
+            ? dbRefFieldSupport.regexInput(transformer, leftResult)
+            : leftResult);
+    regexOperation.set("regex", regexValue);
+    regexOperation.set("options", optionsValue);
 
     return transformer
         .getObjectMapper()

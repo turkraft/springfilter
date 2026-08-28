@@ -15,10 +15,14 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
   protected final FieldTypeResolver fieldTypeResolver;
 
+  protected final DbRefFieldSupport dbRefFieldSupport;
+
   public JsonNodeHelperImpl(ObjectMapper objectMapper,
-      FieldTypeResolver fieldTypeResolver) {
+      FieldTypeResolver fieldTypeResolver,
+      DbRefFieldSupport dbRefFieldSupport) {
     this.objectMapper = objectMapper;
     this.fieldTypeResolver = fieldTypeResolver;
+    this.dbRefFieldSupport = dbRefFieldSupport;
   }
 
   @Override
@@ -52,6 +56,31 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
 
     JsonNode rightResult = transformer.transform(source.getRight());
 
+    if (isComparisonOperator(mongoOperator)) {
+
+      boolean leftIsCollectionDbRef =
+          dbRefFieldSupport.isCollectionDbRefDollarField(transformer, source.getLeft());
+      boolean rightIsCollectionDbRef = !leftIsCollectionDbRef
+          && dbRefFieldSupport.isCollectionDbRefDollarField(transformer, source.getRight());
+
+      if (leftIsCollectionDbRef || rightIsCollectionDbRef) {
+
+        JsonNode arrayExpression = leftIsCollectionDbRef ? leftResult : rightResult;
+        JsonNode valueExpression = leftIsCollectionDbRef ? rightResult : leftResult;
+
+        if ("$eq".equals(mongoOperator) || "$ne".equals(mongoOperator)) {
+          return dbRefFieldSupport.membershipComparison(transformer, valueExpression,
+              arrayExpression, "$ne".equals(mongoOperator));
+        }
+
+        String operator = leftIsCollectionDbRef ? mongoOperator : flipComparison(mongoOperator);
+        return dbRefFieldSupport
+            .anyElementComparison(transformer, arrayExpression, valueExpression, operator, false);
+
+      }
+
+    }
+
     return transformer
         .getObjectMapper()
         .createObjectNode()
@@ -62,6 +91,28 @@ public class JsonNodeHelperImpl implements JsonNodeHelper {
                 .add(leftResult)
                 .add(rightResult));
 
+  }
+
+  private static boolean isComparisonOperator(String mongoOperator) {
+    return "$eq".equals(mongoOperator) || "$ne".equals(mongoOperator)
+        || "$gt".equals(mongoOperator) || "$gte".equals(mongoOperator)
+        || "$lt".equals(mongoOperator) || "$lte".equals(mongoOperator);
+  }
+
+  private static String flipComparison(String mongoOperator) {
+    if ("$gt".equals(mongoOperator)) {
+      return "$lt";
+    }
+    if ("$gte".equals(mongoOperator)) {
+      return "$lte";
+    }
+    if ("$lt".equals(mongoOperator)) {
+      return "$gt";
+    }
+    if ("$lte".equals(mongoOperator)) {
+      return "$gte";
+    }
+    return mongoOperator;
   }
 
 }
