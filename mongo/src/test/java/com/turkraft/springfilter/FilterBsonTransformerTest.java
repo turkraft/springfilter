@@ -4,8 +4,9 @@ import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.language.HelloWorldPlaceholder;
 import com.turkraft.springfilter.language.SizeFunction;
+import com.turkraft.springfilter.language.TodayFunction;
 import com.turkraft.springfilter.parser.node.FilterNode;
-import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
+import com.turkraft.springfilter.transformer.FilterBsonTransformer;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +17,22 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.springframework.data.convert.Jsr310Converters;
 
 @ExtendWith(SpringExtension.class)
-public class FilterJsonNodeTransformerTest {
+public class FilterBsonTransformerTest {
 
   @Configuration
   @ComponentScan("com.turkraft.springfilter")
@@ -30,9 +42,6 @@ public class FilterJsonNodeTransformerTest {
 
   @Autowired
   private ConversionService conversionService;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private FilterBuilder fb;
@@ -47,22 +56,26 @@ public class FilterJsonNodeTransformerTest {
   private SizeFunction sizeFunction;
 
   @Autowired
+  private TodayFunction todayFunction;
+
+  @Autowired
   private HelloWorldPlaceholder helloWorldPlaceholder;
 
-  private FilterJsonNodeTransformer transformer;
+  private FilterBsonTransformer transformer;
 
   @BeforeEach
   void init() {
-    transformer = new FilterJsonNodeTransformer(conversionService, objectMapper,
-        filterNodeProcessorFactories, fieldTypeResolver, TestEntity.class);
+    transformer = new FilterBsonTransformer(conversionService, filterNodeProcessorFactories,
+        fieldTypeResolver, TestEntity.class);
   }
 
   private void test(String expectedJson, FilterNode filterNode) {
-    JsonNode expectedOutput = objectMapper.readTree(expectedJson);
-    Assertions.assertEquals(expectedOutput.toString(),
-        transformer
-            .transform(filterNode)
-            .toString());
+    // Extended JSON keeps the expectations readable: $oid and $date parse to ObjectId and Date.
+    test(Document.parse("{\"r\": " + expectedJson + "}").get("r"), filterNode);
+  }
+
+  private void test(Object expectedOutput, FilterNode filterNode) {
+    Assertions.assertEquals(expectedOutput, transformer.transform(filterNode));
   }
 
   @Test
@@ -134,8 +147,8 @@ public class FilterJsonNodeTransformerTest {
     test("""
             {
               "$or": [
-                { "$string": { "$regex": "hello%" } },
-                { "$string": { "$regex": "%world" } }
+                { "$regexMatch": { "input": "$string", "regex": ".*hello%.*", "options": "" } },
+                { "$regexMatch": { "input": "$string", "regex": ".*%world.*", "options": "" } }
               ]
             }
             """,
@@ -866,16 +879,84 @@ public class FilterJsonNodeTransformerTest {
             .get());
   }
 
+  // Typed values: the BSON transformer must never fall back to strings for non-string fields.
+
   @Test
-  void objectIdFieldTest() {
+  void instantInputBecomesDate() {
+    test(new Document("$eq", Arrays.asList("$instant",
+            Date.from(Instant.parse("2023-01-01T00:00:00Z")))),
+        fb
+            .field("instant")
+            .equal(fb.input("2023-01-01T00:00:00Z"))
+            .get());
+  }
+
+  @Test
+  void instantInputMatchesExtendedJsonDate() {
     test("""
             {
-              "$eq": [
-                "$objectId",
-                { "$oid": "642ebb0e91ac8f778f5654b7" }
+              "$gt": [
+                "$instant",
+                { "$date": "2023-01-01T00:00:00Z" }
               ]
             }
             """,
+        fb
+            .field("instant")
+            .greaterThan(fb.input("2023-01-01T00:00:00Z"))
+            .get());
+  }
+
+  @Test
+  void localDateInputBecomesDateAtStartOfDay() {
+    test(new Document("$eq", Arrays.asList("$localDate",
+            Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(LocalDate.of(2023, 1, 1)))),
+        fb
+            .field("localDate")
+            .equal(fb.input("2023-01-01"))
+            .get());
+  }
+
+  @Test
+  void localDateTimeInputBecomesDate() {
+    LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 1, 12, 30);
+    test(new Document("$lt", Arrays.asList("$localDateTime",
+            Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()))),
+        fb
+            .field("localDateTime")
+            .lessThan(fb.input("2023-01-01T12:30:00"))
+            .get());
+  }
+
+  @Test
+  void temporalCollectionItemsBecomeDates() {
+    test(new Document("$and", Arrays.asList(
+            new Document("$isArray", Arrays.asList(Arrays.asList(
+                Date.from(Instant.parse("2020-06-01T00:00:00Z")),
+                Date.from(Instant.parse("2026-06-01T00:00:00Z"))))),
+            new Document("$in", Arrays.asList("$instants", Arrays.asList(
+                Date.from(Instant.parse("2020-06-01T00:00:00Z")),
+                Date.from(Instant.parse("2026-06-01T00:00:00Z"))))))),
+        fb
+            .field("instants")
+            .in(fb.collection(fb.input("2020-06-01T00:00:00Z"), fb.input("2026-06-01T00:00:00Z")))
+            .get());
+  }
+
+  @Test
+  void stringIdInputBecomesObjectId() {
+    test(new Document("$eq",
+            Arrays.asList("$_id", new ObjectId("642ebb0e91ac8f778f5654b7"))),
+        fb
+            .field("id")
+            .equal(fb.input("642ebb0e91ac8f778f5654b7"))
+            .get());
+  }
+
+  @Test
+  void objectIdFieldInputBecomesObjectId() {
+    test(new Document("$eq",
+            Arrays.asList("$objectId", new ObjectId("642ebb0e91ac8f778f5654b7"))),
         fb
             .field("objectId")
             .equal(fb.input("642ebb0e91ac8f778f5654b7"))
@@ -883,8 +964,144 @@ public class FilterJsonNodeTransformerTest {
   }
 
   @Test
-  void placeholderTest() {
-    test("\"Hello world!\"", fb.placeholder(helloWorldPlaceholder).get());
+  void uuidInputBecomesUuid() {
+    UUID uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+    test(new Document("$eq", Arrays.asList("$uuid", uuid)),
+        fb
+            .field("uuid")
+            .equal(fb.input(uuid.toString()))
+            .get());
+    test(new Document("$eq", Arrays.asList("$uuidByName.home", uuid)),
+        fb
+            .field("uuidByName.home")
+            .equal(fb.input(uuid.toString()))
+            .get());
+  }
+
+  @Test
+  void numericInputIsCoercedToTheFieldType() {
+    test(new Document("$eq", Arrays.asList("$integer", 5)),
+        fb
+            .field("integer")
+            .equal(fb.input("5"))
+            .get());
+    test(new Document("$eq", Arrays.asList("$amount", new BigDecimal("12.50"))),
+        fb
+            .field("amount")
+            .equal(fb.input("12.50"))
+            .get());
+  }
+
+  @Test
+  void enumInputBecomesItsName() {
+    test(new Document("$eq", Arrays.asList("$status", "ACTIVE")),
+        fb
+            .field("status")
+            .equal(fb.input("ACTIVE"))
+            .get());
+  }
+
+  @Test
+  void isNullKeepsTheNullOperand() {
+    test(new Document("$lte", Arrays.asList("$instant", null)),
+        fb
+            .field("instant")
+            .isNull()
+            .get());
+    test(new Document("$gt", Arrays.asList("$instant", null)),
+        fb
+            .field("instant")
+            .isNotNull()
+            .get());
+  }
+
+  @Test
+  void likeOnStringIdConvertsTheIdentifierToString() {
+    test("""
+            {
+              "$regexMatch": {
+                "input": { "$convert": {
+                  "input": "$_id", "to": "string", "onError": "", "onNull": ""
+                } },
+                "regex": ".*abc.*",
+                "options": ""
+              }
+            }
+            """,
+        fb
+            .field("id")
+            .like(fb.input("abc"))
+            .get());
+  }
+
+  @Test
+  void likeOnObjectIdFieldConvertsTheIdentifierToString() {
+    test("""
+            {
+              "$regexMatch": {
+                "input": { "$convert": {
+                  "input": "$objectId", "to": "string", "onError": "", "onNull": ""
+                } },
+                "regex": ".*abc.*",
+                "options": "i"
+              }
+            }
+            """,
+        fb
+            .field("objectId")
+            .insensitiveLike(fb.input("abc"))
+            .get());
+  }
+
+  @Test
+  void insensitiveLikeCollectionUsesRegexMatchWithOptions() {
+    test("""
+            {
+              "$regexMatch": { "input": "$string", "regex": ".*hello.*", "options": "i" }
+            }
+            """,
+        fb
+            .field("string")
+            .insensitiveLikeCollection(fb.input("hello"))
+            .get());
+  }
+
+  @Test
+  void todayIsAStartOfDayDate() {
+    Object result = transformer.transform(fb.function(todayFunction).get());
+    Assertions.assertInstanceOf(Date.class, result);
+    Assertions.assertEquals(
+        Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()), result);
+  }
+
+  @Test
+  void placeholderProducesItsValue() {
+    Assertions.assertEquals("Hello world!",
+        transformer.transform(fb.placeholder(helloWorldPlaceholder).get()));
+  }
+
+  @Test
+  void producedTreeContainsOnlyDriverEncodableValues() {
+    Object result = transformer.transform(fb
+        .field("instant").greaterThan(fb.input("2023-01-01T00:00:00Z"))
+        .and(fb.field("id").in(fb.collection(fb.input("642ebb0e91ac8f778f5654b7"))))
+        .and(fb.field("uuid").equal(fb.input("550e8400-e29b-41d4-a716-446655440000")))
+        .and(fb.field("status").equal(fb.input("ACTIVE")))
+        .get());
+    assertDriverEncodable(result);
+  }
+
+  private static void assertDriverEncodable(Object value) {
+    if (value instanceof Document document) {
+      document.values().forEach(FilterBsonTransformerTest::assertDriverEncodable);
+    } else if (value instanceof List<?> list) {
+      list.forEach(FilterBsonTransformerTest::assertDriverEncodable);
+    } else if (value != null) {
+      Assertions.assertTrue(value instanceof String || value instanceof Boolean
+              || value instanceof Number || value instanceof Date || value instanceof ObjectId
+              || value instanceof UUID,
+          "Unexpected value type in BSON tree: " + value.getClass());
+    }
   }
 
 }

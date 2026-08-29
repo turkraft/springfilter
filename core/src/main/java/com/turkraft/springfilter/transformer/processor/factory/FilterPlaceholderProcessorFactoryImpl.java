@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FilterPlaceholderProcessorFactoryImpl extends
-    AbstractFilterNodeProcessorFactory<PlaceholderNode, FilterPlaceholderProcessor<?, PlaceholderNode>> implements
+    AbstractFilterNodeProcessorFactory<PlaceholderNode, FilterPlaceholderProcessor<?, ?>> implements
     FilterPlaceholderProcessorFactory {
 
   public FilterPlaceholderProcessorFactoryImpl(
-      List<FilterPlaceholderProcessor<?, PlaceholderNode>> processors) {
+      List<FilterPlaceholderProcessor<?, ?>> processors) {
     super(processors);
   }
 

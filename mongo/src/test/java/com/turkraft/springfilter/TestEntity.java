@@ -1,9 +1,15 @@
 package com.turkraft.springfilter;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -62,6 +68,24 @@ public class TestEntity {
   private HashMap<String, String> hashMapWebsites;
 
   private Map<String, ?> wildcardMap;
+
+  private Instant instant;
+
+  private LocalDate localDate;
+
+  private LocalDateTime localDateTime;
+
+  private Date date;
+
+  private Status status;
+
+  private BigDecimal amount;
+
+  private UUID uuid;
+
+  private ObjectId objectId;
+
+  private List<Instant> instants;
 
   public enum Status {
     ACTIVE, INACTIVE
@@ -257,6 +281,78 @@ public class TestEntity {
 
   public void setWildcardMap(Map<String, ?> wildcardMap) {
     this.wildcardMap = wildcardMap;
+  }
+
+  public Instant getInstant() {
+    return instant;
+  }
+
+  public void setInstant(Instant instant) {
+    this.instant = instant;
+  }
+
+  public LocalDate getLocalDate() {
+    return localDate;
+  }
+
+  public void setLocalDate(LocalDate localDate) {
+    this.localDate = localDate;
+  }
+
+  public LocalDateTime getLocalDateTime() {
+    return localDateTime;
+  }
+
+  public void setLocalDateTime(LocalDateTime localDateTime) {
+    this.localDateTime = localDateTime;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public BigDecimal getAmount() {
+    return amount;
+  }
+
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
+  }
+
+  public ObjectId getObjectId() {
+    return objectId;
+  }
+
+  public void setObjectId(ObjectId objectId) {
+    this.objectId = objectId;
+  }
+
+  public List<Instant> getInstants() {
+    return instants;
+  }
+
+  public void setInstants(List<Instant> instants) {
+    this.instants = instants;
   }
 
 }

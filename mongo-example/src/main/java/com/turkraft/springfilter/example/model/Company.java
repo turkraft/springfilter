@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.example.model;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,8 @@ public class Company {
   private Map<String, List<String>> tags;
 
   private HashMap<String, String> socialMedia;
+
+  private Instant createdAt;
 
   public String getName() {
     return name;
@@ -141,6 +144,14 @@ public class Company {
 
   public void setSocialMedia(HashMap<String, String> socialMedia) {
     this.socialMedia = socialMedia;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
   }
 
 }

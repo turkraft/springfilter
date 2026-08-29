@@ -277,6 +277,12 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
       return CustomUUID.class;
     }
 
+    if (field
+        .getType()
+        .equals(ObjectId.class)) {
+      return CustomObjectId.class;
+    }
+
     if (Collection.class.isAssignableFrom(field.getType())) {
       return getRawClass(getTypeArgumentOf(field.getGenericType(), 0));
     } else if (field
@@ -295,6 +301,9 @@ class FieldTypeResolverImpl implements FieldTypeResolver {
     Class<?> raw = getRawClass(valueType);
     if (UUID.class.equals(raw)) {
       return CustomUUID.class;
+    }
+    if (ObjectId.class.equals(raw)) {
+      return CustomObjectId.class;
     }
     if (Collection.class.isAssignableFrom(raw)) {
       return getRawClass(getTypeArgumentOf(valueType, 0));

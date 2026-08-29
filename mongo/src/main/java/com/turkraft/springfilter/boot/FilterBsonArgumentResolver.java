@@ -1,47 +1,29 @@
 package com.turkraft.springfilter.boot;
 
-import com.turkraft.springfilter.helper.FieldTypeResolver;
-import com.turkraft.springfilter.helper.JsonNodeHelper;
+import com.turkraft.springfilter.converter.FilterQueryConverter;
 import com.turkraft.springfilter.parser.node.FilterNode;
-import com.turkraft.springfilter.transformer.FilterJsonNodeTransformer;
-import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
 import java.util.Optional;
+import org.bson.Document;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.node.ObjectNode;
 
-public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentResolver {
-
-  protected final ConversionService conversionService;
-
-  protected final ObjectMapper objectMapper;
+public class FilterBsonArgumentResolver implements HandlerMethodArgumentResolver {
 
   protected final FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper;
 
-  protected final JsonNodeHelper jsonNodeHelper;
+  protected final FilterQueryConverter filterQueryConverter;
 
-  protected final FilterNodeProcessorFactories filterNodeProcessorFactories;
-
-  protected final FieldTypeResolver fieldTypeResolver;
-
-  public FilterJsonNodeArgumentResolver(
-      ConversionService conversionService, ObjectMapper objectMapper,
+  public FilterBsonArgumentResolver(
       FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
-      JsonNodeHelper jsonNodeHelper,
-      FilterNodeProcessorFactories filterNodeProcessorFactories,
-      FieldTypeResolver fieldTypeResolver) {
-    this.conversionService = conversionService;
-    this.objectMapper = objectMapper;
+      FilterQueryConverter filterQueryConverter) {
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
-    this.jsonNodeHelper = jsonNodeHelper;
-    this.filterNodeProcessorFactories = filterNodeProcessorFactories;
-    this.fieldTypeResolver = fieldTypeResolver;
+    this.filterQueryConverter = filterQueryConverter;
   }
 
   @Override
@@ -49,8 +31,12 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
     return methodParameter.hasParameterAnnotation(Filter.class)
         && (methodParameter
         .getParameterType()
-        .isAssignableFrom(ObjectNode.class)
-        || isOptionalParameter(methodParameter, ObjectNode.class));
+        .isAssignableFrom(Document.class)
+        || methodParameter
+        .getParameterType()
+        .isAssignableFrom(Query.class)
+        || isOptionalParameter(methodParameter, Document.class)
+        || isOptionalParameter(methodParameter, Query.class));
   }
 
   private boolean isOptionalParameter(MethodParameter methodParameter,
@@ -96,21 +82,28 @@ public class FilterJsonNodeArgumentResolver implements HandlerMethodArgumentReso
           .equals(Optional.class)) {
         return Optional.empty();
       }
-      return objectMapper.createObjectNode();
+      if (methodParameter
+          .getParameterType()
+          .isAssignableFrom(Document.class)) {
+        return new Document();
+      }
+      return new BasicQuery(new Document());
     }
-    FilterJsonNodeTransformer filterJsonNodeTransformer = new FilterJsonNodeTransformer(
-        conversionService, objectMapper, filterNodeProcessorFactories, fieldTypeResolver,
-        methodParameter
-            .getParameterAnnotation(Filter.class)
-            .entityClass());
-    ObjectNode jsonResult = jsonNodeHelper.wrapWithMongoExpression(
-        filterJsonNodeTransformer.transform(result.get()));
+    Class<?> entityClass = methodParameter
+        .getParameterAnnotation(Filter.class)
+        .entityClass();
     if (methodParameter
         .getParameterType()
-        .isAssignableFrom(ObjectNode.class)) {
-      return jsonResult;
-    } else if (isOptionalParameter(methodParameter, ObjectNode.class)) {
-      return Optional.of(jsonResult);
+        .isAssignableFrom(Document.class)) {
+      return filterQueryConverter.convertToDocument(result.get(), entityClass);
+    } else if (isOptionalParameter(methodParameter, Document.class)) {
+      return Optional.of(filterQueryConverter.convertToDocument(result.get(), entityClass));
+    } else if (methodParameter
+        .getParameterType()
+        .isAssignableFrom(Query.class)) {
+      return filterQueryConverter.convert(result.get(), entityClass);
+    } else if (isOptionalParameter(methodParameter, Query.class)) {
+      return Optional.of(filterQueryConverter.convert(result.get(), entityClass));
     }
     throw new IllegalStateException(
         "Unsupported method parameter " + methodParameter.getParameterType());

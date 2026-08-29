@@ -1,5 +1,6 @@
 package com.turkraft.springfilter.boot;
 
+import com.turkraft.springfilter.converter.FilterQueryConverter;
 import com.turkraft.springfilter.helper.FieldTypeResolver;
 import com.turkraft.springfilter.helper.JsonNodeHelper;
 import com.turkraft.springfilter.transformer.processor.factory.FilterNodeProcessorFactories;
@@ -29,19 +30,23 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
 
   protected final FieldTypeResolver fieldTypeResolver;
 
+  protected final FilterQueryConverter filterQueryConverter;
+
   public FilterJsonNodeArgumentResolverConfigurer(
       @Lazy @Qualifier("sfConversionService") ConversionService conversionService,
       @Lazy ObjectMapper objectMapper,
       @Lazy FilterNodeArgumentResolverHelper filterNodeArgumentResolverHelper,
       @Lazy JsonNodeHelper jsonNodeHelper,
       @Lazy FilterNodeProcessorFactories filterNodeProcessorFactories,
-      FieldTypeResolver fieldTypeResolver) {
+      FieldTypeResolver fieldTypeResolver,
+      @Lazy FilterQueryConverter filterQueryConverter) {
     this.conversionService = conversionService;
     this.objectMapper = objectMapper;
     this.filterNodeArgumentResolverHelper = filterNodeArgumentResolverHelper;
     this.jsonNodeHelper = jsonNodeHelper;
     this.filterNodeProcessorFactories = filterNodeProcessorFactories;
     this.fieldTypeResolver = fieldTypeResolver;
+    this.filterQueryConverter = filterQueryConverter;
   }
 
   @Override
@@ -50,6 +55,8 @@ public class FilterJsonNodeArgumentResolverConfigurer implements WebMvcConfigure
     resolvers.add(new FilterJsonNodeArgumentResolver(conversionService, objectMapper,
         filterNodeArgumentResolverHelper, jsonNodeHelper,
         filterNodeProcessorFactories, fieldTypeResolver));
+    resolvers.add(new FilterBsonArgumentResolver(filterNodeArgumentResolverHelper,
+        filterQueryConverter));
   }
 
 }
