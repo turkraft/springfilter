@@ -55,7 +55,7 @@
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-    <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
+    <flatten-maven-plugin.version>1.8.0</flatten-maven-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <flatten.skip>false</flatten.skip>
     <automatic.module.name>com.turkraft.springfilter</automatic.module.name>
