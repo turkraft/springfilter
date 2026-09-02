@@ -132,8 +132,10 @@ public class FilterableProcessor extends AbstractProcessor {
 
   private FieldKind classifyType(TypeMirror type) {
     switch (type.getKind()) {
-      case INT: case LONG: case SHORT: case BYTE:
+      case INT: case SHORT: case BYTE:
         return FieldKind.INT;
+      case LONG:
+        return FieldKind.LONG;
       case DOUBLE: case FLOAT:
         return FieldKind.DOUBLE;
       case BOOLEAN:
@@ -147,9 +149,12 @@ public class FilterableProcessor extends AbstractProcessor {
       if (qualifiedName.equals("java.lang.String")) {
         return FieldKind.STRING;
       }
-      if (qualifiedName.equals("java.lang.Integer") || qualifiedName.equals("java.lang.Long")
+      if (qualifiedName.equals("java.lang.Integer")
           || qualifiedName.equals("java.lang.Short") || qualifiedName.equals("java.lang.Byte")) {
         return FieldKind.INT;
+      }
+      if (qualifiedName.equals("java.lang.Long")) {
+        return FieldKind.LONG;
       }
       if (qualifiedName.equals("java.lang.Double") || qualifiedName.equals("java.lang.Float")) {
         return FieldKind.DOUBLE;
@@ -208,6 +213,9 @@ public class FilterableProcessor extends AbstractProcessor {
       case INT:
         stepClass = "IntFieldStep";
         break;
+      case LONG:
+        stepClass = "LongFieldStep";
+        break;
       case DOUBLE:
         stepClass = "DoubleFieldStep";
         break;
@@ -237,7 +245,7 @@ public class FilterableProcessor extends AbstractProcessor {
   }
 
   private enum FieldKind {
-    INT, DOUBLE, BOOLEAN, STRING, DATE, ENUM, COLLECTION, ENTITY
+    INT, LONG, DOUBLE, BOOLEAN, STRING, DATE, ENUM, COLLECTION, ENTITY
   }
 
   private static class FieldInfo {

@@ -30,7 +30,7 @@ public class LocateFunctionExpressionProcessor implements
 
     if (source
         .getArguments()
-        .size() >= 2) {
+        .size() >= 3) {
       transformer.registerTargetType(source.getArgument(2), Integer.class);
       return transformer
           .getCriteriaBuilder()

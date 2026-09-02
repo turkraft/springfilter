@@ -92,6 +92,50 @@ public class FilterPredicateTransformerTest {
   }
 
   @Test
+  void testEqualCoercesMismatchedTypes() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .equal(fb.input("100"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(new TestPojo("x", List.of(), 100)));
+    Assertions.assertFalse(predicate.test(new TestPojo("x", List.of(), 5)));
+
+  }
+
+  @Test
+  void testEqualWithUnparseableLiteralDoesNotThrowJustReturnsFalse() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .equal(fb.input("not-a-number"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertFalse(predicate.test(new TestPojo("x", List.of(), 100)));
+
+  }
+
+  @Test
+  void testNotEqualCoercesMismatchedTypes() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .notEqual(fb.input("100"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertFalse(predicate.test(new TestPojo("x", List.of(), 100)));
+    Assertions.assertTrue(predicate.test(new TestPojo("x", List.of(), 5)));
+
+  }
+
+  @Test
   void testGreaterThan() {
 
     FilterNode filter = fb
@@ -103,6 +147,38 @@ public class FilterPredicateTransformerTest {
 
     Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 100)));
     Assertions.assertFalse(predicate.test(new TestPojo("test", List.of(), 25)));
+
+  }
+
+  @Test
+  void testGreaterThanCoercesMismatchedTypes() {
+
+    FilterNode filter = fb
+        .field("integer")
+        .greaterThan(fb.input("50"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    Assertions.assertTrue(predicate.test(new TestPojo("test", List.of(), 100)));
+    Assertions.assertFalse(predicate.test(new TestPojo("test", List.of(), 5)));
+
+  }
+
+  @Test
+  void testComparisonAgainstUnconvertibleFieldTypeDoesNotSilentlyStringify() {
+
+    FilterNode filter = fb
+        .field("nested")
+        .greaterThan(fb.input("anything"))
+        .get();
+
+    Predicate<Object> predicate = transformer.transform(filter);
+
+    TestPojo pojo = new TestPojo("x", List.of(), 1, Map.of(),
+        new TestPojo.NestedPojo("name", 1));
+
+    Assertions.assertThrows(IllegalStateException.class, () -> predicate.test(pojo));
 
   }
 

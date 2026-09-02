@@ -65,6 +65,13 @@ public class FilterTypesafeTest {
   }
 
   @Test
+  void testLongFieldSupportsValuesAboveIntRange() {
+    long beyondIntRange = 5_000_000_000L;
+    assertFilter("id : '5000000000'",
+        TestEntityFilter.where(fb).id().equal(beyondIntRange).build());
+  }
+
+  @Test
   void testIntBetween() {
     assertFilter("year between '2020' and '2025'",
         TestEntityFilter.where(fb).year().between(2020, 2025).build());

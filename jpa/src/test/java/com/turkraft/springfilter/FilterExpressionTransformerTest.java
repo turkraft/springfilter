@@ -464,6 +464,334 @@ public class FilterExpressionTransformerTest {
             .and(fb.field("integers").notEqual(fb.input(5))).get());
   }
 
+  @Test
+  void orWithEmptyCollectionTest() {
+    createEntity(10, Collections.emptyList());
+    createEntity(1, Collections.emptyList());
+
+    test("""
+            select t from TestEntity t where t.integer > 5 or 999 member of t.integers
+            """,
+        fb.field("integer").greaterThan(fb.input(5))
+            .or(fb.field("integers").equal(fb.input(999))).get());
+  }
+
+  @Test
+  void orAcrossTwoCollectionsTest() {
+    TestEntity matchViaStringsOnly = new TestEntity();
+    matchViaStringsOnly.setInteger(0);
+    matchViaStringsOnly.setIntegers(Collections.emptyList());
+    matchViaStringsOnly.setStrings(Collections.singletonList("card"));
+    entityManager.persist(matchViaStringsOnly);
+
+    TestEntity matchViaIntegersOnly = new TestEntity();
+    matchViaIntegersOnly.setInteger(0);
+    matchViaIntegersOnly.setIntegers(Collections.singletonList(2));
+    matchViaIntegersOnly.setStrings(Collections.emptyList());
+    entityManager.persist(matchViaIntegersOnly);
+
+    TestEntity noMatch = new TestEntity();
+    noMatch.setInteger(0);
+    noMatch.setIntegers(Collections.singletonList(99));
+    noMatch.setStrings(Collections.singletonList("cash"));
+    entityManager.persist(noMatch);
+
+    test("""
+            select t from TestEntity t where 2 member of t.integers or 'card' member of t.strings
+            """,
+        fb.field("integers").equal(fb.input(2))
+            .or(fb.field("strings").equal(fb.input("card"))).get());
+  }
+
+  @Test
+  void countDistinctTest() {
+    TestEntity threeDistinct = createEntity(0, Arrays.asList(1, 2, 2, 3));
+    createEntity(0, Arrays.asList(5, 5));
+
+    FilterNode node = conversionService.convert("countDistinct(integers) : '3'", FilterNode.class);
+
+    criteriaQuery
+        .select(root)
+        .where((Expression<Boolean>) transformer.transform(node));
+    List<TestEntity> results = entityManager.createQuery(criteriaQuery).getResultList();
+
+    Assertions.assertEquals(1, results.size());
+    Assertions.assertEquals(threeDistinct.getId(), results.get(0).getId());
+  }
+
+  @Test
+  void andOnSameCollectionTest() {
+    createEntity(0, Arrays.asList(1, 100));
+    createEntity(0, Arrays.asList(1, 7, 100));
+
+    test("""
+            select t from TestEntity t where exists(select 1 from t.integers i where i > 5 and i < 10)
+            """,
+        fb.field("integers").greaterThan(fb.input(5))
+            .and(fb.field("integers").lessThan(fb.input(10))).get());
+  }
+
+  private void createEntityWithString(String string) {
+    TestEntity e = new TestEntity();
+    e.setInteger(0);
+    e.setString(string);
+    entityManager.persist(e);
+  }
+
+  @Test
+  void locateTwoArgumentsTest() {
+    createEntityWithString("hello");
+    createEntityWithString("abc");
+
+    test("""
+            select t from TestEntity t where locate('ell', t.string) = 2
+            """,
+        conversionService.convert("locate(string, 'ell') : '2'", FilterNode.class));
+  }
+
+  @Test
+  void locateThreeArgumentsTest() {
+    createEntityWithString("hello");
+    createEntityWithString("abc");
+
+    test("""
+            select t from TestEntity t where locate('l', t.string, 4) = 4
+            """,
+        conversionService.convert("locate(string, 'l', '4') : '4'", FilterNode.class));
+  }
+
+  @Test
+  void substringTwoArgumentsTest() {
+    createEntityWithString("hello");
+    createEntityWithString("abc");
+
+    test("""
+            select t from TestEntity t where substring(t.string, 2) = 'ello'
+            """,
+        conversionService.convert("substring(string, '2') : 'ello'", FilterNode.class));
+  }
+
+  @Test
+  void substringThreeArgumentsTest() {
+    createEntityWithString("hello");
+    createEntityWithString("abc");
+
+    test("""
+            select t from TestEntity t where substring(t.string, 1, 3) = 'hel'
+            """,
+        conversionService.convert("substring(string, '1', '3') : 'hel'", FilterNode.class));
+  }
+
+  @Test
+  void greatestTest() {
+    createEntity(0, Arrays.asList(1, 5, 9));
+    createEntity(0, Arrays.asList(1, 2));
+
+    test("""
+            select t from TestEntity t where (select max(i) from TestEntity t2 join t2.integers i where t2 = t) = 9
+            """,
+        conversionService.convert("greatest(integers) : '9'", FilterNode.class));
+  }
+
+  @Test
+  void leastTest() {
+    createEntity(0, Arrays.asList(4, 5, 9));
+    createEntity(0, Arrays.asList(1, 2));
+
+    test("""
+            select t from TestEntity t where (select min(i) from TestEntity t2 join t2.integers i where t2 = t) = 4
+            """,
+        conversionService.convert("least(integers) : '4'", FilterNode.class));
+  }
+
+  @Test
+  void xorAcrossTwoCollectionsTest() {
+    TestEntity onlyIntegers = new TestEntity();
+    onlyIntegers.setInteger(0);
+    onlyIntegers.setIntegers(Collections.singletonList(2));
+    onlyIntegers.setStrings(Collections.emptyList());
+    entityManager.persist(onlyIntegers);
+
+    TestEntity onlyStrings = new TestEntity();
+    onlyStrings.setInteger(0);
+    onlyStrings.setIntegers(Collections.emptyList());
+    onlyStrings.setStrings(Collections.singletonList("card"));
+    entityManager.persist(onlyStrings);
+
+    TestEntity both = new TestEntity();
+    both.setInteger(0);
+    both.setIntegers(Collections.singletonList(2));
+    both.setStrings(Collections.singletonList("card"));
+    entityManager.persist(both);
+
+    TestEntity neither = new TestEntity();
+    neither.setInteger(0);
+    neither.setIntegers(Collections.emptyList());
+    neither.setStrings(Collections.emptyList());
+    entityManager.persist(neither);
+
+    test("""
+            select t from TestEntity t where ((2 member of t.integers) and not ('card' member of t.strings)) or (not (2 member of t.integers) and ('card' member of t.strings))
+            """,
+        conversionService.convert("integers : '2' xor strings : 'card'", FilterNode.class));
+  }
+
+  @Test
+  void xorOnSameCollectionTest() {
+    createEntity(0, Arrays.asList(5, 7));
+    createEntity(0, Arrays.asList(5));
+    createEntity(0, Arrays.asList(7));
+    createEntity(0, Arrays.asList(1));
+
+    test("""
+            select t from TestEntity t where ((5 member of t.integers) and not (7 member of t.integers)) or (not (5 member of t.integers) and (7 member of t.integers))
+            """,
+        conversionService.convert("integers : '5' xor integers : '7'", FilterNode.class));
+  }
+
+  @Test
+  void leastAndCollectionEqualTest() {
+    createEntity(0, Arrays.asList(4, 9));
+    createEntity(0, Arrays.asList(4, 5));
+    createEntity(0, Arrays.asList(1, 9));
+
+    test("""
+            select t from TestEntity t where (select min(i) from TestEntity t2 join t2.integers i where t2 = t) = 4 and 9 member of t.integers
+            """,
+        conversionService.convert("least(integers) : '4' and integers : '9'", FilterNode.class));
+  }
+
+  @Test
+  void leastOrCollectionEqualTest() {
+    createEntity(0, Arrays.asList(4, 9));
+    createEntity(0, Arrays.asList(999, 5));
+    createEntity(0, Arrays.asList(1, 9));
+
+    test("""
+            select t from TestEntity t where (select min(i) from TestEntity t2 join t2.integers i where t2 = t) = 4 or 999 member of t.integers
+            """,
+        conversionService.convert("least(integers) : '4' or integers : '999'", FilterNode.class));
+  }
+
+  @Test
+  void collectionLikeOrTest() {
+    TestEntity viaLike = new TestEntity();
+    viaLike.setInteger(0);
+    viaLike.setIntegers(Collections.emptyList());
+    viaLike.setStrings(Collections.singletonList("card"));
+    entityManager.persist(viaLike);
+
+    TestEntity viaInteger = new TestEntity();
+    viaInteger.setInteger(0);
+    viaInteger.setIntegers(Collections.singletonList(999));
+    viaInteger.setStrings(Collections.emptyList());
+    entityManager.persist(viaInteger);
+
+    TestEntity noMatch = new TestEntity();
+    noMatch.setInteger(0);
+    noMatch.setIntegers(Collections.singletonList(1));
+    noMatch.setStrings(Collections.singletonList("zzz"));
+    entityManager.persist(noMatch);
+
+    test("""
+            select t from TestEntity t where exists (select s from TestEntity t2 join t2.strings s where t2 = t and s like 'c%') or 999 member of t.integers
+            """,
+        conversionService.convert("strings ~ ['c%'] or integers : '999'", FilterNode.class));
+  }
+
+  @Test
+  void notOrAcrossTwoCollectionsTest() {
+    TestEntity matchesOrViaIntegers = new TestEntity();
+    matchesOrViaIntegers.setInteger(0);
+    matchesOrViaIntegers.setIntegers(Collections.singletonList(2));
+    matchesOrViaIntegers.setStrings(Collections.emptyList());
+    entityManager.persist(matchesOrViaIntegers);
+
+    TestEntity matchesOrViaStrings = new TestEntity();
+    matchesOrViaStrings.setInteger(0);
+    matchesOrViaStrings.setIntegers(Collections.emptyList());
+    matchesOrViaStrings.setStrings(Collections.singletonList("card"));
+    entityManager.persist(matchesOrViaStrings);
+
+    TestEntity matchesNeither = new TestEntity();
+    matchesNeither.setInteger(0);
+    matchesNeither.setIntegers(Collections.singletonList(99));
+    matchesNeither.setStrings(Collections.singletonList("cash"));
+    entityManager.persist(matchesNeither);
+
+    TestEntity bothCollectionsEmpty = new TestEntity();
+    bothCollectionsEmpty.setInteger(0);
+    bothCollectionsEmpty.setIntegers(Collections.emptyList());
+    bothCollectionsEmpty.setStrings(Collections.emptyList());
+    entityManager.persist(bothCollectionsEmpty);
+
+    test("""
+            select t from TestEntity t where not (2 member of t.integers or 'card' member of t.strings)
+            """,
+        conversionService.convert("not (integers : '2' or strings : 'card')", FilterNode.class));
+  }
+
+  @Test
+  void countOfOrConditionTest() {
+    createEntity(0, Arrays.asList(5, 7, 9));
+    createEntity(0, Arrays.asList(5, 9));
+    createEntity(0, Arrays.asList(1, 2));
+
+    FilterNode node = conversionService.convert(
+        "count(integers : '5' or integers : '7') : '2'", FilterNode.class);
+
+    criteriaQuery
+        .select(root)
+        .where((Expression<Boolean>) transformer.transform(node));
+    List<TestEntity> results = entityManager.createQuery(criteriaQuery).getResultList();
+
+    List<TestEntity> expected = entityManager.createQuery(
+            "select t from TestEntity t where (select count(i) from TestEntity t2 join t2.integers i where t2 = t and (i = 5 or i = 7)) = 2",
+            TestEntity.class)
+        .getResultList();
+
+    Assertions.assertFalse(expected.isEmpty(), "Queries should return at least one result");
+    Assertions.assertEquals(
+        expected.stream().map(TestEntity::getId).toList(),
+        results.stream().map(TestEntity::getId).toList());
+  }
+
+  @Test
+  void orNestedInsideAndTest() {
+    TestEntity noMatch = new TestEntity();
+    noMatch.setInteger(0);
+    noMatch.setIntegers(Collections.emptyList());
+    noMatch.setStrings(Collections.singletonList("x"));
+    entityManager.persist(noMatch);
+
+    TestEntity matchViaScalarWithEmptyIntegers = new TestEntity();
+    matchViaScalarWithEmptyIntegers.setInteger(10);
+    matchViaScalarWithEmptyIntegers.setIntegers(Collections.emptyList());
+    matchViaScalarWithEmptyIntegers.setStrings(Collections.singletonList("x"));
+    entityManager.persist(matchViaScalarWithEmptyIntegers);
+
+    TestEntity noMatchWrongStrings = new TestEntity();
+    noMatchWrongStrings.setInteger(10);
+    noMatchWrongStrings.setIntegers(Collections.singletonList(999));
+    noMatchWrongStrings.setStrings(Collections.singletonList("y"));
+    entityManager.persist(noMatchWrongStrings);
+
+    TestEntity matchViaIntegersMember = new TestEntity();
+    matchViaIntegersMember.setInteger(0);
+    matchViaIntegersMember.setIntegers(Collections.singletonList(999));
+    matchViaIntegersMember.setStrings(Collections.singletonList("x"));
+    entityManager.persist(matchViaIntegersMember);
+
+    test("""
+            select t from TestEntity t where 'x' member of t.strings and (t.integer > 5 or 999 member of t.integers)
+            """,
+        fb.field("strings").equal(fb.input("x"))
+            .and(
+                fb.field("integer").greaterThan(fb.input(5))
+                    .or(fb.field("integers").equal(fb.input(999)))
+            ).get());
+  }
+
   private TestEntity createEntityWithJson(String jsonData) {
     TestEntity e = new TestEntity();
     e.setJsonData(jsonData);

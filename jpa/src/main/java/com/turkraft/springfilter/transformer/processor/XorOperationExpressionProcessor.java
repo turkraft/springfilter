@@ -28,8 +28,10 @@ public class XorOperationExpressionProcessor implements
     transformer.registerTargetType(source.getLeft(), Boolean.class);
     transformer.registerTargetType(source.getRight(), Boolean.class);
     CriteriaBuilder cb = transformer.getCriteriaBuilder();
-    Expression<Boolean> left = (Expression<Boolean>) transformer.transform(source.getLeft());
-    Expression<Boolean> right = (Expression<Boolean>) transformer.transform(source.getRight());
+    Expression<Boolean> left = (Expression<Boolean>) transformer.transformIndependently(
+        source.getLeft());
+    Expression<Boolean> right = (Expression<Boolean>) transformer.transformIndependently(
+        source.getRight());
     return cb.or(
         cb.and(left, cb.not(right)),
         cb.and(cb.not(left), right));

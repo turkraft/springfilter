@@ -42,6 +42,7 @@ public class FilterStringTransformer implements FilterNodeTransformer<String> {
         .requireNonNull(
             conversionService.convert(node.getValue(), String.class),
             "Could not convert `" + node.getValue() + "` to string")
+        .replace("\\", "\\\\")
         .replace("'", "\\'") + "'";
   }
 

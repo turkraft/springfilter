@@ -2,7 +2,7 @@ package com.turkraft.springfilter.transformer.processor;
 
 import com.turkraft.springfilter.helper.IgnoreExists;
 import com.turkraft.springfilter.helper.RootContext;
-import com.turkraft.springfilter.language.LeastFunction;
+import com.turkraft.springfilter.language.CountDistinctFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterExpressionTransformer;
 import jakarta.persistence.criteria.Expression;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @IgnoreExists
 @Component
-public class LeastFunctionExpressionProcessor implements
+public class CountDistinctFunctionExpressionProcessor implements
     FilterFunctionProcessor<FilterExpressionTransformer, Expression<?>> {
 
   @Override
@@ -21,28 +21,27 @@ public class LeastFunctionExpressionProcessor implements
   }
 
   @Override
-  public Class<LeastFunction> getDefinitionType() {
-    return LeastFunction.class;
+  public Class<CountDistinctFunction> getDefinitionType() {
+    return CountDistinctFunction.class;
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public Expression<?> process(FilterExpressionTransformer transformer,
       FunctionNode source) {
 
-    Subquery<Comparable> subquery = transformer
+    Subquery<Long> subquery = transformer
         .getCriteriaQuery()
-        .subquery(Comparable.class);
+        .subquery(Long.class);
 
     Root<?> root = subquery.correlate(transformer.getRoot());
 
     transformer.registerRootContext(source, new RootContext(root));
 
-    subquery.select(
-        transformer
-            .getCriteriaBuilder()
-            .least((Expression<Comparable>) transformer.transform(
-                source.getArgument(0))));
+    Expression<?> argument = transformer.transform(source.getArgument(0));
+
+    subquery.select(transformer
+        .getCriteriaBuilder()
+        .countDistinct(argument));
 
     return subquery;
 
