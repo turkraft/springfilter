@@ -3,6 +3,7 @@ package com.turkraft.springfilter.transformer.processor;
 import com.turkraft.springfilter.language.SizeFunction;
 import com.turkraft.springfilter.parser.node.FunctionNode;
 import com.turkraft.springfilter.transformer.FilterPredicateTransformer;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -84,7 +85,7 @@ public class SizeFunctionPredicateProcessor implements
     if (value
         .getClass()
         .isArray()) {
-      return ((Object[]) value).length;
+      return Array.getLength(value);
     }
 
     return 0;

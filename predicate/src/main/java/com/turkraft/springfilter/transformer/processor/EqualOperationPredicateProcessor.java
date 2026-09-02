@@ -31,7 +31,9 @@ public class EqualOperationPredicateProcessor implements
     return entity -> {
       Object leftValue = PredicateValueExtractor.extractValue(left, entity);
       Object rightValue = PredicateValueExtractor.extractValue(right, entity);
-      return Objects.equals(leftValue, rightValue);
+      Object[] coerced = PredicateValueExtractor.coerce(transformer.getConversionService(),
+          leftValue, rightValue);
+      return Objects.equals(coerced[0], coerced[1]);
     };
 
   }

@@ -76,16 +76,30 @@ public class FilterExpressionTransformer implements FilterNodeTransformer<Expres
   public Expression<?> transform(FilterNode node) {
     if (!insideExists && !ignoreExists.contains(node) && existsExpressionHelper.requiresExists(this,
         node)) {
-      insideExists = true;
-      Expression<?> result = existsExpressionHelper.wrapWithExists(this, node);
-      insideExists = false;
-      return result;
+      return transformWithExists(node);
     }
     Expression<?> expression = FilterNodeTransformer.super.transform(node);
     if (targetTypes.containsKey(node)) {
       return castIfNeeded(expression, targetTypes.get(node));
     }
     return expression;
+  }
+
+  public Expression<?> transformWithExists(FilterNode node) {
+    boolean wasInsideExists = insideExists;
+    insideExists = true;
+    try {
+      return existsExpressionHelper.wrapWithExists(this, node);
+    } finally {
+      insideExists = wasInsideExists;
+    }
+  }
+
+  public Expression<?> transformIndependently(FilterNode node) {
+    if (!ignoreExists.contains(node) && existsExpressionHelper.requiresExists(this, node)) {
+      return transformWithExists(node);
+    }
+    return transform(node);
   }
 
   @Override

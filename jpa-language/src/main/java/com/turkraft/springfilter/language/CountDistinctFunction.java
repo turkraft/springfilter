@@ -12,7 +12,7 @@ public class CountDistinctFunction extends FilterFunction {
 
   @Override
   public String getDescription() {
-    return "Count unique values (not implemented)";
+    return "Count unique values";
   }
 
   @Override

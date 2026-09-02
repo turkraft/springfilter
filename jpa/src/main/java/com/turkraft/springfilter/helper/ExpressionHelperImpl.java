@@ -3,6 +3,7 @@ package com.turkraft.springfilter.helper;
 import com.turkraft.springfilter.definition.FilterDefinition;
 import com.turkraft.springfilter.language.AndOperator;
 import com.turkraft.springfilter.language.OrOperator;
+import com.turkraft.springfilter.language.XorOperator;
 import com.turkraft.springfilter.parser.node.CollectionLikeNode;
 import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FieldNode;
@@ -263,8 +264,11 @@ public class ExpressionHelperImpl implements PathExpressionHelper, ExistsExpress
       }
 
     if (node instanceof InfixOperationNode infixNode) {
-      if (infixNode.getOperator() instanceof AndOperator
-          || infixNode.getOperator() instanceof OrOperator) {
+      if (infixNode.getOperator() instanceof OrOperator
+          || infixNode.getOperator() instanceof XorOperator) {
+        return false;
+      }
+      if (infixNode.getOperator() instanceof AndOperator) {
         boolean leftNeedsWrap = requiresExists(transformer, infixNode.getLeft());
         boolean rightNeedsWrap = requiresExists(transformer, infixNode.getRight());
         if ((leftNeedsWrap || rightNeedsWrap) && containsIgnoreExistsNode(infixNode)) {

@@ -5,6 +5,7 @@ import com.turkraft.springfilter.parser.node.CollectionNode;
 import com.turkraft.springfilter.parser.node.FilterNode;
 import com.turkraft.springfilter.parser.node.InfixOperationNode;
 import com.turkraft.springfilter.transformer.FilterPredicateTransformer;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -71,8 +72,9 @@ public class NotInOperationPredicateProcessor implements
       if (rightValue != null && rightValue
           .getClass()
           .isArray()) {
-        for (Object item : (Object[]) rightValue) {
-          if (Objects.equals(leftValue, item)) {
+        int length = Array.getLength(rightValue);
+        for (int i = 0; i < length; i++) {
+          if (Objects.equals(leftValue, Array.get(rightValue, i))) {
             return false;
           }
         }

@@ -19,6 +19,9 @@ public class TestEntity {
   @ElementCollection
   private List<Integer> integers;
 
+  @ElementCollection
+  private List<String> strings;
+
   private int integer;
 
   @Lob
@@ -46,6 +49,14 @@ public class TestEntity {
 
   public void setIntegers(List<Integer> integers) {
     this.integers = integers;
+  }
+
+  public List<String> getStrings() {
+    return strings;
+  }
+
+  public void setStrings(List<String> strings) {
+    this.strings = strings;
   }
 
   public int getInteger() {

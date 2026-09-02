@@ -46,7 +46,7 @@ public class FilterConversionServiceConfiguration {
 
     if (fallbackConversionService == null) {
       fallbackConversionService =
-          new org.springframework.core.convert.support.DefaultConversionService();
+          new org.springframework.format.support.DefaultFormattingConversionService();
     }
     return fallbackConversionService;
   }

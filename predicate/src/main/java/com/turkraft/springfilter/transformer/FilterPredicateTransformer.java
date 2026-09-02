@@ -42,6 +42,10 @@ public class FilterPredicateTransformer implements FilterNodeTransformer<Predica
     return (Class<Predicate<Object>>) (Class<?>) Predicate.class;
   }
 
+  public ConversionService getConversionService() {
+    return conversionService;
+  }
+
   @Override
   public Predicate<Object> transformField(FieldNode node) {
     return new FieldAccessPredicate(node.getName());
