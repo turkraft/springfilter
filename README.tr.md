@@ -519,12 +519,42 @@ true, false         // boolean
 
 ### Fonksiyonlar
 
+Her modülde kullanılabilir:
+
 ```
 size(collection)
 size(field.collection)
 today()
+```
+
+JPA modülü, JPA Criteria ifadelerine karşılık gelen şu fonksiyonları ekler:
+
+```
+// aritmetik     abs, neg, sign, ceiling, floor, sqrt, exp, ln, power, mod,
+//               sum, diff, prod, quot
+// toplama       count, countDistinct, avg, min, max, exists, greatest, least
+// metin         upper, lower, trim, concat, length, locate, substring
+// tarih/saat    currentDate, currentTime, currentTimestamp,
+//               localDate, localTime, localDateTime
+// tür dönüşümü  toInteger, toDouble, toFloat, toString, toBigDecimal, toBigInteger
+// niceleyici    any, all, some
+```
+
+```
+upper(name) : 'JOHN'
+length(description) > 100
+concat(firstName, ' ', lastName) ~ '%smith%'
+toInteger(code) > 500
+price > all(items.price)
+```
+
+`jsonText` yalnızca JPA içindir ve PostgreSQL'e özgüdür; `jsonb_extract_path_text` olarak
+derlenir. Metin döndürür, bu yüzden metin olarak karşılaştırın veya önce tür dönüşümü uygulayın:
+
+```
 jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
+toInteger(jsonText(field, 'age')) > 18
 ```
 
 ### Yer Tutucular (Placeholders)
@@ -549,7 +579,7 @@ a >: b               // büyük eşittir
 a < b                // küçüktür
 a <: b               // küçük eşittir
 a between x and y    // arasında (dahil)
-a ~ 'pattern'        // like (% ve _ joker karakterleri)
+a ~ 'pattern'        // like (joker karakterler modüle göre değişir, aşağıya bakın)
 a ~~ 'pattern'       // büyük/küçük harf duyarsız like
 a in [x, y]          // koleksiyonda var
 a not in [x, y]      // koleksiyonda yok
@@ -558,6 +588,23 @@ a is not null        // null değil kontrolü
 a is empty           // boş kontrolü (koleksiyonlar/string'ler)
 a is not empty       // boş değil kontrolü
 ```
+
+### Modüller Arası Desen Eşleştirme
+
+`~` ve `~~` operatörleri her modülde aynı şekilde çevrilmez. Desenlerinizi sorguladığınız modüle
+göre yazın:
+
+| Desen içinde | JPA | MongoDB | Predicate |
+|---|---|---|---|
+| `%` | herhangi bir karakter | **düz `%` karakteri** | herhangi bir karakter |
+| `_` | tek karakter | **düz `_` karakteri** | tek karakter |
+| `*` | `%` ile aynı | herhangi bir karakter | **düz `*` karakteri** |
+| joker karakter içermeyen desen | sarmalanır, her yerde eşleşir | sarmalanır, her yerde eşleşir | **değerin tamamıyla eşleşmeli** |
+
+Bu nedenle `name ~ 'John'` ifadesi JPA ve MongoDB'de `"Johnny"` ile eşleşir, predicate modülünde
+eşleşmez; `name ~ '%john%'` ise MongoDB'de düz `%john%` metnini arar. MongoDB'de `*`, JPA'da
+`%`/`_` kullanın. Bunların birleştirilmesi geriye dönük uyumluluğu bozacağından ileri bir ana
+sürüme bırakılmıştır.
 
 ### Öncelik
 
@@ -698,7 +745,7 @@ a and (b or c)
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
 // Tip dönüşümü ile birleştir
-?filter= jsonText(data, 'age') > 18
+?filter= toInteger(jsonText(data, 'age')) > 18
 
 // Desen eşleştirme ile iç içe anahtarlar
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
@@ -810,6 +857,49 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 ```
 
 Artık `?filter=year > 2020` yerine `?q=year > 2020` kullanın.
+
+### Güvenilmeyen Girdiyi Sınırlama
+
+Filtre ifadeleri genellikle doğrudan bir sorgu parametresinden gelir, yani güvenilmeyen girdidir.
+İki sınır geçerlidir.
+
+İç içe geçme derinliği genel olarak sınırlıdır. Sınırı aşan bir ifade, istek iş parçacığının
+yığınını tüketmesine izin verilmek yerine `InvalidSyntaxException` ile reddedilir:
+
+```properties
+# varsayılan: 500; kontrolü devre dışı bırakmak için 0 yapın
+springfilter.core.max_nesting_depth=500
+```
+
+İfade uzunluğu varsayılan olarak sınırlı değildir. Uç nokta herkese açıksa parametre bazında
+ayarlayın:
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(maxLength = 2000) Specification<Car> spec) {
+    return repository.findAll(spec);
+}
+```
+
+`@Sort` ve `@Pagination` kendi varsayılanlarıyla gelir: `maxFields = 10` ve `maxSize = 100`.
+
+### Hata Yönetimi
+
+`InvalidSyntaxException` sınıfı `@ResponseStatus(BAD_REQUEST)` ile işaretlidir, bu yüzden hatalı
+bir ifade ek bir yapılandırma olmadan `400` döner. Yanıt gövdesini denetlemek için bir işleyici
+tanımlayın:
+
+```java
+@ExceptionHandler(InvalidSyntaxException.class)
+ResponseEntity<String> onInvalidFilter(InvalidSyntaxException e) {
+    return ResponseEntity.badRequest().body("Geçersiz filtre: " + e.getMessage());
+}
+```
+
+Diğer girdi hataları, siz eşlemediğiniz sürece sıradan çalışma zamanı istisnaları olarak kalır ve
+varsayılan `500` işleyicisine ulaşır: bilinmeyen bir fonksiyon veya yer tutucu için
+`UnsupportedOperationException`; bilinmeyen bir alan, yanlış argüman sayısı veya alanın türüne
+dönüştürülemeyen bir değer için `IllegalArgumentException`.
 
 ### MongoDB için Entity Sınıfı
 

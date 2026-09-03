@@ -519,12 +519,42 @@ true, false         // 布尔值
 
 ### 函数
 
+所有模块均可使用:
+
 ```
 size(collection)
 size(field.collection)
 today()
+```
+
+JPA 模块额外提供以下函数，它们对应 JPA Criteria 表达式:
+
+```
+// 算术         abs, neg, sign, ceiling, floor, sqrt, exp, ln, power, mod,
+//              sum, diff, prod, quot
+// 聚合         count, countDistinct, avg, min, max, exists, greatest, least
+// 字符串       upper, lower, trim, concat, length, locate, substring
+// 日期时间     currentDate, currentTime, currentTimestamp,
+//              localDate, localTime, localDateTime
+// 类型转换     toInteger, toDouble, toFloat, toString, toBigDecimal, toBigInteger
+// 量词         any, all, some
+```
+
+```
+upper(name) : 'JOHN'
+length(description) > 100
+concat(firstName, ' ', lastName) ~ '%smith%'
+toInteger(code) > 500
+price > all(items.price)
+```
+
+`jsonText` 仅适用于 JPA，且是 PostgreSQL 专有的，会编译为 `jsonb_extract_path_text`。
+它返回文本，因此请按文本比较，或先进行类型转换:
+
+```
 jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
+toInteger(jsonText(field, 'age')) > 18
 ```
 
 ### 占位符
@@ -549,7 +579,7 @@ a >: b               // 大于等于
 a < b                // 小于
 a <: b               // 小于等于
 a between x and y    // 范围（包含边界）
-a ~ 'pattern'        // 模糊匹配（% 和 _ 通配符）
+a ~ 'pattern'        // 模糊匹配（通配符因模块而异，见下文）
 a ~~ 'pattern'       // 不区分大小写的模糊匹配
 a in [x, y]          // 属于集合
 a not in [x, y]      // 不属于集合
@@ -558,6 +588,21 @@ a is not null        // 非空判断
 a is empty           // 空判断（集合/字符串）
 a is not empty       // 非空判断
 ```
+
+### 跨模块的模式匹配
+
+`~` 和 `~~` 在各模块中的转换方式并不相同。请针对实际查询的模块编写模式:
+
+| 模式中的字符 | JPA | MongoDB | Predicate |
+|---|---|---|---|
+| `%` | 任意字符 | **字面量 `%`** | 任意字符 |
+| `_` | 单个字符 | **字面量 `_`** | 单个字符 |
+| `*` | 等同于 `%` | 任意字符 | **字面量 `*`** |
+| 不含通配符的模式 | 自动包裹，任意位置匹配 | 自动包裹，任意位置匹配 | **必须与整个值相等** |
+
+因此 `name ~ 'John'` 在 JPA 和 MongoDB 中可以匹配 `"Johnny"`，但在 predicate 模块中不会；而
+`name ~ '%john%'` 在 MongoDB 中查找的是字面文本 `%john%`。在 MongoDB 中请使用 `*`，在 JPA 中
+请使用 `%`/`_`。统一三者属于破坏性变更，已推迟到未来的主版本。
 
 ### 优先级
 
@@ -698,7 +743,7 @@ a and (b or c)
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
 // 结合类型转换
-?filter= jsonText(data, 'age') > 18
+?filter= toInteger(jsonText(data, 'age')) > 18
 
 // 嵌套键与模糊匹配
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
@@ -810,6 +855,45 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 ```
 
 现在使用 `?q=year > 2020` 代替 `?filter=year > 2020`。
+
+### 限制不可信输入
+
+过滤表达式通常直接来自查询参数，属于不可信输入。这里有两项限制。
+
+嵌套深度受全局上限约束。超过上限的表达式会以 `InvalidSyntaxException` 被拒绝，而不会耗尽请求
+线程的栈空间:
+
+```properties
+# 默认值 500；设为 0 可关闭该检查
+springfilter.core.max_nesting_depth=500
+```
+
+表达式长度默认不受限制。当接口对外公开时，请按参数单独设置:
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(maxLength = 2000) Specification<Car> spec) {
+    return repository.findAll(spec);
+}
+```
+
+`@Sort` 和 `@Pagination` 已自带默认值：`maxFields = 10` 与 `maxSize = 100`。
+
+### 错误处理
+
+`InvalidSyntaxException` 标注了 `@ResponseStatus(BAD_REQUEST)`，因此格式错误的表达式无需额外配置
+即可返回 `400`。若需控制响应体，可声明处理器:
+
+```java
+@ExceptionHandler(InvalidSyntaxException.class)
+ResponseEntity<String> onInvalidFilter(InvalidSyntaxException e) {
+    return ResponseEntity.badRequest().body("无效的过滤条件: " + e.getMessage());
+}
+```
+
+其他输入错误仍会以普通运行时异常的形式出现，除非你自行映射，否则会落到默认的 `500` 处理器：
+未知函数或占位符抛出 `UnsupportedOperationException`；未知字段、参数个数错误或无法转换为字段
+类型的值抛出 `IllegalArgumentException`。
 
 ### MongoDB 的实体类
 

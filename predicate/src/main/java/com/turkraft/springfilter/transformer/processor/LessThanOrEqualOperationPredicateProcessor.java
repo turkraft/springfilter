@@ -20,7 +20,6 @@ public class LessThanOrEqualOperationPredicateProcessor implements
     return LessThanOrEqualOperator.class;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   public Predicate<Object> process(FilterPredicateTransformer transformer,
       InfixOperationNode source) {
@@ -36,14 +35,8 @@ public class LessThanOrEqualOperationPredicateProcessor implements
         return false;
       }
 
-      Object[] coerced = PredicateValueExtractor.coerce(transformer.getConversionService(),
-          leftValue, rightValue);
-
-      if (coerced[0] instanceof Comparable && coerced[1] instanceof Comparable) {
-        return ((Comparable) coerced[0]).compareTo(coerced[1]) <= 0;
-      }
-
-      throw new IllegalStateException("Cannot compare non-comparable values");
+      return PredicateValueExtractor.compare(transformer.getConversionService(),
+          leftValue, rightValue) <= 0;
     };
 
   }

@@ -8,7 +8,7 @@ grammar AntlrFilter;
 @lexer::members {
 
     private FilterOperators operators;
-   
+
     public AntlrFilterLexer(CharStream input, FilterOperators operators) {
       this(input);
       this.operators = operators;
@@ -35,10 +35,10 @@ grammar AntlrFilter;
     }
 
     private Deque<Token> deque = new LinkedList<Token>();
-   
+
     private Token previousToken;
     private Token nextToken;
-   
+
     @Override
     public Token nextToken() {
       if (!deque.isEmpty()) {
@@ -72,7 +72,7 @@ grammar AntlrFilter;
         return previousToken = result;
       }
     }
-   
+
     private List<Token> findOperatorCombination(String sequence, OperatorType type) {
       switch (type) {
       case POSTFIX_OPERATOR:
@@ -85,7 +85,7 @@ grammar AntlrFilter;
         return null;
       }
     }
-   
+
     private List<Token> getPrefixCombination(String sequence) {
       if (isPrefixOperator(sequence)) {
         List<Token> seq = new ArrayList<Token> (1);
@@ -105,7 +105,7 @@ grammar AntlrFilter;
       }
       return null;
     }
-   
+
     private List<Token> getPostfixCombination(String sequence) {
       if (isPostfixOperator(sequence)) {
         List<Token> seq = new ArrayList<Token>(1);
@@ -125,7 +125,7 @@ grammar AntlrFilter;
       }
       return null;
     }
-   
+
     private List<Token> getInfixCombination(String sequence) {
       for (int i = 0; i < sequence.length(); i++) {
         for (int j = 0; j < sequence.length() - i; j++) {
@@ -149,7 +149,7 @@ grammar AntlrFilter;
       }
       return null;
     }
-   
+
     private OperatorType getOperatorType() {
       if (isAfterAtom()) {
         if (isBeforeAtom()) {
@@ -159,13 +159,13 @@ grammar AntlrFilter;
       }
       return OperatorType.PREFIX_OPERATOR;
     }
-   
+
     private enum OperatorType {
       PREFIX_OPERATOR,
       INFIX_OPERATOR,
       POSTFIX_OPERATOR
     };
-   
+
     private boolean isBeforeAtom() {
       if (nextToken == null) {
         return false;
@@ -176,7 +176,7 @@ grammar AntlrFilter;
         || type == AntlrFilterParser.STRING || type == AntlrFilterParser.TRUE
         || type == AntlrFilterParser.FALSE || type == AntlrFilterParser.LPAREN;
     }
-   
+
     private boolean isAfterAtom() {
       if (previousToken == null) {
         return false;
@@ -187,7 +187,7 @@ grammar AntlrFilter;
         || type == AntlrFilterParser.STRING || type == AntlrFilterParser.TRUE
         || type == AntlrFilterParser.FALSE || type == AntlrFilterParser.RPAREN;
     }
-   
+
     private boolean isPrefixOperator(String operator) {
       try {
         operators.getPrefixOperator(operator);
@@ -196,7 +196,7 @@ grammar AntlrFilter;
         return false;
       }
     }
-   
+
     private boolean isInfixOperator(String operator) {
       try {
         operators.getInfixOperator(operator);
@@ -205,7 +205,7 @@ grammar AntlrFilter;
         return false;
       }
     }
-    
+
     private boolean isPostfixOperator(String operator) {
       try {
         operators.getPostfixOperator(operator);
@@ -223,6 +223,37 @@ grammar AntlrFilter;
     public AntlrFilterParser(TokenStream input, FilterOperators operators) {
       this(input);
       this.operators = operators;
+    }
+
+    public static final int DEFAULT_MAX_NESTING_DEPTH = 500;
+
+    private int maxNestingDepth = DEFAULT_MAX_NESTING_DEPTH;
+
+    private int nestingDepth = 0;
+
+    void setMaxNestingDepth(int maxNestingDepth) {
+      this.maxNestingDepth = maxNestingDepth;
+    }
+
+    @Override
+    public void enterRule(ParserRuleContext localctx, int state, int ruleIndex) {
+      if (maxNestingDepth > 0 && nestingDepth >= maxNestingDepth) {
+        Token token = _input.LT(1);
+        throw new com.turkraft.springfilter.parser.InvalidSyntaxException(
+            "The filter expression is nested too deeply, the maximum nesting depth is "
+                + maxNestingDepth,
+            token != null ? token.getLine() : 0,
+            token != null ? token.getCharPositionInLine() : 0,
+            token, null);
+      }
+      nestingDepth++;
+      super.enterRule(localctx, state, ruleIndex);
+    }
+
+    @Override
+    public void exitRule() {
+      nestingDepth--;
+      super.exitRule();
     }
 
     public Integer getPrecedence(Token op) {
@@ -309,7 +340,8 @@ BETWEEN: 'between' | 'BETWEEN';
 ID: [a-zA-Z_$][a-zA-Z_$0-9]*;
 NUMBER: '-'? [0-9]+ ('.' [0-9]+)?;
 STRING: '\'' (~('\'' | '\\') | '\\' ('\'' | '\\'))* '\'';
-WS: [ \t]+ -> skip;
+
+WS: [ \t\r\n]+ -> skip;
 
 SYMBOL
     : .
