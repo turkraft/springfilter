@@ -21,7 +21,7 @@
   </description>
 
   <properties>
-    <springdoc-openapi.version>3.0.0</springdoc-openapi.version>
+    <springdoc-openapi.version>3.1.0</springdoc-openapi.version>
     <automatic.module.name>com.turkraft.springfilter.openapi</automatic.module.name>
   </properties>
 
