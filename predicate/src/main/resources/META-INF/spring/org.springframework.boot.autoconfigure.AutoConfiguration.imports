@@ -23,3 +23,4 @@ com.turkraft.springfilter.transformer.processor.LikeOperationPredicateProcessor
 com.turkraft.springfilter.transformer.processor.InsensitiveLikeOperationPredicateProcessor
 com.turkraft.springfilter.transformer.processor.SizeFunctionPredicateProcessor
 com.turkraft.springfilter.transformer.processor.TodayFunctionPredicateProcessor
+com.turkraft.springfilter.transformer.processor.HelloWorldPlaceholderPredicateProcessor

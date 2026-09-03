@@ -519,12 +519,42 @@ true, false         // 真偽値
 
 ### 関数
 
+すべてのモジュールで利用できます:
+
 ```
 size(collection)
 size(field.collection)
 today()
+```
+
+JPA モジュールは、JPA Criteria 式に対応する以下の関数を追加します:
+
+```
+// 算術         abs, neg, sign, ceiling, floor, sqrt, exp, ln, power, mod,
+//              sum, diff, prod, quot
+// 集約         count, countDistinct, avg, min, max, exists, greatest, least
+// 文字列       upper, lower, trim, concat, length, locate, substring
+// 日付・時刻   currentDate, currentTime, currentTimestamp,
+//              localDate, localTime, localDateTime
+// 型変換       toInteger, toDouble, toFloat, toString, toBigDecimal, toBigInteger
+// 限定子       any, all, some
+```
+
+```
+upper(name) : 'JOHN'
+length(description) > 100
+concat(firstName, ' ', lastName) ~ '%smith%'
+toInteger(code) > 500
+price > all(items.price)
+```
+
+`jsonText` は JPA 専用かつ PostgreSQL 固有で、`jsonb_extract_path_text` にコンパイルされます。
+文字列を返すため、文字列として比較するか、先に型変換してください:
+
+```
 jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
+toInteger(jsonText(field, 'age')) > 18
 ```
 
 ### プレースホルダー
@@ -549,7 +579,7 @@ a >: b               // 以上
 a < b                // より小さい
 a <: b               // 以下
 a between x and y    // 範囲（両端を含む）
-a ~ 'pattern'        // パターンマッチ（% と _ のワイルドカード）
+a ~ 'pattern'        // パターンマッチ（ワイルドカードはモジュールごとに異なる。下記参照）
 a ~~ 'pattern'       // 大文字小文字を区別しないパターンマッチ
 a in [x, y]          // コレクションに含まれる
 a not in [x, y]      // コレクションに含まれない
@@ -558,6 +588,23 @@ a is not null        // 非 null チェック
 a is empty           // 空チェック（コレクション/文字列）
 a is not empty       // 非空チェック
 ```
+
+### モジュール間のパターンマッチング
+
+`~` と `~~` は、モジュールごとに同じようには変換されません。実際に問い合わせるモジュールに
+合わせてパターンを記述してください:
+
+| パターン内 | JPA | MongoDB | Predicate |
+|---|---|---|---|
+| `%` | 任意の文字列 | **`%` そのもの** | 任意の文字列 |
+| `_` | 任意の 1 文字 | **`_` そのもの** | 任意の 1 文字 |
+| `*` | `%` の別名 | 任意の文字列 | **`*` そのもの** |
+| ワイルドカードなしのパターン | 前後を補い、部分一致 | 前後を補い、部分一致 | **値全体と一致する必要がある** |
+
+そのため `name ~ 'John'` は JPA と MongoDB では `"Johnny"` に一致しますが、predicate モジュール
+では一致しません。また `name ~ '%john%'` は MongoDB では `%john%` という文字列そのものを検索
+します。MongoDB では `*` を、JPA では `%`/`_` を使用してください。これを統一することは互換性を
+壊す変更となるため、将来のメジャーバージョンに見送られています。
 
 ### 優先順位
 
@@ -698,7 +745,7 @@ a and (b or c)
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
 // 型キャストと組み合わせ
-?filter= jsonText(data, 'age') > 18
+?filter= toInteger(jsonText(data, 'age')) > 18
 
 // パターンマッチング付きのネストされたキー
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
@@ -810,6 +857,46 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 ```
 
 これで `?filter=year > 2020` の代わりに `?q=year > 2020` が使用できます。
+
+### 信頼できない入力の制限
+
+フィルタ式は通常クエリパラメータからそのまま渡されるため、信頼できない入力です。2 つの制限が
+適用されます。
+
+ネストの深さは全体で上限が設けられています。上限を超えた式は、リクエストスレッドのスタックを
+使い果たすのではなく `InvalidSyntaxException` として拒否されます:
+
+```properties
+# デフォルト: 500。0 にするとチェックを無効化します
+springfilter.core.max_nesting_depth=500
+```
+
+式の長さはデフォルトでは制限されません。公開エンドポイントではパラメータごとに設定してください:
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(maxLength = 2000) Specification<Car> spec) {
+    return repository.findAll(spec);
+}
+```
+
+`@Sort` と `@Pagination` にはすでに既定値があります（`maxFields = 10`、`maxSize = 100`）。
+
+### エラーハンドリング
+
+`InvalidSyntaxException` には `@ResponseStatus(BAD_REQUEST)` が付いているため、不正な式は追加の
+設定なしで `400` を返します。レスポンスボディを制御するにはハンドラを定義してください:
+
+```java
+@ExceptionHandler(InvalidSyntaxException.class)
+ResponseEntity<String> onInvalidFilter(InvalidSyntaxException e) {
+    return ResponseEntity.badRequest().body("不正なフィルタ: " + e.getMessage());
+}
+```
+
+その他の入力ミスは、マッピングしない限り通常の実行時例外のままデフォルトの `500` ハンドラに
+到達します。未知の関数やプレースホルダーには `UnsupportedOperationException`、未知のフィールド、
+引数の個数の誤り、フィールドの型に変換できない値には `IllegalArgumentException` が発生します。
 
 ### MongoDB のエンティティクラス
 

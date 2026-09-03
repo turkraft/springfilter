@@ -87,8 +87,8 @@ public class LikeOperationJsonNodeProcessor implements
         functionBody.set("body", transformer
             .getObjectMapper()
             .getNodeFactory()
-            .stringNode("function(id) { return new RegExp('" + createRegex(
-                String.valueOf(inputNode.getValue())).replace("'", "\\'") + "', '" + regexOptions
+            .stringNode("function(id) { return new RegExp('" + escapeForJavaScriptString(
+                createRegex(String.valueOf(inputNode.getValue()))) + "', '" + regexOptions
                 + "').test(id) }"));
 
         return transformer
@@ -160,6 +160,14 @@ public class LikeOperationJsonNodeProcessor implements
 
   private String sanitizeRegexInput(String input) {
     return input.replaceAll("[-.\\+*?\\[^\\]$(){}=!<>|:\\\\]", "\\\\$0");
+  }
+
+  private String escapeForJavaScriptString(String input) {
+    return input
+        .replace("\\", "\\\\")
+        .replace("'", "\\'")
+        .replace("\r", "\\r")
+        .replace("\n", "\\n");
   }
 
 }

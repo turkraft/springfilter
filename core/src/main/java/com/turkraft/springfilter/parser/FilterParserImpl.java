@@ -5,6 +5,7 @@ import com.turkraft.springfilter.parser.node.FilterNode;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ class FilterParserImpl implements FilterParser {
   private AntlrParser antlrParser;
 
   private final FilterOperators operators;
+
+  @Value("${springfilter.core.max_nesting_depth:500}")
+  private int maxNestingDepth = AntlrFilterParser.DEFAULT_MAX_NESTING_DEPTH;
 
   public FilterParserImpl(FilterOperators operators) {
     this.operators = operators;
@@ -32,6 +36,7 @@ class FilterParserImpl implements FilterParser {
     com.turkraft.springfilter.parser.AntlrFilterParser parser = new com.turkraft.springfilter.parser.AntlrFilterParser(
         new CommonTokenStream(lexer),
         operators);
+    parser.setMaxNestingDepth(maxNestingDepth);
     parser.removeErrorListeners();
     parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
@@ -40,6 +45,12 @@ class FilterParserImpl implements FilterParser {
     } catch (InvalidSyntaxException e) {
       e.setInput(input);
       throw e;
+    } catch (StackOverflowError e) {
+
+      InvalidSyntaxException exception = new InvalidSyntaxException(
+          "The filter expression is too complex to parse", 0, 0, null, null);
+      exception.setInput(input);
+      throw exception;
     }
 
   }

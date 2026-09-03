@@ -19,6 +19,7 @@ com.turkraft.springfilter.language.FloorFunction
 com.turkraft.springfilter.language.UpperFunction
 com.turkraft.springfilter.language.ToBigDecimalFunction
 com.turkraft.springfilter.language.LocateFunction
+com.turkraft.springfilter.language.JsonTextFunction
 com.turkraft.springfilter.language.ExistsFunction
 com.turkraft.springfilter.language.GreatestFunction
 com.turkraft.springfilter.language.TrimFunction

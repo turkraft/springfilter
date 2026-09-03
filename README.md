@@ -519,12 +519,42 @@ true, false         // boolean
 
 ### Functions
 
+Available in every module:
+
 ```
 size(collection)
 size(field.collection)
 today()
+```
+
+The JPA module adds the following, which map onto JPA Criteria expressions:
+
+```
+// arithmetic   abs, neg, sign, ceiling, floor, sqrt, exp, ln, power, mod,
+//              sum, diff, prod, quot
+// aggregate    count, countDistinct, avg, min, max, exists, greatest, least
+// string       upper, lower, trim, concat, length, locate, substring
+// temporal     currentDate, currentTime, currentTimestamp,
+//              localDate, localTime, localDateTime
+// casting      toInteger, toDouble, toFloat, toString, toBigDecimal, toBigInteger
+// quantifiers  any, all, some
+```
+
+```
+upper(name) : 'JOHN'
+length(description) > 100
+concat(firstName, ' ', lastName) ~ '%smith%'
+toInteger(code) > 500
+price > all(items.price)
+```
+
+`jsonText` is JPA-only and PostgreSQL-specific — it compiles to `jsonb_extract_path_text`. It
+returns text, so compare it as text or cast it first:
+
+```
 jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
+toInteger(jsonText(field, 'age')) > 18
 ```
 
 ### Placeholders
@@ -549,7 +579,7 @@ a >: b               // greater than or equal
 a < b                // less than
 a <: b               // less than or equal
 a between x and y    // between (inclusive range)
-a ~ 'pattern'        // like (% and _ wildcards)
+a ~ 'pattern'        // like (wildcards differ per module, see below)
 a ~~ 'pattern'       // case-insensitive like
 a in [x, y]          // in collection
 a not in [x, y]      // not in collection
@@ -558,6 +588,22 @@ a is not null        // not null check
 a is empty           // empty check (collections/strings)
 a is not empty       // not empty check
 ```
+
+### Pattern Matching Across Modules
+
+The `~` and `~~` operators do not translate identically in every module. Write patterns for the
+module you are actually querying:
+
+| In a pattern | JPA | MongoDB | Predicate |
+|---|---|---|---|
+| `%` | any characters | **literal `%`** | any characters |
+| `_` | single character | **literal `_`** | single character |
+| `*` | alias for `%` | any characters | **literal `*`** |
+| pattern with no wildcard | wrapped, matches anywhere | wrapped, matches anywhere | **must match the whole value** |
+
+So `name ~ 'John'` matches `"Johnny"` under JPA and MongoDB but not under the predicate module,
+and `name ~ '%john%'` searches for the literal text `%john%` on MongoDB. Use `*` on MongoDB and
+`%`/`_` on JPA. Unifying this is a breaking change and is deferred to a future major version.
 
 ### Precedence
 
@@ -698,7 +744,7 @@ a and (b or c)
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
 // Combine with type casting
-?filter= jsonText(data, 'age') > 18
+?filter= toInteger(jsonText(data, 'age')) > 18
 
 // Nested keys with pattern matching
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
@@ -810,6 +856,47 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 ```
 
 Now use `?q=year > 2020` instead of `?filter=year > 2020`.
+
+### Limiting Untrusted Input
+
+Filter expressions usually arrive straight from a query parameter, so they are untrusted input.
+Two limits apply.
+
+Nesting depth is capped globally. An expression nested past the cap is rejected with
+`InvalidSyntaxException` rather than being allowed to exhaust the request thread's stack:
+
+```properties
+# default: 500; set to 0 to disable the check
+springfilter.core.max_nesting_depth=500
+```
+
+Expression length is not capped by default. Set it per parameter when the endpoint is public:
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(maxLength = 2000) Specification<Car> spec) {
+    return repository.findAll(spec);
+}
+```
+
+`@Sort` and `@Pagination` carry their own defaults already — `maxFields = 10` and `maxSize = 100`.
+
+### Error Handling
+
+`InvalidSyntaxException` is annotated `@ResponseStatus(BAD_REQUEST)`, so a malformed expression
+answers `400` without any extra wiring. Declare a handler to control the response body:
+
+```java
+@ExceptionHandler(InvalidSyntaxException.class)
+ResponseEntity<String> onInvalidFilter(InvalidSyntaxException e) {
+    return ResponseEntity.badRequest().body("Invalid filter: " + e.getMessage());
+}
+```
+
+Other input mistakes still surface as plain runtime exceptions and reach the default `500`
+handler unless you map them: `UnsupportedOperationException` for an unknown function or
+placeholder, and `IllegalArgumentException` for an unknown field, a wrong argument count, or a
+value that cannot be converted to the field's type.
 
 ### Entity Class for MongoDB
 

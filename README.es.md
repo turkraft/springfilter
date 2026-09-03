@@ -519,12 +519,42 @@ true, false         // booleano
 
 ### Funciones
 
+Disponibles en todos los módulos:
+
 ```
 size(collection)
 size(field.collection)
 today()
+```
+
+El módulo JPA añade las siguientes, que se traducen a expresiones de JPA Criteria:
+
+```
+// aritmética    abs, neg, sign, ceiling, floor, sqrt, exp, ln, power, mod,
+//               sum, diff, prod, quot
+// agregación    count, countDistinct, avg, min, max, exists, greatest, least
+// cadenas       upper, lower, trim, concat, length, locate, substring
+// temporales    currentDate, currentTime, currentTimestamp,
+//               localDate, localTime, localDateTime
+// conversión    toInteger, toDouble, toFloat, toString, toBigDecimal, toBigInteger
+// cuantificador any, all, some
+```
+
+```
+upper(name) : 'JOHN'
+length(description) > 100
+concat(firstName, ' ', lastName) ~ '%smith%'
+toInteger(code) > 500
+price > all(items.price)
+```
+
+`jsonText` es exclusiva de JPA y específica de PostgreSQL: se compila a
+`jsonb_extract_path_text`. Devuelve texto, así que compara como texto o convierte primero:
+
+```
 jsonText(field, 'key')
 jsonText(field, 'key1', 'key2', ...)
+toInteger(jsonText(field, 'age')) > 18
 ```
 
 ### Placeholders
@@ -549,7 +579,7 @@ a >: b               // mayor o igual
 a < b                // menor que
 a <: b               // menor o igual
 a between x and y    // entre (rango inclusivo)
-a ~ 'pattern'        // like (comodines % y _)
+a ~ 'pattern'        // like (los comodines varían según el módulo, ver abajo)
 a ~~ 'pattern'       // like sin distinción de mayúsculas
 a in [x, y]          // en colección
 a not in [x, y]      // no en colección
@@ -558,6 +588,22 @@ a is not null        // comprobación de no nulo
 a is empty           // comprobación de vacío (colecciones/strings)
 a is not empty       // comprobación de no vacío
 ```
+
+### Coincidencia de patrones entre módulos
+
+Los operadores `~` y `~~` no se traducen igual en todos los módulos. Escribe los patrones para el
+módulo que estás consultando:
+
+| En un patrón | JPA | MongoDB | Predicate |
+|---|---|---|---|
+| `%` | cualquier carácter | **`%` literal** | cualquier carácter |
+| `_` | un solo carácter | **`_` literal** | un solo carácter |
+| `*` | alias de `%` | cualquier carácter | **`*` literal** |
+| patrón sin comodines | se envuelve, coincide en cualquier posición | se envuelve, coincide en cualquier posición | **debe coincidir con el valor completo** |
+
+Por eso `name ~ 'John'` coincide con `"Johnny"` en JPA y MongoDB pero no en el módulo predicate, y
+`name ~ '%john%'` busca el texto literal `%john%` en MongoDB. Usa `*` en MongoDB y `%`/`_` en JPA.
+Unificarlo sería un cambio incompatible y queda aplazado a una futura versión mayor.
 
 ### Precedencia
 
@@ -698,7 +744,7 @@ a and (b or c)
 ?filter= jsonText(data, 'status') in ['active', 'pending']
 
 // Combinar con conversión de tipo
-?filter= jsonText(data, 'age') > 18
+?filter= toInteger(jsonText(data, 'age')) > 18
 
 // Claves anidadas con coincidencia de patrones
 ?filter= jsonText(metadata, 'address', 'city') ~ '%York%'
@@ -810,6 +856,51 @@ List<Car> search(@Filter(parameter = "q") Specification<Car> spec) {
 ```
 
 Ahora usa `?q=year > 2020` en lugar de `?filter=year > 2020`.
+
+### Limitar la entrada no confiable
+
+Las expresiones de filtro suelen llegar directamente desde un parámetro de consulta, por lo que
+son entrada no confiable. Se aplican dos límites.
+
+La profundidad de anidamiento está limitada globalmente. Una expresión que supere el límite se
+rechaza con `InvalidSyntaxException` en lugar de permitir que agote la pila del hilo de la
+petición:
+
+```properties
+# por defecto: 500; poner 0 para desactivar la comprobación
+springfilter.core.max_nesting_depth=500
+```
+
+La longitud de la expresión no está limitada por defecto. Configúrala por parámetro cuando el
+endpoint sea público:
+
+```java
+@GetMapping("/cars")
+List<Car> search(@Filter(maxLength = 2000) Specification<Car> spec) {
+    return repository.findAll(spec);
+}
+```
+
+`@Sort` y `@Pagination` ya traen sus propios valores por defecto: `maxFields = 10` y
+`maxSize = 100`.
+
+### Manejo de errores
+
+`InvalidSyntaxException` está anotada con `@ResponseStatus(BAD_REQUEST)`, por lo que una expresión
+malformada responde `400` sin configuración adicional. Declara un handler para controlar el cuerpo
+de la respuesta:
+
+```java
+@ExceptionHandler(InvalidSyntaxException.class)
+ResponseEntity<String> onInvalidFilter(InvalidSyntaxException e) {
+    return ResponseEntity.badRequest().body("Filtro inválido: " + e.getMessage());
+}
+```
+
+Otros errores de entrada siguen apareciendo como excepciones de tiempo de ejecución normales y
+llegan al handler `500` por defecto salvo que las mapees: `UnsupportedOperationException` para una
+función o placeholder desconocido, e `IllegalArgumentException` para un campo desconocido, un
+número de argumentos incorrecto o un valor que no puede convertirse al tipo del campo.
 
 ### Clase de entidad para MongoDB
 

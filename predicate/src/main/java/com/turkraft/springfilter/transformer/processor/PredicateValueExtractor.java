@@ -34,4 +34,31 @@ public final class PredicateValueExtractor {
     return new Object[]{left, right};
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static int compare(ConversionService conversionService, Object left, Object right) {
+    Object[] coerced = coerce(conversionService, left, right);
+    if (coerced[0] instanceof Comparable && coerced[1] instanceof Comparable) {
+      try {
+        return ((Comparable) coerced[0]).compareTo(coerced[1]);
+      } catch (ClassCastException e) {
+        throw new IllegalStateException(cannotCompare(coerced[0], coerced[1]), e);
+      }
+    }
+    throw new IllegalStateException(cannotCompare(coerced[0], coerced[1]));
+  }
+
+  private static String cannotCompare(Object left, Object right) {
+    return "Cannot compare a value of type " + typeName(left) + " with a value of type "
+        + typeName(right);
+  }
+
+  private static String typeName(Object value) {
+    if (value == null) {
+      return "null";
+    }
+    return value
+        .getClass()
+        .getName();
+  }
+
 }

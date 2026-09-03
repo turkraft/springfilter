@@ -42,23 +42,7 @@ public class InsensitiveLikeOperationPredicateProcessor implements
           .toString()
           .toLowerCase();
 
-      String regex = pattern
-          .replace("\\", "\\\\")
-          .replace(".", "\\.")
-          .replace("*", "\\*")
-          .replace("+", "\\+")
-          .replace("?", "\\?")
-          .replace("(", "\\(")
-          .replace(")", "\\)")
-          .replace("[", "\\[")
-          .replace("]", "\\]")
-          .replace("{", "\\{")
-          .replace("}", "\\}")
-          .replace("^", "\\^")
-          .replace("$", "\\$")
-          .replace("|", "\\|")
-          .replace("%", ".*")
-          .replace("_", ".");
+      String regex = LikeOperationPredicateProcessor.likePatternToRegex(pattern);
 
       return leftStr.matches(regex);
     };
