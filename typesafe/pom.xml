@@ -58,7 +58,7 @@
             <path>
               <groupId>com.turkraft.springfilter</groupId>
               <artifactId>typesafe-processor</artifactId>
-              <version>${revision}</version>
+              <version>${project.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
